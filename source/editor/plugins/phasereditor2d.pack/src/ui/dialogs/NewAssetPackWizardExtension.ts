@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.dialogs {
         constructor() {
             super({
                 dialogName: "Asset Pack File",
-                dialogIconDescriptor: AssetPackPlugin.getInstance().getIconDescriptor(ICON_ASSET_PACK),
+                dialogIconDescriptor: icons.getIconDescriptor(icons.ICON_ASSET_PACK),
                 initialFileName: "asset-pack",
                 fileExtension: "json"
             });

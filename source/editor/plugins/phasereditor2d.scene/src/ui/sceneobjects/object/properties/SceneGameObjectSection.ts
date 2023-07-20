@@ -60,8 +60,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             element.classList.add("PropertyLockIcon");
             parent.appendChild(element);
 
-            const lockedIcon = ScenePlugin.getInstance().getIcon(ICON_LOCKED);
-            const unlockedIcon = ScenePlugin.getInstance().getIcon(ICON_UNLOCKED);
+            const lockedIcon = icons.getIcon(icons.ICON_LOCKED);
+            const unlockedIcon = icons.getIcon(icons.ICON_UNLOCKED);
 
             element.addEventListener("click", e => {
 

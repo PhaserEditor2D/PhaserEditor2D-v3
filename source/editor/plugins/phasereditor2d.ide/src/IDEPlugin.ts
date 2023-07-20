@@ -3,8 +3,6 @@ namespace phasereditor2d.ide {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export const ICON_PLAY = "play";
-
     export class IDEPlugin extends colibri.Plugin {
 
         public eventActivationChanged = new controls.ListenerList<boolean>();
@@ -36,13 +34,6 @@ namespace phasereditor2d.ide {
                     () => new ui.DesignWindow()
                 )
             );
-
-            // icons
-
-            reg.addExtension(
-                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_PLAY
-                ]));
 
             // keys
 

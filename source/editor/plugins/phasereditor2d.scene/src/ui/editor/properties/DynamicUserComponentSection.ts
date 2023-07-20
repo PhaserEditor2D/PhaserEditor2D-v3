@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             super(page,
                 DynamicUserComponentSection.computeId(componentName, hash),
                 componentName, false, true,
-                ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT),
+                icons.getIcon(icons.ICON_USER_COMPONENT),
                 `DynamicUserComponentSection_${componentName}}`);
 
             this._componentName = componentName;

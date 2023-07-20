@@ -28,7 +28,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_BUILD));
+            return new controls.viewers.IconImageCellRenderer(icons.getIcon(icons.ICON_BUILD));
         }
 
         getObjectParent(): ISceneGameObject {

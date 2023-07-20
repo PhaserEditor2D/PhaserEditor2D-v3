@@ -180,6 +180,7 @@
             <key type="filename">dark/dirty.png</key>
             <key type="filename">dark/file.png</key>
             <key type="filename">dark/folder.png</key>
+            <key type="filename">dark/inspector.png</key>
             <key type="filename">dark/keymap.png</key>
             <key type="filename">dark/menu.png</key>
             <key type="filename">dark/minus.png</key>
@@ -203,6 +204,7 @@
             <key type="filename">light/dirty.png</key>
             <key type="filename">light/file.png</key>
             <key type="filename">light/folder.png</key>
+            <key type="filename">light/inspector.png</key>
             <key type="filename">light/keymap.png</key>
             <key type="filename">light/menu.png</key>
             <key type="filename">light/minus.png</key>
@@ -239,6 +241,7 @@
             <key type="filename">dark/dirty@2x.png</key>
             <key type="filename">dark/file@2x.png</key>
             <key type="filename">dark/folder@2x.png</key>
+            <key type="filename">dark/inspector@2x.png</key>
             <key type="filename">dark/keymap@2x.png</key>
             <key type="filename">dark/menu@2x.png</key>
             <key type="filename">dark/minus@2x.png</key>
@@ -262,6 +265,7 @@
             <key type="filename">light/dirty@2x.png</key>
             <key type="filename">light/file@2x.png</key>
             <key type="filename">light/folder@2x.png</key>
+            <key type="filename">light/inspector@2x.png</key>
             <key type="filename">light/keymap@2x.png</key>
             <key type="filename">light/menu@2x.png</key>
             <key type="filename">light/minus@2x.png</key>

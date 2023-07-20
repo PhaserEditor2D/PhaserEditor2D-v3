@@ -68,7 +68,7 @@ namespace phasereditor2d.ide.ui.actions {
                     id: CMD_PLAY_PROJECT,
                     name: "Play Project",
                     tooltip: "Run this project in the browser.",
-                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    icon: icons.getIcon(icons.ICON_PLAY),
                     category: CAT_PROJECT
                 },
 
@@ -92,7 +92,7 @@ namespace phasereditor2d.ide.ui.actions {
                     id: CMD_QUICK_PLAY_PROJECT,
                     name: "Quick Play Project",
                     tooltip: "Run this project in a dialog.",
-                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    icon: icons.getIcon(icons.ICON_PLAY),
                     category: CAT_PROJECT
                 },
 

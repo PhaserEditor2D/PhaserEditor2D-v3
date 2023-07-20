@@ -19,7 +19,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
             if (element instanceof core.AssetPack) {
 
-                return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK));
+                return this.getIconRenderer(icons.getIcon(icons.ICON_ASSET_PACK));
 
             } else if (AssetPackPlugin.getInstance().isAssetPackItemType(element)) {
 

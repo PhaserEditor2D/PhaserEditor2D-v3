@@ -28,6 +28,7 @@ namespace colibri {
     export const ICON_CONTROL_SECTION_EXPAND = "section-expand";
     export const ICON_CONTROL_CLOSE = "close";
     export const ICON_CONTROL_DIRTY = "dirty";
+    export const ICON_INSPECTOR = "inspector";
 
     export class ColibriPlugin extends colibri.Plugin {
 

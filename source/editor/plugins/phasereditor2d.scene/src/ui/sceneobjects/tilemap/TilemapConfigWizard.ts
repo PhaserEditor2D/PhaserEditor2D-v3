@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._viewer.setCellRendererProvider(
                 controls.viewers.EmptyCellRendererProvider.withIcon(
-                    pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP)));
+                    icons.getIcon(icons.ICON_TILEMAP)));
 
             this._viewer.setInput(this.getWizard().getTilemapAssets());
 
@@ -359,7 +359,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._viewer.setCellRendererProvider(
                 controls.viewers.EmptyCellRendererProvider.withIcon(
-                    pack.AssetPackPlugin.getInstance().getIcon(pack.ICON_TILEMAP_LAYER)));
+                    icons.getIcon(icons.ICON_TILEMAP_LAYER)));
 
             this._viewer.setInput(this.getWizard().getTilemapKeyPage().getTilemapAsset().getLayerNames());
 

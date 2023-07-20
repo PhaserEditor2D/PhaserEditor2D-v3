@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>../../../source/editor/plugins/phasereditor2d.icons/icons/atlas.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -155,11 +155,11 @@
             <key>scaleMode</key>
             <enum type="ScaleMode">Smooth</enum>
             <key>extrude</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimThreshold</key>
             <uint>1</uint>
             <key>trimMargin</key>
-            <uint>0</uint>
+            <uint>1</uint>
             <key>trimMode</key>
             <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>tracerTolerance</key>
@@ -182,7 +182,10 @@
             <key type="filename">dark/align-right.png</key>
             <key type="filename">dark/align-top.png</key>
             <key type="filename">dark/angle.png</key>
+            <key type="filename">dark/animations.png</key>
+            <key type="filename">dark/asset-pack.png</key>
             <key type="filename">dark/bitmapfont-type.png</key>
+            <key type="filename">dark/blocks.png</key>
             <key type="filename">dark/border-bottom.png</key>
             <key type="filename">dark/border-center.png</key>
             <key type="filename">dark/border-left.png</key>
@@ -193,9 +196,17 @@
             <key type="filename">dark/collider.png</key>
             <key type="filename">dark/column.png</key>
             <key type="filename">dark/dot.png</key>
+            <key type="filename">dark/file-font.png</key>
+            <key type="filename">dark/file-image.png</key>
+            <key type="filename">dark/file-movie.png</key>
+            <key type="filename">dark/file-new.png</key>
+            <key type="filename">dark/file-script.png</key>
+            <key type="filename">dark/file-sound.png</key>
+            <key type="filename">dark/file-text.png</key>
             <key type="filename">dark/grid.png</key>
             <key type="filename">dark/group.png</key>
             <key type="filename">dark/image-type.png</key>
+            <key type="filename">dark/inspector.png</key>
             <key type="filename">dark/keyboard-key.png</key>
             <key type="filename">dark/layer.png</key>
             <key type="filename">dark/list.png</key>
@@ -210,11 +221,16 @@
             <key type="filename">dark/origin-topleft.png</key>
             <key type="filename">dark/origin-topright.png</key>
             <key type="filename">dark/origin.png</key>
+            <key type="filename">dark/outline.png</key>
+            <key type="filename">dark/play.png</key>
+            <key type="filename">dark/project.png</key>
             <key type="filename">dark/row.png</key>
             <key type="filename">dark/scale.png</key>
             <key type="filename">dark/select-region.png</key>
             <key type="filename">dark/sprite-type.png</key>
             <key type="filename">dark/text-type.png</key>
+            <key type="filename">dark/tilemap-layer.png</key>
+            <key type="filename">dark/tilemap.png</key>
             <key type="filename">dark/tilesprite.png</key>
             <key type="filename">dark/translate.png</key>
             <key type="filename">dark/unlocked.png</key>
@@ -228,7 +244,10 @@
             <key type="filename">light/align-right.png</key>
             <key type="filename">light/align-top.png</key>
             <key type="filename">light/angle.png</key>
+            <key type="filename">light/animations.png</key>
+            <key type="filename">light/asset-pack.png</key>
             <key type="filename">light/bitmapfont-type.png</key>
+            <key type="filename">light/blocks.png</key>
             <key type="filename">light/border-bottom.png</key>
             <key type="filename">light/border-center.png</key>
             <key type="filename">light/border-left.png</key>
@@ -240,9 +259,17 @@
             <key type="filename">light/collider.png</key>
             <key type="filename">light/column.png</key>
             <key type="filename">light/dot.png</key>
+            <key type="filename">light/file-font.png</key>
+            <key type="filename">light/file-image.png</key>
+            <key type="filename">light/file-movie.png</key>
+            <key type="filename">light/file-new.png</key>
+            <key type="filename">light/file-script.png</key>
+            <key type="filename">light/file-sound.png</key>
+            <key type="filename">light/file-text.png</key>
             <key type="filename">light/grid.png</key>
             <key type="filename">light/group.png</key>
             <key type="filename">light/image-type.png</key>
+            <key type="filename">light/inspector.png</key>
             <key type="filename">light/keyboard-key.png</key>
             <key type="filename">light/layer.png</key>
             <key type="filename">light/list.png</key>
@@ -257,11 +284,16 @@
             <key type="filename">light/origin-topleft.png</key>
             <key type="filename">light/origin-topright.png</key>
             <key type="filename">light/origin.png</key>
+            <key type="filename">light/outline.png</key>
+            <key type="filename">light/play.png</key>
+            <key type="filename">light/project.png</key>
             <key type="filename">light/row.png</key>
             <key type="filename">light/scale.png</key>
             <key type="filename">light/select-region.png</key>
             <key type="filename">light/sprite-type.png</key>
             <key type="filename">light/text-type.png</key>
+            <key type="filename">light/tilemap-layer.png</key>
+            <key type="filename">light/tilemap.png</key>
             <key type="filename">light/tilesprite.png</key>
             <key type="filename">light/translate.png</key>
             <key type="filename">light/unlocked.png</key>
@@ -289,7 +321,10 @@
             <key type="filename">dark/align-right@2x.png</key>
             <key type="filename">dark/align-top@2x.png</key>
             <key type="filename">dark/angle@2x.png</key>
+            <key type="filename">dark/animations@2x.png</key>
+            <key type="filename">dark/asset-pack@2x.png</key>
             <key type="filename">dark/bitmapfont-type@2x.png</key>
+            <key type="filename">dark/blocks@2x.png</key>
             <key type="filename">dark/border-bottom@2x.png</key>
             <key type="filename">dark/border-center@2x.png</key>
             <key type="filename">dark/border-left@2x.png</key>
@@ -300,9 +335,17 @@
             <key type="filename">dark/collider@2x.png</key>
             <key type="filename">dark/column@2x.png</key>
             <key type="filename">dark/dot@2x.png</key>
+            <key type="filename">dark/file-font@2x.png</key>
+            <key type="filename">dark/file-image@2x.png</key>
+            <key type="filename">dark/file-movie@2x.png</key>
+            <key type="filename">dark/file-new@2x.png</key>
+            <key type="filename">dark/file-script@2x.png</key>
+            <key type="filename">dark/file-sound@2x.png</key>
+            <key type="filename">dark/file-text@2x.png</key>
             <key type="filename">dark/grid@2x.png</key>
             <key type="filename">dark/group@2x.png</key>
             <key type="filename">dark/image-type@2x.png</key>
+            <key type="filename">dark/inspector@2x.png</key>
             <key type="filename">dark/keyboard-key@2x.png</key>
             <key type="filename">dark/layer@2x.png</key>
             <key type="filename">dark/list@2x.png</key>
@@ -317,11 +360,16 @@
             <key type="filename">dark/origin-topleft@2x.png</key>
             <key type="filename">dark/origin-topright@2x.png</key>
             <key type="filename">dark/origin@2x.png</key>
+            <key type="filename">dark/outline@2x.png</key>
+            <key type="filename">dark/play@2x.png</key>
+            <key type="filename">dark/project@2x.png</key>
             <key type="filename">dark/row@2x.png</key>
             <key type="filename">dark/scale@2x.png</key>
             <key type="filename">dark/select-region@2x.png</key>
             <key type="filename">dark/sprite-type@2x.png</key>
             <key type="filename">dark/text-type@2x.png</key>
+            <key type="filename">dark/tilemap-layer@2x.png</key>
+            <key type="filename">dark/tilemap@2x.png</key>
             <key type="filename">dark/tilesprite@2x.png</key>
             <key type="filename">dark/translate@2x.png</key>
             <key type="filename">dark/unlocked@2x.png</key>
@@ -335,7 +383,10 @@
             <key type="filename">light/align-right@2x.png</key>
             <key type="filename">light/align-top@2x.png</key>
             <key type="filename">light/angle@2x.png</key>
+            <key type="filename">light/animations@2x.png</key>
+            <key type="filename">light/asset-pack@2x.png</key>
             <key type="filename">light/bitmapfont-type@2x.png</key>
+            <key type="filename">light/blocks@2x.png</key>
             <key type="filename">light/border-bottom@2x.png</key>
             <key type="filename">light/border-center@2x.png</key>
             <key type="filename">light/border-left@2x.png</key>
@@ -347,9 +398,17 @@
             <key type="filename">light/collider@2x.png</key>
             <key type="filename">light/column@2x.png</key>
             <key type="filename">light/dot@2x.png</key>
+            <key type="filename">light/file-font@2x.png</key>
+            <key type="filename">light/file-image@2x.png</key>
+            <key type="filename">light/file-movie@2x.png</key>
+            <key type="filename">light/file-new@2x.png</key>
+            <key type="filename">light/file-script@2x.png</key>
+            <key type="filename">light/file-sound@2x.png</key>
+            <key type="filename">light/file-text@2x.png</key>
             <key type="filename">light/grid@2x.png</key>
             <key type="filename">light/group@2x.png</key>
             <key type="filename">light/image-type@2x.png</key>
+            <key type="filename">light/inspector@2x.png</key>
             <key type="filename">light/keyboard-key@2x.png</key>
             <key type="filename">light/layer@2x.png</key>
             <key type="filename">light/list@2x.png</key>
@@ -364,11 +423,16 @@
             <key type="filename">light/origin-topleft@2x.png</key>
             <key type="filename">light/origin-topright@2x.png</key>
             <key type="filename">light/origin@2x.png</key>
+            <key type="filename">light/outline@2x.png</key>
+            <key type="filename">light/play@2x.png</key>
+            <key type="filename">light/project@2x.png</key>
             <key type="filename">light/row@2x.png</key>
             <key type="filename">light/scale@2x.png</key>
             <key type="filename">light/select-region@2x.png</key>
             <key type="filename">light/sprite-type@2x.png</key>
             <key type="filename">light/text-type@2x.png</key>
+            <key type="filename">light/tilemap-layer@2x.png</key>
+            <key type="filename">light/tilemap@2x.png</key>
             <key type="filename">light/tilesprite@2x.png</key>
             <key type="filename">light/translate@2x.png</key>
             <key type="filename">light/unlocked@2x.png</key>

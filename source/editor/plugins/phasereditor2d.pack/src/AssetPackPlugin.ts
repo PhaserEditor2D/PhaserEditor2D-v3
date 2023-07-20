@@ -4,11 +4,6 @@ namespace phasereditor2d.pack {
 
     import ide = colibri.ui.ide;
 
-    export const ICON_ASSET_PACK = "asset-pack";
-    export const ICON_ANIMATIONS = "animations";
-    export const ICON_TILEMAP = "tilemap";
-    export const ICON_TILEMAP_LAYER = "tilemap-layer";
-
     export const CAT_ASSET_PACK = "phasereditor2d.pack.ui.editor.category";
     export const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
     export const CMD_TOGGLE_SIMPLE_RENDERING_OF_TEXTURE_ATLAS = "phasereditor2d.pack.ui.editor.ToggleSimpleRenderingOfTextureAtlas";
@@ -87,17 +82,6 @@ namespace phasereditor2d.pack {
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
-            // icons loader
-
-            reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_ASSET_PACK,
-                    ICON_ANIMATIONS,
-                    ICON_TILEMAP,
-                    ICON_TILEMAP_LAYER
-                ])
-            );
-
             // asset pack extensions
 
             reg.addExtension(new ui.DefaultAssetPackExtension());
@@ -167,22 +151,22 @@ namespace phasereditor2d.pack {
             // content type icons
 
             reg.addExtension(
-                ide.ContentTypeIconExtension.withPluginIcons(this, [
+                ide.ContentTypeIconExtension.withPluginIcons(icons.IconsPlugin.getInstance(), [
                     {
-                        iconName: ICON_ASSET_PACK,
+                        iconName: icons.ICON_ASSET_PACK,
                         contentType: core.contentTypes.CONTENT_TYPE_ASSET_PACK
                     },
                     {
-                        iconName: ICON_ANIMATIONS,
+                        iconName: icons.ICON_ANIMATIONS,
                         contentType: core.contentTypes.CONTENT_TYPE_ANIMATIONS
                     },
                     {
-                        iconName: ICON_TILEMAP,
+                        iconName: icons.ICON_TILEMAP,
                         contentType: core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON
                     },
                     {
-                        plugin: webContentTypes.WebContentTypesPlugin.getInstance(),
-                        iconName: webContentTypes.ICON_FILE_FONT,
+                        plugin: icons.IconsPlugin.getInstance(),
+                        iconName: icons.ICON_FILE_FONT,
                         contentType: core.contentTypes.CONTENT_TYPE_BITMAP_FONT
                     }
                 ]));

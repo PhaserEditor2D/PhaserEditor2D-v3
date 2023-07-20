@@ -343,7 +343,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             (obj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent) =>
                                 new controls.viewers.IconImageCellRenderer(
                                     obj instanceof usercomponent.UserComponent ?
-                                        ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
+                                        icons.getIcon(icons.ICON_USER_COMPONENT)
                                         : colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER))));
 
                         viewer.setContentProvider(new ContentProvider());
@@ -2006,7 +2006,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_OPEN_COMPILED_FILE,
-                    icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                    icon: icons.getIcon(icons.ICON_FILE_SCRIPT),
                     name: "Open Output File",
                     tooltip: "Open the output source file of the scene.",
                     category: CAT_SCENE_EDITOR
@@ -2022,7 +2022,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_COMPILE_SCENE_EDITOR,
-                    icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
+                    icon: icons.getIcon(icons.ICON_BUILD),
                     name: "Compile Scene",
                     tooltip: "Compile the editor's Scene.",
                     category: CAT_SCENE_EDITOR
@@ -2040,7 +2040,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_TRANSLATE_SCENE_OBJECT,
                     name: "Translate Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
+                    icon: icons.getIcon(icons.ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2058,7 +2058,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ROTATE_SCENE_OBJECT,
                     name: "Rotate Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
+                    icon: icons.getIcon(icons.ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2093,7 +2093,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SCALE_SCENE_OBJECT,
                     name: "Scale Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
+                    icon: icons.getIcon(icons.ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2111,7 +2111,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SET_ORIGIN_SCENE_OBJECT,
                     name: "Origin Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
+                    icon: icons.getIcon(icons.ICON_ORIGIN),
                     tooltip: "Change the origin of the selected scene object",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2131,7 +2131,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Select Region Tool",
                     category: CAT_SCENE_EDITOR,
                     tooltip: "Select all objects inside a region",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_SELECT_REGION)
+                    icon: icons.getIcon(icons.ICON_SELECT_REGION)
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -2432,7 +2432,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         id: data.command,
                         name: data.name,
                         tooltip: `Set the origin of the object to (${data.x},${data.y})`,
-                        icon: ScenePlugin.getInstance().getIcon(data.icon),
+                        icon: icons.getIcon(data.icon),
                         category: CAT_SCENE_EDITOR
                     },
                     keys: {

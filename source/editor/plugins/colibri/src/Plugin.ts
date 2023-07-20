@@ -37,10 +37,10 @@ namespace colibri {
                 return;
             }
 
-            const imgUrl = this.getResourceURL("icons/atlas.png", CACHE_VERSION);
+            const imgUrl = this.getPluginURL("icons/atlas.png");
 
             this._atlasImage = ui.controls.Controls
-                .getImage(imgUrl, this.getId() + ".icon-atlas");
+                .getImage(imgUrl, this.getId() + ".atlas");
 
             await this._atlasImage.preload();
 
@@ -128,7 +128,7 @@ namespace colibri {
 
             const iconPath = this.getIconsAtlasFrameName(name, theme);
 
-            const url = this.getResourceURL(`icons/${iconPath}`);
+            const url = this.getPluginURL(`icons/${iconPath}`);
 
             const id = theme + "." + name;
 
@@ -142,6 +142,11 @@ namespace colibri {
             return `${theme}/${name}${x2 ? "@2x" : ""}.png`;
         }
 
+        getPluginURL(pathInPlugin: string) {
+
+            return `/editor/app/plugins/${this.getId()}/${pathInPlugin}`;
+        }
+
         getResourceURL(pathInPlugin: string, version?: string) {
 
             if (version === undefined) {
@@ -149,7 +154,7 @@ namespace colibri {
                 version = Date.now().toString();
             }
 
-            return `/editor/app/plugins/${this.getId()}/${pathInPlugin}?v=${version}`;
+            return `${this.getPluginURL(pathInPlugin)}?v=${version}`;
         }
 
         async getJSON(pathInPlugin: string, version?: string) {

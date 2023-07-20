@@ -16,7 +16,7 @@ namespace colibri.inspector.ui.views {
             super(InspectorView.VIEW_ID);
 
             this.setTitle("Inspector");
-            this.setIcon(InspectorPlugin.getInstance().getIcon(ICON_INSPECTOR));
+            this.setIcon(ColibriPlugin.getInstance().getIcon(colibri.ICON_INSPECTOR));
         }
 
         static updateInspectorView(selection: any[]) {
