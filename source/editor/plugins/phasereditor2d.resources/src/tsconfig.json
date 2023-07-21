@@ -1,7 +1,7 @@
 {
     "extends": "../../../tsconfig-base.json",
     "compilerOptions": {
-        "outFile": "../_out/phasereditor2d.icons.js"
+        "outFile": "../_out/phasereditor2d.resources.js"
     },
     "references": [
         {

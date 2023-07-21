@@ -169,9 +169,9 @@ namespace phasereditor2d.scene {
             );
 
             reg.addExtension(
-                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(icons.IconsPlugin.getInstance(), [
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(resources.ResourcesPlugin.getInstance(), [
                     {
-                        iconName: icons.ICON_USER_COMPONENT,
+                        iconName: resources.ICON_USER_COMPONENT,
                         contentType: core.CONTENT_TYPE_USER_COMPONENTS
                     }
                 ]));

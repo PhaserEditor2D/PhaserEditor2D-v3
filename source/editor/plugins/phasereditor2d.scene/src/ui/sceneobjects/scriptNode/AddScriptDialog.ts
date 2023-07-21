@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
                     e => new controls.viewers.IconImageCellRenderer(
-                        icons.getIcon(icons.ICON_BUILD))));
+                        resources.getIcon(resources.ICON_BUILD))));
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 

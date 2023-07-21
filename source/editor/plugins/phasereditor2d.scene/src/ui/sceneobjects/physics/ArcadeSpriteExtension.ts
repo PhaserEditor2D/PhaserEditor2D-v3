@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     typeName: "ArcadeSprite",
                     phaserTypeName: "Phaser.Physics.Arcade.Sprite",
                     category: SCENE_OBJECT_ARCADE_CATEGORY,
-                    icon: icons.getIconDescriptor(icons.ICON_SPRITE_TYPE)
+                    icon: resources.getIconDescriptor(resources.ICON_SPRITE_TYPE)
             });
         }
 

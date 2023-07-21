@@ -7,7 +7,7 @@ namespace phasereditor2d.ide.ui.viewers {
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
             return new controls.viewers.IconImageCellRenderer(
-                icons.getIcon(icons.ICON_PROJECT));
+                resources.getIcon(resources.ICON_PROJECT));
         }
 
         preload(element: any): Promise<controls.PreloadResult> {

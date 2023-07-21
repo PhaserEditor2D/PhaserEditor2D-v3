@@ -151,22 +151,22 @@ namespace phasereditor2d.pack {
             // content type icons
 
             reg.addExtension(
-                ide.ContentTypeIconExtension.withPluginIcons(icons.IconsPlugin.getInstance(), [
+                ide.ContentTypeIconExtension.withPluginIcons(resources.ResourcesPlugin.getInstance(), [
                     {
-                        iconName: icons.ICON_ASSET_PACK,
+                        iconName: resources.ICON_ASSET_PACK,
                         contentType: core.contentTypes.CONTENT_TYPE_ASSET_PACK
                     },
                     {
-                        iconName: icons.ICON_ANIMATIONS,
+                        iconName: resources.ICON_ANIMATIONS,
                         contentType: core.contentTypes.CONTENT_TYPE_ANIMATIONS
                     },
                     {
-                        iconName: icons.ICON_TILEMAP,
+                        iconName: resources.ICON_TILEMAP,
                         contentType: core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON
                     },
                     {
-                        plugin: icons.IconsPlugin.getInstance(),
-                        iconName: icons.ICON_FILE_FONT,
+                        plugin: resources.ResourcesPlugin.getInstance(),
+                        iconName: resources.ICON_FILE_FONT,
                         contentType: core.contentTypes.CONTENT_TYPE_BITMAP_FONT
                     }
                 ]));

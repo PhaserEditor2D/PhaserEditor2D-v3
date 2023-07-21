@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                icon: icons.getIconDescriptor(icons.ICON_GROUP),
+                icon: resources.getIconDescriptor(resources.ICON_GROUP),
                 phaserTypeName: "Phaser.GameObjects.Rectangle",
                 category: SCENE_OBJECT_SHAPE_CATEGORY,
                 typeName: "Rectangle"

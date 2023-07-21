@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                icon: icons.getIconDescriptor(icons.ICON_TILEMAP_LAYER),
+                icon: resources.getIconDescriptor(resources.ICON_TILEMAP_LAYER),
                 phaserTypeName: "Phaser.Tilemaps.TilemapLayer",
                 typeName: "TilemapLayer",
                 typeNameAlias: ["StaticTilemapLayer", "DynamicTilemapLayer"],
@@ -210,11 +210,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (element instanceof Tilemap) {
 
                 return new controls.viewers.IconGridCellRenderer(
-                    icons.getIcon(icons.ICON_TILEMAP));
+                    resources.getIcon(resources.ICON_TILEMAP));
             }
 
             return new controls.viewers.IconGridCellRenderer(
-                icons.getIcon(icons.ICON_TILEMAP_LAYER));
+                resources.getIcon(resources.ICON_TILEMAP_LAYER));
         }
 
         async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {

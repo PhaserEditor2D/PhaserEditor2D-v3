@@ -1,4 +1,4 @@
-namespace phasereditor2d.icons {
+namespace phasereditor2d.resources {
 
     // phasereditor2d.blocks
     export const ICON_BLOCKS = "blocks";
@@ -69,30 +69,30 @@ namespace phasereditor2d.icons {
     export const ICON_FILE_SOUND = "file-sound";
     export const ICON_FILE_TEXT = "file-text";
 
-    export class IconsPlugin extends colibri.Plugin {
+    export class ResourcesPlugin extends colibri.Plugin {
 
         // icons
 
-        private static _instance = new IconsPlugin();
+        private static _instance = new ResourcesPlugin();
 
         static getInstance() {
             return this._instance;
         }
 
         private constructor() {
-            super("phasereditor2d.icons", true);
+            super("phasereditor2d.resources", true);
         }
     }
 
     export function getIcon(name: string) {
 
-        return IconsPlugin.getInstance().getIcon(name);
+        return ResourcesPlugin.getInstance().getIcon(name);
     };
 
     export function getIconDescriptor(name: string) {
 
-        return IconsPlugin.getInstance().getIconDescriptor(name);
+        return ResourcesPlugin.getInstance().getIconDescriptor(name);
     };
 
-    colibri.Platform.addPlugin(IconsPlugin.getInstance());
+    colibri.Platform.addPlugin(ResourcesPlugin.getInstance());
 }

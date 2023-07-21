@@ -14,5 +14,8 @@
     "typescript": "^4.3.2"
   },
   "author": "Arian Fornaris <developers@phasereditor2d.com> (https://phasereditor2d.com)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "colibri-packer": "file:../../../colibri-packer"
+  }
 }

@@ -30,49 +30,49 @@ namespace phasereditor2d.webContentTypes {
             // content type icons
 
             reg.addExtension(
-                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(icons.IconsPlugin.getInstance(), [
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(resources.ResourcesPlugin.getInstance(), [
                     {
-                        iconName: icons.ICON_FILE_IMAGE,
+                        iconName: resources.ICON_FILE_IMAGE,
                         contentType: core.CONTENT_TYPE_IMAGE
                     },
                     {
-                        iconName: icons.ICON_FILE_IMAGE,
+                        iconName: resources.ICON_FILE_IMAGE,
                         contentType: core.CONTENT_TYPE_SVG
                     },
                     {
-                        iconName: icons.ICON_FILE_SOUND,
+                        iconName: resources.ICON_FILE_SOUND,
                         contentType: core.CONTENT_TYPE_AUDIO
                     },
                     {
-                        iconName: icons.ICON_FILE_VIDEO,
+                        iconName: resources.ICON_FILE_VIDEO,
                         contentType: core.CONTENT_TYPE_VIDEO
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_SCRIPT
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_JAVASCRIPT
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_TYPESCRIPT
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_CSS
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_HTML
                     },
                     {
-                        iconName: icons.ICON_FILE_SCRIPT,
+                        iconName: resources.ICON_FILE_SCRIPT,
                         contentType: core.CONTENT_TYPE_XML
                     },
                     {
-                        iconName: icons.ICON_FILE_TEXT,
+                        iconName: resources.ICON_FILE_TEXT,
                         contentType: core.CONTENT_TYPE_TEXT
                     }
                 ]));

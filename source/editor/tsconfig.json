@@ -7,7 +7,7 @@
             "path": "./plugins/colibri.inspector/src"
         },
         {
-            "path": "./plugins/phasereditor2d.icons/src"
+            "path": "./plugins/phasereditor2d.resources/src"
         },
         {
             "path": "./plugins/phasereditor2d.pack/src"

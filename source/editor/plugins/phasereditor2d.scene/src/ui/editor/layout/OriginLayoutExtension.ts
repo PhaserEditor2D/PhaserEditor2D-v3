@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor.layout {
             super({
                 name: `Origin ${getYName(originY)}/${getXName(originX)}`,
                 group: "Origin",
-                icon: icons.getIcon(("origin-" + getYName(originY) + getXName(originX)).toLowerCase()),
+                icon: resources.getIcon(("origin-" + getYName(originY) + getXName(originX)).toLowerCase()),
             });
 
             this._originX = originX;
