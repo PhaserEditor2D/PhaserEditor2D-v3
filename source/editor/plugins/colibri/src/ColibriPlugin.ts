@@ -40,7 +40,7 @@ namespace colibri {
         }
 
         private constructor() {
-            super("colibri", true);
+            super("colibri", { loadIconsFromAtlas: true });
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {

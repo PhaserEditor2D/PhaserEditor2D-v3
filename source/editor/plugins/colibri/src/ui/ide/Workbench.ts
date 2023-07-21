@@ -127,6 +127,9 @@ namespace colibri.ui.ide {
 
                     // register default extensions
                     registry.addExtension(new IconAtlasLoaderExtension(plugin));
+                    
+                    registry.addExtension(new PluginResourceLoaderExtension(
+                        () => plugin.preloadResources()));
 
                     plugin.registerExtensions(registry);
                 }
@@ -383,7 +386,7 @@ namespace colibri.ui.ide {
             const extensions = Platform.getExtensions<commands.CommandExtension>(commands.CommandExtension.POINT_ID);
 
             for (const extension of extensions) {
-                
+
                 extension.getConfigurer()(this._commandManager);
             }
         }

@@ -5,18 +5,27 @@ namespace colibri {
         private _id: string;
         private _iconCache: Map<string, ui.controls.IconImage>;
         private _loadIconsFromAtlas: boolean;
+        private _loadResources: boolean;
         private _atlasImage: ui.controls.IImage;
         private _atlasData: ui.controls.IAtlasData;
+        private _resources: ui.ide.Resources;
 
-        constructor(id: string, loadIconsFromAtlas = false) {
+        constructor(id: string, config?: {
+            loadIconsFromAtlas?: boolean,
+            loadResources?: boolean
+        }) {
 
             this._id = id;
-            this._loadIconsFromAtlas = loadIconsFromAtlas;
+
+            this._loadIconsFromAtlas = Boolean(config?.loadIconsFromAtlas);
+
+            this._loadResources = Boolean(config?.loadResources);
 
             this._iconCache = new Map();
         }
 
         getId() {
+
             return this._id;
         }
 
@@ -28,6 +37,23 @@ namespace colibri {
         started(): Promise<void> {
 
             return Promise.resolve();
+        }
+
+        getResources() {
+
+            return this._resources;
+        }
+
+        async preloadResources() {
+
+            if (!this._loadResources) {
+
+                return;
+            }
+
+            this._resources = new ui.ide.Resources(this);
+
+            await this._resources.preload();
         }
 
         async preloadAtlasIcons() {

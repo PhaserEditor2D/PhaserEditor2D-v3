@@ -82,36 +82,21 @@ namespace phasereditor2d.resources {
         }
 
         private constructor() {
-            super("phasereditor2d.resources", true);
-        }
-
-        registerExtensions(registry: colibri.ExtensionRegistry): void {
-
-            registry.addExtension(new colibri.ui.ide.PluginResourceLoaderExtension(async () => {
-
-                this._res = await this.getJSON("res.json");
-            }));
-        }
-
-        getResString(key: string) {
-
-            return this.getResData(key) as string;
-        }
-
-        getResData(key: string) {
-
-            return this._res[key];
+            super("phasereditor2d.resources", {
+                loadIconsFromAtlas: true,
+                loadResources: true
+            });
         }
     }
 
     export function getResString(key: string) {
 
-        return ResourcesPlugin.getInstance().getResString(key);
+        return ResourcesPlugin.getInstance().getResources().getResString(key);
     }
 
     export function getResData(key: string) {
 
-        return ResourcesPlugin.getInstance().getResData(key);
+        return ResourcesPlugin.getInstance().getResources().getResData(key);
     }
 
     export function getIcon(name: string) {
