@@ -171,13 +171,6 @@ namespace phasereditor2d.pack {
                     }
                 ]));
 
-            // plugin resources loader
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await AssetPackPlugin.getInstance().getPhaserDocs().preload();
-            }));
-
             // project resources preloader
 
             reg.addExtension(new core.AssetPackPreloadProjectExtension())
@@ -265,9 +258,15 @@ namespace phasereditor2d.pack {
         private _phaserDocs: phasereditor2d.ide.core.PhaserDocs;
 
         getPhaserDocs() {
-            return this._phaserDocs ?
-                this._phaserDocs :
-                (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
+
+            if (!this._phaserDocs) {
+
+                this._phaserDocs = this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance()
+                    , "phasereditor2d.pack/docs/phaser-docs.json");
+            }
+
+            return this._phaserDocs;
         }
     }
 

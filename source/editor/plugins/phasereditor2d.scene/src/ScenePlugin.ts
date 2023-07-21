@@ -40,7 +40,6 @@ namespace phasereditor2d.scene {
         private _sceneFinder: core.json.SceneFinder;
 
         private _docs: phasereditor2d.ide.core.PhaserDocs;
-        private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
 
         static getInstance() {
             return this._instance;
@@ -48,13 +47,6 @@ namespace phasereditor2d.scene {
 
         private constructor() {
             super("phasereditor2d.scene");
-
-            this._docs = new phasereditor2d.ide.core.PhaserDocs(
-                this,
-                "data/phaser-docs.json",
-                "data/events-docs.json");
-
-            this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/events-docs.json");
         }
 
         async starting() {
@@ -90,12 +82,15 @@ namespace phasereditor2d.scene {
 
         getPhaserDocs() {
 
+            if (!this._docs) {
+
+                this._docs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance(),
+                    "phasereditor2d.scene/docs/phaser.json",
+                    "phasereditor2d.scene/docs/events.json");
+            }
+
             return this._docs;
-        }
-
-        getPhaserEventsDocs() {
-
-            return this._eventsDocs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -107,18 +102,6 @@ namespace phasereditor2d.scene {
             reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
             reg.addExtension(new core.migrations.UnlockPositionMigration_v1_to_v2());
             reg.addExtension(new core.migrations.TextAlignMigration());
-
-            // preload docs
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ScenePlugin.getInstance().getPhaserDocs().preload();
-            }));
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ScenePlugin.getInstance().getPhaserEventsDocs().preload();
-            }));
 
             ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
                 "phasereditor.scene.ScriptNodeCategory", "ScriptNode", reg);

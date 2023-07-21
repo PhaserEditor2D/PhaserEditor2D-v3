@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer) {
 
             // Phaser events
-            const docs = ScenePlugin.getInstance().getPhaserEventsDocs();
+            const docs = ScenePlugin.getInstance().getPhaserDocs();
 
             const phaserNames = docs.getKeys();
 
@@ -161,7 +161,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const [eventName] = sel as string[];
 
                 const phaserDocs = ScenePlugin.getInstance().getPhaserDocs();
-                const eventsDocs = ScenePlugin.getInstance().getPhaserEventsDocs();
 
                 if (eventName) {
 
@@ -169,19 +168,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (eventName.startsWith("Phaser.")) {
 
-                        help = eventsDocs.getDoc(eventName, false) || "";
+                        help = phaserDocs.getDoc(eventName, false) || "";
 
                     } else if (eventName.startsWith("animationcomplete-")) {
 
-                        help = eventsDocs.getDoc("Phaser.Animations.Events.ANIMATION_COMPLETE_KEY", false);
+                        help = phaserDocs.getDoc("Phaser.Animations.Events.ANIMATION_COMPLETE_KEY", false);
 
                     } else if (eventName.startsWith("keydown-")) {
 
-                        help = eventsDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_DOWN", false);
+                        help = phaserDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_DOWN", false);
 
                     } if (eventName.startsWith("keyup-")) {
 
-                        help = eventsDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_UP", false);
+                        help = phaserDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_UP", false);
 
                     } else {
 
