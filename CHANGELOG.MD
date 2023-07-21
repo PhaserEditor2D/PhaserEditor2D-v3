@@ -2,7 +2,8 @@
 
 ## v3.62.3-development.
 
-* Migrates editor's icons from single files to a texture atlas.
+* Boost load speed: migrates editor's icons from single files to a texture atlas.
+* Boost load speed: bundle all IDE text resources into a single res.json file.
 * Improves browser cache managing. Loads way faster when running in the cloud.
 
 ## v3.62.2, Jul 2, 2023
