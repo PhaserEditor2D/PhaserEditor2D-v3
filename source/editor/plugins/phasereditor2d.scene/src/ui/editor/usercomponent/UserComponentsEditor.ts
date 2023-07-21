@@ -320,11 +320,11 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                         icon: resources.getIcon(resources.ICON_FILE_SCRIPT),
                         callback: async () => {
 
-                            const resources = UserComponentCodeResources.getInstance();
-                            const id = "usercomponent" + (mod ? ".module" : "") + "." + ext;
+                            const codeResources = UserComponentCodeResources.getInstance();
+                            // const id = "UserComponent" + (mod ? ".module" : "") + "." + ext;
+                            const id = `${ext}${mod? "-module" : ""}/UserComponent.${ext}`;
                             const parent = this.getInput().getParent();
                             const name = "UserComponent." + ext
-
 
                             if (parent.getFile(name)) {
 
@@ -334,7 +334,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                                 }
                             }
 
-                            const file = await resources.createFile(id, parent, name);
+                            const file = await codeResources.createFile(id, parent, name);
 
                             colibri.Platform.getWorkbench().openEditor(file);
                         }

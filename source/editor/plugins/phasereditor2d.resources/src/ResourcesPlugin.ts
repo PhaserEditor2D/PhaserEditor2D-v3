@@ -74,14 +74,44 @@ namespace phasereditor2d.resources {
         // icons
 
         private static _instance = new ResourcesPlugin();
+        private _res: { [name: string]: any };
 
         static getInstance() {
+
             return this._instance;
         }
 
         private constructor() {
             super("phasereditor2d.resources", true);
         }
+
+        registerExtensions(registry: colibri.ExtensionRegistry): void {
+
+            registry.addExtension(new colibri.ui.ide.PluginResourceLoaderExtension(async () => {
+
+                this._res = await this.getJSON("res.json");
+            }));
+        }
+
+        getResString(key: string) {
+
+            return this.getResData(key) as string;
+        }
+
+        getResData(key: string) {
+
+            return this._res[key];
+        }
+    }
+
+    export function getResString(key: string) {
+
+        return ResourcesPlugin.getInstance().getResString(key);
+    }
+
+    export function getResData(key: string) {
+
+        return ResourcesPlugin.getInstance().getResData(key);
     }
 
     export function getIcon(name: string) {

@@ -120,20 +120,6 @@ namespace phasereditor2d.scene {
                 await ScenePlugin.getInstance().getPhaserEventsDocs().preload();
             }));
 
-            // preload UserComponent files
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ui.editor.usercomponent.UserComponentCodeResources.getInstance().preload();
-            }));
-
-            // preload ScriptNode files
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ui.sceneobjects.ScriptNodeCodeResources.getInstance().preload();
-            }));
-
             ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
                 "phasereditor.scene.ScriptNodeCategory", "ScriptNode", reg);
 
