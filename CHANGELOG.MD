@@ -2,6 +2,7 @@
 
 ## v3.62.3-development.
 
+* Show splash before loading the workbench.
 * Boost load speed: migrates editor's icons from single files to a texture atlas.
 * Boost load speed: bundle all IDE text resources into a single res.json file.
 * Improves browser cache managing. Loads way faster when running in the cloud.
