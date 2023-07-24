@@ -1,3 +1,6 @@
 {
-    "workbench.colorTheme": "Nord"
+    "workbench.colorTheme": "Nord",
+    "cSpell.words": [
+        "openfile"
+    ]
 }

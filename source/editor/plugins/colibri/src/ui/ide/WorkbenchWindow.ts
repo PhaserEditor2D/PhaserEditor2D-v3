@@ -103,6 +103,7 @@ namespace colibri.ui.ide {
                     const inputState = inputData.inputState;
 
                     if (!inputState) {
+
                         continue;
                     }
 
@@ -139,6 +140,7 @@ namespace colibri.ui.ide {
                 let activeEditor = editorArea.getEditors()[restoreEditorData.activeEditorIndex];
 
                 if (!activeEditor) {
+
                     activeEditor = lastEditor;
                 }
 
@@ -147,6 +149,38 @@ namespace colibri.ui.ide {
                     editorArea.activateEditor(activeEditor);
                     wb.setActivePart(activeEditor);
                 }
+            }
+
+            if (editorArea.getEditors().length === 0) {
+
+                this.openFromUrlSearchParameter();
+            }
+        }
+
+        private openFromUrlSearchParameter() {
+            
+            const params = new URLSearchParams(window.location.search);
+            
+            const filePath = params.get("openfile");
+
+            if (!filePath) {
+
+                return;
+            }
+
+            const root = FileUtils.getRoot().getName();
+
+            console.log(`Workbench: opening editor for "${filePath}"`);
+
+            const file = FileUtils.getFileFromPath(`${root}/${filePath}`);
+
+            if (file) {
+
+                colibri.Platform.getWorkbench().openEditor(file);
+
+            } else {
+
+                console.log("Workbench: file not found.");
             }
         }
 
