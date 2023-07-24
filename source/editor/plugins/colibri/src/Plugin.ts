@@ -63,7 +63,7 @@ namespace colibri {
                 return;
             }
 
-            const ratio = ui.controls.DEVICE_PIXEL_RATIO_x2? "@x2" : "@x1";
+            const ratio = ui.controls.DEVICE_PIXEL_RATIO_x2? "@2x" : "@1x";
 
             const imgUrl = this.getPluginURL(`icons/atlas${ratio}.png`);
 

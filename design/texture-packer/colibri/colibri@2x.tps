@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../../source/editor/plugins/colibri/icons/atlas@x2.json</filename>
+                <filename>../../../source/editor/plugins/colibri/icons/atlas@2x.json</filename>
             </struct>
         </map>
         <key>multiPack</key>

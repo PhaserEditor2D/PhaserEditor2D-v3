@@ -371,10 +371,10 @@
 "meta": {
 	"app": "https://www.codeandweb.com/texturepacker",
 	"version": "1.0",
-	"image": "atlas@x2.png",
+	"image": "atlas@2x.png",
 	"format": "RGBA8888",
 	"size": {"w":240,"h":128},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:cb317c20211734a4c4376126dc24f588:ce8d5840bfe17c6b9b6e68f58624c8b6:21f11e0ab952e29b6fb40de6c3df4d82$"
+	"smartupdate": "$TexturePacker:SmartUpdate:050eebb1ed188776cbe3312a4d801424:ce8d5840bfe17c6b9b6e68f58624c8b6:9eb1a82ac620c259737931966d4495d0$"
 }
 }
