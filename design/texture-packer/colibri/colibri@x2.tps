@@ -124,7 +124,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../../../source/editor/plugins/colibri/icons/atlas.json</filename>
+                <filename>../../../source/editor/plugins/colibri/icons/atlas@x2.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -173,114 +173,52 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">dark/checked.png</key>
-            <key type="filename">dark/close.png</key>
-            <key type="filename">dark/color.png</key>
-            <key type="filename">dark/delete.png</key>
-            <key type="filename">dark/dirty.png</key>
-            <key type="filename">dark/file.png</key>
-            <key type="filename">dark/folder.png</key>
-            <key type="filename">dark/inspector.png</key>
-            <key type="filename">dark/keymap.png</key>
-            <key type="filename">dark/menu.png</key>
-            <key type="filename">dark/minus.png</key>
-            <key type="filename">dark/plus.png</key>
-            <key type="filename">dark/section-collapse-left.png</key>
-            <key type="filename">dark/section-collapse.png</key>
-            <key type="filename">dark/section-expand.png</key>
-            <key type="filename">dark/small-menu.png</key>
-            <key type="filename">dark/tree-collapse-left.png</key>
-            <key type="filename">dark/tree-collapse.png</key>
-            <key type="filename">dark/tree-expand-left.png</key>
-            <key type="filename">dark/tree-expand.png</key>
-            <key type="filename">dark/zoom-reset.png</key>
-            <key type="filename">dark/zoom_in.png</key>
-            <key type="filename">dark/zoom_out.png</key>
-            <key type="filename">light/add.png</key>
-            <key type="filename">light/checked.png</key>
-            <key type="filename">light/close.png</key>
-            <key type="filename">light/color.png</key>
-            <key type="filename">light/delete.png</key>
-            <key type="filename">light/dirty.png</key>
-            <key type="filename">light/file.png</key>
-            <key type="filename">light/folder.png</key>
-            <key type="filename">light/inspector.png</key>
-            <key type="filename">light/keymap.png</key>
-            <key type="filename">light/menu.png</key>
-            <key type="filename">light/minus.png</key>
-            <key type="filename">light/plus.png</key>
-            <key type="filename">light/section-collapse-left.png</key>
-            <key type="filename">light/section-collapse.png</key>
-            <key type="filename">light/section-expand.png</key>
-            <key type="filename">light/small-menu.png</key>
-            <key type="filename">light/tree-collapse-left.png</key>
-            <key type="filename">light/tree-collapse.png</key>
-            <key type="filename">light/tree-expand-left.png</key>
-            <key type="filename">light/tree-expand.png</key>
-            <key type="filename">light/zoom-reset.png</key>
-            <key type="filename">light/zoom_in.png</key>
-            <key type="filename">light/zoom_out.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">dark/checked@2x.png</key>
-            <key type="filename">dark/close@2x.png</key>
-            <key type="filename">dark/color@2x.png</key>
-            <key type="filename">dark/delete@2x.png</key>
-            <key type="filename">dark/dirty@2x.png</key>
-            <key type="filename">dark/file@2x.png</key>
-            <key type="filename">dark/folder@2x.png</key>
-            <key type="filename">dark/inspector@2x.png</key>
-            <key type="filename">dark/keymap@2x.png</key>
-            <key type="filename">dark/menu@2x.png</key>
-            <key type="filename">dark/minus@2x.png</key>
-            <key type="filename">dark/plus@2x.png</key>
-            <key type="filename">dark/section-collapse-left@2x.png</key>
-            <key type="filename">dark/section-collapse@2x.png</key>
-            <key type="filename">dark/section-expand@2x.png</key>
-            <key type="filename">dark/small-menu@2x.png</key>
-            <key type="filename">dark/tree-collapse-left@2x.png</key>
-            <key type="filename">dark/tree-collapse@2x.png</key>
-            <key type="filename">dark/tree-expand-left@2x.png</key>
-            <key type="filename">dark/tree-expand@2x.png</key>
-            <key type="filename">dark/zoom-reset@2x.png</key>
-            <key type="filename">dark/zoom_in@2x.png</key>
-            <key type="filename">dark/zoom_out@2x.png</key>
-            <key type="filename">light/add@2x.png</key>
-            <key type="filename">light/checked@2x.png</key>
-            <key type="filename">light/close@2x.png</key>
-            <key type="filename">light/color@2x.png</key>
-            <key type="filename">light/delete@2x.png</key>
-            <key type="filename">light/dirty@2x.png</key>
-            <key type="filename">light/file@2x.png</key>
-            <key type="filename">light/folder@2x.png</key>
-            <key type="filename">light/inspector@2x.png</key>
-            <key type="filename">light/keymap@2x.png</key>
-            <key type="filename">light/menu@2x.png</key>
-            <key type="filename">light/minus@2x.png</key>
-            <key type="filename">light/plus@2x.png</key>
-            <key type="filename">light/section-collapse-left@2x.png</key>
-            <key type="filename">light/section-collapse@2x.png</key>
-            <key type="filename">light/section-expand@2x.png</key>
-            <key type="filename">light/small-menu@2x.png</key>
-            <key type="filename">light/tree-collapse-left@2x.png</key>
-            <key type="filename">light/tree-collapse@2x.png</key>
-            <key type="filename">light/tree-expand-left@2x.png</key>
-            <key type="filename">light/tree-expand@2x.png</key>
-            <key type="filename">light/zoom-reset@2x.png</key>
-            <key type="filename">light/zoom_in@2x.png</key>
-            <key type="filename">light/zoom_out@2x.png</key>
+            <key type="filename">x2/dark/checked@2x.png</key>
+            <key type="filename">x2/dark/close@2x.png</key>
+            <key type="filename">x2/dark/color@2x.png</key>
+            <key type="filename">x2/dark/delete@2x.png</key>
+            <key type="filename">x2/dark/dirty@2x.png</key>
+            <key type="filename">x2/dark/file@2x.png</key>
+            <key type="filename">x2/dark/folder@2x.png</key>
+            <key type="filename">x2/dark/inspector@2x.png</key>
+            <key type="filename">x2/dark/keymap@2x.png</key>
+            <key type="filename">x2/dark/menu@2x.png</key>
+            <key type="filename">x2/dark/minus@2x.png</key>
+            <key type="filename">x2/dark/plus@2x.png</key>
+            <key type="filename">x2/dark/section-collapse-left@2x.png</key>
+            <key type="filename">x2/dark/section-collapse@2x.png</key>
+            <key type="filename">x2/dark/section-expand@2x.png</key>
+            <key type="filename">x2/dark/small-menu@2x.png</key>
+            <key type="filename">x2/dark/tree-collapse-left@2x.png</key>
+            <key type="filename">x2/dark/tree-collapse@2x.png</key>
+            <key type="filename">x2/dark/tree-expand-left@2x.png</key>
+            <key type="filename">x2/dark/tree-expand@2x.png</key>
+            <key type="filename">x2/dark/zoom-reset@2x.png</key>
+            <key type="filename">x2/dark/zoom_in@2x.png</key>
+            <key type="filename">x2/dark/zoom_out@2x.png</key>
+            <key type="filename">x2/light/checked@2x.png</key>
+            <key type="filename">x2/light/close@2x.png</key>
+            <key type="filename">x2/light/color@2x.png</key>
+            <key type="filename">x2/light/delete@2x.png</key>
+            <key type="filename">x2/light/dirty@2x.png</key>
+            <key type="filename">x2/light/file@2x.png</key>
+            <key type="filename">x2/light/folder@2x.png</key>
+            <key type="filename">x2/light/inspector@2x.png</key>
+            <key type="filename">x2/light/keymap@2x.png</key>
+            <key type="filename">x2/light/menu@2x.png</key>
+            <key type="filename">x2/light/minus@2x.png</key>
+            <key type="filename">x2/light/plus@2x.png</key>
+            <key type="filename">x2/light/section-collapse-left@2x.png</key>
+            <key type="filename">x2/light/section-collapse@2x.png</key>
+            <key type="filename">x2/light/section-expand@2x.png</key>
+            <key type="filename">x2/light/small-menu@2x.png</key>
+            <key type="filename">x2/light/tree-collapse-left@2x.png</key>
+            <key type="filename">x2/light/tree-collapse@2x.png</key>
+            <key type="filename">x2/light/tree-expand-left@2x.png</key>
+            <key type="filename">x2/light/tree-expand@2x.png</key>
+            <key type="filename">x2/light/zoom-reset@2x.png</key>
+            <key type="filename">x2/light/zoom_in@2x.png</key>
+            <key type="filename">x2/light/zoom_out@2x.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -298,8 +236,8 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>dark</filename>
-            <filename>light</filename>
+            <filename>x2/dark</filename>
+            <filename>x2/light</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

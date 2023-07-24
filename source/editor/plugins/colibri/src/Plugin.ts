@@ -63,14 +63,16 @@ namespace colibri {
                 return;
             }
 
-            const imgUrl = this.getPluginURL("icons/atlas.png");
+            const ratio = ui.controls.DEVICE_PIXEL_RATIO_x2? "@x2" : "@x1";
+
+            const imgUrl = this.getPluginURL(`icons/atlas${ratio}.png`);
 
             this._atlasImage = ui.controls.Controls
                 .getImage(imgUrl, this.getId() + ".atlas");
 
             await this._atlasImage.preload();
 
-            this._atlasData = await this.getJSON("icons/atlas.json");
+            this._atlasData = await this.getJSON(`icons/atlas${ratio}.json`);
         }
 
         registerExtensions(registry: ExtensionRegistry): void {
@@ -162,7 +164,7 @@ namespace colibri {
 
         private getIconsAtlasFrameName(name: string, theme: "dark" | "light" | "common") {
 
-            const x2 = ui.controls.ICON_SIZE === 32;
+            const x2 = ui.controls.DEVICE_PIXEL_RATIO_x2;
 
             return `${theme}/${name}${x2 ? "@2x" : ""}.png`;
         }

@@ -8,7 +8,8 @@ namespace colibri.ui.controls {
     }
 
     export const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
-    export const ICON_SIZE = DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
+    export const DEVICE_PIXEL_RATIO_x2 = DEVICE_PIXEL_RATIO > 1;
+    export const ICON_SIZE = DEVICE_PIXEL_RATIO_x2 ? 32 : 16;
     export const RENDER_ICON_SIZE = 16;
 
     export type IImageOrCanvas = HTMLImageElement|HTMLCanvasElement;
