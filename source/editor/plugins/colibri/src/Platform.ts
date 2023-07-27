@@ -42,11 +42,18 @@ namespace colibri {
             return ui.ide.Workbench.getWorkbench();
         }
 
-        static async loadProduct() {
+        static async loadProduct(bypassCache = true) {
 
             try {
 
-                const resp = await fetch(`/editor/product.json?v=${Date.now()}`);
+                const url = bypassCache ?
+                    `/editor/product.json?v=${Date.now()}` :
+                    `/editor/product.json}`;
+
+                const resp = await fetch(url, {
+                    method: "GET",
+                    cache: "no-cache"
+                });
 
                 this._product = await resp.json();
 
