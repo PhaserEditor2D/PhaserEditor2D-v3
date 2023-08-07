@@ -3,11 +3,7 @@
     "compilerOptions": {
         "outFile": "../_out/phasereditor2d.phaser.js"
     },
-    "references": [
-        {
-            "path": "../../colibri/src"
-        }
-    ],
+    "references": [],
     "exclude": [
         "../_out/"
     ]

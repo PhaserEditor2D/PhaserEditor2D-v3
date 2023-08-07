@@ -1,0 +1,6 @@
+{
+    "id": "phasereditor2d.spine",
+    "scripts": [
+        "scripts/spine-phaser.min.js"
+    ]
+}
