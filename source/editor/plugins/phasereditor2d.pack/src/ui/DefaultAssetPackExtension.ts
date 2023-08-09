@@ -344,7 +344,8 @@ namespace phasereditor2d.pack.ui {
                     case core.MULTI_ATLAS_TYPE:
                     case core.ATLAS_TYPE:
                     case core.UNITY_ATLAS_TYPE:
-                    case core.ATLAS_XML_TYPE: {
+                    case core.ATLAS_XML_TYPE:
+                    case core.SPINE_ATLAS_TYPE: {
 
                         return new viewers.AtlasItemCellRenderer();
                     }

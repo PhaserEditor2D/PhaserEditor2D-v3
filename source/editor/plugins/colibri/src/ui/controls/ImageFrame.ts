@@ -13,6 +13,7 @@ namespace colibri.ui.controls {
         }
 
         preloadSize(): Promise<PreloadResult> {
+
             return this.preload();
         }
 
@@ -21,17 +22,21 @@ namespace colibri.ui.controls {
         }
 
         getImage() {
+
             return this._image;
         }
 
         getFrameData() {
+
             return this._frameData;
         }
 
         paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void {
+
             const img = this._image;
 
             if (!img) {
+                
                 return;
             }
 
@@ -49,6 +54,7 @@ namespace colibri.ui.controls {
 
             // fix width if it goes beyond the area
             if (imgW > renderWidth) {
+
                 imgH = imgH * (renderWidth / imgW);
                 imgW = renderWidth;
             }

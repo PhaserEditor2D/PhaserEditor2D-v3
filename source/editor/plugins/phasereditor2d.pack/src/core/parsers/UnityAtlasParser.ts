@@ -106,14 +106,17 @@ namespace phasereditor2d.pack.core.parsers {
         private addFrame(image: controls.DefaultImage, imageFrames: AssetPackImageFrame[], spriteName: string, rect: any) {
 
             if (!image) {
+                
                 return;
             }
 
             const src = new controls.Rect(rect.x, rect.y, rect.width, rect.height);
             src.y = image.getHeight() - src.y - src.h;
+
             const dst = new controls.Rect(0, 0, rect.width, rect.height);
             const srcSize = new controls.Point(rect.width, rect.height);
             const fd = new controls.FrameData(imageFrames.length, src, dst, srcSize);
+
             imageFrames.push(new AssetPackImageFrame(
                 this.getPackItem() as ImageFrameContainerAssetPackItem, spriteName, image, fd));
         }
