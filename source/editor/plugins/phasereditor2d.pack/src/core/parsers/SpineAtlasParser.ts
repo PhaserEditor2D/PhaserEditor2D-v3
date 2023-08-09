@@ -54,24 +54,43 @@ namespace phasereditor2d.pack.core.parsers {
                 return frames;
             }
 
-            const images = this.getTextureImages(atlasFile);
+            const atlasContent = ide.FileUtils.getFileString(atlasFile);
 
-            let i = 0;
+            const spineAtlas = new spine.TextureAtlas(atlasContent);
 
-            for (const image of images) {
+            for (const page of spineAtlas.pages) {
 
-                const w = image.getWidth();
-                const h = image.getHeight();
+                const imageFile = atlasFile.getSibling(page.name);
 
-                const fd = controls.FrameData.fromRect(i, new controls.Rect(0, 0, w, h));
+                const image = colibri.Platform.getWorkbench().getFileImage(imageFile);
 
-                const name = image.getFile().getName();
+                let i = 0;
 
-                const frame = new AssetPackImageFrame(packItem, name, image, fd);
+                for (const region of page.regions) {
 
-                frames.push(frame);
+                    let src: controls.Rect;
+                    let dst: controls.Rect;
+                    let size: controls.Point;
 
-                i++;
+                    if (region.degrees === 90) {
+
+                        src = new controls.Rect(region.x, region.y, region.height, region.width);
+                        dst = new controls.Rect(region.x + region.offsetX, region.y + region.offsetX, region.height, region.width);
+                        size = new controls.Point(region.height, region.width);
+
+                    } else {
+
+                        src = new controls.Rect(region.x, region.y, region.width, region.height);
+                        dst = new controls.Rect(region.x + region.offsetX, region.y + region.offsetX, region.width, region.height);
+                        size = new controls.Point(region.width, region.height);
+                    }
+
+                    const fd = new controls.FrameData(i++, src, dst, size);
+
+                    const frame = new AssetPackImageFrame(packItem, region.name, image, fd);
+
+                    frames.push(frame);
+                }
             }
 
             return frames;
