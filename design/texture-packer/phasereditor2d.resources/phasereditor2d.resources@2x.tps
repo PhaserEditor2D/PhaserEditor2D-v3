@@ -227,6 +227,7 @@
             <key type="filename">x2/dark/row@2x.png</key>
             <key type="filename">x2/dark/scale@2x.png</key>
             <key type="filename">x2/dark/select-region@2x.png</key>
+            <key type="filename">x2/dark/spine@2x.png</key>
             <key type="filename">x2/dark/sprite-type@2x.png</key>
             <key type="filename">x2/dark/text-type@2x.png</key>
             <key type="filename">x2/dark/tilemap-layer@2x.png</key>
@@ -290,6 +291,7 @@
             <key type="filename">x2/light/row@2x.png</key>
             <key type="filename">x2/light/scale@2x.png</key>
             <key type="filename">x2/light/select-region@2x.png</key>
+            <key type="filename">x2/light/spine@2x.png</key>
             <key type="filename">x2/light/sprite-type@2x.png</key>
             <key type="filename">x2/light/text-type@2x.png</key>
             <key type="filename">x2/light/tilemap-layer@2x.png</key>
