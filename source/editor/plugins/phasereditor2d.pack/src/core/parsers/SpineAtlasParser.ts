@@ -98,6 +98,15 @@ namespace phasereditor2d.pack.core.parsers {
 
         private getTextureImages(atlasFile: io.FilePath) {
 
+            return SpineAtlasParser.getTextureFiles(atlasFile)
+
+                .map(file => colibri.Platform.getWorkbench().getFileImage(file))
+
+                .filter(img => Boolean(img));
+        }
+
+        static getTextureFiles(atlasFile: io.FilePath) {
+
             const str = ide.FileUtils.getFileString(atlasFile);
 
             const textures = this.getTextures(str);
@@ -106,14 +115,10 @@ namespace phasereditor2d.pack.core.parsers {
 
                 .map(texture => atlasFile.getSibling(texture))
 
-                .filter(file => Boolean(file))
-
-                .map(file => colibri.Platform.getWorkbench().getFileImage(file))
-
-                .filter(img => Boolean(img));
+                .filter(file => Boolean(file));
         }
 
-        private getTextures(atlasContent: string) {
+        private static getTextures(atlasContent: string) {
 
             // taken from spine-phaser runtime.
 
@@ -138,45 +143,43 @@ namespace phasereditor2d.pack.core.parsers {
             return textures;
         }
 
-
         addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache) {
 
-            // Nothing, the spine atlas frames are not using in regular game objects like
-            // Image, Sprite, TileSprite, etc...
-            //
-            // The spine atlas are used only by the spine game objects.
+            const item = this.getPackItem() as SpineAtlasAssetPackItem;
+
+            cache.addAsset(item);
+
+            if (!game.textures.exists(item.getKey())) {
+
+                const packItemData = item.getData();
+                const atlasDataFile = item.getFileFromAssetUrl(packItemData.url);
+                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(item.getPack(), packItemData.url);
+
+                if (atlasData && atlasDataFile) {
+
+                    // add atlas data to cache
+
+                    game.cache.text.add(item.getKey(), JSON.stringify(atlasData));
+
+                    cache.addAsset(item);
+
+                    // add images to cache
+
+                    const images = this.getTextureImages(atlasDataFile);
+
+                    for(const image of images) {
+
+                        const key = item.getKey() + "!" + image.getFile().getName();
+
+                        game.textures.addImage(key, image.getImageElement());
+                    }
+
+                    for (const frame of item.getFrames()) {
+
+                        cache.addImage(frame, item.getKey(), frame.getName());
+                    }
+                }
+            }
         }
     }
 }
-
-/*
-
-TextureImporter:
-  spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
-  spriteSheet:
-    sprites:
-    - name: asteroids_0
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 328
-        width: 65
-        height: 82
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: asteroids_1
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 322
-        width: 53
-        height: 88
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-  spritePackingTag: Asteroids
-
-  */
