@@ -14,12 +14,11 @@ namespace phasereditor2d.pack.core.contentTypes {
         async computeContentType(file: io.FilePath): Promise<string> {
 
             if (file.getExtension() === "meta") {
+
                 return CONTENT_TYPE_UNITY_ATLAS;
             }
 
             return colibri.core.CONTENT_TYPE_ANY;
         }
-
     }
-
 }

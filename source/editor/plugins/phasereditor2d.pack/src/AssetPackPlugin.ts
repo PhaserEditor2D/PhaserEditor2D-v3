@@ -146,7 +146,8 @@ namespace phasereditor2d.pack {
                 new colibri.core.ContentTypeExtension(
                     [
                         new pack.core.contentTypes.SpineJsonContentTypeResolver(),
-                        new pack.core.contentTypes.SpineBinaryContentTypeResolver()
+                        new pack.core.contentTypes.SpineBinaryContentTypeResolver(),
+                        new pack.core.contentTypes.SpineAtlasContentTypeResolver()
                     ],
                     5
                 ));
@@ -184,6 +185,10 @@ namespace phasereditor2d.pack {
                     {
                         iconName: resources.ICON_SPINE,
                         contentType: core.contentTypes.CONTENT_TYPE_SPINE_BINARY
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_ATLAS
                     }
                 ]));
 

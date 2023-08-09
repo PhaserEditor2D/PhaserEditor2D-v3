@@ -115,8 +115,11 @@ namespace phasereditor2d.pack.ui {
                 case core.SPINE_JSON_TYPE:
                     return new core.SpineJsonAssetPackItem(pack, data);
 
-                    case core.SPINE_BINARY_TYPE:
-                        return new core.SpineBinaryAssetPackItem(pack, data);
+                case core.SPINE_BINARY_TYPE:
+                    return new core.SpineBinaryAssetPackItem(pack, data);
+
+                case core.SPINE_ATLAS_TYPE:
+                    return new core.SpineAtlasAssetPackItem(pack, data);
 
                 case core.PLUGIN_TYPE:
                     return new core.PluginAssetPackItem(pack, data);
@@ -486,6 +489,8 @@ namespace phasereditor2d.pack.ui {
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
+
+                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_ATLAS, core.SPINE_ATLAS_TYPE),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,
