@@ -9,6 +9,9 @@ namespace phasereditor2d.pack.core {
     export const ATLAS_XML_TYPE = "atlasXML";
     export const UNITY_ATLAS_TYPE = "unityAtlas";
     export const MULTI_ATLAS_TYPE = "multiatlas";
+    export const SPINE_JSON_TYPE = "spineJson";
+    export const SPINE_BINARY_TYPE = "spineBinary";
+    export const SPINE_ATLAS_TYPE = "spineAtlas";
     export const SPRITESHEET_TYPE = "spritesheet";
     export const ANIMATION_TYPE = "animation";
     export const AUDIO_TYPE = "audio";

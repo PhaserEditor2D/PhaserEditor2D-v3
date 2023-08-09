@@ -11,6 +11,7 @@ namespace phasereditor2d.resources {
     export const ICON_ANIMATIONS = "animations";
     export const ICON_TILEMAP = "tilemap";
     export const ICON_TILEMAP_LAYER = "tilemap-layer";
+    export const ICON_SPINE = "spine";
     // phasereditor2d.files
     export const ICON_NEW_FILE = "file-new";
     export const ICON_PROJECT = "project";

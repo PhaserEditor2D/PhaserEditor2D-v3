@@ -144,6 +144,15 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(
                 new colibri.core.ContentTypeExtension(
+                    [
+                        new pack.core.contentTypes.SpineJsonContentTypeResolver(),
+                        new pack.core.contentTypes.SpineBinaryContentTypeResolver()
+                    ],
+                    5
+                ));
+
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
                     [new pack.core.contentTypes.AudioSpriteContentTypeResolver()],
                     5
                 ));
@@ -165,9 +174,16 @@ namespace phasereditor2d.pack {
                         contentType: core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON
                     },
                     {
-                        plugin: resources.ResourcesPlugin.getInstance(),
                         iconName: resources.ICON_FILE_FONT,
                         contentType: core.contentTypes.CONTENT_TYPE_BITMAP_FONT
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_JSON
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_BINARY
                     }
                 ]));
 

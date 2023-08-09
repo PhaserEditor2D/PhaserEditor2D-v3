@@ -15,6 +15,9 @@ namespace phasereditor2d.pack.ui {
         core.TILEMAP_CSV_TYPE,
         core.TILEMAP_IMPACT_TYPE,
         core.TILEMAP_TILED_JSON_TYPE,
+        core.SPINE_JSON_TYPE,
+        core.SPINE_BINARY_TYPE,
+        core.SPINE_ATLAS_TYPE,
         core.PLUGIN_TYPE,
         core.SCENE_FILE_TYPE,
         core.SCENE_PLUGIN_TYPE,
@@ -46,6 +49,9 @@ namespace phasereditor2d.pack.ui {
         tilemapCSV: "Tilemap CSV",
         tilemapImpact: "Tilemap Impact",
         tilemapTiledJSON: "Tilemap Tiled JSON",
+        spineJson: "Spine JSON",
+        spineBinary: "Spine Binary",
+        spineAtlas: "Spine Atlas",
         plugin: "Plugin",
         sceneFile: "Scene File",
         scenePlugin: "Scene Plugin",
@@ -106,6 +112,12 @@ namespace phasereditor2d.pack.ui {
                 case core.TILEMAP_TILED_JSON_TYPE:
                     return new core.TilemapTiledJSONAssetPackItem(pack, data);
 
+                case core.SPINE_JSON_TYPE:
+                    return new core.SpineJsonAssetPackItem(pack, data);
+
+                    case core.SPINE_BINARY_TYPE:
+                        return new core.SpineBinaryAssetPackItem(pack, data);
+
                 case core.PLUGIN_TYPE:
                     return new core.PluginAssetPackItem(pack, data);
 
@@ -150,7 +162,7 @@ namespace phasereditor2d.pack.ui {
 
                 case core.JSON_TYPE:
                     return new core.JSONAssetPackItem(pack, data);
-                    
+
                 case core.XML_TYPE:
                     return new core.XMLAssetPackItem(pack, data);
             }
@@ -197,6 +209,14 @@ namespace phasereditor2d.pack.ui {
                 new editor.properties.TilemapImpactSection(page),
 
                 new editor.properties.TilemapTiledJSONSection(page),
+
+                new editor.properties.SimpleURLSection(page,
+                    "phasereditor2d.pack.ui.editor.properties.SpineJsonSection",
+                    "Spine JSON",
+                    "URL",
+                    "url",
+                    core.contentTypes.CONTENT_TYPE_SPINE_JSON,
+                    core.SPINE_JSON_TYPE),
 
                 new editor.properties.PluginSection(page),
 
@@ -379,6 +399,11 @@ namespace phasereditor2d.pack.ui {
 
                         return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_TILEMAP), layout);
 
+                    case core.SPINE_JSON_TYPE:
+                    case core.SPINE_BINARY_TYPE:
+
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_SPINE), layout);
+
                     default:
                         break;
                 }
@@ -457,6 +482,10 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
                     core.TILEMAP_TILED_JSON_TYPE),
+
+                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
+
+                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,

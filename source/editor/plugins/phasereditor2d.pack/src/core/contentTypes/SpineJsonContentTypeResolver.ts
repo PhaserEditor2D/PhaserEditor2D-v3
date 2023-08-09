@@ -3,13 +3,13 @@ namespace phasereditor2d.pack.core.contentTypes {
     import io = colibri.core.io;
     import ide = colibri.ui.ide;
 
-    export const CONTENT_TYPE_SPINE_DATA = "phasereditor2d.pack.core.spineData";
+    export const CONTENT_TYPE_SPINE_JSON = "phasereditor2d.pack.core.spineJson";
 
-    export class SpineDataContentTypeResolver implements colibri.core.IContentTypeResolver {
+    export class SpineJsonContentTypeResolver implements colibri.core.IContentTypeResolver {
 
         getId(): string {
 
-            return "phasereditor2d.pack.core.spineData";
+            return "phasereditor2d.pack.core.spineJson";
         }
 
         async computeContentType(file: io.FilePath): Promise<string> {
@@ -22,13 +22,15 @@ namespace phasereditor2d.pack.core.contentTypes {
 
                     const data = JSON.parse(content);
 
-                    if (data.hasOwnProperty("textures")) {
+                    if (data.hasOwnProperty("skeleton")) {
 
-                        const frames = data["textures"];
+                        const skeletonData = data["skeleton"];
 
-                        if (typeof (frames) === "object") {
+                        if (typeof (skeletonData) === "object") {
 
-                            return CONTENT_TYPE_SPINE_DATA;
+                            if (typeof skeletonData["spine"] === "string")
+
+                            return CONTENT_TYPE_SPINE_JSON;
                         }
                     }
 
