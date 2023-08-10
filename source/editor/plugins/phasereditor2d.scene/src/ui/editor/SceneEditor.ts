@@ -343,6 +343,11 @@ namespace phasereditor2d.scene.ui.editor {
                 physics: {
                     default: "arcade"
                 },
+                plugins: {
+                    scene: [
+                        { key: "spine.SpinePlugin", plugin: spine.SpinePlugin, mapping: "spine" }
+                    ]
+                },
                 scene: this._scene,
             });
 

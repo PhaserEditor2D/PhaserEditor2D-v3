@@ -153,13 +153,18 @@ namespace phasereditor2d.pack.core.parsers {
 
                 const packItemData = item.getData();
                 const atlasDataFile = item.getFileFromAssetUrl(packItemData.url);
-                const atlasData = AssetPackUtils.getFileJSONFromPackUrl(item.getPack(), packItemData.url);
+                const atlasData = AssetPackUtils.getFileStringFromPackUrl(item.getPack(), packItemData.url);
 
                 if (atlasData && atlasDataFile) {
 
                     // add atlas data to cache
 
-                    game.cache.text.add(item.getKey(), JSON.stringify(atlasData));
+                    console.log("add atlas data to cache", item.getKey());
+
+                    game.cache.text.add(item.getKey(), {
+                        data: atlasData,
+                        premultipliedAlpha: packItemData.premultipliedAlpha || atlasData.indexOf("pma: true") >= 0
+                    });
 
                     cache.addAsset(item);
 

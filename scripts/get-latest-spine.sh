@@ -8,6 +8,7 @@ export SPINE_PLUGIN=source/editor/plugins/phasereditor2d.spine
 
 rm -Rf $SPINE_PLUGIN/scripts/*.js
 cp $SPINE_RUNTIME/dist/iife/spine-phaser.min.js $SPINE_PLUGIN/scripts/
+cp $SPINE_RUNTIME/dist/iife/spine-phaser.js $SPINE_PLUGIN/scripts/
 
 # spine types
 

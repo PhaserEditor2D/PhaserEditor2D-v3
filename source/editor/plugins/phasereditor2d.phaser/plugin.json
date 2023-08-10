@@ -1,5 +1,6 @@
 {
     "id": "phasereditor2d.phaser",
+    "priority": -100,
     "scripts": [
         "scripts/phaser.min.js"
     ],

@@ -2,13 +2,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TilemapLoaderUpdater extends LoaderUpdaterExtension {
 
-        clearCache(game: Phaser.Game): void {
+        clearCache(scene: BaseScene): void {
 
-            const keys = game.cache.tilemap.getKeys();
+            const keys = scene.cache.tilemap.getKeys();
 
             for (const key of keys) {
 
-                game.cache.tilemap.remove(key);
+                scene.cache.tilemap.remove(key);
             }
         }
 

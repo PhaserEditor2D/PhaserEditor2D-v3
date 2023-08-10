@@ -4,9 +4,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class ImageLoaderExtension extends LoaderUpdaterExtension {
 
-        clearCache(game: Phaser.Game): void {
+        clearCache(scene: BaseScene): void {
 
-            const list = game.textures.list;
+            const list = scene.textures.list;
 
             for (const key in list) {
 

@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(LoaderUpdaterExtension.POINT_ID);
         }
 
-        abstract clearCache(game: Phaser.Game): void;
+        abstract clearCache(scene: BaseScene): void;
 
         abstract acceptAsset(asset: any): boolean;
 

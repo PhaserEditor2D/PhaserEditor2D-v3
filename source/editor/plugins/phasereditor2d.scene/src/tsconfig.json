@@ -11,6 +11,9 @@
             "path": "../../phasereditor2d.phaser/src"
         },
         {
+            "path": "../../phasereditor2d.spine/src"
+        },
+        {
             "path": "../../phasereditor2d.resources/src"
         },
         {

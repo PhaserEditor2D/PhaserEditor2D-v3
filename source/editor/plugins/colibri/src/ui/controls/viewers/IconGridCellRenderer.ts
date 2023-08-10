@@ -38,19 +38,6 @@ namespace colibri.ui.controls.viewers {
 
                 DefaultImage.paintEmpty(args.canvasContext, args.x, args.y, args.w, args.h);
             }
-
-            /*const ctx = args.canvasContext;
-
-            ctx.save();
-
-            ctx.lineWidth = 1;
-            ctx.globalAlpha = 0.5;
-            ctx.strokeStyle = Controls.getTheme().viewerForeground;
-
-            ctx.strokeRect(args.x, args.y, args.w, args.h);
-
-            ctx.restore();
-            */
         }
 
         cellHeight(args: RenderCellArgs): number {
@@ -60,7 +47,5 @@ namespace colibri.ui.controls.viewers {
         preload(args: PreloadCellArgs): Promise<any> {
             return this._icon.preload();
         }
-
     }
-
 }

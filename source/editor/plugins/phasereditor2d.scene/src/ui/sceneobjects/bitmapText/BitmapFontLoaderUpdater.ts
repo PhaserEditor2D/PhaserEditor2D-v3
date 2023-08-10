@@ -2,9 +2,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class BitmapFontLoaderUpdater extends LoaderUpdaterExtension {
 
-        clearCache(game: Phaser.Game): void {
-
-            const fontCache = game.cache.bitmapFont;
+        clearCache(scene: BaseScene): void {
+            
+            const fontCache = scene.cache.bitmapFont;
 
             const keys = fontCache.getKeys();
 

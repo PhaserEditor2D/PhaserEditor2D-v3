@@ -11,6 +11,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
     export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
+    export const SCENE_OBJECT_SPINE_CATEGORY = "Spine";
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
@@ -20,6 +21,7 @@ namespace phasereditor2d.scene {
         SCENE_OBJECT_SHAPE_CATEGORY,
         SCENE_OBJECT_TILEMAP_CATEGORY,
         SCENE_OBJECT_INPUT_CATEGORY,
+        SCENE_OBJECT_SPINE_CATEGORY,
         SCENE_OBJECT_SCRIPT_CATEGORY
     ];
 
@@ -150,7 +152,8 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ui.sceneobjects.ImageLoaderExtension(),
                 new ui.sceneobjects.BitmapFontLoaderUpdater(),
-                new ui.sceneobjects.TilemapLoaderUpdater()
+                new ui.sceneobjects.TilemapLoaderUpdater(),
+                new ui.sceneobjects.SpineLoaderUpdater()
             );
 
             // outline extensions
@@ -218,7 +221,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
                 ui.sceneobjects.ColliderExtension.getInstance(),
                 ui.sceneobjects.KeyboardKeyExtension.getInstance(),
-                ui.sceneobjects.ScriptNodeExtension.getInstance()
+                ui.sceneobjects.ScriptNodeExtension.getInstance(),
+                ui.sceneobjects.SpineExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -578,4 +582,6 @@ namespace phasereditor2d.scene {
     }
 
     colibri.Platform.addPlugin(ScenePlugin.getInstance());
+
+    console.log(spine.SpineGameObject);
 }
