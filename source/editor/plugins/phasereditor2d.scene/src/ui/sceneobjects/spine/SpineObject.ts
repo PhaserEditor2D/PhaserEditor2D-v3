@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // TODO: missing bounds provider
             super(scene, scene.spine, x, y, dataKey, atlasKey);
 
-            this._editorSupport = new SpineEditorSupport(SpineExtension.getInstance(), this, scene);
+            this._editorSupport = new SpineEditorSupport(this, scene);
         }
 
         getEditorSupport() {

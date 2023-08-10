@@ -4,9 +4,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SpineEditorSupport extends GameObjectEditorSupport<SpineObject>{
 
+        constructor(obj: SpineObject, scene: Scene) {
+
+            super(SpineExtension.getInstance(), obj, scene);
+
+            this.addComponent(
+                new TransformComponent(obj))
+        }
+
         setInteractive(): void {
 
-            // TODO
+            this.getObject().setInteractive();
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
