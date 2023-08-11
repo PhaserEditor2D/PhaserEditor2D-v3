@@ -103,7 +103,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject;
+        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject | Promise<sceneobjects.ISceneGameObject>;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.

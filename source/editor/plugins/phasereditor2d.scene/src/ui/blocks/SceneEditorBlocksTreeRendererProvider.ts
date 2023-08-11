@@ -12,7 +12,9 @@ namespace phasereditor2d.scene.ui.blocks {
         pack.core.SVG_TYPE,
         pack.core.ATLAS_TYPE,
         pack.core.SPRITESHEET_TYPE,
-        pack.core.BITMAP_FONT_TYPE
+        pack.core.BITMAP_FONT_TYPE,
+        pack.core.SPINE_JSON_TYPE,
+        pack.core.SPINE_BINARY_TYPE
     ]
 
     export const BLOCKS_SECTIONS = [

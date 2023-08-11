@@ -158,14 +158,21 @@ namespace phasereditor2d.scene.ui.editor {
 
                     if (ext.acceptsDropData(data)) {
 
-                        const sprite = ext.createSceneObjectWithAsset({
+                        const result = ext.createSceneObjectWithAsset({
                             x: x,
                             y: y,
                             asset: data,
                             scene: scene
                         });
 
-                        newSprites.push(sprite);
+                        // for compatibility with external plugins,
+                        // I set returning a promise as optional
+                        const sprite = result instanceof Promise ? await result : result;
+
+                        if (sprite) {
+
+                            newSprites.push(sprite);
+                        }
 
                         break;
                     }

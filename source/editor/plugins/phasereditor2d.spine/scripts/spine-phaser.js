@@ -14138,13 +14138,12 @@ void main () {
   })(SpineSkeletonDataFileType || {});
   var SpineSkeletonDataFile = class extends import_phaser.default.Loader.MultiFile {
     constructor(loader, key, url, fileType, xhrSettings) {
-      if (import_phaser.default.Utils.Objects.IsPlainObject(key)) {
+      if (typeof key !== "string") {
         const config = key;
-        key = import_phaser.default.Utils.Objects.GetFastValue(config, "key");
-        url = import_phaser.default.Utils.Objects.GetFastValue(config, "url");
-        const type = import_phaser.default.Utils.Objects.GetFastValue(config, "type");
-        fileType = type === "spineJson" ? 0 /* json */ : 1 /* binary */;
-        xhrSettings = import_phaser.default.Utils.Objects.GetFastValue(config, "xhrSettings");
+        key = config.key;
+        url = config.url;
+        fileType = config.type === "spineJson" ? 0 /* json */ : 1 /* binary */;
+        xhrSettings = config.xhrSettings;
       }
       let file = null;
       let isJson = fileType == 0 /* json */;
@@ -14176,12 +14175,13 @@ void main () {
   };
   var SpineAtlasFile = class extends import_phaser.default.Loader.MultiFile {
     constructor(loader, key, url, premultipliedAlpha = true, xhrSettings) {
-      if (import_phaser.default.Utils.Objects.IsPlainObject(key)) {
+      var _a;
+      if (typeof key !== "string") {
         const config = key;
-        key = import_phaser.default.Utils.Objects.GetFastValue(config, "key");
-        url = import_phaser.default.Utils.Objects.GetFastValue(config, "url");
-        premultipliedAlpha = import_phaser.default.Utils.Objects.GetFastValue(config, "premultipliedAlpha", true);
-        xhrSettings = import_phaser.default.Utils.Objects.GetFastValue(config, "xhrSettings");
+        key = config.key;
+        url = config.url;
+        premultipliedAlpha = (_a = config.premultipliedAlpha) != null ? _a : true;
+        xhrSettings = config.xhrSettings;
       }
       super(loader, SPINE_ATLAS_FILE_TYPE, key, [
         new import_phaser.default.Loader.FileTypes.TextFile(loader, {

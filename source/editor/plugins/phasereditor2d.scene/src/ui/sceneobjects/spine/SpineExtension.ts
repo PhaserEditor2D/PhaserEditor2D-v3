@@ -44,7 +44,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const scene = editor.getScene();
 
-
                     for (const asset of [dataAsset, atlasAsset]) {
 
                         const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
@@ -76,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         acceptsDropData(data: any): boolean {
 
-            return data instanceof pack.core.SpineAtlasAssetPackItem
+            return data instanceof pack.core.SpineJsonAssetPackItem
                 || data instanceof pack.core.SpineBinaryAssetPackItem
         }
 
@@ -84,14 +83,46 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { dataAsset, atlasAsset } = args.extraData as ISpineExtraData;
 
-            const spineObj = new SpineObject(args.scene, 0, 0, dataAsset.getKey(), atlasAsset.getKey());
+            const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
 
             return [spineObj];
         }
 
-        createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneGameObject {
-            
-            throw new Error("Method not implemented.");
+        async createSceneObjectWithAsset(args: ICreateWithAssetArgs): Promise<ISceneGameObject> {
+
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
+            const asset: pack.core.SpineJsonAssetPackItem | pack.core.SpineBinaryAssetPackItem = args.asset;
+
+            return new Promise((resolve, reject) => {
+
+                const dlg = new SpineConfigWizard(finder, asset);
+
+                dlg.setFinishCallback(async () => {
+
+                    const { dataAsset, atlasAsset } = dlg.getSelection();
+
+                    for (const asset of [dataAsset, atlasAsset]) {
+
+                        const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+
+                        await updater.updateLoader(args.scene, asset);
+                    }
+
+                    const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+
+                    resolve(spineObj);
+                });
+
+                dlg.setCancelCallback(() => {
+
+                    resolve(undefined);
+                });
+
+                dlg.create();
+            });
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {

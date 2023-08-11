@@ -7,23 +7,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _finder: pack.core.PackFinder;
         private _spineDataPage: SpineDataPage;
         private _spineAtlasPage: SpineAtlasPage;
+        private _initSpineDataAsset: pack.core.SpineBinaryAssetPackItem | pack.core.SpineJsonAssetPackItem;
         private _finishCallback: () => void;
         private _cancelCallback: () => void;
 
-        constructor(finder: pack.core.PackFinder) {
+        constructor(finder: pack.core.PackFinder, spineDataAsset?: pack.core.SpineBinaryAssetPackItem | pack.core.SpineJsonAssetPackItem) {
             super();
 
             this._finder = finder;
+            this._initSpineDataAsset = spineDataAsset;
 
             this.setSize(undefined, 500, true);
         }
 
         create() {
 
-            this._spineDataPage = new SpineDataPage();
-            this._spineAtlasPage = new SpineAtlasPage();
+            if (this._initSpineDataAsset) {
+                
+                this._spineAtlasPage = new SpineAtlasPage();
+                
+                this.addPages(this._spineAtlasPage);
 
-            this.addPages(this._spineDataPage, this._spineAtlasPage);
+            } else {
+
+                this._spineDataPage = new SpineDataPage();
+                this._spineAtlasPage = new SpineAtlasPage();
+
+                this.addPages(this._spineDataPage, this._spineAtlasPage);
+            }
 
             super.create();
 
@@ -64,7 +75,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getSelection() {
 
             return {
-                dataAsset: this._spineDataPage.getSpineDataAsset(),
+                dataAsset: this._initSpineDataAsset || this._spineDataPage.getSpineDataAsset(),
                 atlasAsset: this._spineAtlasPage.getSpineAtlasAsset()
             }
         }
