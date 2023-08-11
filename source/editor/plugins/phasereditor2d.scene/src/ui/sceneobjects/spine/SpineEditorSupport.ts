@@ -9,7 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(SpineExtension.getInstance(), obj, scene);
 
             this.addComponent(
-                new TransformComponent(obj))
+                new TransformComponent(obj),
+                new OriginComponent(obj))
         }
 
         setInteractive(): void {
