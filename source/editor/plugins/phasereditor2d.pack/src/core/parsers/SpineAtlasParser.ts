@@ -159,8 +159,6 @@ namespace phasereditor2d.pack.core.parsers {
 
                     // add atlas data to cache
 
-                    console.log("add atlas data to cache", item.getKey());
-
                     game.cache.text.add(item.getKey(), {
                         data: atlasData,
                         premultipliedAlpha: packItemData.premultipliedAlpha || atlasData.indexOf("pma: true") >= 0

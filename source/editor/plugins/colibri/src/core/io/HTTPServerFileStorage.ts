@@ -435,20 +435,26 @@ namespace colibri.core.io {
             return newFolder;
         }
 
-        async getFileString(file: FilePath): Promise<string> {
+        async getFileBinary(file: FilePath): Promise<ArrayBuffer> {
 
-            // const data = await apiRequest("GetFileString", {
-            //     path: file.getFullName()
-            // });
-            //
-            // if (data.error) {
-            //     alert(`Cannot get file content of '${file.getFullName()}'`);
-            //     return null;
-            // }
-            //
-            // const content = data["content"];
-            //
-            // return content;
+            const resp = await fetch(file.getUrl(), {
+                method: "GET",
+                cache: "force-cache"
+            });
+
+            const content = await resp.arrayBuffer();
+
+            if (!resp.ok) {
+
+                alert(`Cannot get the content of file '${file.getFullName()}'.`);
+
+                return null;
+            }
+
+            return content;
+        }
+
+        async getFileString(file: FilePath): Promise<string> {
 
             const resp = await fetch(file.getUrl(), {
                 method: "GET",

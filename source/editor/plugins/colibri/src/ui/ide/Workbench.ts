@@ -26,6 +26,7 @@ namespace colibri.ui.ide {
         public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
 
         private _fileStringCache: core.io.FileStringCache;
+        private _fileBinaryCache: core.io.FileBinaryCache;
         private _fileImageCache: ImageFileCache;
         private _fileImageSizeCache: ImageSizeFileCache;
         private _activeWindow: ide.WorkbenchWindow;
@@ -61,6 +62,8 @@ namespace colibri.ui.ide {
                 this._fileStorage = new core.io.FileStorage_HTTPServer();
 
                 this._fileStringCache = new core.io.FileStringCache(this._fileStorage);
+
+                this._fileBinaryCache = new core.io.FileBinaryCache(this._fileStorage);
             }
 
             this._globalPreferences = new core.preferences.Preferences("__global__");
@@ -191,6 +194,7 @@ namespace colibri.ui.ide {
         private resetCache() {
 
             this._fileStringCache.reset();
+            this._fileImageCache.reset();
             this._fileImageCache.reset();
             this._fileImageSizeCache.reset();
             this._contentTypeRegistry.resetCache();
@@ -437,40 +441,54 @@ namespace colibri.ui.ide {
         }
 
         getFileStringCache() {
+
             return this._fileStringCache;
         }
 
+        getFileBinaryCache() {
+
+            return this._fileBinaryCache;
+        }
+
         getFileStorage() {
+
             return this._fileStorage;
         }
 
         getCommandManager() {
+
             return this._commandManager;
         }
 
         getActiveDialog() {
+
             return controls.dialogs.Dialog.getActiveDialog();
         }
 
         getActiveWindow() {
+
             return this._activeWindow;
         }
 
         getActiveElement() {
+
             return this._activeElement;
         }
 
         getActivePart() {
+
             return this._activePart;
         }
 
         getActiveEditor() {
+
             return this._activeEditor;
         }
 
         setActiveEditor(editor: EditorPart) {
 
             if (editor === this._activeEditor) {
+
                 return;
             }
 
