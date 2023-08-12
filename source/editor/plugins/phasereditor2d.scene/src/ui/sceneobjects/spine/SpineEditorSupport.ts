@@ -2,6 +2,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
+    export interface ISpineObjectData extends core.json.IObjectData {
+        dataKey: string;
+        atlasKey: string;
+    }
+
     export class SpineEditorSupport extends GameObjectEditorSupport<SpineObject>{
 
         constructor(obj: SpineObject, scene: Scene) {
@@ -10,7 +15,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
                 new TransformComponent(obj),
-                new OriginComponent(obj))
+                new OriginComponent(obj),
+                new SpineComponent(obj));
         }
 
         setInteractive(): void {
@@ -22,5 +28,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_SPINE));
         }
+
+        writeJSON(data: ISpineObjectData): void {
+            
+            super.writeJSON(data);
+
+            const obj = this.getObject();
+
+            data.dataKey = obj.getDataKey();
+            data.atlasKey = obj.getAtlasKey();
+        }
     }
+
 }

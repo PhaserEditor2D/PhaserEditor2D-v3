@@ -126,15 +126,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
-            throw new Error("Method not implemented.");
+
+            const data = args.data as ISpineObjectData;
+
+            const obj = new SpineObject(args.scene, 0, 0, data.dataKey, data.atlasKey);
+
+            obj.getEditorSupport().readJSON(data);
+
+            return obj;
         }
 
-        getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
-            throw new Error("Method not implemented.");
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
+            
+            const dataKey = args.serializer.read("dataKey");
+            const atlasKey = args.serializer.read("atlasKey");
+
+            const dataAsset = args.finder.findAssetPackItem(dataKey);
+            const atlasAsset= args.finder.findAssetPackItem(atlasKey);
+
+            return [dataAsset, atlasAsset];
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
-            throw new Error("Method not implemented.");
+           
+            return new SpineCodeDOMBuilder();
         }
     }
 }

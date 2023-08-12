@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createEnumField<TValue>(
             parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true, filter?: (v: TValue) => boolean) {
 
-            const getItems = () => property.values
+            const getItems = () => (property.values ?? property.getEnumValues(this.getSelection()[0]))
                 .filter(v => !filter || filter(v))
                 .map(value => {
                     return {
