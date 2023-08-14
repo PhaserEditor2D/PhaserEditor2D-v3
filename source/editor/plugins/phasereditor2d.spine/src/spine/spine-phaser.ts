@@ -1,35 +1,7 @@
 
 
 // PACK: spine-phaser/dist/SpineGameObject.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class BaseSpineGameObject extends Phaser.GameObjects.GameObject {
 	    constructor(scene: Phaser.Scene, type: string);
 	}
@@ -129,40 +101,10 @@ declare namespace spine {
 	    renderWebGL(renderer: Phaser.Renderer.WebGL.WebGLRenderer, src: SpineGameObject, camera: Phaser.Cameras.Scene2D.Camera, parentMatrix: Phaser.GameObjects.Components.TransformMatrix): void;
 	    renderCanvas(renderer: Phaser.Renderer.Canvas.CanvasRenderer, src: SpineGameObject, camera: Phaser.Cameras.Scene2D.Camera, parentMatrix: Phaser.GameObjects.Components.TransformMatrix): void;
 	}
-	
-
 }
 
 // PACK: spine-phaser/dist/SpinePlugin.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	/**
 	 * Configuration object used when creating {@link SpineGameObject} instances via a scene's
 	 * {@link GameObjectCreator} (`Scene.make`).
@@ -223,40 +165,10 @@ declare namespace spine {
 	    /** Creates a new Skeleton instance from the data and atlas. */
 	    createSkeleton(dataKey: string, atlasKey: string): Skeleton;
 	}
-	
-
 }
 
 // PACK: spine-phaser/dist/keys.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	const SPINE_SKELETON_FILE_CACHE_KEY = "esotericsoftware.spine.skeletonFile.cache";
 	const SPINE_ATLAS_CACHE_KEY = "esotericsoftware.spine.atlas.cache";
 	const SPINE_LOADER_TYPE = "spine";
@@ -264,13 +176,10 @@ declare namespace spine {
 	const SPINE_ATLAS_FILE_TYPE = "spineAtlasData";
 	const SPINE_GAME_OBJECT_TYPE = "spine";
 	const SPINE_CONTAINER_TYPE = "spineContainer";
-	
-
 }
 
 // PACK: spine-phaser/dist/mixins.d.ts
-declare namespace spine {
-	const ComputedSize: any;
+declare namespace spine {	const ComputedSize: any;
 	const Depth: any;
 	const Flip: any;
 	const ScrollFactor: any;
@@ -299,6 +208,4 @@ declare namespace spine {
 	const OriginMixin: OriginMixin;
 	type AlphaMixin = Mixin<Phaser.GameObjects.Components.Alpha, Phaser.GameObjects.GameObject>;
 	const AlphaMixin: AlphaMixin;
-	
-
 }

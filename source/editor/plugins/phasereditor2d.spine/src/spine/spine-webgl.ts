@@ -1,72 +1,14 @@
 
 
 // PACK: spine-webgl/dist/AssetManager.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class AssetManager extends AssetManagerBase {
 	    constructor(context: ManagedWebGLRenderingContext | WebGLRenderingContext, pathPrefix?: string, downloader?: Downloader);
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Camera.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class OrthoCamera {
 	    position: Vector3;
 	    direction: Vector3;
@@ -86,79 +28,19 @@ declare namespace spine {
 	    worldToScreen(worldCoords: Vector3, screenWidth: number, screenHeight: number): Vector3;
 	    setViewport(viewportWidth: number, viewportHeight: number): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/CameraController.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class CameraController {
 	    canvas: HTMLElement;
 	    camera: OrthoCamera;
 	    constructor(canvas: HTMLElement, camera: OrthoCamera);
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/GLTexture.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class GLTexture extends Texture implements Disposable, Restorable {
 	    context: ManagedWebGLRenderingContext;
 	    private texture;
@@ -176,40 +58,10 @@ declare namespace spine {
 	    unbind(): void;
 	    dispose(): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Input.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class Input {
 	    element: HTMLElement;
 	    mouseX: number;
@@ -239,40 +91,10 @@ declare namespace spine {
 	    wheel?(delta: number): void;
 	    zoom?(initialDistance: number, distance: number): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/LoadingScreen.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class LoadingScreen implements Disposable {
 	    private renderer;
 	    private logo;
@@ -287,40 +109,10 @@ declare namespace spine {
 	    dispose(): void;
 	    draw(complete?: boolean): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Matrix4.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	const M00 = 0;
 	const M01 = 4;
 	const M02 = 8;
@@ -359,40 +151,10 @@ declare namespace spine {
 	    multiplyLeft(matrix: Matrix4): Matrix4;
 	    lookAt(position: Vector3, direction: Vector3, up: Vector3): this;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Mesh.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class Mesh implements Disposable, Restorable {
 	    private attributes;
 	    private context;
@@ -450,40 +212,10 @@ declare namespace spine {
 	enum VertexAttributeType {
 	    Float = 0
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/PolygonBatcher.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class PolygonBatcher implements Disposable {
 	    static disableCulling: boolean;
 	    private context;
@@ -509,40 +241,10 @@ declare namespace spine {
 	    static getAndResetGlobalDrawCalls(): number;
 	    dispose(): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/SceneRenderer.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class SceneRenderer implements Disposable {
 	    context: ManagedWebGLRenderingContext;
 	    canvas: HTMLCanvasElement;
@@ -581,40 +283,10 @@ declare namespace spine {
 	    Expand = 1,
 	    Fit = 2
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Shader.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class Shader implements Disposable, Restorable {
 	    private vertexShader;
 	    private fragmentShader;
@@ -660,40 +332,10 @@ declare namespace spine {
 	    static newTwoColoredTextured(context: ManagedWebGLRenderingContext | WebGLRenderingContext): Shader;
 	    static newColored(context: ManagedWebGLRenderingContext | WebGLRenderingContext): Shader;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/ShapeRenderer.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class ShapeRenderer implements Disposable {
 	    private context;
 	    private isDrawing;
@@ -732,40 +374,10 @@ declare namespace spine {
 	    Line = 1,
 	    Filled = 4
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/SkeletonDebugRenderer.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class SkeletonDebugRenderer implements Disposable {
 	    boneLineColor: Color;
 	    boneOriginColor: Color;
@@ -795,40 +407,10 @@ declare namespace spine {
 	    draw(shapes: ShapeRenderer, skeleton: Skeleton, ignoredBones?: Array<string>): void;
 	    dispose(): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/SkeletonRenderer.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	type VertexTransformer = (vertices: NumberArrayLike, numVertices: number, stride: number) => void;
 	class SkeletonRenderer {
 	    static QUAD_TRIANGLES: number[];
@@ -847,40 +429,10 @@ declare namespace spine {
 	    constructor(context: ManagedWebGLRenderingContext, twoColorTint?: boolean);
 	    draw(batcher: PolygonBatcher, skeleton: Skeleton, slotRangeStart?: number, slotRangeEnd?: number, transformer?: VertexTransformer | null): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/SpineCanvas.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	/** An app running inside a {@link SpineCanvas}. The app life-cycle
 	 * is as follows:
 	 *
@@ -925,40 +477,10 @@ declare namespace spine {
 	    /** Clears the canvas with the given color. The color values are given in the range [0,1]. */
 	    clear(r: number, g: number, b: number, a: number): void;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/Vector3.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class Vector3 {
 	    x: number;
 	    y: number;
@@ -977,40 +499,10 @@ declare namespace spine {
 	    length(): number;
 	    distance(v: Vector3): number;
 	}
-	
-
 }
 
 // PACK: spine-webgl/dist/WebGL.d.ts
-declare namespace spine {
-	/******************************************************************************
-	 * Spine Runtimes License Agreement
-	 * Last updated July 28, 2023. Replaces all prior versions.
-	 *
-	 * Copyright (c) 2013-2023, Esoteric Software LLC
-	 *
-	 * Integration of the Spine Runtimes into software or otherwise creating
-	 * derivative works of the Spine Runtimes is permitted under the terms and
-	 * conditions of Section 2 of the Spine Editor License Agreement:
-	 * http://esotericsoftware.com/spine-editor-license
-	 *
-	 * Otherwise, it is permitted to integrate the Spine Runtimes into software or
-	 * otherwise create derivative works of the Spine Runtimes (collectively,
-	 * "Products"), provided that each user of the Products must obtain their own
-	 * Spine Editor license and redistribution of the Products in any form must
-	 * include this license and copyright notice.
-	 *
-	 * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
-	 * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	 * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
-	 * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-	 * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
-	 * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
-	 * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	 * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
-	 * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 *****************************************************************************/
+declare namespace spine {	
 	class ManagedWebGLRenderingContext {
 	    canvas: HTMLCanvasElement | OffscreenCanvas;
 	    gl: WebGLRenderingContext;
@@ -1024,6 +516,4 @@ declare namespace spine {
 	    static getSourceColorGLBlendMode(blendMode: BlendMode, premultipliedAlpha?: boolean): 1 | 770 | 774;
 	    static getSourceAlphaGLBlendMode(blendMode: BlendMode): 1 | 769 | 771;
 	}
-	
-
 }
