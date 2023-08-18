@@ -5,28 +5,56 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class SpineCodeDOMBuilder extends GameObjectCodeDOMBuilder {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
-            
+
             const obj = args.obj as SpineObject;
             const call = new code.MethodCallCodeDOM("spine", args.gameObjectFactoryExpr);
 
             call.argFloat(obj.x);
             call.argFloat(obj.y);
-            call.argLiteral(obj.getDataKey());
-            call.argLiteral(obj.getAtlasKey());
+            call.argLiteral(obj.dataKey);
+            call.argLiteral(obj.atlasKey);
 
             return call;
         }
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void {
-            throw new Error("Method not implemented.");
+
+            const obj = args.obj as SpineObject;
+            const { dataKey, atlasKey } = obj;
+
+            const call = args.methodCallDOM;
+
+            call.arg(args.sceneExpr);
+            call.arg(`${args.sceneExpr}.spine`);
+
+            this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
+
+            call.argLiteral(dataKey);
+            call.argLiteral(atlasKey);
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
-            throw new Error("Method not implemented.");
+
+            const ctr = args.ctrDeclCodeDOM;
+
+            ctr.arg("plugin", "spine.SpinePlugin");
+            ctr.arg("x", "number");
+            ctr.arg("y", "number");
+            ctr.arg("dataKey", "string");
+            ctr.arg("atlasKey", "string");
         }
 
-        buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
-            throw new Error("Method not implemented.");
+        buildPrefabConstructorDeclarationSupperCallCodeDOM(
+            args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const call = args.superMethodCallCodeDOM;
+
+            call.arg("plugin");
+
+            this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
+
+            call.arg("dataKey");
+            call.arg("atlasKey");
         }
     }
 }

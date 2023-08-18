@@ -4,6 +4,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SpineComponent extends Component<SpineObject> {
 
+        static dataKey = SimpleProperty("dataKey", undefined, "Data Key", "The skeleton data key");
+        static atlasKey = SimpleProperty("atlasKey", undefined, "Atlas Key", "The skeleton data key");
+
         static skin: IEnumProperty<SpineObject, string> = {
             name: "skinName",
             defValue: null,
@@ -19,7 +22,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 try {
 
-                    console.log("set skin", value);
                     if (value) {
 
                         obj.skeleton.setSkinByName(value);
@@ -41,6 +43,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(obj: SpineObject) {
             super(obj, [
+                SpineComponent.dataKey,
+                SpineComponent.atlasKey,
                 SpineComponent.skin
             ]);
         }

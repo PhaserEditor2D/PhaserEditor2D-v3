@@ -27,16 +27,5 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_SPINE));
         }
-
-        writeJSON(data: ISpineObjectData): void {
-            
-            super.writeJSON(data);
-
-            const obj = this.getObject();
-
-            data.dataKey = obj.getDataKey();
-            data.atlasKey = obj.getAtlasKey();
-        }
     }
-
 }

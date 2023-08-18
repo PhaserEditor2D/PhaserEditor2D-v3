@@ -57,9 +57,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildCreatePrefabInstanceCodeDOM_XY_Arguments(args: IBuildPrefabConstructorCodeDOMArgs) {
 
             const obj = args.obj as any as ITransformLikeObject;
+            const objES = obj.getEditorSupport();
+            
             const call = args.methodCallDOM;
 
-            if (obj.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
+            if (objES.isUnlockedPropertyXY(TransformComponent.position)) {
 
                 call.argFloat(obj.x);
                 call.argFloat(obj.y);
@@ -120,9 +122,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         protected buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs) {
 
             const obj = args.prefabObj;
+            const objES = obj.getEditorSupport();
+
             const call = args.superMethodCallCodeDOM;
 
-            if (obj.getEditorSupport().isUnlockedPropertyXY(TransformComponent.position)) {
+            if (objES.isUnlockedPropertyXY(TransformComponent.position)) {
 
                 call.arg(`x ?? ${TransformComponent.x.getValue(obj)}`);
                 call.arg(`y ?? ${TransformComponent.y.getValue(obj)}`);

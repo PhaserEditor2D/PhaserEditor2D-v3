@@ -131,11 +131,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
 
-            const data = args.data as ISpineObjectData;
+            const objData = args.data;
 
-            const obj = new SpineObject(args.scene, 0, 0, data.dataKey, data.atlasKey);
+            const serializer = args.scene.getMaker().getSerializer(objData);
+            
+            const dataKey = serializer.read("dataKey");
+            const atlasKey = serializer.read("atlasKey");
+            
+            const obj = new SpineObject(args.scene, 0, 0, dataKey, atlasKey);
 
-            obj.getEditorSupport().readJSON(data);
+            obj.getEditorSupport().readJSON(objData);
 
             return obj;
         }

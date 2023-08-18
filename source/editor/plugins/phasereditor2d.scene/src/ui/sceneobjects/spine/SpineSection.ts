@@ -19,11 +19,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             
             const first = selection[0];
 
-            const dataKey = first.getDataKey();
+            const { dataKey } = first;
 
             for(const obj of selection) {
 
-                if (obj.getDataKey() !== dataKey) {
+                if (obj.dataKey !== dataKey) {
 
                     return false;
                 }
