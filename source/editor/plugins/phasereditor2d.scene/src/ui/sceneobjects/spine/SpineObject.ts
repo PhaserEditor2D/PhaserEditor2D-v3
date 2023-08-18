@@ -22,6 +22,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new SpineEditorSupport(this, scene);
         }
 
+        setFirstSkin() {
+
+            const skin = this.skeleton.data.skins[0];
+
+            if (skin) {
+
+                this.skeleton.setSkin(skin);
+                this.skeleton.setSlotsToSetupPose();
+            }
+        }
+
         getDataKey() {
 
             return this._dataKey;
@@ -33,7 +44,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getEditorSupport() {
-            
+
             return this._editorSupport;
         }
     }

@@ -85,6 +85,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
 
+            spineObj.setFirstSkin();
+
             return [spineObj];
         }
 
@@ -112,6 +114,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                     const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+                    
+                    spineObj.setFirstSkin();
 
                     resolve(spineObj);
                 });
@@ -137,18 +141,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
-            
+
             const dataKey = args.serializer.read("dataKey");
             const atlasKey = args.serializer.read("atlasKey");
 
             const dataAsset = args.finder.findAssetPackItem(dataKey);
-            const atlasAsset= args.finder.findAssetPackItem(atlasKey);
+            const atlasAsset = args.finder.findAssetPackItem(atlasKey);
 
             return [dataAsset, atlasAsset];
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
-           
+
             return new SpineCodeDOMBuilder();
         }
     }

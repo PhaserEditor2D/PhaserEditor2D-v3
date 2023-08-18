@@ -174,7 +174,10 @@ namespace phasereditor2d.pack.core.parsers {
 
                         const key = item.getKey() + "!" + image.getFile().getName();
 
-                        game.textures.addImage(key, image.getImageElement());
+                        if (!game.textures.exists(key)) {
+
+                            game.textures.addImage(key, image.getImageElement());
+                        }
                     }
 
                     for (const frame of item.getFrames()) {
