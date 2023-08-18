@@ -14,6 +14,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._atlasKey = atlasKey;
 
             this._editorSupport = new SpineEditorSupport(this, scene);
+
+            const skins = this.skeleton.data.skins.map(skin => skin.name);
+
+            this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, skins);
+
+            this.updateSize();
         }
 
         getDataKey() {

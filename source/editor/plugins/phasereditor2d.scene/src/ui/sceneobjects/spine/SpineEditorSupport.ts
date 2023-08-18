@@ -15,7 +15,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
                 new TransformComponent(obj),
-                new OriginComponent(obj),
                 new SpineComponent(obj));
         }
 
