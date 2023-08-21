@@ -22,7 +22,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super({
                 typeName: "SpineGameObject",
-                phaserTypeName: "spine.SpineGameObject",
+                phaserTypeName: "SpineGameObject",
+                phaserTypeGlobalScope: "spine",
                 category: SCENE_OBJECT_SPINE_CATEGORY,
                 icon: resources.getIconDescriptor(resources.ICON_SPINE)
             });
@@ -73,6 +74,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return promise;
         }
 
+        adaptDataAfterTypeConversion(
+            serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: ISpineExtraData) {
+
+                serializer.write("dataKey", extraData.dataAsset.getKey());
+                serializer.write("atlasKey", extraData.atlasAsset.getKey());
+        }
+
         acceptsDropData(data: any): boolean {
 
             return data instanceof pack.core.SpineJsonAssetPackItem
@@ -114,7 +122,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                     const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
-                    
+
                     spineObj.setFirstSkin();
 
                     resolve(spineObj);
@@ -134,10 +142,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const objData = args.data;
 
             const serializer = args.scene.getMaker().getSerializer(objData);
-            
+
             const dataKey = serializer.read("dataKey");
             const atlasKey = serializer.read("atlasKey");
-            
+
             const obj = new SpineObject(args.scene, 0, 0, dataKey, atlasKey);
 
             obj.getEditorSupport().readJSON(objData);

@@ -38,6 +38,10 @@ namespace phasereditor2d.scene.core.code {
             this._imports.push(new ImportCodeDOM(elementName, filePath));
         }
 
+        private addVerbatimImport() {
+            
+        }
+
         getBody() {
 
             return this._body;

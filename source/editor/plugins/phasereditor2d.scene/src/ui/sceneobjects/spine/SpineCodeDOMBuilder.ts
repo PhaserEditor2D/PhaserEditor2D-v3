@@ -35,9 +35,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
+            args.unit.addImport("{ SpinePlugin }", "@esotericsoftware/spine-phaser");
+            args.unit.addImport("{ SpineGameObject }", "@esotericsoftware/spine-phaser");
+            args.importTypes.push("Phaser.Scene");
+
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("plugin", "spine.SpinePlugin");
+            ctr.arg("plugin", args.isESModule ? "SpinePlugin" : "spine.SpinePlugin");
             ctr.arg("x", "number");
             ctr.arg("y", "number");
             ctr.arg("dataKey", "string");

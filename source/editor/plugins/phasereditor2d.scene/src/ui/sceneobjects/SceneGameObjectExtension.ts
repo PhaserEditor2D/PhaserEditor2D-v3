@@ -53,6 +53,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
         prefabObj: ISceneGameObject;
         importTypes: string[];
+        unit: code.UnitCodeDOM;
+        isESModule: boolean;
     }
 
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
@@ -67,8 +69,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(config: {
             typeName: string,
+            typeNameES?: string;
             typeNameAlias?: string[],
             phaserTypeName: string,
+            phaserTypeGlobalScope?: string,
             category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {

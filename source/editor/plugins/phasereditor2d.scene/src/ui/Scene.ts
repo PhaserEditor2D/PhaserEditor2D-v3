@@ -294,6 +294,11 @@ namespace phasereditor2d.scene.ui {
             this._sceneType = sceneType;
         }
 
+        isESModule() {
+
+            return this._settings.autoImport || this._settings.exportClass;
+        }
+
         getMaker() {
 
             return super.getMaker() as SceneMaker;

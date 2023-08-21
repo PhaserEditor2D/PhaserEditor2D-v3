@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if ("height" in originalObject) {
 
-                    size = originalObject["height"];
+                    size = originalObject["height"] as number;
                 }
 
                 if (typeof originalObject["text"] !== "string") {

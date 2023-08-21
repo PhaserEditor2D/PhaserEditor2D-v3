@@ -76,6 +76,18 @@ namespace phasereditor2d.scene.core.code {
                     } else {
 
                         superCls = support.getPhaserType();
+
+                        if (!this._scene.isESModule()) {
+                            
+                            // we are in a global scope (no ES modules)
+
+                            const globalScope = support.getExtension().getPhaserTypeGlobalScope();
+
+                            if (globalScope) {
+
+                                superCls = globalScope + "." + superCls;
+                            }
+                        }
                     }
 
                     superCls = settings.superClassName.trim().length === 0 ?
@@ -319,7 +331,9 @@ namespace phasereditor2d.scene.core.code {
             const args: ui.sceneobjects.IBuildPrefabConstructorDeclarationCodeDOM = {
                 ctrDeclCodeDOM: ctrDecl,
                 prefabObj,
-                importTypes: []
+                importTypes: [],
+                unit: this._unit,
+                isESModule: this._scene.isESModule()
             };
 
             objBuilder.buildPrefabConstructorDeclarationCodeDOM(args);
