@@ -77,8 +77,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         adaptDataAfterTypeConversion(
             serializer: core.json.Serializer, originalObject: ISceneGameObject, extraData: ISpineExtraData) {
 
+            if (extraData && extraData.dataAsset) {
+
                 serializer.write("dataKey", extraData.dataAsset.getKey());
                 serializer.write("atlasKey", extraData.atlasAsset.getKey());
+            }
         }
 
         acceptsDropData(data: any): boolean {
