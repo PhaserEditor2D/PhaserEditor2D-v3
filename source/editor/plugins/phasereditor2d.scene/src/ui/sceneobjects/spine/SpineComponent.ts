@@ -89,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static boundsProviderTimeStep = SimpleProperty(
-            "bpTimeStep", 0.05, "BP Time Step",
+            "bpTimeStep", SpineObject.DEFAULT_BP_TIME_STEP, "BP Time Step",
             "The timeStep of the SkinAndAnimationBoundsProvider.",
             false, (obj: SpineObject) => {
 
@@ -116,6 +116,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
+            // skin
+
             this.buildSetObjectPropertyCodeDOM([SpineComponent.skin], args2 => {
 
                 const dom = new code.MethodCallCodeDOM("skeleton.setSkinByName", args.objectVarName);
@@ -124,6 +126,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 args.statements.push(dom);
             });
+
+            // bounds provider
+            
+            const objES = this.getEditorSupport();
+
+            if (objES.isNestedPrefabInstance()) {
+
+                if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+
+                    const newBoundsProviderExpr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(this.getObject(), args.unit);
+                    
+                    const propDom = new code.AssignPropertyCodeDOM("boundsProvider", args.objectVarName);
+
+                    propDom.value(newBoundsProviderExpr);
+
+                    const updateSizeDom = new code.MethodCallCodeDOM("updateSize", args.objectVarName);
+
+                    args.statements.push(propDom, updateSizeDom);
+                }
+            }
         }
     }
 }

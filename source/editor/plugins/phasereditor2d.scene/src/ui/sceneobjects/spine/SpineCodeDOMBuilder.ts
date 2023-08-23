@@ -14,12 +14,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argLiteral(obj.dataKey);
             call.argLiteral(obj.atlasKey);
 
+            if (obj.boundsProviderType !== SpineComponent.boundsProviderType.defValue) {
+
+                const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
+
+                call.arg(expr)
+            }
+
             return call;
         }
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void {
 
             const obj = args.obj as SpineObject;
+            const objES = obj.getEditorSupport();
+
             const { dataKey, atlasKey } = obj;
 
             const call = args.methodCallDOM;
@@ -31,35 +40,97 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.argLiteral(dataKey);
             call.argLiteral(atlasKey);
+
+            if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+
+                const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
+                call.arg(expr);
+            }
+        }
+
+        public static generateNewBoundsProviderExpression(obj: SpineObject, unit: code.UnitCodeDOM) {
+
+            if (obj.boundsProviderType === BoundsProviderType.SETUP_TYPE) {
+
+                unit.addImport("{ SetupPoseBoundsProvider }", "@esotericsoftware/spine-phaser");
+
+                const cls = this.spineClassName(obj, "SetupPoseBoundsProvider");
+
+                return `new ${cls}()`;
+            }
+
+            unit.addImport("{ SkinsAndAnimationBoundsProvider }", "@esotericsoftware/spine-phaser");
+
+            const cls = this.spineClassName(obj, "SkinsAndAnimationBoundsProvider");
+
+            const animation = JSON.stringify(obj.boundsProviderAnimation);
+
+            let skins: string[] = [];
+
+            if (obj.boundsProviderSkin === BoundsProviderSkin.CURRENT_SKIN) {
+
+                if (obj.skeleton.skin) {
+
+                    skins = [obj.skeleton.skin.name];
+                }
+
+            } else {
+
+                skins = obj.skeleton.data.skins.map(skin => skin.name);
+            }
+
+            if (obj.boundsProviderTimeStep == 0.05) {
+
+                return `new ${cls}(${animation}, ${JSON.stringify(skins)})`;
+            }
+
+            return `new ${cls}(${animation}, ${JSON.stringify(skins)}, ${obj.boundsProviderTimeStep})`;
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
-            const obj = args.prefabObj;
+            const obj = args.prefabObj as SpineObject;
             const objES = obj.getEditorSupport();
 
+            args.importTypes.push("Phaser.Scene");
+            args.unit.addImport("{ SpinePlugin }", "@esotericsoftware/spine-phaser");
+            args.unit.addImport("{ SpineGameObjectBoundsProvider }", "@esotericsoftware/spine-phaser");
+
             if (!objES.isPrefabInstance()) {
-                
+
                 // It uses the SpineGameObject class only as super class.
                 // If it is extending another prefab, then the SpineGameObject class is not used.
 
-                args.unit.addImport("{ SpineGameObject }", "@esotericsoftware/spine-phaser");
+                // args.unit.addImport("{ SpineGameObject }", "@esotericsoftware/spine-phaser");
             }
-
-            args.unit.addImport("{ SpinePlugin }", "@esotericsoftware/spine-phaser");
-            args.importTypes.push("Phaser.Scene");
 
             const ctr = args.ctrDeclCodeDOM;
 
-            ctr.arg("plugin", args.isESModule ? "SpinePlugin" : "spine.SpinePlugin");
+            ctr.arg("plugin", SpineCodeDOMBuilder.spineClassName(obj, "SpinePlugin"));
             ctr.arg("x", "number");
             ctr.arg("y", "number");
             ctr.arg("dataKey", "string");
             ctr.arg("atlasKey", "string");
+            ctr.arg("boundsProvider", SpineCodeDOMBuilder.spineClassName(obj, "SpineGameObjectBoundsProvider"), true);
+        }
+
+        public static spineClassName(obj: ISceneGameObject, cls: string) {
+
+            const scene = obj.getEditorSupport().getScene();
+
+            if (scene.isESModule()) {
+
+                return cls;
+            }
+
+            return "spine." + cls;
         }
 
         buildPrefabConstructorDeclarationSupperCallCodeDOM(
             args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
+
+            const obj = args.prefabObj as SpineObject;
+            const objES = obj.getEditorSupport();
 
             const call = args.superMethodCallCodeDOM;
 
@@ -69,6 +140,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             call.arg("dataKey");
             call.arg("atlasKey");
+
+            const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
+
+            if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+
+                call.arg(`boundsProvider ?? ${expr}`);
+
+            } else {
+
+                call.arg("boundsProvider");
+            }
         }
     }
 }

@@ -114,12 +114,12 @@ namespace phasereditor2d.scene.ui {
                     bounds.y = 0;
                 }
 
-                if (bounds.width < 0) {
+                if (bounds.width <= 0) {
 
                     bounds.width = 800;
                 }
 
-                if (bounds.height < 0) {
+                if (bounds.height <= 0) {
 
                     bounds.height = 600;
                 }

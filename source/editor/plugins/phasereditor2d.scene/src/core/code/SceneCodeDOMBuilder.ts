@@ -23,6 +23,28 @@ namespace phasereditor2d.scene.core.code {
             this._objectsToFieldList = [];
         }
 
+        private getCompletePhaserType(obj: ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+            const objExt = objES.getExtension();
+
+            const typeName = objExt.getPhaserTypeName();
+
+            if (objExt.isThirdPartyLib()) {
+
+                if (this._scene.isESModule()) {
+
+                    this._unit.addImport(`{ ${typeName} }`, objExt.getPhaserTypeThirdPartyLibModule())
+
+                    return typeName;
+                }
+
+                return objExt.getPhaserTypeThirdPartyLib() + "." + typeName;
+            }
+
+            return typeName;
+        }
+
         async build(): Promise<UnitCodeDOM> {
 
             colibri.ui.ide.Workbench.getWorkbench().getFileStorage().getRoot().visit(file => {
@@ -67,27 +89,15 @@ namespace phasereditor2d.scene.core.code {
                         return null;
                     }
 
-                    const support = obj.getEditorSupport();
+                    const objES = obj.getEditorSupport();
 
                     if (obj.getEditorSupport().isPrefabInstance()) {
 
-                        superCls = support.getPrefabName();
+                        superCls = objES.getPrefabName();
 
                     } else {
 
-                        superCls = support.getPhaserType();
-
-                        if (!this._scene.isESModule()) {
-                            
-                            // we are in a global scope (no ES modules)
-
-                            const globalScope = support.getExtension().getPhaserTypeGlobalScope();
-
-                            if (globalScope) {
-
-                                superCls = globalScope + "." + superCls;
-                            }
-                        }
+                        superCls = this.getCompletePhaserType(obj);
                     }
 
                     superCls = settings.superClassName.trim().length === 0 ?
@@ -287,11 +297,18 @@ namespace phasereditor2d.scene.core.code {
 
                     const varName = code.formatToValidVarName(objES.getLabel());
 
-                    const explicitType = this.getExplicitType(obj);
+                    let phaserType = this.getCompletePhaserType(obj);
+
+                    const explicitType = this.getExplicitType(obj, phaserType);
+
+                    if (explicitType) {
+
+                        phaserType = explicitType;
+                    }
 
                     const type = objES.isPrefabInstance()
                         ? objES.getPrefabName()
-                        : (explicitType ? explicitType : objES.getPhaserType());
+                        : phaserType;
 
                     const isPublic = objES.isPublicScope();
 
@@ -351,6 +368,7 @@ namespace phasereditor2d.scene.core.code {
                 objBuilder.buildPrefabConstructorDeclarationSupperCallCodeDOM({
                     superMethodCallCodeDOM: superCall,
                     prefabObj: prefabObj,
+                    unit: this._unit
                 });
 
                 body.push(superCall);
@@ -732,6 +750,7 @@ namespace phasereditor2d.scene.core.code {
                     builder.buildCreatePrefabInstanceCodeDOM({
                         obj,
                         methodCallDOM: createObjectMethodCall,
+                        unit: this._unit,
                         sceneExpr: this._isPrefabScene ? "scene" : "this",
                         parentVarName,
                         prefabSerializer
@@ -755,7 +774,8 @@ namespace phasereditor2d.scene.core.code {
                     gameObjectFactoryExpr: `${sceneVarName}.${factoryVarName}`,
                     sceneExpr: sceneVarName,
                     parentVarName,
-                    obj: obj
+                    obj: obj,
+                    unit: this._unit
                 });
 
                 // for example, in case it is adding a ScriptNode to a scene
@@ -773,7 +793,7 @@ namespace phasereditor2d.scene.core.code {
                     }
                 }
 
-                const forcingType = this.getExplicitType(obj);
+                const forcingType = this.getExplicitType(obj, this.getCompletePhaserType(obj));
 
                 createObjectMethodCall.setExplicitType(forcingType);
             }
@@ -882,13 +902,13 @@ namespace phasereditor2d.scene.core.code {
             }
         }
 
-        getExplicitType(obj: ISceneGameObject) {
+        getExplicitType(obj: ISceneGameObject, baseType: string) {
 
             const objES = obj.getEditorSupport();
 
             return objES.getActiveComponents()
 
-                .map(comp => comp.getExplicitTypesForMethodFactory())
+                .map(comp => comp.getExplicitTypesForMethodFactory(baseType))
 
                 .filter(type => type !== undefined)
 

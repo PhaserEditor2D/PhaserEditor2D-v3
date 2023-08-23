@@ -28,5 +28,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_SPINE));
         }
+
+        setUnlockedProperty(property: IProperty<any>, unlock: boolean): void {
+
+            super.setUnlockedProperty(property, unlock);
+            
+            if (property === SpineComponent.boundsProviderType) {
+
+                super.setUnlockedProperty(SpineComponent.boundsProviderSkin, unlock);
+                super.setUnlockedProperty(SpineComponent.boundsProviderAnimation, unlock);
+                super.setUnlockedProperty(SpineComponent.boundsProviderTimeStep, unlock);
+            }
+        }
     }
 }

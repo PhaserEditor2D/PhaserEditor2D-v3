@@ -23,7 +23,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super({
                 typeName: "SpineGameObject",
                 phaserTypeName: "SpineGameObject",
-                phaserTypeGlobalScope: "spine",
+                phaserTypeThirdPartyLib: "spine",
+                phaserTypeThirdPartyLibModule: "@esotericsoftware/spine-phaser",
                 category: SCENE_OBJECT_SPINE_CATEGORY,
                 icon: resources.getIconDescriptor(resources.ICON_SPINE)
             });

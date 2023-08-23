@@ -37,6 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         gameObjectFactoryExpr: string;
         sceneExpr: string;
         parentVarName: string;
+        unit: code.UnitCodeDOM;
     }
 
     export interface IBuildPrefabConstructorCodeDOMArgs {
@@ -45,6 +46,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sceneExpr: string;
         parentVarName?: string;
         methodCallDOM: code.MethodCallCodeDOM;
+        unit: code.UnitCodeDOM;
         prefabSerializer: json.Serializer;
     }
 
@@ -61,6 +63,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         superMethodCallCodeDOM: code.MethodCallCodeDOM;
         prefabObj: ISceneGameObject;
+        unit: code.UnitCodeDOM;
     }
 
     export abstract class SceneGameObjectExtension extends SceneObjectExtension {
@@ -72,7 +75,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             typeNameES?: string;
             typeNameAlias?: string[],
             phaserTypeName: string,
-            phaserTypeGlobalScope?: string,
+            phaserTypeThirdPartyLib?: string,
+            phaserTypeThirdPartyLibModule?: string,
             category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {
