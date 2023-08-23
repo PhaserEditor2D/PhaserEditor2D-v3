@@ -35,8 +35,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
+            const obj = args.prefabObj;
+            const objES = obj.getEditorSupport();
+
+            if (!objES.isPrefabInstance()) {
+                
+                // It uses the SpineGameObject class only as super class.
+                // If it is extending another prefab, then the SpineGameObject class is not used.
+
+                args.unit.addImport("{ SpineGameObject }", "@esotericsoftware/spine-phaser");
+            }
+
             args.unit.addImport("{ SpinePlugin }", "@esotericsoftware/spine-phaser");
-            args.unit.addImport("{ SpineGameObject }", "@esotericsoftware/spine-phaser");
             args.importTypes.push("Phaser.Scene");
 
             const ctr = args.ctrDeclCodeDOM;

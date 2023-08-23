@@ -1,10 +1,24 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export enum BoundsProviderType {
+        SETUP_TYPE = "SETUP POSE",
+        SKINS_AND_ANIMATION_TYPE = "SKINS AND ANIMATION"
+    }
+
+    export enum BoundsProviderSkin {
+        ALL_SKINS = "ALL",
+        CURRENT_SKIN = "CURRENT"
+    }
+
     export class SpineObject extends spine.SpineGameObject implements ISceneGameObject {
 
         private _editorSupport: SpineEditorSupport;
         public dataKey: string;
         public atlasKey: string;
+        public boundsProviderType: BoundsProviderType;
+        public boundsProviderSkin: BoundsProviderSkin;
+        public boundsProviderAnimation: string;
+        public boundsProviderTimeStep = 0.05;
 
         constructor(scene: Scene, x: number, y: number, dataKey: string, atlasKey: string) {
             // TODO: missing bounds provider
@@ -13,13 +27,58 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.dataKey = dataKey;
             this.atlasKey = atlasKey;
 
-            const skins = this.skeleton.data.skins.map(skin => skin.name);
+            this.boundsProviderType = BoundsProviderType.SETUP_TYPE;
+            this.boundsProviderSkin = BoundsProviderSkin.CURRENT_SKIN;
+            this.boundsProviderAnimation = null;
 
-            this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, skins);
-
-            this.updateSize();
+            // const skins = this.skeleton.data.skins.map(skin => skin.name);
+            // this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, skins);
+            // this.updateSize();
 
             this._editorSupport = new SpineEditorSupport(this, scene);
+        }
+
+        updateBoundsProvider() {
+
+            if (this.boundsProviderType === BoundsProviderType.SETUP_TYPE) {
+
+                this.boundsProvider = new spine.SetupPoseBoundsProvider();
+                this.updateSize();
+
+            } else {
+
+                try {
+
+                    let skins: string[] = [];
+
+                    if (this.boundsProviderSkin === BoundsProviderSkin.CURRENT_SKIN) {
+
+                        if (this.skeleton.skin) {
+
+                            skins = [this.skeleton.skin.name];
+                        }
+
+                    } else {
+
+                        skins = this.skeleton.data.skins.map(s => s.name);
+                    }
+
+                    // TODO: missing timeStep argument
+
+                    this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
+                        this.boundsProviderAnimation, skins, this.boundsProviderTimeStep);
+
+                    this.updateSize();
+
+                } catch (e) {
+
+                    console.error(e);
+
+                    alert(e.message);
+                }
+            }
+
+            this.setInteractive();
         }
 
         setFirstSkin() {

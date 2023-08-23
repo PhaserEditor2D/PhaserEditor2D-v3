@@ -1,3 +1,5 @@
+/// <reference path="./SpineObject.ts"/>
+
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
@@ -32,6 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                     obj.skeleton.setToSetupPose();
+                    obj.updateBoundsProvider();
 
                 } catch (e) {
 
@@ -40,13 +43,75 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             },
         };
 
+        static boundsProviderType: IEnumProperty<SpineObject, BoundsProviderType> = {
+            name: "bpType",
+            label: "BP",
+            tooltip: "The type of the bounds provider.",
+            defValue: BoundsProviderType.SETUP_TYPE,
+            values: [BoundsProviderType.SETUP_TYPE, BoundsProviderType.SKINS_AND_ANIMATION_TYPE],
+            getValue: obj => obj.boundsProviderType,
+            setValue: (obj, val) => {
+
+                obj.boundsProviderType = val;
+                obj.updateBoundsProvider();
+            },
+            getValueLabel: val => val.toString()
+        };
+
+        static boundsProviderSkin: IEnumProperty<SpineObject, BoundsProviderSkin> = {
+            name: "bpSkin",
+            label: "BP Skin",
+            tooltip: "The skins to use in the SkinsAndAnimationBoundsProvider.",
+            defValue: BoundsProviderSkin.CURRENT_SKIN,
+            values: [BoundsProviderSkin.CURRENT_SKIN, BoundsProviderSkin.ALL_SKINS],
+            getValue: obj => obj.boundsProviderSkin,
+            setValue: (obj, val) => {
+
+                obj.boundsProviderSkin = val;
+                obj.updateBoundsProvider();
+            },
+            getValueLabel: val => val.toString()
+        };
+
+        static boundsProviderAnimation: IEnumProperty<SpineObject, string> = {
+            name: "bpAnimation",
+            label: "BP Animation",
+            tooltip: "The animation to use in the SkinsAndAnimationBoundsProvider.",
+            defValue: null,
+            getEnumValues: obj => [null, ...obj.skeleton.data.animations.map(a => a.name)],
+            getValue: obj => obj.boundsProviderAnimation,
+            setValue: (obj, val) => {
+
+                obj.boundsProviderAnimation = val;
+                obj.updateBoundsProvider();
+            },
+            getValueLabel: val => val ? val.toString() : "<null>"
+        };
+
+        static boundsProviderTimeStep = SimpleProperty(
+            "bpTimeStep", 0.05, "BP Time Step",
+            "The timeStep of the SkinAndAnimationBoundsProvider.",
+            false, (obj: SpineObject) => {
+
+                obj.updateBoundsProvider();
+            })
+
 
         constructor(obj: SpineObject) {
             super(obj, [
                 SpineComponent.dataKey,
                 SpineComponent.atlasKey,
-                SpineComponent.skin
+                SpineComponent.skin,
+                SpineComponent.boundsProviderType,
+                SpineComponent.boundsProviderSkin,
+                SpineComponent.boundsProviderAnimation,
+                SpineComponent.boundsProviderTimeStep
             ]);
+        }
+
+        readJSON(ser: core.json.Serializer): void {
+
+            super.readJSON(ser);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {

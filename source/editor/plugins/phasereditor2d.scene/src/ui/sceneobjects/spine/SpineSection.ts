@@ -13,6 +13,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const comp = this.createGridElement(parent, 3);
 
             this.createPropertyEnumRow(comp, SpineComponent.skin);
+
+            this.createPropertyEnumRow(comp, SpineComponent.boundsProviderType);
+
+            this.createPropertyEnumRow(comp, SpineComponent.boundsProviderSkin);
+            
+            this.createPropertyEnumRow(comp, SpineComponent.boundsProviderAnimation);
+
+            this.createPropertyFloatRow(comp, SpineComponent.boundsProviderTimeStep);
         }
 
         canEditAll(selection: SpineObject[]): boolean {

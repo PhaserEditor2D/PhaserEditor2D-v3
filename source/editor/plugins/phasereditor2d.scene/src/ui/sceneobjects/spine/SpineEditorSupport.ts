@@ -15,7 +15,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addComponent(
                 new SpineComponent(obj),
-                new TransformComponent(obj));
+                new TransformComponent(obj),
+                new ArcadeComponent(obj, false));
         }
 
         setInteractive(): void {
