@@ -33,7 +33,14 @@ namespace phasereditor2d.pack.core {
 
             if (str) {
 
-                return new spine.TextureAtlas(str);
+                const atlas = new spine.TextureAtlas(str);
+
+                for(const page of atlas.pages) {
+
+                    page.setTexture(new FakeTexture());
+                }
+
+                return atlas;
             }
 
             return undefined;
@@ -62,6 +69,31 @@ namespace phasereditor2d.pack.core {
 
                 console.error(e);
             }
+        }
+    }
+
+    class FakeTexture extends spine.Texture {
+        
+        private static _auxImage = document.createElement("image") as HTMLImageElement;
+
+        static {
+            this._auxImage.style.display = "none";
+        }
+
+        constructor() {
+            super(FakeTexture._auxImage);
+        }
+
+        setFilters(minFilter: spine.TextureFilter, magFilter: spine.TextureFilter): void {
+
+        }
+
+        setWraps(uWrap: spine.TextureWrap, vWrap: spine.TextureWrap): void {
+
+        }
+
+        dispose(): void {
+
         }
     }
 }
