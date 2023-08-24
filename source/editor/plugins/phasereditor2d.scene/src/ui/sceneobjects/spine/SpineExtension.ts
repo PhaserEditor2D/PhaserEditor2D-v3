@@ -2,7 +2,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     interface ISpineExtraData {
         dataAsset: pack.core.SpineJsonAssetPackItem | pack.core.SpineBinaryAssetPackItem,
-        atlasAsset: pack.core.SpineAtlasAssetPackItem
+        atlasAsset: pack.core.SpineAtlasAssetPackItem,
+        skinName: string;
     }
 
     export class SpineExtension extends SceneGameObjectExtension {
@@ -42,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 dlg.setFinishCallback(async () => {
 
-                    const { dataAsset, atlasAsset } = dlg.getSelection();
+                    const { dataAsset, atlasAsset, skinName } = dlg.getSelection();
 
                     const scene = editor.getScene();
 
@@ -54,7 +55,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     }
 
                     const result: ICreateExtraDataResult = {
-                        data: ({ dataAsset, atlasAsset } as ISpineExtraData)
+                        data: ({ dataAsset, atlasAsset, skinName } as ISpineExtraData)
                     };
 
                     resolve(result);
@@ -82,6 +83,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 serializer.write("dataKey", extraData.dataAsset.getKey());
                 serializer.write("atlasKey", extraData.atlasAsset.getKey());
+                serializer.write("skinName", extraData.skinName);
             }
         }
 
@@ -93,9 +95,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
 
-            const { dataAsset, atlasAsset } = args.extraData as ISpineExtraData;
+            const { dataAsset, atlasAsset, skinName } = args.extraData as ISpineExtraData;
 
             const obj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+
+            SpineComponent.skin.setValue(obj, skinName);
 
             return [obj];
         }
@@ -114,7 +118,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 dlg.setFinishCallback(async () => {
 
-                    const { dataAsset, atlasAsset } = dlg.getSelection();
+                    const { dataAsset, atlasAsset, skinName } = dlg.getSelection();
 
                     for (const asset of [dataAsset, atlasAsset]) {
 
@@ -131,13 +135,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     // select a skin
 
-                    const skin = obj.skeleton.data.skins[0];
-
-                    if (skin) {
-
-                        obj.skeleton.setSkin(skin);
-                        obj.skeleton.setSlotsToSetupPose();
-                    }
+                    SpineComponent.skin.setValue(obj, skinName);
 
                     // select bounds provider
 

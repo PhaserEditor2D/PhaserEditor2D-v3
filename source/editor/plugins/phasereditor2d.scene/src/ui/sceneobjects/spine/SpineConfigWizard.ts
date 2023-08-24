@@ -7,6 +7,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _finder: pack.core.PackFinder;
         private _spineDataPage: SpineDataPage;
         private _spineAtlasPage: SpineAtlasPage;
+        private _spineSkinPage: SpineSkinPage;
         private _initSpineDataAsset: pack.core.SpineBinaryAssetPackItem | pack.core.SpineJsonAssetPackItem;
         private _finishCallback: () => void;
         private _cancelCallback: () => void;
@@ -23,17 +24,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         create() {
 
             if (this._initSpineDataAsset) {
-                
+
                 this._spineAtlasPage = new SpineAtlasPage();
-                
-                this.addPages(this._spineAtlasPage);
+                this._spineSkinPage = new SpineSkinPage();
+
+                this.addPages(this._spineAtlasPage, this._spineSkinPage);
 
             } else {
 
                 this._spineDataPage = new SpineDataPage();
                 this._spineAtlasPage = new SpineAtlasPage();
+                this._spineSkinPage = new SpineSkinPage();
 
-                this.addPages(this._spineDataPage, this._spineAtlasPage);
+                this.addPages(this._spineDataPage, this._spineAtlasPage, this._spineSkinPage);
             }
 
             super.create();
@@ -76,7 +79,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return {
                 dataAsset: this._initSpineDataAsset || this._spineDataPage.getSpineDataAsset(),
-                atlasAsset: this._spineAtlasPage.getSpineAtlasAsset()
+                atlasAsset: this._spineAtlasPage.getSpineAtlasAsset(),
+                skinName: this._spineSkinPage.getSkinName()
             }
         }
     }
@@ -196,7 +200,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setTimeout(() => {
 
                 this._viewer.repaint();
-                
+
             }, 100);
 
             this.updateUI();
@@ -221,6 +225,87 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         canGoNext() {
 
             return this._spineAtlasAsset !== undefined && this._spineAtlasAsset !== null;
+        }
+
+        getWizard() {
+
+            return super.getWizard() as SpineConfigWizard;
+        }
+    }
+
+    class SpineSkinPage extends controls.dialogs.WizardPage {
+
+        private _viewer: controls.viewers.TreeViewer;
+        private _skinName: string;
+
+        constructor() {
+            super("Skin", "Select the skin.");
+        }
+
+        getSkinName() {
+
+            return this._skinName;
+        }
+
+        createElements(parent: HTMLElement) {
+
+            this._viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.SpineSkinPage");
+
+            this._viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            this._viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider());
+            this._viewer.setLabelProvider(new controls.viewers.LabelProvider((skin: string) => {
+
+                return skin ? skin : "NULL";
+            }));
+
+
+            const { dataAsset, atlasAsset } = this.getWizard().getSelection();
+
+            const skeletonData = dataAsset.buildSkeleton(atlasAsset);
+
+            const skins = skeletonData ? [...skeletonData.skins.map(s => s.name), null] : [];
+
+            this._viewer.setInput(skins);
+
+            const filteredViewer = new controls.viewers.FilteredViewerInElement(this._viewer, false);
+
+            parent.appendChild(filteredViewer.getElement());
+
+            this._viewer.eventSelectionChanged.addListener(sel => {
+
+                this._skinName = this._viewer.getSelectionFirstElement();
+
+                this.getWizard().updateWizardButtons();
+            });
+
+            setTimeout(() => {
+
+                this._viewer.repaint();
+
+            }, 100);
+
+            this.updateUI();
+        }
+
+        private updateUI() {
+
+            if (this._skinName) {
+
+                this._viewer.setSelection([this._skinName]);
+                this._viewer.reveal(this._skinName);
+            }
+
+            this.getWizard().updateWizardButtons();
+        }
+
+        canFinish() {
+
+            return this.canGoNext();
+        }
+
+        canGoNext() {
+
+            return this._skinName !== undefined;
         }
 
         getWizard() {

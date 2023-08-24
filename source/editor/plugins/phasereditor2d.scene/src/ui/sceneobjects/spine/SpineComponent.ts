@@ -14,8 +14,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             defValue: null,
             label: "Skin",
             tooltip: "Skeleton's current skin.",
-            getEnumValues: obj => [null, ...obj.skeleton.data.skins.map(s => s.name)],
-            getValueLabel: val => val ?? "<null>",
+            getEnumValues: obj => [...obj.skeleton.data.skins.map(s => s.name), null],
+            getValueLabel: val => val ?? "NULL",
             getValue: (obj: SpineObject) => {
 
                 return obj.skeleton.skin?.name || null;
@@ -78,14 +78,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "BP Animation",
             tooltip: "The animation to use in the SkinsAndAnimationBoundsProvider.",
             defValue: null,
-            getEnumValues: obj => [null, ...obj.skeleton.data.animations.map(a => a.name)],
+            getEnumValues: obj => [...obj.skeleton.data.animations.map(a => a.name), null],
             getValue: obj => obj.bpAnimation,
             setValue: (obj, val) => {
 
                 obj.bpAnimation = val;
                 obj.updateBoundsProvider();
             },
-            getValueLabel: val => val ? val.toString() : "<null>"
+            getValueLabel: val => val ? val.toString() : "NULL"
         };
 
         static bpTimeStep = SimpleProperty(

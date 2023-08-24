@@ -1,5 +1,5 @@
 namespace phasereditor2d.pack.core {
-    
+
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
@@ -11,9 +11,7 @@ namespace phasereditor2d.pack.core {
 
         async preload(): Promise<controls.PreloadResult> {
 
-            const url = this.getData().url;
-
-            const file = this.getFileFromAssetUrl(url);
+            const file = this.getDataFile();
 
             if (file) {
 
@@ -23,8 +21,47 @@ namespace phasereditor2d.pack.core {
             return controls.PreloadResult.NOTHING_LOADED;
         }
 
+        getDataFile() {
+
+            const url = this.getData().url;
+
+            const file = this.getFileFromAssetUrl(url);
+
+            return file;
+        }
+
+        getDataString() {
+
+            const file = this.getDataFile();
+
+            if (file) {
+
+                return ide.FileUtils.getFileString(file);
+            }
+
+            return undefined;
+        }
+
+        buildSkeleton(atlasAsset: SpineAtlasAssetPackItem) {
+
+            const spineData = this.getDataString();
+
+            const atlas = atlasAsset.getSpineTextureAtlas();
+
+            if (spineData && atlas) {
+
+                const skel = new spine.SkeletonJson(new spine.AtlasAttachmentLoader(atlas));
+
+                const data = skel.readSkeletonData(spineData);
+
+                return data;
+            }
+
+            return undefined;
+        }
+
         addToPhaserCache(game: Phaser.Game, cache: parsers.AssetPackCache): void {
-            
+
             const url = this.getData().url;
 
             const file = this.getFileFromAssetUrl(url);
