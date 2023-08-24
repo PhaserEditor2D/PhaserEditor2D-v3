@@ -43,52 +43,52 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             },
         };
 
-        static boundsProviderType: IEnumProperty<SpineObject, BoundsProviderType> = {
+        static bpType: IEnumProperty<SpineObject, BoundsProviderType> = {
             name: "bpType",
             label: "BP",
             tooltip: "The type of the bounds provider.",
             defValue: BoundsProviderType.SETUP_TYPE,
             values: [BoundsProviderType.SETUP_TYPE, BoundsProviderType.SKINS_AND_ANIMATION_TYPE],
-            getValue: obj => obj.boundsProviderType,
+            getValue: obj => obj.bpType,
             setValue: (obj, val) => {
 
-                obj.boundsProviderType = val;
+                obj.bpType = val;
                 obj.updateBoundsProvider();
             },
             getValueLabel: val => val.toString()
         };
 
-        static boundsProviderSkin: IEnumProperty<SpineObject, BoundsProviderSkin> = {
+        static bpSkin: IEnumProperty<SpineObject, BoundsProviderSkin> = {
             name: "bpSkin",
             label: "BP Skin",
             tooltip: "The skins to use in the SkinsAndAnimationBoundsProvider.",
             defValue: BoundsProviderSkin.CURRENT_SKIN,
             values: [BoundsProviderSkin.CURRENT_SKIN, BoundsProviderSkin.ALL_SKINS],
-            getValue: obj => obj.boundsProviderSkin,
+            getValue: obj => obj.bpSkin,
             setValue: (obj, val) => {
 
-                obj.boundsProviderSkin = val;
+                obj.bpSkin = val;
                 obj.updateBoundsProvider();
             },
             getValueLabel: val => val.toString()
         };
 
-        static boundsProviderAnimation: IEnumProperty<SpineObject, string> = {
+        static bpAnimation: IEnumProperty<SpineObject, string> = {
             name: "bpAnimation",
             label: "BP Animation",
             tooltip: "The animation to use in the SkinsAndAnimationBoundsProvider.",
             defValue: null,
             getEnumValues: obj => [null, ...obj.skeleton.data.animations.map(a => a.name)],
-            getValue: obj => obj.boundsProviderAnimation,
+            getValue: obj => obj.bpAnimation,
             setValue: (obj, val) => {
 
-                obj.boundsProviderAnimation = val;
+                obj.bpAnimation = val;
                 obj.updateBoundsProvider();
             },
             getValueLabel: val => val ? val.toString() : "<null>"
         };
 
-        static boundsProviderTimeStep = SimpleProperty(
+        static bpTimeStep = SimpleProperty(
             "bpTimeStep", SpineObject.DEFAULT_BP_TIME_STEP, "BP Time Step",
             "The timeStep of the SkinAndAnimationBoundsProvider.",
             false, (obj: SpineObject) => {
@@ -102,10 +102,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 SpineComponent.dataKey,
                 SpineComponent.atlasKey,
                 SpineComponent.skin,
-                SpineComponent.boundsProviderType,
-                SpineComponent.boundsProviderSkin,
-                SpineComponent.boundsProviderAnimation,
-                SpineComponent.boundsProviderTimeStep
+                SpineComponent.bpType,
+                SpineComponent.bpSkin,
+                SpineComponent.bpAnimation,
+                SpineComponent.bpTimeStep
             ]);
         }
 
@@ -133,7 +133,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (objES.isNestedPrefabInstance()) {
 
-                if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+                if (objES.isUnlockedProperty(SpineComponent.bpType)) {
 
                     const newBoundsProviderExpr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(this.getObject(), args.unit);
                     

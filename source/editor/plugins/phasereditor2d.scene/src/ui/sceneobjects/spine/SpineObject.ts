@@ -17,10 +17,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _editorSupport: SpineEditorSupport;
         public dataKey: string;
         public atlasKey: string;
-        public boundsProviderType: BoundsProviderType;
-        public boundsProviderSkin: BoundsProviderSkin;
-        public boundsProviderAnimation: string;
-        public boundsProviderTimeStep: number;
+        public bpType: BoundsProviderType;
+        public bpSkin: BoundsProviderSkin;
+        public bpAnimation: string;
+        public bpTimeStep: number;
 
         constructor(scene: Scene, x: number, y: number, dataKey: string, atlasKey: string) {
             // TODO: missing bounds provider
@@ -29,10 +29,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.dataKey = dataKey;
             this.atlasKey = atlasKey;
 
-            this.boundsProviderType = BoundsProviderType.SETUP_TYPE;
-            this.boundsProviderSkin = BoundsProviderSkin.CURRENT_SKIN;
-            this.boundsProviderAnimation = null;
-            this.boundsProviderTimeStep = SpineObject.DEFAULT_BP_TIME_STEP;
+            this.bpType = BoundsProviderType.SETUP_TYPE;
+            this.bpSkin = BoundsProviderSkin.CURRENT_SKIN;
+            this.bpAnimation = null;
+            this.bpTimeStep = SpineObject.DEFAULT_BP_TIME_STEP;
 
             // const skins = this.skeleton.data.skins.map(skin => skin.name);
             // this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, skins);
@@ -43,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         updateBoundsProvider() {
 
-            if (this.boundsProviderType === BoundsProviderType.SETUP_TYPE) {
+            if (this.bpType === BoundsProviderType.SETUP_TYPE) {
 
                 this.boundsProvider = new spine.SetupPoseBoundsProvider();
                 this.updateSize();
@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     let skins: string[] = [];
 
-                    if (this.boundsProviderSkin === BoundsProviderSkin.CURRENT_SKIN) {
+                    if (this.bpSkin === BoundsProviderSkin.CURRENT_SKIN) {
 
                         if (this.skeleton.skin) {
 
@@ -69,7 +69,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     // TODO: missing timeStep argument
 
                     this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
-                        this.boundsProviderAnimation, skins, this.boundsProviderTimeStep);
+                        this.bpAnimation, skins, this.bpTimeStep);
 
                     this.updateSize();
 
@@ -82,17 +82,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             this.setInteractive();
-        }
-
-        setFirstSkin() {
-
-            const skin = this.skeleton.data.skins[0];
-
-            if (skin) {
-
-                this.skeleton.setSkin(skin);
-                this.skeleton.setSlotsToSetupPose();
-            }
         }
 
         getEditorSupport() {

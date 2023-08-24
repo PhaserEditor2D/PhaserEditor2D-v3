@@ -86,16 +86,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { key, frame, baseLabel } = this.getKeyFrameFromAsset(args.asset);
 
-            const sprite = this.createImageObject(args.scene, args.x, args.y, key, frame);
+            const obj = this.createImageObject(args.scene, args.x, args.y, key, frame);
 
-            const support = sprite.getEditorSupport();
+            const objES = obj.getEditorSupport();
 
-            support.setLabel(baseLabel);
+            objES.setLabel(baseLabel);
 
-            const textureComponent = (support.getComponent(TextureComponent) as TextureComponent);
+            const textureComponent = (objES.getComponent(TextureComponent) as TextureComponent);
             textureComponent.setTextureKeys({ key, frame });
 
-            return sprite;
+            return obj;
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): sceneobjects.ISceneGameObject {

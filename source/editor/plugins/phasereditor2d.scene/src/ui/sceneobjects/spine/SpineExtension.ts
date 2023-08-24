@@ -95,11 +95,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { dataAsset, atlasAsset } = args.extraData as ISpineExtraData;
 
-            const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+            const obj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
 
-            spineObj.setFirstSkin();
-
-            return [spineObj];
+            return [obj];
         }
 
         async createSceneObjectWithAsset(args: ICreateWithAssetArgs): Promise<ISceneGameObject> {
@@ -125,11 +123,45 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         await updater.updateLoader(args.scene, asset);
                     }
 
-                    const spineObj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+                    const obj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
 
-                    spineObj.setFirstSkin();
+                    const objES = obj.getEditorSupport();
 
-                    resolve(spineObj);
+                    objES.setLabel(dataAsset.getKey());
+
+                    // select a skin
+
+                    const skin = obj.skeleton.data.skins[0];
+
+                    if (skin) {
+
+                        obj.skeleton.setSkin(skin);
+                        obj.skeleton.setSlotsToSetupPose();
+                    }
+
+                    // select bounds provider
+
+                    if (obj.skeleton.skin) {
+
+                        obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
+                        obj.bpSkin = BoundsProviderSkin.CURRENT_SKIN;
+        
+                    } else if (obj.skeleton.data.defaultSkin) {
+        
+                        obj.bpType = BoundsProviderType.SETUP_TYPE;
+        
+                    } else {
+        
+                        obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
+                        obj.bpAnimation = null;
+                        obj.bpSkin = BoundsProviderSkin.ALL_SKINS;
+                    }
+        
+                    obj.updateBoundsProvider();
+
+                    // return
+
+                    resolve(obj);
                 });
 
                 dlg.setCancelCallback(() => {

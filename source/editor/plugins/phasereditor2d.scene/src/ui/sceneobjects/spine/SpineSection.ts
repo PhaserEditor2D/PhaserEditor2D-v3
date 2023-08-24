@@ -14,19 +14,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPropertyEnumRow(comp, SpineComponent.skin);
 
-            this.createPropertyEnumRow(comp, SpineComponent.boundsProviderType);
+            this.createPropertyEnumRow(comp, SpineComponent.bpType);
 
-            const btn1 = this.createPropertyEnumRow(comp, SpineComponent.boundsProviderSkin, false);
+            const btn1 = this.createPropertyEnumRow(comp, SpineComponent.bpSkin, false);
 
-            const btn2 = this.createPropertyEnumRow(comp, SpineComponent.boundsProviderAnimation, false);
+            const btn2 = this.createPropertyEnumRow(comp, SpineComponent.bpAnimation, false);
 
-            const btn3 = this.createPropertyFloatRow(comp, SpineComponent.boundsProviderTimeStep, false);
+            const btn3 = this.createPropertyFloatRow(comp, SpineComponent.bpTimeStep, false);
 
             this.addUpdater(() => {
 
                 let enable = false;
 
-                const typeProp = SpineComponent.boundsProviderType;
+                const typeProp = SpineComponent.bpType;
 
                 const unlockedObjs = this.getSelection()
 

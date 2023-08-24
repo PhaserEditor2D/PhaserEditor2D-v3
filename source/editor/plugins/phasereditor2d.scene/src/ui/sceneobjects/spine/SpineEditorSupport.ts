@@ -33,11 +33,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             super.setUnlockedProperty(property, unlock);
             
-            if (property === SpineComponent.boundsProviderType) {
+            if (property === SpineComponent.bpType) {
 
-                super.setUnlockedProperty(SpineComponent.boundsProviderSkin, unlock);
-                super.setUnlockedProperty(SpineComponent.boundsProviderAnimation, unlock);
-                super.setUnlockedProperty(SpineComponent.boundsProviderTimeStep, unlock);
+                super.setUnlockedProperty(SpineComponent.bpSkin, unlock);
+                super.setUnlockedProperty(SpineComponent.bpAnimation, unlock);
+                super.setUnlockedProperty(SpineComponent.bpTimeStep, unlock);
             }
         }
     }

@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argLiteral(obj.dataKey);
             call.argLiteral(obj.atlasKey);
 
-            if (obj.boundsProviderType !== SpineComponent.boundsProviderType.defValue) {
+            if (obj.bpType !== SpineComponent.bpType.defValue) {
 
                 const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
 
@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argLiteral(dataKey);
             call.argLiteral(atlasKey);
 
-            if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+            if (objES.isUnlockedProperty(SpineComponent.bpType)) {
 
                 const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
                 call.arg(expr);
@@ -50,7 +50,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         public static generateNewBoundsProviderExpression(obj: SpineObject, unit: code.UnitCodeDOM) {
 
-            if (obj.boundsProviderType === BoundsProviderType.SETUP_TYPE) {
+            if (obj.bpType === BoundsProviderType.SETUP_TYPE) {
 
                 unit.addImport("{ SetupPoseBoundsProvider }", "@esotericsoftware/spine-phaser");
 
@@ -63,11 +63,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const cls = this.spineClassName(obj, "SkinsAndAnimationBoundsProvider");
 
-            const animation = JSON.stringify(obj.boundsProviderAnimation);
+            const animation = JSON.stringify(obj.bpAnimation);
 
             let skins: string[] = [];
 
-            if (obj.boundsProviderSkin === BoundsProviderSkin.CURRENT_SKIN) {
+            if (obj.bpSkin === BoundsProviderSkin.CURRENT_SKIN) {
 
                 if (obj.skeleton.skin) {
 
@@ -79,12 +79,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 skins = obj.skeleton.data.skins.map(skin => skin.name);
             }
 
-            if (obj.boundsProviderTimeStep == 0.05) {
+            if (obj.bpTimeStep == 0.05) {
 
                 return `new ${cls}(${animation}, ${JSON.stringify(skins)})`;
             }
 
-            return `new ${cls}(${animation}, ${JSON.stringify(skins)}, ${obj.boundsProviderTimeStep})`;
+            return `new ${cls}(${animation}, ${JSON.stringify(skins)}, ${obj.bpTimeStep})`;
         }
 
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
@@ -143,7 +143,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
 
-            if (objES.isUnlockedProperty(SpineComponent.boundsProviderType)) {
+            if (objES.isUnlockedProperty(SpineComponent.bpType)) {
 
                 call.arg(`boundsProvider ?? ${expr}`);
 
