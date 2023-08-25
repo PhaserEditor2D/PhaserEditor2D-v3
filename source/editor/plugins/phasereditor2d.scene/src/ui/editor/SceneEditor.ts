@@ -796,25 +796,38 @@ namespace phasereditor2d.scene.ui.editor {
             this._currentRefreshHash = await this.buildDependenciesHash();
         }
 
-        async onPartActivated() {
+        override async onPartActivated() {
 
             super.onPartActivated();
 
-            {
-                if (this._scene) {
+            await this.updateWithExternalChanges();
+        }
 
-                    const hash = await this.buildDependenciesHash();
+        protected onFileStorageChanged(change: io.FileStorageChange): void {
 
-                    if (this._currentRefreshHash !== null
+            if (change.getCause() === colibri.core.io.FileStorageChangeCause.WINDOW_FOCUS) {
 
-                        && this._currentRefreshHash !== undefined
+                this.updateWithExternalChanges();
+            }
+        }
 
-                        && hash !== this._currentRefreshHash) {
+        private async updateWithExternalChanges() {
 
-                        console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
+            console.log("SceneEditor.updateWithExternalChanges()");
 
-                        await this.refreshScene();
-                    }
+            if (this._scene) {
+
+                const hash = await this.buildDependenciesHash();
+
+                if (this._currentRefreshHash !== null
+
+                    && this._currentRefreshHash !== undefined
+
+                    && hash !== this._currentRefreshHash) {
+
+                    console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
+
+                    await this.refreshScene();
                 }
             }
 

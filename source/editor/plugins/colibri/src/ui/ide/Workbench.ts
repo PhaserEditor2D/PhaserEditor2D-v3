@@ -24,6 +24,7 @@ namespace colibri.ui.ide {
         public eventBeforeOpenProject = new controls.ListenerList();
         public eventProjectOpened = new controls.ListenerList();
         public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
+        public eventWindowFocused = new controls.ListenerList();
 
         private _fileStringCache: core.io.FileStringCache;
         private _fileBinaryCache: core.io.FileBinaryCache;
@@ -57,20 +58,56 @@ namespace colibri.ui.ide {
 
             this._fileImageSizeCache = new ImageSizeFileCache();
 
-            if (CAPABILITY_FILE_STORAGE) {
-
-                this._fileStorage = new core.io.FileStorage_HTTPServer();
-
-                this._fileStringCache = new core.io.FileStringCache(this._fileStorage);
-
-                this._fileBinaryCache = new core.io.FileBinaryCache(this._fileStorage);
-            }
-
             this._globalPreferences = new core.preferences.Preferences("__global__");
 
             this._projectPreferences = null;
 
             this._editorSessionStateRegistry = new Map();
+        }
+
+        getFileStringCache() {
+            
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileStringCache) {
+
+                this._fileStringCache = new core.io.FileStringCache(this.getFileStorage());
+            }
+
+            return this._fileStringCache;
+        }
+
+        getFileBinaryCache() {
+
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileBinaryCache) {
+
+                this._fileBinaryCache = new core.io.FileBinaryCache(this.getFileStorage());
+            }
+
+            return this._fileBinaryCache;
+        }
+
+        getFileStorage() {
+
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileStorage) {
+
+                this._fileStorage = new core.io.FileStorage_HTTPServer();
+            }
+
+            return this._fileStorage;
         }
 
         getEditorSessionStateRegistry() {
@@ -193,8 +230,9 @@ namespace colibri.ui.ide {
 
         private resetCache() {
 
-            this._fileStringCache.reset();
-            this._fileImageCache.reset();
+            this.getFileStringCache().reset();
+            this.getFileBinaryCache().reset();
+
             this._fileImageCache.reset();
             this._fileImageSizeCache.reset();
             this._contentTypeRegistry.resetCache();
@@ -210,9 +248,11 @@ namespace colibri.ui.ide {
 
             console.log(`Workbench: opening project.`);
 
-            await this._fileStorage.openProject();
+            const fileStorage = this.getFileStorage();
 
-            const projectName = this._fileStorage.getRoot().getName();
+            await fileStorage.openProject();
+
+            const projectName = fileStorage.getRoot().getName();
 
             console.log(`Workbench: project ${projectName} loaded.`);
 
@@ -426,6 +466,45 @@ namespace colibri.ui.ide {
                     });
                 }
             });
+
+            /*
+
+            This flag is needed by Firefox.
+            In Firefox the focus event is emitted when an object is drop into the window
+            so we should filter that case.
+
+            */
+            const flag = { drop: false };
+
+            window.addEventListener("drop", e => {
+
+                flag.drop = true;
+            });
+
+            window.addEventListener("focus", () => {
+
+                if (flag.drop) {
+
+                    flag.drop = false;
+
+                    return;
+                }
+
+                this.eventWindowFocused.fire();
+
+                for(const window of this._windows) {
+
+                    for(const editor of this.getEditors()) {
+
+                        editor.onWindowFocus();
+                    }
+
+                    for(const part of window.getViews()) {
+
+                        part.onWindowFocus();
+                    }
+                }
+            });
         }
 
         private registerEditors(): void {
@@ -438,21 +517,6 @@ namespace colibri.ui.ide {
                     this._editorRegistry.registerFactory(factory);
                 }
             }
-        }
-
-        getFileStringCache() {
-
-            return this._fileStringCache;
-        }
-
-        getFileBinaryCache() {
-
-            return this._fileBinaryCache;
-        }
-
-        getFileStorage() {
-
-            return this._fileStorage;
         }
 
         getCommandManager() {
@@ -623,11 +687,13 @@ namespace colibri.ui.ide {
         }
 
         getContentTypeRegistry() {
+
             return this._contentTypeRegistry;
         }
 
         getProjectRoot(): core.io.FilePath {
-            return this._fileStorage.getRoot();
+
+            return this.getFileStorage().getRoot();
         }
 
         getContentTypeIcon(contentType: string): controls.IImage {

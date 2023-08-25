@@ -65,6 +65,5 @@ namespace phasereditor2d.pack.core.parsers {
             return new AssetPackImageFrame(
                 packItem as ImageFrameContainerAssetPackItem, frame.filename, image, frameData);
         }
-
     }
 }

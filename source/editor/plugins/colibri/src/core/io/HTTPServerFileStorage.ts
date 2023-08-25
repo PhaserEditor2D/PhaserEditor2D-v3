@@ -1,5 +1,7 @@
 namespace colibri.core.io {
 
+    import controls = colibri.ui.controls;
+
     interface IGetProjectFilesData {
 
         hash: string;
@@ -66,34 +68,13 @@ namespace colibri.core.io {
 
         private registerDocumentVisibilityListener() {
 
-            /*
+            Platform.getWorkbench().eventWindowFocused.addListener(async () => {
 
-            This flag is needed by Firefox.
-            In Firefox the focus event is emitted when an object is drop into the window
-            so we should filter that case.
-
-            */
-            const flag = { drop: false };
-
-            window.addEventListener("drop", e => {
-
-                flag.drop = true;
-            });
-
-            window.addEventListener("focus", e => {
-
-                if (flag.drop) {
-
-                    flag.drop = false;
-
-                } else {
-
-                    this.updateWithServerChanges();
-                }
+                await this.detectServerChangesOnWindowsFocus();
             });
         }
 
-        private async updateWithServerChanges() {
+        private async detectServerChangesOnWindowsFocus() {
 
             const hashData = await apiRequest("GetProjectFilesHash", {});
 
@@ -131,7 +112,7 @@ namespace colibri.core.io {
 
             }
 
-            const change = new FileStorageChange();
+            const change = new FileStorageChange(FileStorageChangeCause.WINDOW_FOCUS);
 
             const localFiles = this._root.flatTree([], true);
             const serverFiles = new FilePath(null, data.rootFile).flatTree([], true);
@@ -365,6 +346,7 @@ namespace colibri.core.io {
                     const result = listener(change);
 
                     if (result instanceof Promise) {
+
                         await result;
                     }
 

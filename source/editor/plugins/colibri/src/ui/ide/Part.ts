@@ -107,6 +107,10 @@ namespace colibri.ui.ide {
             // nothing
         }
 
+        onWindowFocus() {
+            // nothing
+        }
+
         onPartAdded() {
             // nothing
         }

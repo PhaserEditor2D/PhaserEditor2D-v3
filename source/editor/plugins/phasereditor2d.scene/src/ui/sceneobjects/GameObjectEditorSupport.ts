@@ -374,6 +374,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private static async buildPrefabDependencyHash(builder: ide.core.MultiHashBuilder, prefabId: string) {
 
             if (!prefabId) {
+
                 return;
             }
 
@@ -382,6 +383,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const file = finder.getPrefabFile(prefabId);
 
             if (!file) {
+
                 return;
             }
 
@@ -392,6 +394,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const sceneData = finder.getSceneData(file);
 
             if (!sceneData) {
+                
                 return;
             }
 

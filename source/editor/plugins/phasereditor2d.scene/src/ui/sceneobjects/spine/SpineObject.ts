@@ -28,7 +28,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.dataKey = dataKey;
             this.atlasKey = atlasKey;
-
             this.bpType = BoundsProviderType.SETUP_TYPE;
             this.bpSkin = BoundsProviderSkin.CURRENT_SKIN;
             this.bpAnimation = null;

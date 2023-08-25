@@ -4,7 +4,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         clearCache(scene: BaseScene): void {
 
-            for (const cache of [scene.cache.json, scene.cache.binary]) {
+            const spineAtlasCache = scene.cache.custom["esotericsoftware.spine.atlas.cache"];
+            const spineSkeletonCache = scene.cache.custom["esotericsoftware.spine.skeletonFile.cache"];
+
+            const caches = [
+                scene.cache.json,
+                scene.cache.binary,
+                spineAtlasCache,
+                spineSkeletonCache];
+
+            for (const cache of caches) {
 
                 const keys = cache.getKeys();
 
