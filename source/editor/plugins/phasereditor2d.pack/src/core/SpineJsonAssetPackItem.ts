@@ -1,9 +1,10 @@
+/// <reference path="./SpineAssetPackItem.ts"/>
 namespace phasereditor2d.pack.core {
 
     import controls = colibri.ui.controls;
     import ide = colibri.ui.ide;
 
-    export class SpineJsonAssetPackItem extends AssetPackItem {
+    export class SpineJsonAssetPackItem extends SpineAssetPackItem {
 
         constructor(pack: AssetPack, data: any) {
             super(pack, data);
@@ -21,15 +22,6 @@ namespace phasereditor2d.pack.core {
             return controls.PreloadResult.NOTHING_LOADED;
         }
 
-        getDataFile() {
-
-            const url = this.getData().url;
-
-            const file = this.getFileFromAssetUrl(url);
-
-            return file;
-        }
-
         getDataString() {
 
             const file = this.getDataFile();
@@ -42,7 +34,7 @@ namespace phasereditor2d.pack.core {
             return undefined;
         }
 
-        buildSkeleton(atlasAsset: SpineAtlasAssetPackItem) {
+        override buildSkeleton(atlasAsset: SpineAtlasAssetPackItem) {
 
             const spineData = this.getDataString();
 

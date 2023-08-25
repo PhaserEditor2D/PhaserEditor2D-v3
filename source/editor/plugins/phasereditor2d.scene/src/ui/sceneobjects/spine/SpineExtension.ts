@@ -1,7 +1,7 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     interface ISpineExtraData {
-        dataAsset: pack.core.SpineJsonAssetPackItem | pack.core.SpineBinaryAssetPackItem,
+        dataAsset: pack.core.SpineAssetPackItem,
         atlasAsset: pack.core.SpineAtlasAssetPackItem,
         skinName: string;
     }
@@ -89,8 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         acceptsDropData(data: any): boolean {
 
-            return data instanceof pack.core.SpineJsonAssetPackItem
-                || data instanceof pack.core.SpineBinaryAssetPackItem
+            return data instanceof pack.core.SpineAssetPackItem;
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
@@ -110,7 +109,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             await finder.preload();
 
-            const asset: pack.core.SpineJsonAssetPackItem | pack.core.SpineBinaryAssetPackItem = args.asset;
+            const asset: pack.core.SpineAssetPackItem = args.asset;
 
             return new Promise((resolve, reject) => {
 

@@ -17,8 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         acceptAsset(asset: any): boolean {
 
-            return asset instanceof pack.core.SpineJsonAssetPackItem
-                || asset instanceof pack.core.SpineBinaryAssetPackItem;
+            return asset instanceof pack.core.SpineAssetPackItem;
         }
 
         async updateLoader(scene: BaseScene, asset: any) {

@@ -8,11 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _spineDataPage: SpineDataPage;
         private _spineAtlasPage: SpineAtlasPage;
         private _spineSkinPage: SpineSkinPage;
-        private _initSpineDataAsset: pack.core.SpineBinaryAssetPackItem | pack.core.SpineJsonAssetPackItem;
+        private _initSpineDataAsset: pack.core.SpineAssetPackItem;
         private _finishCallback: () => void;
         private _cancelCallback: () => void;
 
-        constructor(finder: pack.core.PackFinder, spineDataAsset?: pack.core.SpineBinaryAssetPackItem | pack.core.SpineJsonAssetPackItem) {
+        constructor(finder: pack.core.PackFinder, spineDataAsset?: pack.core.SpineAssetPackItem) {
             super();
 
             this._finder = finder;
@@ -66,8 +66,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getSpineDataAssets() {
 
-            return this._finder.getAssets(item => item instanceof pack.core.SpineJsonAssetPackItem
-                || item instanceof pack.core.SpineBinaryAssetPackItem);
+            return this._finder.getAssets(item => item instanceof pack.core.SpineAssetPackItem);
         }
 
         getSpineAtlasAssets() {
@@ -88,7 +87,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     class SpineDataPage extends controls.dialogs.WizardPage {
 
         private _viewer: controls.viewers.TreeViewer;
-        private _spineDataAsset: pack.core.SpineJsonAssetPackItem | pack.core.SpineBinaryAssetPackItem;
+        private _spineDataAsset: pack.core.SpineAssetPackItem;
 
         constructor() {
             super("Spine Data", "Select the JSON or Binary Spine data file.");
