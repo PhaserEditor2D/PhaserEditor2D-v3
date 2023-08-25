@@ -26,7 +26,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         acceptAsset(asset: any): boolean {
 
-            return asset instanceof pack.core.SpineAssetPackItem;
+            return asset instanceof pack.core.SpineAssetPackItem
+                || asset instanceof pack.core.SpineAtlasAssetPackItem;
         }
 
         async updateLoader(scene: BaseScene, asset: any) {
@@ -39,7 +40,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         async updateLoaderWithObjData(scene: BaseScene, data: core.json.IObjectData): Promise<void> {
-            // TODO
+
+            const serializer = new core.json.Serializer(data);
+            const type = serializer.getType();
+
+            if (type === SpineExtension.getInstance().getTypeName()) {
+
+                const dataKey = serializer.read("dataKey");
+                const atlasKey = serializer.read("atlerKey");
+
+                const finder = scene.getMaker().getPackFinder();
+
+                for (const key of [dataKey, atlasKey]) {
+
+                    if (key) {
+
+                        const asset = finder.findAssetPackItem(key);
+
+                        if (asset && this.acceptAsset(asset)) {
+
+                            await this.updateLoader(scene, asset);
+                        }
+                    }
+                }
+            }
         }
     }
 }
