@@ -64,6 +64,11 @@ namespace phasereditor2d.scene.ui.blocks {
                 return true;
             }
 
+            if (obj instanceof pack.core.SpineSkinItem) {
+
+                return true;
+            }
+
             return super.isShadowAsChild(obj);
         }
 

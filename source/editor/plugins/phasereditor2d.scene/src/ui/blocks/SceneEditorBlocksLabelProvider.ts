@@ -21,6 +21,10 @@ namespace phasereditor2d.scene.ui.blocks {
             } else if (obj instanceof viewers.PhaserTypeSymbol) {
 
                 return obj.getDisplayName();
+
+            } else if (obj instanceof pack.core.SpineSkinItem) {
+
+                return obj.skinName;
             }
 
             return super.getLabel(obj);

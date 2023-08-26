@@ -89,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         acceptsDropData(data: any): boolean {
 
-            return data instanceof pack.core.SpineAssetPackItem;
+            return data instanceof pack.core.SpineAssetPackItem || data instanceof pack.core.SpineSkinItem;
         }
 
         createDefaultSceneObject(args: ICreateDefaultArgs) {
@@ -109,6 +109,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             await finder.preload();
 
+            if (args.asset instanceof pack.core.SpineSkinItem) {
+
+                const { spineAsset, spineAtlasAsset, skinName } = args.asset;
+
+                const obj = await this.newSpineObject(args, spineAsset, spineAtlasAsset, skinName);
+
+                return obj;
+            }
+
             const asset: pack.core.SpineAssetPackItem = args.asset;
 
             return new Promise((resolve, reject) => {
@@ -119,44 +128,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const { dataAsset, atlasAsset, skinName } = dlg.getSelection();
 
-                    for (const asset of [dataAsset, atlasAsset]) {
-
-                        const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
-
-                        await updater.updateLoader(args.scene, asset);
-                    }
-
-                    const obj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
-
-                    const objES = obj.getEditorSupport();
-
-                    objES.setLabel(dataAsset.getKey());
-
-                    // select a skin
-
-                    SpineComponent.skin.setValue(obj, skinName);
-
-                    // select bounds provider
-
-                    if (obj.skeleton.skin) {
-
-                        obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
-                        obj.bpSkin = BoundsProviderSkin.CURRENT_SKIN;
-        
-                    } else if (obj.skeleton.data.defaultSkin) {
-        
-                        obj.bpType = BoundsProviderType.SETUP_TYPE;
-        
-                    } else {
-        
-                        obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
-                        obj.bpAnimation = null;
-                        obj.bpSkin = BoundsProviderSkin.ALL_SKINS;
-                    }
-        
-                    obj.updateBoundsProvider();
-
-                    // return
+                    const obj = await this.newSpineObject(args, dataAsset, atlasAsset, skinName);
 
                     resolve(obj);
                 });
@@ -168,6 +140,46 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 dlg.create();
             });
+        }
+
+        private async newSpineObject(args: ICreateWithAssetArgs, dataAsset: pack.core.SpineAssetPackItem, atlasAsset: pack.core.SpineAtlasAssetPackItem, skinName: string) {
+
+            for (const asset of [dataAsset, atlasAsset]) {
+
+                const updater = ScenePlugin.getInstance().getLoaderUpdaterForAsset(asset);
+
+                await updater.updateLoader(args.scene, asset);
+            }
+
+            const obj = new SpineObject(args.scene, args.x, args.y, dataAsset.getKey(), atlasAsset.getKey());
+
+            const objES = obj.getEditorSupport();
+
+            objES.setLabel(dataAsset.getKey());
+
+            // select a skin
+            SpineComponent.skin.setValue(obj, skinName);
+
+            // select bounds provider
+            if (obj.skeleton.skin) {
+
+                obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
+                obj.bpSkin = BoundsProviderSkin.CURRENT_SKIN;
+
+            } else if (obj.skeleton.data.defaultSkin) {
+
+                obj.bpType = BoundsProviderType.SETUP_TYPE;
+
+            } else {
+
+                obj.bpType = BoundsProviderType.SKINS_AND_ANIMATION_TYPE;
+                obj.bpAnimation = null;
+                obj.bpSkin = BoundsProviderSkin.ALL_SKINS;
+            }
+
+            obj.updateBoundsProvider();
+
+            return obj;
         }
 
         createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {

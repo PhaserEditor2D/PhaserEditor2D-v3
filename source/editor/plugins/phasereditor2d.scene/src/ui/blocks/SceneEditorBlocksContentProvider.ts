@@ -218,6 +218,11 @@ namespace phasereditor2d.scene.ui.blocks {
                 return [...scenes, ...items];
             }
 
+            if (parent instanceof pack.core.SpineAssetPackItem) {
+
+                return parent.getGuessSkinItems();
+            }
+
             return super.getChildren(parent);
         }
     }

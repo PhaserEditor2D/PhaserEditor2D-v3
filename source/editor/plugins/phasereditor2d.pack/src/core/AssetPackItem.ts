@@ -95,6 +95,7 @@ namespace phasereditor2d.pack.core {
         }
 
         async preload(): Promise<controls.PreloadResult> {
+
             return controls.Controls.resolveNothingLoaded();
         }
 
@@ -106,6 +107,27 @@ namespace phasereditor2d.pack.core {
 
             return this;
         }
-    }
 
+        computeHash() {
+
+            const files = new Set<io.FilePath>();
+            
+            this.computeUsedFiles(files);
+
+            const builder = new ide.core.MultiHashBuilder();
+
+            for(const file of files) {
+
+                builder.addPartialFileToken(file);
+            }
+
+            const str = JSON.stringify(this.getData());
+
+            builder.addPartialToken(str);
+
+            const hash = builder.build();
+
+            return hash;
+        }
+    }
 }
