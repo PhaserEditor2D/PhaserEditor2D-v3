@@ -4,6 +4,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
+    const BoundsProviderTypeLabels = {
+        [BoundsProviderType.SETUP_TYPE]: "SETUP_POSE",
+        [BoundsProviderType.SKINS_AND_ANIMATION_TYPE]: "SKINS_AND_ANIMATION"
+    }
+
+    const BoundsProviderSkinLabels = {
+        [BoundsProviderSkin.ALL_SKINS]: "ALL",
+        [BoundsProviderSkin.CURRENT_SKIN]: "CURRENT"
+    }
+
     export class SpineComponent extends Component<SpineObject> {
 
         static dataKey = SimpleProperty("dataKey", undefined, "Data Key", "The skeleton data key");
@@ -55,7 +65,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.bpType = val;
                 obj.updateBoundsProvider();
             },
-            getValueLabel: val => val.toString()
+            getValueLabel: val => BoundsProviderTypeLabels[val]
         };
 
         static bpSkin: IEnumProperty<SpineObject, BoundsProviderSkin> = {
@@ -70,7 +80,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.bpSkin = val;
                 obj.updateBoundsProvider();
             },
-            getValueLabel: val => val.toString()
+            getValueLabel: val => BoundsProviderSkinLabels[val]
         };
 
         static bpAnimation: IEnumProperty<SpineObject, string> = {

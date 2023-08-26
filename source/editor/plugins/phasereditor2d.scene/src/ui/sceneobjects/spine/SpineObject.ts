@@ -1,13 +1,13 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export enum BoundsProviderType {
-        SETUP_TYPE = "SETUP POSE",
-        SKINS_AND_ANIMATION_TYPE = "SKINS AND ANIMATION"
+        SETUP_TYPE,
+        SKINS_AND_ANIMATION_TYPE
     }
 
     export enum BoundsProviderSkin {
-        ALL_SKINS = "ALL",
-        CURRENT_SKIN = "CURRENT"
+        ALL_SKINS,
+        CURRENT_SKIN
     }
 
     export class SpineObject extends spine.SpineGameObject implements ISceneGameObject {

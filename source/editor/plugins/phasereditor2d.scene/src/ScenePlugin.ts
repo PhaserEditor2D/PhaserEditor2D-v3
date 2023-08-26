@@ -604,7 +604,7 @@ namespace phasereditor2d.scene {
                 "displayList": [
                     {
                         "type": "SpineGameObject",
-                        "id": "0ed01afd-8eed-4655-89c7-cd766c497c23",
+                        "id": "spine-thumbnail-id",
                         "label": "spine",
                         "dataKey": spineAsset.getKey(),
                         "atlasKey": spineAtlasAsset.getKey(),
