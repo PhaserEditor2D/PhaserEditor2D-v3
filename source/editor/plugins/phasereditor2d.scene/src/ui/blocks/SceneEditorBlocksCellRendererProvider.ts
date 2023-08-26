@@ -42,6 +42,10 @@ namespace phasereditor2d.scene.ui.blocks {
             } else if (element instanceof viewers.PhaserTypeSymbol) {
 
                 return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            } else if (element instanceof pack.core.SpineSkinItem) {
+
+                return new viewers.SpineSkinCellRenderer();
             }
 
             return super.getCellRenderer(element);

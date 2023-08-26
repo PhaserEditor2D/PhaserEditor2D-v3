@@ -40,14 +40,16 @@ namespace phasereditor2d.scene {
         static DEFAULT_EDITOR_PIXEL_ART = true;
 
         private _sceneFinder: core.json.SceneFinder;
-
         private _docs: phasereditor2d.ide.core.PhaserDocs;
+        private _spineThumbnailCache: ui.SpineThumbnailCache;
 
         static getInstance() {
+
             return this._instance;
         }
 
         private constructor() {
+
             super("phasereditor2d.scene");
         }
 
@@ -580,9 +582,48 @@ namespace phasereditor2d.scene {
                 }
             }
         }
+
+        getSpineThumbnailCache() {
+
+            if (!this._spineThumbnailCache) {
+
+                this._spineThumbnailCache = new ui.SpineThumbnailCache();
+            }
+
+            return this._spineThumbnailCache;
+        }
+
+        buildSpineSkinThumbnailImage(skinItem: pack.core.SpineSkinItem) {
+
+            const { spineAsset, spineAtlasAsset, skinName } = skinItem;
+
+            const data: core.json.ISceneData = {
+                "id": "ad829e9b-d82c-466a-a31c-a2789656ef84",
+                "sceneType": core.json.SceneType.SCENE,
+                "settings": {},
+                "displayList": [
+                    {
+                        "type": "SpineGameObject",
+                        "id": "0ed01afd-8eed-4655-89c7-cd766c497c23",
+                        "label": "spine",
+                        "dataKey": spineAsset.getKey(),
+                        "atlasKey": spineAtlasAsset.getKey(),
+                        "skinName": skinName,
+                        "bpType": ui.sceneobjects.BoundsProviderType.SKINS_AND_ANIMATION_TYPE,
+                        "bpSkin": ui.sceneobjects.BoundsProviderSkin.CURRENT_SKIN,
+                        "x": 0,
+                        "y": 0
+                    } as any
+                ],
+                "plainObjects": [],
+                "meta": {
+                    "version": 4
+                } as any
+            };
+
+            return new ui.SceneThumbnailImage(data);
+        }
     }
 
     colibri.Platform.addPlugin(ScenePlugin.getInstance());
-
-    console.log(spine.SpineGameObject);
 }

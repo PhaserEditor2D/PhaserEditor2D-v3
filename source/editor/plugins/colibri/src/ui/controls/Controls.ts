@@ -345,5 +345,46 @@ namespace colibri.ui.controls {
 
             ctx.restore();
         }
+
+        static createBlobFromImage(img: controls.IImageOrCanvas): Promise<Blob> {
+
+            return new Promise((resolve, reject) => {
+    
+                let canvas: HTMLCanvasElement;
+    
+                if (img instanceof HTMLCanvasElement) {
+    
+                    canvas = img;
+    
+                } else {
+    
+                    canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    canvas.style.width = img.width + "px";
+                    canvas.style.height = img.height + "px";
+    
+                    const ctx = canvas.getContext("2d");
+                    ctx.imageSmoothingEnabled = false;
+    
+                    ctx.drawImage(img, 0, 0);
+                }
+    
+                canvas.toBlob((blob) => {
+    
+                    resolve(blob);
+    
+                }, 'image/png');
+            });
+        }
+    
+        static createImageFromBlob(blob: Blob) {
+    
+            const img = document.createElement("img");
+    
+            img.src = URL.createObjectURL(blob);
+    
+            return img;
+        }
     }
 }

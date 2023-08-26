@@ -51,12 +51,17 @@ namespace phasereditor2d.pack.core {
 
         getGuessSkinItems() {
 
-            this.getGuessSkeleton();
+            this.buildGuessSkeleton();
 
             return this._guessSkinItems;
         }
 
-        getGuessSkeleton() {
+        getGuessHash() {
+
+            return this._guessHash;
+        }
+
+        buildGuessSkeleton() {
 
             const atlas = this.guessAtlasAsset();
 
@@ -65,7 +70,7 @@ namespace phasereditor2d.pack.core {
                 this._guessHash = undefined;
                 this._guessSkeleton = undefined;
 
-                return undefined;
+                return;
             }
 
             const thisHash = this.computeHash();
@@ -95,6 +100,11 @@ namespace phasereditor2d.pack.core {
                     this._guessSkinItems = [];
                 }
             }
+        }
+
+        getGuessSkeleton() {
+
+            this.buildGuessSkeleton();
 
             return this._guessSkeleton;
         }

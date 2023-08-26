@@ -53,7 +53,7 @@ namespace phasereditor2d.scene.ui {
 
                             if (currentFileTime === savedFileTime) {
 
-                                const imgElement = createImageFromBlob(blob);
+                                const imgElement = controls.Controls.createImageFromBlob(blob);
 
                                 await new Promise((resolver, reject) => {
 
@@ -78,7 +78,7 @@ namespace phasereditor2d.scene.ui {
 
                 if (element) {
 
-                    const newBlob = await createBlobFromImage(element);
+                    const newBlob = await controls.Controls.createBlobFromImage(element);
 
                     db.setItem(imageKey, newBlob);
                     db.setItem(modTimeKey, currentFileTime);
@@ -87,46 +87,5 @@ namespace phasereditor2d.scene.ui {
                 return Promise.resolve(image);
             });
         }
-    }
-
-    async function createBlobFromImage(img: controls.IImageOrCanvas): Promise<Blob> {
-
-        return new Promise((resolve, reject) => {
-
-            let canvas: HTMLCanvasElement;
-
-            if (img instanceof HTMLCanvasElement) {
-
-                canvas = img;
-
-            } else {
-
-                canvas = document.createElement("canvas");
-                canvas.width = img.width;
-                canvas.height = img.height;
-                canvas.style.width = img.width + "px";
-                canvas.style.height = img.height + "px";
-
-                const ctx = canvas.getContext("2d");
-                ctx.imageSmoothingEnabled = false;
-
-                ctx.drawImage(img, 0, 0);
-            }
-
-            canvas.toBlob((blob) => {
-
-                resolve(blob);
-
-            }, 'image/png');
-        });
-    }
-
-    function createImageFromBlob(blob: Blob) {
-
-        const img = document.createElement("img");
-
-        img.src = URL.createObjectURL(blob);
-
-        return img;
     }
 }
