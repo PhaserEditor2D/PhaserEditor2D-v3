@@ -487,11 +487,11 @@ namespace phasereditor2d.pack.ui {
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
                     core.TILEMAP_TILED_JSON_TYPE),
 
-                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
 
-                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
 
-                new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_SPINE_ATLAS, core.SPINE_ATLAS_TYPE),
+                new importers.SpineAtlasImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,

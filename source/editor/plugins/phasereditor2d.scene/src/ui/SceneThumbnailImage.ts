@@ -90,8 +90,6 @@ namespace phasereditor2d.scene.ui {
 
             let bounds = this.computeSceneBounds();
 
-            console.log("bounds", bounds);
-
             if (!singleObject && (bounds.width > s.borderWidth || bounds.height > s.borderHeight)) {
 
                 bounds = {
