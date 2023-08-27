@@ -268,6 +268,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
+                page => new ui.sceneobjects.SpineBoundsProviderSection(page),
                 page => new ui.sceneobjects.HitAreaSection(page),
                 page => new ui.sceneobjects.RectangleHitAreaSection(page),
                 page => new ui.sceneobjects.CircleHitAreaSection(page),
