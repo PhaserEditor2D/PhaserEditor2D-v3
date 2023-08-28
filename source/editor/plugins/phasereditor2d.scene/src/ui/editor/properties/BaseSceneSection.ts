@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     import controls = colibri.ui.controls;
 
-    export abstract class BaseSceneSection<T> extends colibri.ui.controls.properties.PropertySection<T> {
+    export abstract class BaseSceneSection<T> extends controls.properties.PropertySection<T> {
 
         protected getHelp(key: string) {
             return "";

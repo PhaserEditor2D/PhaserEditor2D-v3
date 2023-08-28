@@ -11,8 +11,11 @@ namespace phasereditor2d.scene.ui.blocks {
 
             super.addSections(page, sections);
 
-            sections.push(new sceneobjects.ObjectTypeDocSection(page));
-            sections.push(new sceneobjects.ObjectListDocSection(page));
+            sections.push(
+                new sceneobjects.ObjectTypeDocSection(page),
+                new sceneobjects.ObjectListDocSection(page),
+                new sceneobjects.SpinePreviewSection(page)
+            );
         }
     }
 }
