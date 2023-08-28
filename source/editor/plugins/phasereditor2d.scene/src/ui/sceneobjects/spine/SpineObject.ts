@@ -33,10 +33,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.bpAnimation = null;
             this.bpTimeStep = SpineObject.DEFAULT_BP_TIME_STEP;
 
-            // const skins = this.skeleton.data.skins.map(skin => skin.name);
-            // this.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, skins);
-            // this.updateSize();
-
             this._editorSupport = new SpineEditorSupport(this, scene);
         }
 

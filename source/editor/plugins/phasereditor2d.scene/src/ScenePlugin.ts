@@ -267,8 +267,6 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
-                page => new ui.sceneobjects.SpineSection(page),
-                page => new ui.sceneobjects.SpineBoundsProviderSection(page),
                 page => new ui.sceneobjects.HitAreaSection(page),
                 page => new ui.sceneobjects.RectangleHitAreaSection(page),
                 page => new ui.sceneobjects.CircleHitAreaSection(page),
@@ -294,7 +292,9 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.PolygonSection(page),
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
-                page => new ui.sceneobjects.TextureSection(page)
+                page => new ui.sceneobjects.TextureSection(page),
+                page => new ui.sceneobjects.SpineSection(page),
+                page => new ui.sceneobjects.SpineBoundsProviderSection(page)
             ));
 
             // scene tools
