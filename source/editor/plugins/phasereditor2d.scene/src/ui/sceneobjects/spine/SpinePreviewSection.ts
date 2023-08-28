@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createForm(parent: HTMLDivElement): void {
 
             parent.style.gridTemplateColumns = "1fr";
-            parent.style.gridTemplateRows = "auto 1fr";
+            parent.style.gridTemplateRows = "1fr auto";
 
             this.addUpdater(() => {
 
@@ -41,9 +41,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.updatePreview();
             });
 
-            this.createSettings(parent);
-
             this.createGameCanvas(parent);
+
+            this.createSettings(parent);
         }
 
         private createSettings(parent: HTMLDivElement) {
