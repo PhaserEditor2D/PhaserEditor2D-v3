@@ -5,9 +5,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class SpinePreviewSection extends controls.properties.PropertySection<pack.core.SpineAssetPackItem | pack.core.SpineSkinItem> {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.SpinePreviewSection";
+
         private _game: Phaser.Game;
         private _selectedSkinName: string;
         private _skinBtn: HTMLButtonElement;
+        private _animationBtn: HTMLButtonElement;
+        private _selectedAnimationName: any;
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, SpinePreviewSection.ID, "Spine Preview", true, false);
@@ -32,6 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this.setDefaultSkin(obj, atlas);
                 }
+
+                this._selectedAnimationName = null;
 
                 this.updatePreview();
             });
@@ -64,6 +69,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._skinBtn.textContent = this._selectedSkinName;
             });
+
+            this.createLabel(comp, "Animation");
+
+            this._animationBtn = this.createMenuButton(comp, "",
+                () => [...this.getSelectedSpineAsset().getGuessSkeleton().animations.map(a => ({
+                    name: a.name,
+                    value: a.name
+                })), { name: "NULL", value: null }], animationName => {
+
+                    this._selectedAnimationName = animationName;
+
+                    this._animationBtn.textContent = animationName;
+
+                    this.updatePreview();
+                });
+
+            this.addUpdater(() => {
+
+                this._animationBtn.textContent = this._selectedAnimationName ?? "";
+            });
         }
 
         private createGameCanvas(parent: HTMLDivElement) {
@@ -78,12 +103,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 private _spineAsset: pack.core.SpineAssetPackItem;
                 private _atlasAsset: pack.core.SpineAtlasAssetPackItem;
                 private _skinName: string;
+                private _animationName: string;
 
                 init(data: any) {
 
                     this._spineAsset = data.spineAsset;
                     this._atlasAsset = data.spineAtlasAsset;
                     this._skinName = data.skinName;
+                    this._animationName = data.animationName;
                 }
 
                 create() {
@@ -101,20 +128,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const obj = new spine.SpineGameObject(this, this.spine, 400, 400, key, atlas);
 
                     this.add.existing(obj);
+                    this.sys.updateList.add(obj);
 
                     if (this._skinName) {
 
                         obj.skeleton.setSkinByName(this._skinName);
 
-                        obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(null, [this._skinName]);
+                        obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(this._animationName, [this._skinName]);
 
                     } else {
 
                         obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
-                            null, obj.skeleton.data.skins.map(s => s.name));
+                            this._animationName, obj.skeleton.data.skins.map(s => s.name));
                     }
 
                     obj.updateSize();
+
+                    obj.setInteractive({ draggable: true });
+                    obj.on("drag", (pointer: any, dragX: number, dragY: number) => {
+
+                        obj.setPosition(dragX, dragY);
+                    });
+
+                    if (this._animationName) {
+
+                        obj.animationState.setAnimation(0, this._animationName, true);
+                    }
 
                     const objWidth = obj.skeleton.data.width;
                     const objHeight = obj.skeleton.data.height;
@@ -143,7 +182,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     obj.setPosition(cx, cy);
 
-                    camera.zoomTo(z, 100);
+                    camera.zoom = z;
+
+                    this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
+
+                        camera.zoom += deltaY > 0 ? -0.01 : 0.01;
+                        camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
+                    });
                 }
             }
 
@@ -185,15 +230,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        private updatePreview() {
+        private async updatePreview() {
 
             const spineAsset = this.getSelectedSpineAsset();
             const spineAtlasAsset = spineAsset.guessAtlasAsset();
 
+            await spineAsset.preload();
+            await spineAtlasAsset.preload();
+            await spineAtlasAsset.preloadImages();
+
+            spineAsset.buildGuessSkeleton();
+
             this._game.scene.start("Level", {
                 spineAsset,
                 spineAtlasAsset,
-                skinName: this._selectedSkinName
+                skinName: this._selectedSkinName,
+                animationName: this._selectedAnimationName
             });
 
             setTimeout(() => {
