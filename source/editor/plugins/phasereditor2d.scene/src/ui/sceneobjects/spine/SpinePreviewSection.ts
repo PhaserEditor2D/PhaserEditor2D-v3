@@ -51,6 +51,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
+            this.createLabel(comp, "Preview");
+
+            this.createButton(comp, "Preview", async () => {
+
+                const dlg = new SpinePreviewDialog();
+
+                dlg.create();
+
+                const spineAsset = this.getSelectedSpineAsset();
+                const spineAtlasAsset = spineAsset.guessAtlasAsset();
+
+                await spineAsset.preload();
+                await spineAtlasAsset.preload();
+                await spineAtlasAsset.preloadImages();
+
+                spineAsset.buildGuessSkeleton();
+
+                dlg.previewSpine(spineAsset, spineAtlasAsset, this._selectedSkinName);
+            });
+
             this.createLabel(comp, "Skin");
 
             this._skinBtn = this.createMenuButton(comp, "",
@@ -206,7 +226,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         override onSectionHidden(): void {
-            
+
             if (this._game) {
 
                 this._game.destroy(true);
