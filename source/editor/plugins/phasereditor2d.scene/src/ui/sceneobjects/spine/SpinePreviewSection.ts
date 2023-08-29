@@ -11,6 +11,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _skinBtn: HTMLButtonElement;
         private _animationBtn: HTMLButtonElement;
         private _selectedAnimationName: any;
+        private _canvasParent: HTMLDivElement;
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, SpinePreviewSection.ID, "Spine Preview", false, false);
@@ -93,49 +94,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        private createGameCanvas(parent: HTMLDivElement, width = 600, height = 800) {
+        private createGameCanvas(parent: HTMLDivElement) {
 
-            let canvasParent: HTMLElement;
+            const canvasParent = document.createElement("div");
 
-            if (this._game) {
+            parent.appendChild(canvasParent);
 
-                canvasParent = this._game.canvas.parentElement;
-
-            } else {
-
-                if (parent) {
-
-                    canvasParent = document.createElement("div");
-
-                    parent.appendChild(canvasParent);
-                }
-            }
-
-            const game = new Phaser.Game({
-                parent: canvasParent,
-                transparent: true,
-                scale: {
-                    width,
-                    height,
-                    mode: Phaser.Scale.ScaleModes.FIT,
-                    autoCenter: Phaser.Scale.Center.CENTER_BOTH,
-                    resizeInterval: 10
-                },
-                plugins: {
-                    scene: [
-                        { key: "spine.SpinePlugin", plugin: spine.SpinePlugin, mapping: "spine" }
-                    ]
-                }
-            });
-
-            game.canvas.style.backgroundColor = "#00000010";
-
-            canvasParent.style.width = "100%";
-            canvasParent.style.height = "300px";
-
-            game.scene.add("PreviewScene", PreviewScene);
-
-            this._game = game;
+            this._canvasParent = canvasParent;
         }
 
         private setDefaultSkin(spineAsset: pack.core.SpineAssetPackItem, atlasAsset: pack.core.SpineAtlasAssetPackItem) {
@@ -170,9 +135,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._game.destroy(true);
             }
 
-            this.createGameCanvas(null, width, height);
+            this._game = new Phaser.Game({
+                parent: this._canvasParent,
+                transparent: true,
+                scale: {
+                    width,
+                    height,
+                    mode: Phaser.Scale.ScaleModes.FIT,
+                    autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+                    resizeInterval: 10
+                },
+                plugins: {
+                    scene: [
+                        { key: "spine.SpinePlugin", plugin: spine.SpinePlugin, mapping: "spine" }
+                    ]
+                }
+            });
 
-            this._game.scene.start("PreviewScene", {
+            this._game.canvas.style.backgroundColor = "#00000010";
+
+            this._canvasParent.style.width = "100%";
+            this._canvasParent.style.height = "300px";
+
+            this._game.scene.add("PreviewScene", PreviewScene, true, {
                 spineAsset,
                 spineAtlasAsset,
                 skinName: this._selectedSkinName,
