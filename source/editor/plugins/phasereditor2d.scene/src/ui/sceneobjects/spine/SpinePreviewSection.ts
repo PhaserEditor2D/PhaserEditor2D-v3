@@ -199,6 +199,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return n === 1;
         }
+
+        override onSectionHidden(): void {
+            
+            if (this._game) {
+
+                this._game.destroy(true);
+            }
+        }
     }
 
     class PreviewScene extends Phaser.Scene {
@@ -214,6 +222,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._atlasAsset = data.spineAtlasAsset;
             this._skinName = data.skinName;
             this._animationName = data.animationName;
+        }
+
+        update() {
+
+            console.log("update");
         }
 
         create() {

@@ -172,6 +172,8 @@ namespace colibri.ui.controls.properties {
 
                 } else {
 
+                    section.onSectionHidden();
+
                     pane.getElement().style.display = "none";
                 }
             }
