@@ -115,7 +115,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     ]
                 }
             });
-            
+
             game.canvas.style.backgroundColor = "#00000010";
 
             gameContainerElement.style.width = "100%";
@@ -250,7 +250,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             obj.updateSize();
 
-            obj.setInteractive({ draggable: true });
+            const w = 100000;
+            obj.setInteractive({
+                draggable: true,
+                hitArea: new Phaser.Geom.Rectangle(-w, -w, w * 2, w * 2),
+                hitAreaCallback: Phaser.Geom.Rectangle.Contains
+            });
 
             if (this._animationName) {
 
@@ -282,7 +287,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
 
-                camera.zoom += deltaY > 0 ? -0.01 : 0.01;
+                const scrollWidth = Math.abs(deltaY) * 2;
+
+                const screenWidth = camera.width;
+
+                const zoomDelta = scrollWidth / (screenWidth + scrollWidth);
+
+                const zoomFactor = (deltaY > 0 ? 1 - zoomDelta : 1 + zoomDelta);
+
+                camera.zoom *= zoomFactor;
                 camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
             });
 

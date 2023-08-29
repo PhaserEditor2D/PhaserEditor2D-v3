@@ -15,9 +15,6 @@ namespace phasereditor2d.scene.ui.editor {
     export class SceneEditor extends colibri.ui.ide.FileEditor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
-        private _menuCreator: SceneEditorMenuCreator;
-        private _canvasContainer: HTMLDivElement;
-        private _layoutToolsManager: LayoutToolsManager;
 
         static getFactory() {
 
@@ -26,6 +23,9 @@ namespace phasereditor2d.scene.ui.editor {
             ));
         }
 
+        private _menuCreator: SceneEditorMenuCreator;
+        private _canvasContainer: HTMLDivElement;
+        private _layoutToolsManager: LayoutToolsManager;
         private _blocksProvider: blocks.SceneEditorBlocksProvider;
         private _outlineProvider: outline.SceneEditorOutlineProvider;
         private _propertyProvider: properties.SceneEditorSectionProvider;
