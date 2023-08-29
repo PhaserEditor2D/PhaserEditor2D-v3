@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 transparent: true,
                 scale: {
                     width: 600,
-                    height: 1200,
+                    height: 800,
                     mode: Phaser.Scale.ScaleModes.FIT,
                     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
                     resizeInterval: 10
