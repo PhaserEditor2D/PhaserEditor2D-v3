@@ -1,0 +1,34 @@
+namespace phasereditor2d.scene.ui.sceneobjects {
+
+    import controls = colibri.ui.controls;
+
+    export class SpineAssetPreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection<pack.core.SpineAssetPackItem> {
+
+        static ID = "phasereditor2d.scene.ui.sceneobjects.SpineAssetPreviewSection";
+
+        constructor(page: controls.properties.PropertyPage) {
+            super(page, SpineAssetPreviewSection.ID, "Spine Preview", true, false);
+        }
+
+        protected async getViewerInput(): Promise<unknown> {
+            
+            return this.getSelection().flatMap(obj => obj.getGuessSkinItems());
+        }
+
+        protected prepareViewer(viewer: controls.viewers.TreeViewer) {
+            
+            viewer.setLabelProvider(new ui.blocks.SceneEditorBlocksLabelProvider());
+            viewer.setCellRendererProvider(new ui.blocks.SceneEditorBlocksCellRendererProvider());
+        }
+
+        canEdit(obj: any, n: number): boolean {
+
+            return obj instanceof pack.core.SpineAssetPackItem;
+        }
+
+        canEditNumber(n: number): boolean {
+
+            return n > 0;
+        }
+    }
+}

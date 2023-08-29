@@ -2,12 +2,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class SpinePreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection<pack.core.SpineSkinItem> {
+    export class SpineSkinItemPreviewSection extends colibri.ui.ide.properties.BaseImagePreviewSection<pack.core.SpineSkinItem> {
 
         static ID = "phasereditor2d.scene.ui.sceneobjects.SpinePreviewSection";
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, SpinePreviewSection.ID, "Spine Preview", true, false);
+            super(page, SpineSkinItemPreviewSection.ID, "Spine Preview", true, false);
         }
 
         protected getSelectedImage(): controls.IImage {

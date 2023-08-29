@@ -173,6 +173,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.game.events.on("updateSkinName", (skinName: string) => {
 
                 obj.skeleton.setSkinByName(skinName);
+                obj.skeleton.setToSetupPose();
             });
 
             this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {

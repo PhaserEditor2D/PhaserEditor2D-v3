@@ -15,7 +15,8 @@ namespace phasereditor2d.scene.ui.blocks {
                 new sceneobjects.ObjectTypeDocSection(page),
                 new sceneobjects.ObjectListDocSection(page),
                 new sceneobjects.SpineSkeletonDataSection(page),
-                new sceneobjects.SpinePreviewSection(page)
+                new sceneobjects.SpineSkinItemPreviewSection(page),
+                new sceneobjects.SpineAssetPreviewSection(page)
             );
         }
     }
