@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor() {
             super();
 
-            this.setSize(window.innerWidth * 0.8, window.innerHeight * 0.8);
+            this.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
         }
 
         protected createDialogArea(): void {
@@ -81,7 +81,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Skins
 
             {
-                builder.createLabel(parentElement, "Skins");
+                builder.createLabel(parentElement, "Skin");
 
                this._skinBtn = builder.createMenuButton(parentElement, skinName ?? "",
                     () => spineAsset.getGuessSkinItems().map(s => ({
@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             {
 
-                builder.createLabel(parentElement, "Animations");
+                builder.createLabel(parentElement, "Animation");
 
                 let animations = spineAsset.getGuessSkeleton().animations.map(a => a.name);
                 animations = [null, ...animations,]
@@ -134,7 +134,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Tracks
 
             {
-                builder.createLabel(parentElement, "Tracks");
+                builder.createLabel(parentElement, "Track");
 
                 this._trackBtn = builder.createMenuButton(parentElement, "Track 0", () => [0, 1, 2, 3, 4, 5].map(t => ({
                     name: this.getTrackName(t),
