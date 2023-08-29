@@ -93,18 +93,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        private createGameCanvas(parent: HTMLDivElement) {
+        private createGameCanvas(parent: HTMLDivElement, width = 600, height = 800) {
 
-            const gameContainerElement = document.createElement("div");
+            let canvasParent: HTMLElement;
 
-            parent.appendChild(gameContainerElement);
+            if (this._game) {
+
+                canvasParent = this._game.canvas.parentElement;
+
+            } else {
+
+                if (parent) {
+
+                    canvasParent = document.createElement("div");
+
+                    parent.appendChild(canvasParent);
+                }
+            }
 
             const game = new Phaser.Game({
-                parent: gameContainerElement,
+                parent: canvasParent,
                 transparent: true,
                 scale: {
-                    width: 600,
-                    height: 800,
+                    width,
+                    height,
                     mode: Phaser.Scale.ScaleModes.FIT,
                     autoCenter: Phaser.Scale.Center.CENTER_BOTH,
                     resizeInterval: 10
@@ -118,8 +130,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             game.canvas.style.backgroundColor = "#00000010";
 
-            gameContainerElement.style.width = "100%";
-            gameContainerElement.style.height = "300px";
+            canvasParent.style.width = "100%";
+            canvasParent.style.height = "300px";
 
             game.scene.add("PreviewScene", PreviewScene);
 
@@ -151,14 +163,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             spineAsset.buildGuessSkeleton();
 
+            const { width, height } = spineAsset.getGuessSkeleton();
+
+            if (this._game) {
+
+                this._game.destroy(true);
+            }
+
+            this.createGameCanvas(null, width, height);
+
             this._game.scene.start("PreviewScene", {
                 spineAsset,
                 spineAtlasAsset,
                 skinName: this._selectedSkinName,
                 animationName: this._selectedAnimationName
             });
-
-            setTimeout(() => this._game.scale.refresh(), 10);
         }
 
         getSelectedSpineAsset() {

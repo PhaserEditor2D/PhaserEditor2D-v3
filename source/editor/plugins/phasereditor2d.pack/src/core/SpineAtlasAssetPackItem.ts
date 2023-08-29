@@ -76,10 +76,6 @@ namespace phasereditor2d.pack.core {
         
         private static _auxImage = document.createElement("image") as HTMLImageElement;
 
-        static {
-            this._auxImage.style.display = "none";
-        }
-
         constructor() {
             super(FakeTexture._auxImage);
         }
