@@ -138,6 +138,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game = new Phaser.Game({
                 parent: this._canvasParent,
                 transparent: true,
+                fps: {
+                    target: 30,
+                },
                 scale: {
                     width,
                     height,
@@ -163,6 +166,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 skinName: this._selectedSkinName,
                 animationName: this._selectedAnimationName
             });
+
+            setTimeout(() => this._game.scale.refresh(), 10);
         }
 
         getSelectedSpineAsset() {
@@ -222,11 +227,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._atlasAsset = data.spineAtlasAsset;
             this._skinName = data.skinName;
             this._animationName = data.animationName;
-        }
-
-        update() {
-
-            console.log("update");
         }
 
         create() {
@@ -300,7 +300,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             obj.setPosition(cx, cy);
 
-            camera.zoomTo(z, 100);
+            camera.zoom = z;
 
             this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
 
