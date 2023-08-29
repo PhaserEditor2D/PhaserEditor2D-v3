@@ -74,6 +74,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         previewSpine(spineAsset: pack.core.SpineAssetPackItem, spineAtlasAsset?: pack.core.SpineAtlasAssetPackItem, skinName?: string) {
 
+            if (!skinName) {
+
+                const skeleton = spineAsset.getGuessSkeleton();
+
+                skinName = skeleton.defaultSkin?.name;
+            }
+
             const parentElement = this._leftArea;
 
             const builder = new controls.properties.FormBuilder();
