@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _selectedAnimationName: any;
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, SpinePreviewSection.ID, "Spine Preview", true, false);
+            super(page, SpinePreviewSection.ID, "Spine Preview", false, false);
         }
 
         createForm(parent: HTMLDivElement): void {
@@ -82,7 +82,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._animationBtn.textContent = animationName;
 
-                    this.updatePreview();
+                    this._game.events.emit("updateAnimation", animationName);
+
+                    // this.updatePreview();
                 });
 
             this.addUpdater(() => {
@@ -94,112 +96,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private createGameCanvas(parent: HTMLDivElement) {
 
             const gameContainerElement = document.createElement("div");
-            gameContainerElement.style.width = "100%";
 
             parent.appendChild(gameContainerElement);
 
-            class Level extends Phaser.Scene {
-
-                private _spineAsset: pack.core.SpineAssetPackItem;
-                private _atlasAsset: pack.core.SpineAtlasAssetPackItem;
-                private _skinName: string;
-                private _animationName: string;
-
-                init(data: any) {
-
-                    this._spineAsset = data.spineAsset;
-                    this._atlasAsset = data.spineAtlasAsset;
-                    this._skinName = data.skinName;
-                    this._animationName = data.animationName;
-                }
-
-                create() {
-
-                    console.log("repaintSpine", this._spineAsset.getKey(), this._atlasAsset.getKey(), this._skinName);
-
-                    const packCache = new pack.core.parsers.AssetPackCache();
-
-                    this._atlasAsset.addToPhaserCache(this.game, packCache);
-                    this._spineAsset.addToPhaserCache(this.game, packCache);
-
-                    const key = this._spineAsset.getKey();
-                    const atlas = this._atlasAsset.getKey();
-
-                    const obj = new spine.SpineGameObject(this, this.spine, 400, 400, key, atlas);
-
-                    this.add.existing(obj);
-                    this.sys.updateList.add(obj);
-
-                    if (this._skinName) {
-
-                        obj.skeleton.setSkinByName(this._skinName);
-
-                        obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(this._animationName, [this._skinName]);
-
-                    } else {
-
-                        obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
-                            this._animationName, obj.skeleton.data.skins.map(s => s.name));
-                    }
-
-                    obj.updateSize();
-
-                    obj.setInteractive({ draggable: true });
-                    obj.on("drag", (pointer: any, dragX: number, dragY: number) => {
-
-                        obj.setPosition(dragX, dragY);
-                    });
-
-                    if (this._animationName) {
-
-                        obj.animationState.setAnimation(0, this._animationName, true);
-                    }
-
-                    const objWidth = obj.skeleton.data.width;
-                    const objHeight = obj.skeleton.data.height;
-
-                    const camera = this.cameras.main;
-
-                    const gameWidth = camera.width;
-                    const gameHeight = camera.height;
-
-                    let z = 1.05;
-
-                    if (objWidth > gameWidth || objHeight > gameHeight) {
-
-                        const fx = gameWidth / objWidth;
-                        const fy = gameHeight / objHeight;
-
-                        z = Math.min(fx, fy);
-                    }
-
-                    const displayOriginX = objWidth * obj.originX;
-                    const displayOriginY = objHeight * obj.originY;
-                    const objCX = objWidth / 2;
-                    const objCY = objHeight / 2;
-                    const cx = gameWidth / 2 + displayOriginX - objCX;
-                    const cy = gameHeight / 2 + displayOriginY - objCY;
-
-                    obj.setPosition(cx, cy);
-
-                    camera.zoom = z;
-
-                    this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
-
-                        camera.zoom += deltaY > 0 ? -0.01 : 0.01;
-                        camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
-                    });
-                }
-            }
-
             const game = new Phaser.Game({
                 parent: gameContainerElement,
-                width: 800,
-                height: 1200,
                 transparent: true,
                 scale: {
-                    autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+                    width: 600,
+                    height: 1200,
                     mode: Phaser.Scale.ScaleModes.FIT,
+                    autoCenter: Phaser.Scale.Center.CENTER_BOTH,
                     resizeInterval: 10
                 },
                 plugins: {
@@ -208,10 +115,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     ]
                 }
             });
+            
+            game.canvas.style.backgroundColor = "#00000010";
 
-            gameContainerElement.style.height = "450px";
+            gameContainerElement.style.width = "100%";
+            gameContainerElement.style.height = "300px";
 
-            game.scene.add("Level", Level);
+            game.scene.add("PreviewScene", PreviewScene);
 
             this._game = game;
         }
@@ -241,18 +151,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             spineAsset.buildGuessSkeleton();
 
-            this._game.scene.start("Level", {
+            this._game.scene.start("PreviewScene", {
                 spineAsset,
                 spineAtlasAsset,
                 skinName: this._selectedSkinName,
                 animationName: this._selectedAnimationName
             });
 
-            setTimeout(() => {
-
-                this._game.scale.refresh();
-
-            }, 100);
+            setTimeout(() => this._game.scale.refresh(), 10);
         }
 
         getSelectedSpineAsset() {
@@ -288,6 +194,114 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         canEditNumber(n: number): boolean {
 
             return n === 1;
+        }
+    }
+
+    class PreviewScene extends Phaser.Scene {
+
+        private _spineAsset: pack.core.SpineAssetPackItem;
+        private _atlasAsset: pack.core.SpineAtlasAssetPackItem;
+        private _skinName: string;
+        private _animationName: string;
+
+        init(data: any) {
+
+            this._spineAsset = data.spineAsset;
+            this._atlasAsset = data.spineAtlasAsset;
+            this._skinName = data.skinName;
+            this._animationName = data.animationName;
+        }
+
+        create() {
+
+            console.log("repaintSpine", this._spineAsset.getKey(), this._atlasAsset.getKey(), this._skinName);
+
+            const packCache = new pack.core.parsers.AssetPackCache();
+
+            this._atlasAsset.addToPhaserCache(this.game, packCache);
+            this._spineAsset.addToPhaserCache(this.game, packCache);
+
+            const key = this._spineAsset.getKey();
+            const atlas = this._atlasAsset.getKey();
+
+            const obj = new spine.SpineGameObject(this, this.spine, 400, 400, key, atlas);
+
+            this.add.existing(obj);
+            this.sys.updateList.add(obj);
+
+            obj.on("drag", (pointer: any, dragX: number, dragY: number) => {
+
+                obj.setPosition(dragX, dragY);
+            });
+
+            if (this._skinName) {
+
+                obj.skeleton.setSkinByName(this._skinName);
+
+                obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(this._animationName, [this._skinName]);
+
+            } else {
+
+                obj.skeleton.setSkin(null);
+
+                obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
+                    this._animationName, obj.skeleton.data.skins.map(s => s.name));
+            }
+
+            obj.updateSize();
+
+            obj.setInteractive({ draggable: true });
+
+            if (this._animationName) {
+
+                obj.animationState.setAnimation(0, this._animationName, true);
+            }
+
+            const objWidth = (obj as any).width
+            const objHeight = (obj as any).height;
+
+            const camera = this.cameras.main;
+
+            const gameWidth = camera.width;
+            const gameHeight = camera.height;
+
+            const fx = gameWidth / objWidth;
+            const fy = gameHeight / objHeight;
+            const z = Math.min(fx, fy);
+
+            const displayOriginX = objWidth * obj.originX;
+            const displayOriginY = objHeight * obj.originY;
+            const objCX = objWidth / 2;
+            const objCY = objHeight / 2;
+            const cx = gameWidth / 2 + displayOriginX - objCX;
+            const cy = gameHeight / 2 + displayOriginY - objCY;
+
+            obj.setPosition(cx, cy);
+
+            camera.zoomTo(z, 100);
+
+            this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
+
+                camera.zoom += deltaY > 0 ? -0.01 : 0.01;
+                camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
+            });
+
+            this.game.events.on("updateAnimation", (animationName: string) => {
+
+                if (animationName) {
+
+                    obj.animationState.setAnimation(0, animationName, true);
+
+                } else {
+
+                    obj.animationState.setEmptyAnimation(0);
+                }
+            });
+
+            this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+
+                this.game.events.off("updateAnimation");
+            });
         }
     }
 }
