@@ -11,11 +11,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _trackBtn: HTMLButtonElement;
         private _skinBtn: HTMLButtonElement;
         private _animBtn: HTMLButtonElement;
+        private _spineAsset: pack.core.SpineAssetPackItem;
+        private _spineAtlasAsset: pack.core.SpineAtlasAssetPackItem;
+        private _skinName: string;
+        private _currentLoop = true;
 
-        constructor() {
+        constructor(spineAsset: pack.core.SpineAssetPackItem, spineAtlasAsset?: pack.core.SpineAtlasAssetPackItem, skinName?: string) {
             super();
 
             this.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+
+            this._spineAsset = spineAsset;
+            this._spineAtlasAsset = spineAtlasAsset;
+            this._skinName = skinName;
         }
 
         protected createDialogArea(): void {
@@ -72,13 +80,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             style.boxSizing = "border-box";
         }
 
-        previewSpine(spineAsset: pack.core.SpineAssetPackItem, spineAtlasAsset?: pack.core.SpineAtlasAssetPackItem, skinName?: string) {
+        private createUI() {
 
-            if (!skinName) {
+            if (!this._skinName) {
 
-                const skeleton = spineAsset.getGuessSkeleton();
+                const skeleton = this._spineAsset.getGuessSkeleton();
 
-                skinName = skeleton.defaultSkin?.name;
+                this._skinName = skeleton.defaultSkin?.name;
             }
 
             const parentElement = this._leftArea;
@@ -90,8 +98,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             {
                 builder.createLabel(parentElement, "Skin");
 
-               this._skinBtn = builder.createMenuButton(parentElement, skinName ?? "",
-                    () => spineAsset.getGuessSkinItems().map(s => ({
+                this._skinBtn = builder.createMenuButton(parentElement, this._skinName ?? "",
+                    () => this._spineAsset.getGuessSkinItems().map(s => ({
                         name: s.skinName,
                         value: s.skinName
                     })), skin => {
@@ -100,45 +108,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         this._previewManager.setSkin(skin);
                     });
-                
-                    if (skinName) {
 
-                        this._skinBtn.textContent = skinName;
-                    }
+                if (this._skinName) {
+
+                    this._skinBtn.textContent = this._skinName;
+                }
             }
 
-            // Animations
-
-            {
-
-                builder.createLabel(parentElement, "Animation");
-
-                let animations = spineAsset.getGuessSkeleton().animations.map(a => a.name);
-                animations = [null, ...animations,]
-
-                this._animBtn = builder.createMenuButton(parentElement, "EMPTY", () => animations.map(a => ({
-                    name: a ?? "EMPTY",
-                    value: a
-                })), animation => {
-
-                    this._animBtn.textContent = animation ?? "EMPTY";
-                    
-                    if (animation) {
-
-                        this._trackAnimationMap.set(this._currentTrack, animation);
-
-                    } else {
-
-                        this._trackAnimationMap.delete(this._currentTrack);
-                    }
-
-                    this._previewManager.setAnimation(animation, this._currentTrack);
-
-                    this._trackBtn.textContent = this.getTrackName(this._currentTrack);
-                });
-            }
-
-            // Tracks
+            // Track
 
             {
                 builder.createLabel(parentElement, "Track");
@@ -154,23 +131,92 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
             }
 
+            // Animations
+
+            {
+
+                builder.createLabel(parentElement, "Animation");
+
+                let animations = this._spineAsset.getGuessSkeleton().animations.map(a => a.name);
+                animations = [null, ...animations,]
+
+                this._animBtn = builder.createMenuButton(
+                    parentElement, "EMPTY", () => animations.map(a => ({
+                        name: a ?? "EMPTY",
+                        value: a
+                    })), animation => {
+
+                        this._animBtn.textContent = animation ?? "EMPTY";
+
+                        if (animation) {
+
+                            this._trackAnimationMap.set(this._currentTrack, animation);
+
+                        } else {
+
+                            this._trackAnimationMap.delete(this._currentTrack);
+                        }
+
+                        this._previewManager.setAnimation(this._currentTrack, animation, this._currentLoop);
+
+                        this._trackBtn.textContent = this.getTrackName(this._currentTrack);
+                    });
+            }
+
+            // Loop
+            {
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Loop"));
+
+                check.addEventListener("change", () => {
+
+                    this._currentLoop = check.checked;
+                });
+
+                check.checked = true;
+            }
+
+            // Mix Time
+            {
+                builder.createLabel(parentElement, "Mix Time");
+
+                const text = builder.createText(parentElement);
+
+                text.value = localStorage.getItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.mixTime") ?? "0";
+
+                text.addEventListener("change", () => {
+
+                    const n = Number(text.value);
+
+                    this._previewManager.setMixTime(n);
+
+                    localStorage.setItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.mixTime", n.toString());
+                });
+            }
+
+            // game canvas
+
             setTimeout(() => {
 
-                this._previewManager.createGame(spineAsset, spineAtlasAsset, skinName);
+                this._previewManager.createGame(this._spineAsset, this._spineAtlasAsset, this._skinName);
 
             }, 10);
         }
 
         private getTrackName(track: any) {
+
             const animation = this._trackAnimationMap.has(track) ?
                 ` (${this._trackAnimationMap.get(track)})` : "";
+
             const trackName = "Track " + track + animation;
+
             return trackName;
         }
 
         create(hideParentDialog?: boolean): void {
 
             super.create(hideParentDialog);
+
+            this.createUI();
 
             this.setTitle("Spine Preview");
 

@@ -19,14 +19,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        setAnimation(animationName: string, track: number) {
+        setAnimation(track: number, animationName: string, loop: boolean) {
 
-            this._game.events.emit("updateAnimation", animationName, track);
+            this._game.events.emit("updateAnimation", track, animationName, loop);
         }
 
         setSkin(skinName: string) {
 
             this._game.events.emit("updateSkinName", skinName);
+        }
+
+        setMixTime(mixTime: number) {
+
+            this._game.events.emit("updateMixTime", mixTime);
         }
 
         createGame(
@@ -158,11 +163,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
             });
 
-            this.game.events.on("updateAnimation", (animationName: string, track: number) => {
+            this.game.events.on("updateAnimation", (track: number, animationName: string, loop: boolean) => {
 
                 if (animationName) {
 
-                    obj.animationState.setAnimation(track, animationName, true);
+                    obj.animationState.setAnimation(track, animationName, loop);
 
                 } else {
 
@@ -176,9 +181,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.skeleton.setToSetupPose();
             });
 
-            this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+            this.game.events.on("updateMixTime", (mixTime: number) => {
 
-                this.game.events.off("updateAnimation");
+                obj.animationStateData.defaultMix = mixTime;
             });
         }
     }

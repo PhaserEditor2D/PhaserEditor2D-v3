@@ -44,10 +44,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const btn = this.createButton(comp, "Preview Animations", async () => {
 
-                    const dlg = new SpinePreviewDialog();
-                    
-                    dlg.create();
-
                     const asset = this.getSpineAsset();
 
                     const atlas = asset.guessAtlasAsset();
@@ -57,8 +53,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     await atlas.preload();
 
                     await atlas.preloadImages();
-
-                    dlg.previewSpine(asset, atlas, this.getSkinName());
+                    
+                    const dlg = new SpinePreviewDialog(asset, atlas, this.getSkinName());
+                    
+                    dlg.create();
                 });
 
                 btn.style.gridColumn = "1 / span 2";
