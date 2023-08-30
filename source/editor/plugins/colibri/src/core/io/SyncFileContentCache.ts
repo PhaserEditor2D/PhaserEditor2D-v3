@@ -25,15 +25,18 @@ namespace colibri.core.io {
 
             const entry = this._map.get(filename);
 
+            const fileModTime = file.getModTime().toString();
+
             if (entry) {
 
-                if (entry.modTime === file.getModTime()) {
+                if (entry.contentHash === fileModTime) {
+
                     return entry.content;
                 }
 
                 const content2 = this._getContent(file);
 
-                entry.modTime = file.getModTime();
+                entry.contentHash = fileModTime;
                 entry.content = content2;
 
                 return content2;
@@ -41,7 +44,7 @@ namespace colibri.core.io {
 
             const content = this._getContent(file);
 
-            this._map.set(filename, new ContentEntry(content, file.getModTime()));
+            this._map.set(filename, new ContentEntry(content, fileModTime));
 
             return content;
         }

@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return ScenePlugin.getInstance()
                 .getSpineThumbnailCache()
-                .getImage(this.getSelectionFirstElement());
+                .getContent(this.getSelectionFirstElement());
         }
 
         canEdit(obj: any, n: number): boolean {

@@ -959,7 +959,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
                     executeFunc: args => {
 
-                        ui.SceneThumbnailCache.clearCache();
+                        ui.SceneThumbnailCache.getInstance().clearCache();
                     }
                 }
             });
