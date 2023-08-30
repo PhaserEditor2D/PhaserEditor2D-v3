@@ -62,6 +62,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             this._game.canvas.style.backgroundColor = "#00000010";
+            this._game.canvas.classList.add("SpinePreviewCanvas");
 
             this._game.scene.add("PreviewScene", PreviewScene, true, {
                 spineAsset,
