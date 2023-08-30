@@ -175,6 +175,8 @@ namespace phasereditor2d.pack.ui {
 
         createEditorPropertySections(page: controls.properties.PropertyPage): controls.properties.PropertySection<any>[] {
 
+            const exts = AssetPackPlugin.getInstance().getPreviewPropertyProviderExtensions();
+
             return [
 
                 new editor.properties.BlocksSection(page),
@@ -317,6 +319,8 @@ namespace phasereditor2d.pack.ui {
                 new ui.properties.ImagePreviewSection(page),
 
                 new ui.properties.ManyImagePreviewSection(page),
+
+                ...exts.flatMap(ext => ext.getSections(page))
             ];
         }
 

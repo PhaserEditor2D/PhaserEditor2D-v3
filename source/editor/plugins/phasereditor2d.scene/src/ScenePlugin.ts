@@ -329,6 +329,14 @@ namespace phasereditor2d.scene {
             // asset pack renderer extension
 
             reg.addExtension(new ui.sceneobjects.SpineAssetPackCellRendererExtension());
+
+            // asset pack preview extension
+
+            reg.addExtension(new pack.ui.AssetPackPreviewPropertyProviderExtension(
+                page => new ui.sceneobjects.SpineSkeletonDataSection(page),
+                page => new ui.sceneobjects.SpineSkinItemPreviewSection(page),
+                page => new ui.sceneobjects.SpineAssetPreviewSection(page)
+            ));
         }
 
         getTools() {

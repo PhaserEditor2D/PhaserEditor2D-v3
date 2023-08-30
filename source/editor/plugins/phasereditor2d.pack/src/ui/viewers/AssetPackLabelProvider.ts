@@ -3,11 +3,19 @@ namespace phasereditor2d.pack.ui.viewers {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    
-
     export class AssetPackLabelProvider implements controls.viewers.ILabelProvider {
 
         getLabel(obj: any): string {
+
+            const exts = AssetPackPlugin.getInstance().getViewerExtensions();
+            
+            for(const ext of exts) {
+
+                if (ext.acceptObject(obj)) {
+
+                    return ext.getLabel(obj);
+                }
+            }
 
             if (obj instanceof io.FilePath) {
 

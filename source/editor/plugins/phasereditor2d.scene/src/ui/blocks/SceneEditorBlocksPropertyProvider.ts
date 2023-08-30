@@ -13,10 +13,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
             sections.push(
                 new sceneobjects.ObjectTypeDocSection(page),
-                new sceneobjects.ObjectListDocSection(page),
-                new sceneobjects.SpineSkeletonDataSection(page),
-                new sceneobjects.SpineSkinItemPreviewSection(page),
-                new sceneobjects.SpineAssetPreviewSection(page)
+                new sceneobjects.ObjectListDocSection(page)
             );
         }
     }

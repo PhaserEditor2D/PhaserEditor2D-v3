@@ -8,20 +8,19 @@ namespace phasereditor2d.pack.ui.viewers {
 
         private _layout: "grid" | "tree";
         private _fileRendererProvider: files.ui.viewers.FileCellRendererProvider;
-        private _cellRendererExtensions: AssetPackCellRendererExtension[];
+        
 
         constructor(layout: "grid" | "tree") {
             this._layout = layout;
 
             this._fileRendererProvider = new files.ui.viewers.FileCellRendererProvider(layout);
-
-            this._cellRendererExtensions = colibri.Platform
-                .getExtensions(AssetPackCellRendererExtension.POINT_ID) as AssetPackCellRendererExtension[];
         }
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
-            for(const ext of this._cellRendererExtensions) {
+            const exts = AssetPackPlugin.getInstance().getViewerExtensions();
+            
+            for(const ext of exts) {
 
                 if (ext.acceptObject(element)) {
 

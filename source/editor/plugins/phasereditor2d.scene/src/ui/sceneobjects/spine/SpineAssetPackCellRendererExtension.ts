@@ -1,6 +1,8 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class SpineAssetPackCellRendererExtension extends pack.ui.AssetPackCellRendererExtension {
+    import controls = colibri.ui.controls;
+
+    export class SpineAssetPackCellRendererExtension extends pack.ui.AssetPackViewerExtension {
 
         acceptObject(obj: any): boolean {
 
@@ -12,5 +14,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return new SpineSkinCellRenderer();
         }
 
+        getLabel(obj: pack.core.SpineSkinItem): string {
+
+            return obj.skinName;
+        }
     }
 }

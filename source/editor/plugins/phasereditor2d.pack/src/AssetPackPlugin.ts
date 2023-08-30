@@ -16,6 +16,8 @@ namespace phasereditor2d.pack {
         private _assetPackItemTypeSet: Set<string>;
         private _assetPackItemTypeDisplayNameMap: Map<string, string>;
         private _assetPackExtensionByTypeMap: Map<string, ui.AssetPackExtension>;
+        private _viewerExtensions: ui.AssetPackViewerExtension[];
+        private _previewPropertyProviderExtension: ui.AssetPackPreviewPropertyProviderExtension[];
 
         static getInstance() {
             return this._instance;
@@ -49,6 +51,28 @@ namespace phasereditor2d.pack {
         getExtensionByType(assetPackItemType: string) {
 
             return this._assetPackExtensionByTypeMap.get(assetPackItemType);
+        }
+
+        getViewerExtensions() {
+
+            if (!this._viewerExtensions) {
+
+                this._viewerExtensions = colibri.Platform
+                    .getExtensions(ui.AssetPackViewerExtension.POINT_ID);
+            }
+
+            return this._viewerExtensions;
+        }
+
+        getPreviewPropertyProviderExtensions() {
+
+            if (!this._previewPropertyProviderExtension) {
+
+                this._previewPropertyProviderExtension = colibri.Platform
+                    .getExtensions(ui.AssetPackPreviewPropertyProviderExtension.POINT_ID);
+            }
+
+            return this._previewPropertyProviderExtension;
         }
 
         async starting(): Promise<void> {

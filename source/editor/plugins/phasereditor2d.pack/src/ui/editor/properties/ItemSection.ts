@@ -29,10 +29,12 @@ namespace phasereditor2d.pack.ui.editor.properties {
                 const text = this.createText(comp);
 
                 text.addEventListener("change", e => {
-                    this.changeItemField("key", text.value);
+
+                    this.changeItemField("key", text.value, true);
                 });
 
                 this.addUpdater(() => {
+
                     text.value = this.getSelection()[0].getKey();
                 });
             }
