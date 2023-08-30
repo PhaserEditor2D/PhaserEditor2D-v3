@@ -35,7 +35,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.addUpdater(() => {
 
-                    text.value = this.getSpineAsset().guessAtlasAsset().getKey();
+                    const asset = this.getSpineAsset();
+
+                    const atlas = asset.guessAtlasAsset();
+
+                    text.value = atlas ? atlas.getKey() : `Not found "${asset.getKey()}-atlas"`;
                 });
             }
 
@@ -48,14 +52,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     const atlas = asset.guessAtlasAsset();
 
+                    if (!atlas) {
+
+                        alert(`Cannot find an atlas file for this skeleton.`
+                            + `Please, add a "spineAtlas" file to the Asset Pack.` 
+                            + `Use the key <code>${asset.getKey()}-atlas</code>.`);
+
+                        return;
+                    }
+
                     await asset.preload();
 
                     await atlas.preload();
 
                     await atlas.preloadImages();
-                    
+
                     const dlg = new SpinePreviewDialog(asset, atlas, this.getSkinName());
-                    
+
                     dlg.create();
                 });
 

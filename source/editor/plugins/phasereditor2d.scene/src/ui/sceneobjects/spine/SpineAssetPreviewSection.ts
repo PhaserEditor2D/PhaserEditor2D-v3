@@ -19,6 +19,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             
             viewer.setLabelProvider(new ui.blocks.SceneEditorBlocksLabelProvider());
             viewer.setCellRendererProvider(new ui.blocks.SceneEditorBlocksCellRendererProvider());
+            viewer.setCellSize(128, true);
         }
 
         canEdit(obj: any, n: number): boolean {
