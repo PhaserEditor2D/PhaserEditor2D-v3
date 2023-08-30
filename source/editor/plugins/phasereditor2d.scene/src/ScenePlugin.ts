@@ -325,6 +325,10 @@ namespace phasereditor2d.scene {
                     contentType: core.CONTENT_TYPE_USER_COMPONENTS
                 }
             ));
+
+            // asset pack renderer extension
+
+            reg.addExtension(new ui.sceneobjects.SpineAssetPackCellRendererExtension());
         }
 
         getTools() {

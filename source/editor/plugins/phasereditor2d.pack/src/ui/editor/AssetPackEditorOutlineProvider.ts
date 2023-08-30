@@ -14,18 +14,22 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getUndoManager() {
+
             return this._editor.getUndoManager();
         }
 
         getContentProvider(): controls.viewers.ITreeContentProvider {
+
             return new AssetPackEditorOutlineContentProvider(this._editor);
         }
 
         getLabelProvider(): controls.viewers.ILabelProvider {
+
             return this._editor.getViewer().getLabelProvider();
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {
+
             return new viewers.AssetPackCellRendererProvider("tree");
         }
 
@@ -35,14 +39,17 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getPropertySectionProvider(): controls.properties.PropertySectionProvider {
+
             return this._editor.getPropertyProvider();
         }
 
         getInput() {
+
             return this._editor.getViewer().getInput();
         }
 
         preload(): Promise<void> {
+            
             return Promise.resolve();
         }
 
