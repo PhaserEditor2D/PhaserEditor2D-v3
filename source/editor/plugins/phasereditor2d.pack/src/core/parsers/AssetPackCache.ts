@@ -30,7 +30,21 @@ namespace phasereditor2d.pack.core.parsers {
         }
 
         getAssets() {
+
             return this._assets;
+        }
+
+        findAsset(key: string) {
+
+            for(const asset of this._assets) {
+
+                if (asset.getKey() === key) {
+
+                    return asset;
+                }
+            } 
+
+            return null;
         }
 
         addImage(image: controls.IImage, key: string, frame?: string | number) {

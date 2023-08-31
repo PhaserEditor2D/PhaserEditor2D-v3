@@ -24,15 +24,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.getObject().setInteractive();
         }
 
+        computeContentHash(): string {
+
+            return this.computeContentHashWithProperties(this.getObject(),
+                SpineComponent.atlasKey,
+                SpineComponent.dataKey,
+                SpineComponent.skin);
+        }
+
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_SPINE));
+            return new SpineObjectCellRenderer();
         }
 
         setUnlockedProperty(property: IProperty<any>, unlock: boolean): void {
 
             super.setUnlockedProperty(property, unlock);
-            
+
             if (property === SpineComponent.bpType) {
 
                 super.setUnlockedProperty(SpineComponent.bpSkin, unlock);

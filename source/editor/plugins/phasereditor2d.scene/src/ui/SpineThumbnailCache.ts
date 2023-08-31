@@ -19,7 +19,7 @@ namespace phasereditor2d.scene.ui {
         protected computeObjectKey(obj: pack.core.SpineSkinItem): string {
 
             return obj.spineAsset.getPack().getFile().getFullName()
-            + "." + obj.spineAsset.getKey();
+            + "." + obj.spineAsset.getKey() + "." + obj.skinName;
         }
     }
 }
