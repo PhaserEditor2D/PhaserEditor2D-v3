@@ -15,6 +15,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createPropertyEnumRow(comp, SpineComponent.skin);
         }
 
+        createMenu(menu: controls.Menu): void {
+
+            super.createMenu(menu);
+
+            menu.addCommand(ui.editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON);
+            menu.addCommand(ui.editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN);
+        }
+
         canEditAll(selection: SpineObject[]): boolean {
 
             const first = selection[0];

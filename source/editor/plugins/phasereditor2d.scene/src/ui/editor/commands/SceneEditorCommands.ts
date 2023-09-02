@@ -67,6 +67,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
     export const CMD_BROWSE_USER_COMPONENTS = "phasereditor2d.scene.ui.editor.commands.BrowseUserComponents";
+    export const CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameSpineSkin";
+    export const CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameSpineSkeleton";
 
     function isCommandDialogActive() {
 
@@ -192,6 +194,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerPrefabCommands(manager);
 
             this.registerPropertiesCommands(manager);
+
+            this.registerSpineCommands(manager);
         }
 
         static registerPlainObjectOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -1034,6 +1038,109 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "KeyW"
+                }
+            });
+        }
+
+        static registerSpineCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+             // select all same skeleton
+            
+             manager.add({
+                command: {
+                    id: CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON,
+                    name: "Select All With Same Spine Skeleton",
+                    tooltip: "Select all the objects with the same Spine skeleton.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection()
+                            .filter(
+                                obj => obj instanceof sceneobjects.SpineObject)
+                            .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const skeletons = new Set<string>();
+
+                        for (const obj of args.activeEditor.getSelection()) {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                skeletons.add(obj.dataKey);
+                            }
+                        }
+
+                        const sel = [];
+
+                        editor.getScene().visitAll(obj => {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                if (skeletons.has(obj.dataKey)) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        editor.setSelection(sel);
+                    }
+                }
+            });
+
+            // select all same skin
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN,
+                    name: "Select All With Same Spine Skin",
+                    tooltip: "Select all the objects with the same Spine skin.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection()
+                            .filter(
+                                obj => obj instanceof sceneobjects.SpineObject)
+                            .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const skins = new Set<string>();
+
+                        for (const obj of args.activeEditor.getSelection()) {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                skins.add(`${obj.dataKey}+${obj.skeleton.skin?.name}`);
+                            }
+                        }
+
+                        const sel = [];
+
+                        editor.getScene().visitAll(obj => {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                const skin = `${obj.dataKey}+${obj.skeleton.skin?.name}`;
+
+                                if (skins.has(skin)) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        editor.setSelection(sel);
+                    }
                 }
             });
         }
