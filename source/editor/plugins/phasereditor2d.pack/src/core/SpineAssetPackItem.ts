@@ -1,14 +1,5 @@
 namespace phasereditor2d.pack.core {
 
-    export class SpineSkinItem {
-
-        constructor(
-            public spineAsset: SpineAssetPackItem,
-            public spineAtlasAsset: SpineAtlasAssetPackItem,
-            public skinName: string) {
-        }
-    }
-
     export abstract class SpineAssetPackItem extends AssetPackItem {
 
         private _guessHash: string;

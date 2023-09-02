@@ -13,13 +13,17 @@ namespace phasereditor2d.scene.ui {
 
         protected computeObjectHash(obj: pack.core.SpineSkinItem): string {
 
-            return obj.spineAsset.getGuessHash();
+            return obj.computeHash();
         }
 
         protected computeObjectKey(obj: pack.core.SpineSkinItem): string {
 
-            return obj.spineAsset.getPack().getFile().getFullName()
-            + "." + obj.spineAsset.getKey() + "." + obj.skinName;
+            const { spineAsset, spineAtlasAsset, skinName } = obj;
+
+            return spineAsset.getPack().getFile().getFullName()
+                + "+" + spineAsset.getKey()
+                + "+" + spineAtlasAsset.getKey()
+                + "+" + skinName;
         }
     }
 }

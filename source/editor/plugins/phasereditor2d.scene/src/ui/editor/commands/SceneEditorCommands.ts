@@ -960,6 +960,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     executeFunc: args => {
 
                         ui.SceneThumbnailCache.getInstance().clearCache();
+                        ScenePlugin.getInstance().getSpineThumbnailCache().clearCache();
                     }
                 }
             });

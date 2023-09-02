@@ -29,11 +29,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const spineAsset = packCache.findAsset(obj.dataKey) as pack.core.SpineAssetPackItem;
 
-            const skin = obj.skeleton.data.defaultSkin || obj.skeleton.skin;
+            const spineAtlasAsset = packCache.findAsset(obj.atlasKey) as pack.core.SpineAtlasAssetPackItem;
+
+            const skin = obj.skeleton.skin || obj.skeleton.data.defaultSkin;
+
+            if (!spineAsset || !spineAtlasAsset) {
+
+                return null;
+            }
 
             const skinName = skin.name;
 
-            const skinItem = spineAsset.getGuessSkinItems().find(s => s.skinName === skinName);
+            // const skinItem = spineAsset.getGuessSkinItems().find(s => s.skinName === skinName);
+
+            const skinItem = new pack.core.SpineSkinItem(spineAsset, spineAtlasAsset, skinName);
 
             return skinItem;
         }
