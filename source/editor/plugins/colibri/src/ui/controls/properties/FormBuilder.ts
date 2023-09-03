@@ -12,11 +12,16 @@ namespace colibri.ui.controls.properties {
 
     export class FormBuilder {
 
-        createSeparator(parent: HTMLElement, text: string) {
+        createSeparator(parent: HTMLElement, text: string, gridColumn?: string) {
 
             const label = document.createElement("label");
             label.classList.add("formSeparator");
             label.innerText = text;
+
+            if (gridColumn) {
+
+                label.style.gridColumn = gridColumn;
+            }
 
             parent.appendChild(label);
 

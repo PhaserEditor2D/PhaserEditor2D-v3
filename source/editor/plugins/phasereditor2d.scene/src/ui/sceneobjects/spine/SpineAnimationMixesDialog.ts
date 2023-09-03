@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class SpinePreviewDialog extends controls.dialogs.Dialog {
+    export class SpineMixesDialog extends controls.dialogs.Dialog {
         private _leftArea: HTMLDivElement;
         private _rightArea: HTMLDivElement;
         private _previewManager: SpinePreviewManager;
@@ -11,19 +11,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _trackBtn: HTMLButtonElement;
         private _skinBtn: HTMLButtonElement;
         private _animBtn: HTMLButtonElement;
-        private _spineAsset: pack.core.SpineAssetPackItem;
-        private _spineAtlasAsset: pack.core.SpineAtlasAssetPackItem;
-        private _skinName: string;
         private _currentLoop = true;
+        private _spineObject: SpineObject;
 
-        constructor(spineAsset: pack.core.SpineAssetPackItem, spineAtlasAsset?: pack.core.SpineAtlasAssetPackItem, skinName?: string) {
+        constructor(spineObject: SpineObject) {
             super();
 
-            this.setSize(window.innerWidth * 0.5, window.innerHeight * 0.5);
+            this.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
 
-            this._spineAsset = spineAsset;
-            this._spineAtlasAsset = spineAtlasAsset;
-            this._skinName = skinName;
+            this._spineObject = spineObject;
         }
 
         protected createDialogArea(): void {
@@ -82,43 +78,38 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createUI() {
 
-            if (!this._skinName) {
-
-                const skeleton = this._spineAsset.getGuessSkeleton();
-
-                this._skinName = skeleton.defaultSkin?.name;
-            }
-
             const parentElement = this._leftArea;
 
             const builder = new controls.properties.FormBuilder();
 
-            // Skins
+            this.createPreviewSettings(builder, parentElement);
 
-            {
-                builder.gridColumn(parentElement, "Skin");
+            // Mixes
 
-                this._skinBtn = builder.createMenuButton(parentElement, this._skinName ?? "",
-                    () => this._spineAsset.getGuessSkinItems().map(s => ({
-                        name: s.skinName,
-                        value: s.skinName
-                    })), skin => {
+            this.createMixesSettings(parentElement, builder);
 
-                        this._skinBtn.textContent = skin;
+            // game canvas
 
-                        this._previewManager.setSkin(skin);
-                    });
+            setTimeout(() => {
 
-                if (this._skinName) {
+                const cache = this._spineObject.getEditorSupport().getScene().getPackCache();
 
-                    this._skinBtn.textContent = this._skinName;
-                }
-            }
+                const spineAsset = cache.findAsset(this._spineObject.dataKey) as pack.core.SpineAssetPackItem;
+                const spineAtlas = cache.findAsset(this._spineObject.atlasKey) as pack.core.SpineAtlasAssetPackItem;
+
+                this._previewManager.createGame(spineAsset, spineAtlas, this._spineObject.skeleton.skin?.name);
+
+            }, 10);
+        }
+
+        private createPreviewSettings(builder: controls.properties.FormBuilder, parentElement: HTMLDivElement) {
+            
+            builder.createSeparator(parentElement, "PREVIEW", "1 / span 2");
 
             // Track
 
             {
-                builder.gridColumn(parentElement, "Track");
+                builder.createLabel(parentElement, "Track");
 
                 this._trackBtn = builder.createMenuButton(parentElement, "Track 0", () => [0, 1, 2, 3, 4, 5].map(t => ({
                     name: this.getTrackName(t),
@@ -135,10 +126,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             {
 
-                builder.gridColumn(parentElement, "Animation");
+                builder.createLabel(parentElement, "Animation");
 
-                let animations = this._spineAsset.getGuessSkeleton().animations.map(a => a.name);
-                animations = [null, ...animations,]
+                let animations = this._spineObject.skeleton.data.animations.map(a => a.name);
+                animations = [null, ...animations,];
 
                 this._animBtn = builder.createMenuButton(
                     parentElement, "EMPTY", () => animations.map(a => ({
@@ -164,8 +155,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             // Loop
+
             {
-                const check = builder.createCheckbox(parentElement, builder.gridColumn(parentElement, "Loop"));
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Loop"));
 
                 check.addEventListener("change", () => {
 
@@ -174,10 +166,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 check.checked = true;
             }
+        }
+
+        createMixesSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
+
+            builder.createSeparator(parentElement, "Mixes", "1 / span 2");
 
             // Mix Time
+
             {
-                builder.gridColumn(parentElement, "Default Mix");
+                builder.createLabel(parentElement, "Default Mix");
 
                 const text = builder.createText(parentElement);
 
@@ -193,13 +191,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
             }
 
-            // game canvas
+             // Mixes
 
-            setTimeout(() => {
+            {
+                const mixesParent = document.createElement("div");
+                mixesParent.style.display = "grid";
+                mixesParent.style.gridTemplateColumns = "1fr 1fr 4em";
+                mixesParent.style.gridColumn = "1 / span 2";
 
-                this._previewManager.createGame(this._spineAsset, this._spineAtlasAsset, this._skinName);
+                parentElement.appendChild(mixesParent);
 
-            }, 10);
+                const addMixBtn = builder.createButton(mixesParent, "Add Mix", () => { });
+
+                addMixBtn.style.gridColumn = "1 / span 3";
+            }
         }
 
         private getTrackName(track: any) {
@@ -218,9 +223,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createUI();
 
-            this.setTitle("Spine Preview");
+            this.setTitle("Spine Animation Mixes");
 
-            this.addButton("Close", () => this.close());
+            this.addButton("Update", () => this.close());
+
+            this.addCancelButton();
 
             this.eventDialogClose.addListener(() => {
 

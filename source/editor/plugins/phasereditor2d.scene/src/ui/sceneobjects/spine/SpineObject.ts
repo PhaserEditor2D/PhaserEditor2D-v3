@@ -10,6 +10,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         CURRENT_SKIN
     }
 
+    export type IAnimationMixes = Array<[string, string, boolean]>;
+
     export class SpineObject extends spine.SpineGameObject implements ISceneGameObject {
 
         static DEFAULT_BP_TIME_STEP = 0.05;
@@ -21,6 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         public bpSkin: BoundsProviderSkin;
         public bpAnimation: string;
         public bpTimeStep: number;
+        public animationMixes: IAnimationMixes;
 
         constructor(scene: Scene, x: number, y: number, dataKey: string, atlasKey: string) {
             // TODO: missing bounds provider

@@ -53,6 +53,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             },
         };
 
+        // animations
+
+        static animationMixes = SimpleProperty("animationMixes", undefined, "Animation Mixes", "The animation mixes");
+
+        // bounds provider
+
         static bpType: IEnumProperty<SpineObject, BoundsProviderType> = {
             name: "bpType",
             label: "BP",
@@ -106,7 +112,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 obj.updateBoundsProvider();
             })
 
-
         constructor(obj: SpineObject) {
             super(obj, [
                 SpineComponent.dataKey,
@@ -115,7 +120,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 SpineComponent.bpType,
                 SpineComponent.bpSkin,
                 SpineComponent.bpAnimation,
-                SpineComponent.bpTimeStep
+                SpineComponent.bpTimeStep,
+                SpineComponent.animationMixes
             ]);
         }
 

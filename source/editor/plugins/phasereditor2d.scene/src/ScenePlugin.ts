@@ -294,7 +294,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
-                page => new ui.sceneobjects.SpineBoundsProviderSection(page)
+                page => new ui.sceneobjects.SpineBoundsProviderSection(page),
+                page => new ui.sceneobjects.SpineAnimationsSection(page)
             ));
 
             // scene tools
