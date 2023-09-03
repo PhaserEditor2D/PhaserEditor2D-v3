@@ -15,6 +15,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _animationMixes: IAnimationMixes;
         private _mixesParent: HTMLDivElement;
         private _defaultMix: number;
+        private _isUnlockedDefaultMix: boolean;
+        private _isUnlockedMixes: boolean;
 
         constructor(spineObject: SpineObject) {
             super();
@@ -26,6 +28,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._animationMixes = [...(spineObject.animationMixes || [])];
 
             this._defaultMix = spineObject.defaultMix;
+
+            const objES = spineObject.getEditorSupport();
+
+            this._isUnlockedDefaultMix = objES.isUnlockedProperty(SpineComponent.defaultMix);
+
+            this._isUnlockedMixes = objES.isUnlockedProperty(SpineComponent.animationMixes);
         }
 
         protected createDialogArea(): void {
@@ -210,6 +218,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._previewManager.setMixTime(n);
                 });
+
+                text.readOnly = !this._isUnlockedDefaultMix;
             }
 
             // Mixes
@@ -218,7 +228,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this._mixesParent = document.createElement("div");
                 this._mixesParent.style.display = "grid";
                 this._mixesParent.style.gap = "5px";
-                this._mixesParent.style.gridTemplateColumns = "1fr 1fr 3em auto";
+                this._mixesParent.style.gridTemplateColumns = this._isUnlockedMixes? "1fr 1fr 3em auto" : "1fr 1fr 3em";
                 this._mixesParent.style.gridColumn = "1 / span 2";
                 this._mixesParent.style.alignItems = "center";
 
@@ -226,26 +236,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 for (const mix of this._animationMixes) {
 
-                    this.createMixRow(builder, mix);
+                    if (this._isUnlockedMixes) {
+                 
+                        this.createMixEditRow(builder, mix);
+
+                    } else {
+
+                        builder.createText(this._mixesParent, true).value = mix[0];
+                        builder.createText(this._mixesParent, true).value = mix[1];
+                        builder.createText(this._mixesParent, true).value = mix[2].toString();
+                    }
                 }
 
-                const addMixBtn = builder.createButton(parentElement, "Add Mix", () => {
+                if (this._isUnlockedMixes) {
 
-                    const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
+                    const addMixBtn = builder.createButton(parentElement, "Add Mix", () => {
 
-                    const mix: IAnimationMix = [animations[0], animations[0], 0];
+                        const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
 
-                    this._animationMixes.push(mix);
+                        const mix: IAnimationMix = [animations[0], animations[0], 0];
 
-                    this.createMixRow(builder, mix);
+                        this._animationMixes.push(mix);
 
-                });
+                        this.createMixEditRow(builder, mix);
+                    });
 
-                addMixBtn.style.gridColumn = "1 / span 2";
+                    addMixBtn.style.gridColumn = "1 / span 2";
+                }
             }
         }
 
-        private createMixRow(builder: controls.properties.FormBuilder, mix: IAnimationMix) {
+        private createMixEditRow(builder: controls.properties.FormBuilder, mix: IAnimationMix) {
 
             const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
 
@@ -303,6 +324,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             delControl.getCanvas().addEventListener("click", () => {
 
+                if (!this._isUnlockedMixes) {
+
+                    return;
+                }
+
                 this._animationMixes = this._animationMixes.filter(m => m !== mix);
 
                 this.emitUpdateAnimationMixes();
@@ -315,6 +341,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 delControl.getCanvas().remove();
             });
+
+            ui.fromBtn.disabled = ui.toBtn.disabled = ui.durationText.readOnly = !this._isUnlockedMixes;
         }
 
         private emitUpdateAnimationMixes() {
@@ -340,9 +368,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setTitle("Spine Animation Mixes");
 
-            this.addButton("Update", () => this.onUpdateButtonPressed());
+            if (this._isUnlockedDefaultMix || this._isUnlockedMixes) {
 
-            this.addCancelButton();
+                this.addButton("Update", () => this.onUpdateButtonPressed());
+
+                this.addCancelButton();
+
+            } else {
+
+                this.addCancelButton().textContent = "Close";
+            }
 
             this.eventDialogClose.addListener(() => {
 
