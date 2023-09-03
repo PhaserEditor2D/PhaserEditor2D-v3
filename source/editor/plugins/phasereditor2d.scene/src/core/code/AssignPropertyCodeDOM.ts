@@ -17,10 +17,12 @@ namespace phasereditor2d.scene.core.code {
         }
 
         value(expr: string) {
+
             this._propertyValueExpr = expr;
         }
 
         valueLiteral(expr: string) {
+
             this._propertyValueExpr = CodeDOM.quote(expr);
         }
 
@@ -40,26 +42,32 @@ namespace phasereditor2d.scene.core.code {
         }
 
         getPropertyName() {
+
             return this._propertyName;
         }
 
         getContextExpr() {
+
             return this._contextExpr;
         }
 
         setContextExpr(contextExpr: string) {
+
             this._contextExpr = contextExpr;
         }
 
         getPropertyValueExpr() {
+
             return this._propertyValueExpr;
         }
 
         getPropertyType() {
+
             return this._propertyType;
         }
 
         setPropertyType(propertyType: string) {
+            
             this._propertyType = propertyType;
         }
     }

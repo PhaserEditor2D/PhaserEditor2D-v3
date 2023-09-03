@@ -1,10 +1,24 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function SimpleProperty(
-        name: string, defValue: any, label?: string, tooltip?: string, local: boolean = false, afterSetValue?: (obj: any) => void): IProperty<any> {
+        nameConfig: string | { name: string, codeName: string }, defValue: any, label?: string, tooltip?: string, local: boolean = false, afterSetValue?: (obj: any) => void): IProperty<any> {
+
+        let codeName: string;
+        let name: string;
+
+        if (typeof nameConfig === "object") {
+
+            codeName = nameConfig.codeName;
+            name = nameConfig.name;
+
+        } else {
+
+            name = nameConfig;
+        }
 
         return {
             name,
+            codeName,
             defValue,
             label,
             tooltip: tooltip,

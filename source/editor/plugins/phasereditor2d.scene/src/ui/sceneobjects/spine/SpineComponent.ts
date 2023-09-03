@@ -57,7 +57,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static animationMixes = SimpleProperty("animationMixes", undefined, "Animation Mixes", "The animation mixes");
 
-        static defaultMix = SimpleProperty("defaultMix", 0, "Default Mix", "The default mix duration of animations.");
+        static defaultMix = SimpleProperty({
+            name: "defaultMix",
+            codeName: "animationStateData.defaultMix",
+        }, 0, "Default Mix", "The default mix duration of animations.");
 
         // bounds provider
 
@@ -147,7 +150,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             // bounds provider
-            
+
+            const obj = this.getObject();
             const objES = this.getEditorSupport();
 
             if (objES.isNestedPrefabInstance()) {
@@ -155,7 +159,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 if (objES.isUnlockedProperty(SpineComponent.bpType)) {
 
                     const newBoundsProviderExpr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(this.getObject(), args.unit);
-                    
+
                     const propDom = new code.AssignPropertyCodeDOM("boundsProvider", args.objectVarName);
 
                     propDom.value(newBoundsProviderExpr);
@@ -163,6 +167,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const updateSizeDom = new code.MethodCallCodeDOM("updateSize", args.objectVarName);
 
                     args.statements.push(propDom, updateSizeDom);
+                }
+            }
+
+            // default mix
+
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, SpineComponent.defaultMix);
+
+            // mixes
+
+            if (objES.isUnlockedProperty(SpineComponent.animationMixes)) {
+
+                if (objES.isPrefabInstance()) {
+
+                    const dom = new code.AssignPropertyCodeDOM("animationSateData.animationToMixTime", args.objectVarName);
+
+                    dom.value("{}");
+
+                    args.statements.push(dom)
+                }
+
+                const mixes = obj.animationMixes;
+
+                for (const mix of mixes) {
+
+                    const dom = new code.MethodCallCodeDOM("setMix", `${args.objectVarName}.animationStateData`);
+
+                    dom.argLiteral(mix[0]);
+                    dom.argLiteral(mix[1]);
+                    dom.argFloat(mix[2]);
+
+                    args.statements.push(dom);
                 }
             }
         }
