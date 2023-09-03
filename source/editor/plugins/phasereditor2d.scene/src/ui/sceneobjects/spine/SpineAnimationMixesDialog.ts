@@ -229,7 +229,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     this.createMixRow(builder, mix);
                 }
 
-                const addMixBtn = builder.createButton(this._mixesParent, "Add Mix", () => {
+                const addMixBtn = builder.createButton(parentElement, "Add Mix", () => {
 
                     const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
 
@@ -238,9 +238,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     this._animationMixes.push(mix);
 
                     this.createMixRow(builder, mix);
+
                 });
 
-                addMixBtn.style.gridColumn = "1 / span 4";
+                addMixBtn.style.gridColumn = "1 / span 2";
             }
         }
 
@@ -339,16 +340,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setTitle("Spine Animation Mixes");
 
-            this.addButton("Update", () => {
-
-                const newMixes = this._animationMixes.length === 0 ?
-                    undefined : [...this._animationMixes];
-
-                SpineComponent.animationMixes.setValue(this._spineObject, newMixes);
-                SpineComponent.defaultMix.setValue(this._spineObject, this._defaultMix);
-
-                this.close();
-            });
+            this.addButton("Update", () => this.onUpdateButtonPressed());
 
             this.addCancelButton();
 
@@ -356,6 +348,47 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this._previewManager.dispose();
             })
+        }
+
+        private onUpdateButtonPressed() {
+
+            const newMixes = this._animationMixes.length === 0 ?
+                undefined : [...this._animationMixes];
+
+            const editor = this._spineObject.getEditorSupport().getScene().getEditor();
+
+            editor.getUndoManager().add(new UpdateOperation(this._spineObject, {
+                animationMixes: newMixes,
+                defaultMix: this._defaultMix
+            }));
+
+            this.close();
+        }
+    }
+
+    interface IUpdateOperationValue {
+        defaultMix: number;
+        animationMixes: IAnimationMixes;
+    }
+
+    class UpdateOperation extends SceneGameObjectOperation<SpineObject> {
+
+        constructor(obj: SpineObject, value: IUpdateOperationValue) {
+            super(obj.getEditorSupport().getScene().getEditor(), [obj], value);
+        }
+
+        getValue(obj: SpineObject): IUpdateOperationValue {
+
+            return {
+                defaultMix: obj.defaultMix,
+                animationMixes: obj.animationMixes
+            };
+        }
+
+        setValue(obj: SpineObject, value: IUpdateOperationValue): void {
+
+            obj.animationMixes = value.animationMixes;
+            obj.defaultMix = value.defaultMix;
         }
     }
 }

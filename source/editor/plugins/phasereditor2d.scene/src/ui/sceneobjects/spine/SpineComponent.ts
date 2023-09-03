@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static animationMixes = SimpleProperty("animationMixes", undefined, "Animation Mixes", "The animation mixes");
 
-        static defaultMix = SimpleProperty("defaultMix", 0, "Default Mix", "The default animation mix duration.");
+        static defaultMix = SimpleProperty("defaultMix", 0, "Default Mix", "The default mix duration of animations.");
 
         // bounds provider
 
