@@ -57,6 +57,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static animationMixes = SimpleProperty("animationMixes", undefined, "Animation Mixes", "The animation mixes");
 
+        static defaultMix = SimpleProperty("defaultMix", 0, "Default Mix", "The default animation mix duration.");
+
         // bounds provider
 
         static bpType: IEnumProperty<SpineObject, BoundsProviderType> = {
@@ -121,7 +123,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 SpineComponent.bpSkin,
                 SpineComponent.bpAnimation,
                 SpineComponent.bpTimeStep,
-                SpineComponent.animationMixes
+                SpineComponent.animationMixes,
+                SpineComponent.defaultMix
             ]);
         }
 

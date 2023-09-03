@@ -4,7 +4,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _parent: HTMLElement;
         private _game: Phaser.Game;
-        private _defaultSkin: string;
 
         constructor(parent: HTMLElement) {
 
@@ -34,12 +33,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game.events.emit("updateMixTime", mixTime);
         }
 
-        createGame(
-            spineAsset: pack.core.SpineAssetPackItem,
-            spineAtlasAsset: pack.core.SpineAtlasAssetPackItem,
-            skinName: string) {
+        setAnimationMixes(animationMixes: IAnimationMixes) {
 
-            this._defaultSkin = skinName;
+            this._game.events.emit("updateAnimationMixes", animationMixes);
+        }
+
+        createGame(data: IPreviewSceneData) {
 
             const { width, height } = this._parent.getBoundingClientRect();
 
@@ -61,43 +60,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             });
 
-            this._game.canvas.style.backgroundColor = "#00000010";
             this._game.canvas.classList.add("SpinePreviewCanvas");
 
-            this._game.scene.add("PreviewScene", PreviewScene, true, {
-                spineAsset,
-                spineAtlasAsset,
-                skinName: this._defaultSkin
-            });
+            this._game.scene.add("PreviewScene", PreviewScene, true, data);
 
             setTimeout(() => this._game.scale.refresh(), 10);
         }
     }
 
+    export interface IPreviewSceneData {
+        spineAsset: pack.core.SpineAssetPackItem;
+        spineAtlasAsset: pack.core.SpineAtlasAssetPackItem;
+        skinName?: string;
+        animationMixes?: IAnimationMixes;
+        defaultMix?: number;
+    }
+
     class PreviewScene extends Phaser.Scene {
 
-        private _spineAsset: pack.core.SpineAssetPackItem;
-        private _atlasAsset: pack.core.SpineAtlasAssetPackItem;
-        private _defaultSkin: string;
+        private _data: IPreviewSceneData;
 
-        init(data: any) {
+        init(data: IPreviewSceneData) {
 
-            this._spineAsset = data.spineAsset;
-            this._atlasAsset = data.spineAtlasAsset;
-            this._defaultSkin = data.skinName;
+            this._data = data;
         }
 
         create() {
 
-            console.log("repaintSpine", this._spineAsset.getKey(), this._atlasAsset.getKey());
+            console.log("repaintSpine", this._data.spineAsset.getKey(), this._data.spineAtlasAsset.getKey());
 
             const packCache = new pack.core.parsers.AssetPackCache();
 
-            this._atlasAsset.addToPhaserCache(this.game, packCache);
-            this._spineAsset.addToPhaserCache(this.game, packCache);
+            this._data.spineAtlasAsset.addToPhaserCache(this.game, packCache);
+            this._data.spineAsset.addToPhaserCache(this.game, packCache);
 
-            const key = this._spineAsset.getKey();
-            const atlas = this._atlasAsset.getKey();
+            const key = this._data.spineAsset.getKey();
+            const atlas = this._data.spineAtlasAsset.getKey();
 
             const obj = new spine.SpineGameObject(this, this.spine, 400, 400, key, atlas);
 
@@ -112,20 +110,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             obj.boundsProvider = new spine.SkinsAndAnimationBoundsProvider(
                 null, obj.skeleton.data.skins.map(s => s.name));
 
-            if (this._defaultSkin) {
+            if (this._data.skinName) {
 
-                obj.skeleton.setSkinByName(this._defaultSkin);
+                obj.skeleton.setSkinByName(this._data.skinName);
             }
 
             obj.updateSize();
 
+            if (this._data.animationMixes) {
+
+                for (const mix of this._data.animationMixes) {
+
+                    const [from, to, duration] = mix;
+
+                    obj.animationStateData.setMix(from, to, duration);
+                }
+            }
+
             const w = 100000;
+
             obj.setInteractive({
                 draggable: true,
                 hitArea: new Phaser.Geom.Rectangle(-w, -w, w * 2, w * 2),
                 hitAreaCallback: Phaser.Geom.Rectangle.Contains
             });
-
 
             const objWidth = (obj as any).width
             const objHeight = (obj as any).height;
@@ -185,6 +193,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.game.events.on("updateMixTime", (mixTime: number) => {
 
                 obj.animationStateData.defaultMix = mixTime;
+            });
+
+            this.game.events.on("updateAnimationMixes", (mixes: IAnimationMixes) => {
+
+                obj.animationStateData.animationToMixTime = {};
+
+                for (const mix of mixes) {
+
+                    const [from, to, duration] = mix;
+
+                    obj.animationStateData.setMix(from, to, duration);
+                }
             });
         }
     }

@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class SpineAnimationsSection extends SceneGameObjectSection<SpineObject> {
+    export class SpineAnimationSection extends SceneGameObjectSection<SpineObject> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.SpineAnimartionsSection", "Spine Animations", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.SpineAnimartionSection", "Spine Animation", false, true);
 
         }
 
@@ -18,7 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLock(comp, SpineComponent.animationMixes);
 
-                this.gridColumn(comp, "Mixes", "The animation mixes.");
+                this.createLabel(comp, "Mixes", "The animation mixes.");
 
                 const btn = this.createButton(comp, "Configure", () => {
 

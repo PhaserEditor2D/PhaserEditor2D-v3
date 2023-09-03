@@ -96,7 +96,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Skins
 
             {
-                builder.gridColumn(parentElement, "Skin");
+                builder.createLabel(parentElement, "Skin");
 
                 this._skinBtn = builder.createMenuButton(parentElement, this._skinName ?? "",
                     () => this._spineAsset.getGuessSkinItems().map(s => ({
@@ -118,7 +118,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Track
 
             {
-                builder.gridColumn(parentElement, "Track");
+                builder.createLabel(parentElement, "Track");
 
                 this._trackBtn = builder.createMenuButton(parentElement, "Track 0", () => [0, 1, 2, 3, 4, 5].map(t => ({
                     name: this.getTrackName(t),
@@ -135,7 +135,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             {
 
-                builder.gridColumn(parentElement, "Animation");
+                builder.createLabel(parentElement, "Animation");
 
                 let animations = this._spineAsset.getGuessSkeleton().animations.map(a => a.name);
                 animations = [null, ...animations,]
@@ -165,7 +165,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // Loop
             {
-                const check = builder.createCheckbox(parentElement, builder.gridColumn(parentElement, "Loop"));
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Loop"));
 
                 check.addEventListener("change", () => {
 
@@ -177,7 +177,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // Mix Time
             {
-                builder.gridColumn(parentElement, "Default Mix");
+                builder.createLabel(parentElement, "Default Mix");
 
                 const text = builder.createText(parentElement);
 
@@ -197,8 +197,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             setTimeout(() => {
 
-                this._previewManager.createGame(this._spineAsset, this._spineAtlasAsset, this._skinName);
-
+                this._previewManager.createGame({
+                    spineAsset: this._spineAsset,
+                    spineAtlasAsset: this._spineAtlasAsset,
+                    skinName: this._skinName
+                });
             }, 10);
         }
 

@@ -10,7 +10,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         CURRENT_SKIN
     }
 
-    export type IAnimationMixes = Array<[string, string, boolean]>;
+    export type IAnimationMix = [string, string, number];
+    
+    export type IAnimationMixes = Array<IAnimationMix>;
 
     export class SpineObject extends spine.SpineGameObject implements ISceneGameObject {
 
@@ -37,6 +39,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.bpTimeStep = SpineObject.DEFAULT_BP_TIME_STEP;
 
             this._editorSupport = new SpineEditorSupport(this, scene);
+        }
+
+        get defaultMix() {
+
+            return this.animationStateData.defaultMix;
+        }
+
+        set defaultMix(defaultMix: number) {
+
+            this.animationStateData.defaultMix = defaultMix;
         }
 
         updateBoundsProvider() {

@@ -9,10 +9,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _currentTrack = 0;
         private _trackAnimationMap: Map<number, string> = new Map();
         private _trackBtn: HTMLButtonElement;
-        private _skinBtn: HTMLButtonElement;
         private _animBtn: HTMLButtonElement;
         private _currentLoop = true;
         private _spineObject: SpineObject;
+        private _animationMixes: IAnimationMixes;
+        private _mixesParent: HTMLDivElement;
+        private _defaultMix: number;
 
         constructor(spineObject: SpineObject) {
             super();
@@ -20,6 +22,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
 
             this._spineObject = spineObject;
+
+            this._animationMixes = [...(spineObject.animationMixes || [])];
+
+            this._defaultMix = spineObject.defaultMix;
         }
 
         protected createDialogArea(): void {
@@ -95,21 +101,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const cache = this._spineObject.getEditorSupport().getScene().getPackCache();
 
                 const spineAsset = cache.findAsset(this._spineObject.dataKey) as pack.core.SpineAssetPackItem;
-                const spineAtlas = cache.findAsset(this._spineObject.atlasKey) as pack.core.SpineAtlasAssetPackItem;
+                const spineAtlasAsset = cache.findAsset(this._spineObject.atlasKey) as pack.core.SpineAtlasAssetPackItem;
+                const skinName = this._spineObject.skeleton.skin?.name;
+                const animationMixes = this._spineObject.animationMixes;
 
-                this._previewManager.createGame(spineAsset, spineAtlas, this._spineObject.skeleton.skin?.name);
+                this._previewManager.createGame({
+                    spineAsset,
+                    spineAtlasAsset,
+                    skinName,
+                    animationMixes,
+                });
 
             }, 10);
         }
 
         private createPreviewSettings(builder: controls.properties.FormBuilder, parentElement: HTMLDivElement) {
-            
+
             builder.createSeparator(parentElement, "PREVIEW", "1 / span 2");
 
             // Track
 
             {
-                builder.createLabel(parentElement, "Track");
+                builder.createLabel(parentElement, "Preview Track");
 
                 this._trackBtn = builder.createMenuButton(parentElement, "Track 0", () => [0, 1, 2, 3, 4, 5].map(t => ({
                     name: this.getTrackName(t),
@@ -126,7 +139,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             {
 
-                builder.createLabel(parentElement, "Animation");
+                builder.createLabel(parentElement, "Preview Animation");
 
                 let animations = this._spineObject.skeleton.data.animations.map(a => a.name);
                 animations = [null, ...animations,];
@@ -157,7 +170,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             // Loop
 
             {
-                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Loop"));
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Preview Loop"));
 
                 check.addEventListener("change", () => {
 
@@ -168,7 +181,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        createMixesSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
+        private createMixesSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
 
             builder.createSeparator(parentElement, "Mixes", "1 / span 2");
 
@@ -179,32 +192,133 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const text = builder.createText(parentElement);
 
-                text.value = localStorage.getItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.mixTime") ?? "0";
+                // TODO
+                text.value = this._defaultMix.toString();
 
                 text.addEventListener("change", () => {
 
                     const n = Number(text.value);
 
-                    this._previewManager.setMixTime(n);
+                    if (Number.isNaN(n)) {
 
-                    localStorage.setItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.mixTime", n.toString());
+                        text.value = this._defaultMix.toString();
+
+                        return;
+                    }
+
+                    this._defaultMix = n;
+
+                    this._previewManager.setMixTime(n);
                 });
             }
 
-             // Mixes
+            // Mixes
 
             {
-                const mixesParent = document.createElement("div");
-                mixesParent.style.display = "grid";
-                mixesParent.style.gridTemplateColumns = "1fr 1fr 4em";
-                mixesParent.style.gridColumn = "1 / span 2";
+                this._mixesParent = document.createElement("div");
+                this._mixesParent.style.display = "grid";
+                this._mixesParent.style.gap = "5px";
+                this._mixesParent.style.gridTemplateColumns = "1fr 1fr 3em auto";
+                this._mixesParent.style.gridColumn = "1 / span 2";
+                this._mixesParent.style.alignItems = "center";
 
-                parentElement.appendChild(mixesParent);
+                parentElement.appendChild(this._mixesParent);
 
-                const addMixBtn = builder.createButton(mixesParent, "Add Mix", () => { });
+                for (const mix of this._animationMixes) {
 
-                addMixBtn.style.gridColumn = "1 / span 3";
+                    this.createMixRow(builder, mix);
+                }
+
+                const addMixBtn = builder.createButton(this._mixesParent, "Add Mix", () => {
+
+                    const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
+
+                    const mix: IAnimationMix = [animations[0], animations[0], 0];
+
+                    this._animationMixes.push(mix);
+
+                    this.createMixRow(builder, mix);
+                });
+
+                addMixBtn.style.gridColumn = "1 / span 4";
             }
+        }
+
+        private createMixRow(builder: controls.properties.FormBuilder, mix: IAnimationMix) {
+
+            const animations = this._spineObject.skeleton.data.animations.map(a => a.name);
+
+            const ui: { fromBtn?: HTMLButtonElement, toBtn?: HTMLButtonElement, durationText?: HTMLInputElement } = {};
+
+            // From
+
+            ui.fromBtn = builder.createMenuButton(
+                this._mixesParent, mix[0], () => animations.map(a => ({
+                    name: a,
+                    value: a
+                })), animation => {
+
+                    ui.fromBtn.textContent = animation;
+                    mix[0] = animation;
+
+                    this.emitUpdateAnimationMixes();
+                });
+
+            // To
+
+            ui.toBtn = builder.createMenuButton(
+                this._mixesParent, mix[1], () => animations.map(a => ({
+                    name: a,
+                    value: a
+                })), animation => {
+
+                    ui.toBtn.textContent = animation;
+                    mix[1] = animation;
+
+                    this.emitUpdateAnimationMixes();
+                });
+
+            ui.durationText = builder.createText(this._mixesParent);
+            ui.durationText.addEventListener("change", () => {
+
+                const n = Number.parseFloat(ui.durationText.value);
+
+                if (Number.isNaN(n)) {
+
+                    ui.durationText.value = mix[2].toString();
+
+                } else {
+
+                    mix[2] = n;
+                }
+
+                this.emitUpdateAnimationMixes();
+            });
+            ui.durationText.value = mix[2].toString();
+
+            // Del
+
+            const delControl = builder.createIcon(this._mixesParent, colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_DELETE), true);
+
+            delControl.getCanvas().addEventListener("click", () => {
+
+                this._animationMixes = this._animationMixes.filter(m => m !== mix);
+
+                this.emitUpdateAnimationMixes();
+
+                ui.fromBtn.remove();
+
+                ui.toBtn.remove();
+
+                ui.durationText.remove();
+
+                delControl.getCanvas().remove();
+            });
+        }
+
+        private emitUpdateAnimationMixes() {
+
+            this._previewManager.setAnimationMixes(this._animationMixes);
         }
 
         private getTrackName(track: any) {
@@ -225,7 +339,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setTitle("Spine Animation Mixes");
 
-            this.addButton("Update", () => this.close());
+            this.addButton("Update", () => {
+
+                const newMixes = this._animationMixes.length === 0 ?
+                    undefined : [...this._animationMixes];
+
+                SpineComponent.animationMixes.setValue(this._spineObject, newMixes);
+                SpineComponent.defaultMix.setValue(this._spineObject, this._defaultMix);
+
+                this.close();
+            });
 
             this.addCancelButton();
 

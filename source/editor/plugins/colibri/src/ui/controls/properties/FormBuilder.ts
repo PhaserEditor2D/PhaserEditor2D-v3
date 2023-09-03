@@ -359,9 +359,9 @@ namespace colibri.ui.controls.properties {
             return icon;
         }
 
-        createIcon(parent: HTMLElement, iconImage: IImage) {
+        createIcon(parent: HTMLElement, iconImage: IImage, isButtonStyle?: boolean) {
 
-            const icon = new controls.IconControl(iconImage);
+            const icon = new controls.IconControl(iconImage, isButtonStyle);
 
             parent.appendChild(icon.getCanvas());
 
