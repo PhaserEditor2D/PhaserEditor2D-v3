@@ -177,7 +177,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // Mix Time
             {
-                builder.createLabel(parentElement, "Mix Time");
+                builder.createLabel(parentElement, "Default Mix");
 
                 const text = builder.createText(parentElement);
 
