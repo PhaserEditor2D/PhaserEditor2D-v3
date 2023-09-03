@@ -10,7 +10,7 @@
 },
 "dark/close.png":
 {
-	"frame": {"x":145,"y":1,"w":10,"h":10},
+	"frame": {"x":131,"y":30,"w":10,"h":10},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":3,"w":10,"h":10},
@@ -26,7 +26,7 @@
 },
 "dark/delete.png":
 {
-	"frame": {"x":107,"y":18,"w":14,"h":15},
+	"frame": {"x":145,"y":1,"w":14,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":0,"w":14,"h":15},
@@ -34,7 +34,7 @@
 },
 "dark/dirty.png":
 {
-	"frame": {"x":134,"y":56,"w":6,"h":6},
+	"frame": {"x":130,"y":55,"w":6,"h":6},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":5,"w":6,"h":6},
@@ -66,7 +66,7 @@
 },
 "dark/keymap.png":
 {
-	"frame": {"x":107,"y":35,"w":15,"h":11},
+	"frame": {"x":144,"y":18,"w":15,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":3,"w":15,"h":11},
@@ -82,7 +82,7 @@
 },
 "dark/minus.png":
 {
-	"frame": {"x":121,"y":56,"w":11,"h":3},
+	"frame": {"x":114,"y":47,"w":11,"h":3},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":6,"w":11,"h":3},
@@ -90,7 +90,7 @@
 },
 "dark/plus.png":
 {
-	"frame": {"x":124,"y":30,"w":12,"h":11},
+	"frame": {"x":130,"y":17,"w":12,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":2,"w":12,"h":11},
@@ -98,7 +98,7 @@
 },
 "dark/section-collapse-left.png":
 {
-	"frame": {"x":138,"y":30,"w":7,"h":11},
+	"frame": {"x":121,"y":52,"w":7,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":3,"w":7,"h":11},
@@ -114,7 +114,7 @@
 },
 "dark/section-expand.png":
 {
-	"frame": {"x":138,"y":43,"w":7,"h":11},
+	"frame": {"x":131,"y":42,"w":7,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":3,"w":7,"h":11},
@@ -122,7 +122,7 @@
 },
 "dark/small-menu.png":
 {
-	"frame": {"x":107,"y":48,"w":5,"h":15},
+	"frame": {"x":107,"y":18,"w":5,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":1,"w":5,"h":15},
@@ -194,7 +194,7 @@
 },
 "light/close.png":
 {
-	"frame": {"x":145,"y":13,"w":10,"h":10},
+	"frame": {"x":143,"y":31,"w":10,"h":10},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":3,"w":10,"h":10},
@@ -210,7 +210,7 @@
 },
 "light/delete.png":
 {
-	"frame": {"x":107,"y":18,"w":14,"h":15},
+	"frame": {"x":114,"y":17,"w":14,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":1,"y":0,"w":14,"h":15},
@@ -218,7 +218,7 @@
 },
 "light/dirty.png":
 {
-	"frame": {"x":142,"y":56,"w":6,"h":6},
+	"frame": {"x":151,"y":56,"w":6,"h":6},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":5,"w":6,"h":6},
@@ -250,7 +250,7 @@
 },
 "light/keymap.png":
 {
-	"frame": {"x":123,"y":17,"w":15,"h":11},
+	"frame": {"x":114,"y":34,"w":15,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":0,"y":3,"w":15,"h":11},
@@ -266,7 +266,7 @@
 },
 "light/minus.png":
 {
-	"frame": {"x":140,"y":25,"w":11,"h":3},
+	"frame": {"x":138,"y":56,"w":11,"h":3},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":6,"w":11,"h":3},
@@ -274,7 +274,7 @@
 },
 "light/plus.png":
 {
-	"frame": {"x":124,"y":43,"w":12,"h":11},
+	"frame": {"x":107,"y":52,"w":12,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":3,"y":2,"w":12,"h":11},
@@ -282,7 +282,7 @@
 },
 "light/section-collapse-left.png":
 {
-	"frame": {"x":147,"y":30,"w":7,"h":11},
+	"frame": {"x":140,"y":43,"w":7,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":4,"y":3,"w":7,"h":11},
@@ -298,7 +298,7 @@
 },
 "light/section-expand.png":
 {
-	"frame": {"x":147,"y":43,"w":7,"h":11},
+	"frame": {"x":149,"y":43,"w":7,"h":11},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":5,"y":3,"w":7,"h":11},
@@ -306,7 +306,7 @@
 },
 "light/small-menu.png":
 {
-	"frame": {"x":114,"y":48,"w":5,"h":15},
+	"frame": {"x":107,"y":35,"w":5,"h":15},
 	"rotated": false,
 	"trimmed": true,
 	"spriteSourceSize": {"x":6,"y":1,"w":5,"h":15},
@@ -373,8 +373,8 @@
 	"version": "1.0",
 	"image": "atlas@1x.png",
 	"format": "RGBA8888",
-	"size": {"w":156,"h":64},
+	"size": {"w":160,"h":64},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:c77b20c4523e7f0f8594d8e918c827a7:9b09bdcbc990fc8359e17e3d77084bff:a6f74b55a90107bc4ae6d23dde1c2d9e$"
+	"smartupdate": "$TexturePacker:SmartUpdate:295e747e2fb318dde07ea949be206aef:42f4a38e8b3c72f2a54182abdce09148:a6f74b55a90107bc4ae6d23dde1c2d9e$"
 }
 }
