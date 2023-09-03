@@ -180,7 +180,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (objES.isPrefabInstance()) {
 
-                    const dom = new code.AssignPropertyCodeDOM("animationSateData.animationToMixTime", args.objectVarName);
+                    const dom = new code.AssignPropertyCodeDOM("animationStateData.animationToMixTime", args.objectVarName);
 
                     dom.value("{}");
 
