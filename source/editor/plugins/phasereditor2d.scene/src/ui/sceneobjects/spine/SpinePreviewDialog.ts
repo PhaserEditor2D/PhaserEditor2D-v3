@@ -193,6 +193,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 });
             }
 
+            // Time Scale
+            {
+                builder.createLabel(parentElement, "Time Scale");
+
+                const text = builder.createText(parentElement);
+
+                text.value = localStorage.getItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.timeScale") ?? "1";
+
+                text.addEventListener("change", () => {
+
+                    const n = Number(text.value);
+
+                    this._previewManager.setTimeScale(n);
+
+                    localStorage.setItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.timeScale", n.toString());
+                });
+            }
+
             // game canvas
 
             setTimeout(() => {

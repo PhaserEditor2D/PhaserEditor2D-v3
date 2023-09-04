@@ -33,6 +33,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game.events.emit("updateMixTime", mixTime);
         }
 
+        setTimeScale(timeScale: number) {
+
+            this._game.events.emit("updateTimeScale", timeScale);
+        }
+
         setAnimationMixes(animationMixes: IAnimationMixes) {
 
             this._game.events.emit("updateAnimationMixes", animationMixes);
@@ -193,6 +198,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.game.events.on("updateMixTime", (mixTime: number) => {
 
                 obj.animationStateData.defaultMix = mixTime;
+            });
+
+            this.game.events.on("updateTimeScale", (timeScale: number) => {
+
+                obj.animationState.timeScale = timeScale;
             });
 
             this.game.events.on("updateAnimationMixes", (mixes: IAnimationMixes) => {

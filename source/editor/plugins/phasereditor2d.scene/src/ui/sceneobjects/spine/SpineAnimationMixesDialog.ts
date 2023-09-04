@@ -15,7 +15,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _animationMixes: IAnimationMixes;
         private _mixesParent: HTMLDivElement;
         private _defaultMix: number;
+        private _timeScale: number;
         private _isUnlockedDefaultMix: boolean;
+        private _isUnlockedTimeScale: boolean;
         private _isUnlockedMixes: boolean;
 
         constructor(spineObject: SpineObject) {
@@ -28,9 +30,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._animationMixes = [...(spineObject.animationMixes || [])];
 
             this._defaultMix = spineObject.defaultMix;
+            this._timeScale = spineObject.timeScale;
 
             const objES = spineObject.getEditorSupport();
 
+            this._isUnlockedTimeScale = objES.isUnlockedProperty(SpineComponent.timeScale);
             this._isUnlockedDefaultMix = objES.isUnlockedProperty(SpineComponent.defaultMix);
 
             this._isUnlockedMixes = objES.isUnlockedProperty(SpineComponent.animationMixes);
@@ -98,9 +102,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createPreviewSettings(builder, parentElement);
 
-            // Mixes
-
-            this.createMixesSettings(parentElement, builder);
+            this.createObjectSettings(parentElement, builder);
 
             // game canvas
 
@@ -189,9 +191,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        private createMixesSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
+        private createObjectSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
 
-            builder.createSeparator(parentElement, "Mixes", "1 / span 2");
+            builder.createSeparator(parentElement, "Object Settings", "1 / span 2");
+
+            // Time Scale
+
+            {
+                builder.createLabel(parentElement, "Time Scale");
+
+                const text = builder.createText(parentElement);
+
+                text.value = this._timeScale.toString();
+
+                text.addEventListener("change", () => {
+
+                    const n = Number(text.value);
+
+                    if (Number.isNaN(n)) {
+
+                        text.value = this._timeScale.toString();
+
+                        return;
+                    }
+
+                    this._timeScale = n;
+
+                    this._previewManager.setTimeScale(n);
+                });
+
+                text.readOnly = !this._isUnlockedTimeScale;
+            }
 
             // Mix Time
 
@@ -368,7 +398,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.setTitle("Spine Animation Mixes");
 
-            if (this._isUnlockedDefaultMix || this._isUnlockedMixes) {
+            if (this._isUnlockedDefaultMix || this._isUnlockedMixes || this._isUnlockedTimeScale) {
 
                 this.addButton("Update", () => this.onUpdateButtonPressed());
 
@@ -394,7 +424,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             editor.getUndoManager().add(new UpdateOperation(this._spineObject, {
                 animationMixes: newMixes,
-                defaultMix: this._defaultMix
+                defaultMix: this._defaultMix,
+                timeScale: this._timeScale
             }));
 
             this.close();
@@ -404,6 +435,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     interface IUpdateOperationValue {
         defaultMix: number;
         animationMixes: IAnimationMixes;
+        timeScale: number
     }
 
     class UpdateOperation extends SceneGameObjectOperation<SpineObject> {
@@ -416,7 +448,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return {
                 defaultMix: obj.defaultMix,
-                animationMixes: obj.animationMixes
+                animationMixes: obj.animationMixes,
+                timeScale: obj.timeScale
             };
         }
 
@@ -424,6 +457,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             obj.animationMixes = value.animationMixes;
             obj.defaultMix = value.defaultMix;
+            obj.timeScale = value.timeScale;
         }
     }
 }

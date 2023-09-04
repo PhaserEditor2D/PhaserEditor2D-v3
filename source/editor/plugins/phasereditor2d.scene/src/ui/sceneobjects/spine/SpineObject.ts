@@ -41,6 +41,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._editorSupport = new SpineEditorSupport(this, scene);
         }
 
+        get timeScale() {
+
+            return this.animationState.timeScale;
+        }
+
+        set timeScale(timeScale: number) {
+
+            this.animationState.timeScale = timeScale;
+        }
+
         get defaultMix() {
 
             return this.animationStateData.defaultMix;

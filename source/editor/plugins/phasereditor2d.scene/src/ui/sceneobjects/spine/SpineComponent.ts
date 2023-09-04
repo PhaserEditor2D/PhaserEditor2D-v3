@@ -58,9 +58,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static animationMixes = SimpleProperty("animationMixes", undefined, "Animation Mixes", "The animation mixes");
 
         static defaultMix = SimpleProperty({
-            name: "defaultMix",
-            codeName: "animationStateData.defaultMix",
+            name: "defaultMix", codeName: "animationStateData.defaultMix",
         }, 0, "Default Mix", "The default mix duration of animations.");
+
+        static timeScale = SimpleProperty({ name: "timeScale", codeName: "animationState.timeScale" },
+            1, "Time Scale", "Multiplier for the delta time when the animation state is updated, causing time for all animations and mixes to play slower or faster. Defaults to 1.");
 
         // bounds provider
 
@@ -127,7 +129,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 SpineComponent.bpAnimation,
                 SpineComponent.bpTimeStep,
                 SpineComponent.animationMixes,
-                SpineComponent.defaultMix
+                SpineComponent.defaultMix,
+                SpineComponent.timeScale
             ]);
         }
 
@@ -170,9 +173,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            // default mix
+            // simple properties
 
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, SpineComponent.defaultMix);
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
+                SpineComponent.timeScale,
+                SpineComponent.defaultMix);
 
             // mixes
 
@@ -187,7 +192,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     args.statements.push(dom)
                 }
 
-                const mixes = obj.animationMixes;
+                const mixes = obj.animationMixes || [];
 
                 for (const mix of mixes) {
 

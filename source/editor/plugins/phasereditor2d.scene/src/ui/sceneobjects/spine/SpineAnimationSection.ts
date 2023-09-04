@@ -12,6 +12,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 3);
 
+            this.createPropertyFloatRow(comp, SpineComponent.timeScale);
+
             this.createPropertyFloatRow(comp, SpineComponent.defaultMix);
 
             {
