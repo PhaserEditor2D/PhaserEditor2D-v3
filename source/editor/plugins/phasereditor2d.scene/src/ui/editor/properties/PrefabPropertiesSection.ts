@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 linksComp.innerHTML = "";
 
                 const prefabProps = this.getScene().getPrefabUserProperties();
-                
+
                 const props = prefabProps.getProperties();
 
                 for (const prop of props) {
@@ -59,12 +59,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.isPrefabSceneType() || obj instanceof sceneobjects.PrefabUserProperties;
+            return obj instanceof Scene && obj.isPrefabSceneType()
+                || obj instanceof sceneobjects.PrefabUserProperties
+                || obj instanceof sceneobjects.UserProperty;
         }
 
         canEditNumber(n: number): boolean {
 
-            return n === 1;
+            return n > 0;
         }
     }
 }
