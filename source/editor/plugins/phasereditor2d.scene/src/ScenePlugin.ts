@@ -103,7 +103,7 @@ namespace phasereditor2d.scene {
 
                 this._docs = new phasereditor2d.ide.core.PhaserDocs(
                     resources.ResourcesPlugin.getInstance(),
-                    "phasereditor2d.scene/docs/events.json");
+                    "phasereditor2d.scene/docs/phaser.json");
             }
 
             return this._docs;
