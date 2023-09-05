@@ -41,6 +41,7 @@ namespace phasereditor2d.scene {
 
         private _sceneFinder: core.json.SceneFinder;
         private _docs: phasereditor2d.ide.core.PhaserDocs;
+        private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
         private _spineThumbnailCache: ui.SpineThumbnailCache;
 
         static getInstance() {
@@ -84,13 +85,24 @@ namespace phasereditor2d.scene {
             ScenePlugin.DEFAULT_EDITOR_PIXEL_ART = pixelArt;
         }
 
+        getPhaserEventsDocs() {
+
+            if (!this._eventsDocs) {
+
+                this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance(),
+                    "phasereditor2d.scene/docs/events.json");
+            }
+
+            return this._eventsDocs;
+        }
+
         getPhaserDocs() {
 
             if (!this._docs) {
 
                 this._docs = new phasereditor2d.ide.core.PhaserDocs(
                     resources.ResourcesPlugin.getInstance(),
-                    "phasereditor2d.scene/docs/phaser.json",
                     "phasereditor2d.scene/docs/events.json");
             }
 

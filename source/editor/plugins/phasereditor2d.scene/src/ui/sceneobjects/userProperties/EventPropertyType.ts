@@ -69,27 +69,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async createViewer() {
 
+            const finder = new pack.core.PackFinder();
+            await finder.preload();
+
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.editor.EventPropertyType.Dialog");
-            viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
-                () => new controls.viewers.EmptyCellRenderer(false)));
-            viewer.setLabelProvider(new controls.viewers.LabelProvider());
-            viewer.setStyledLabelProvider(new EventPropertyStyleLabelProider());
+            viewer.setCellRendererProvider(new EventCellRendererProvider(finder));
+            viewer.setLabelProvider(new EventLabelProvider());
+            viewer.setStyledLabelProvider(new EventPropertyStyleLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
 
             return viewer;
         }
 
-        protected valueToString(viewer: colibri.ui.controls.viewers.TreeViewer, value: string): string {
+        protected valueToString(viewer: colibri.ui.controls.viewers.TreeViewer, value: EventItem): string {
 
-            return value;
+            return value.eventName;
         }
 
         protected async loadViewerInput(viewer: colibri.ui.controls.viewers.TreeViewer) {
 
             // Phaser events
-            const docs = ScenePlugin.getInstance().getPhaserDocs();
+            const eventsDocs = ScenePlugin.getInstance().getPhaserEventsDocs();
 
-            const phaserNames = docs.getKeys();
+            const phaserEventNames = eventsDocs.getKeys().map(k => new PhaserEventItem(k));
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
@@ -97,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // user events
 
-            const userNames = events.map(e => e.name);
+            const userNames = events.map(e => new UserEventItem(e));
 
             // Phaser animation dynamic events
 
@@ -109,25 +111,110 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .getAssets(i => i instanceof pack.core.AnimationsAssetPackItem)
                 .map(i => i as pack.core.AnimationsAssetPackItem)
                 .flatMap(i => i.getAnimations())
-                .map(anim => anim.getKey())
-                .map(k => `animationcomplete-${k}`);
+                .map(anim => new AnimationEventItem(`animationcomplete-${anim.getKey()}`, anim));
 
             // Phaser keyboard dynamic events
 
-            const keyboardEvents = [];
+            const keyboardEvents: KeyboardEvent[] = [];
 
-            for(const k of Object.keys(Phaser.Input.Keyboard.KeyCodes)) {
+            for (const k of Object.keys(Phaser.Input.Keyboard.KeyCodes)) {
 
-                keyboardEvents.push(`keydown-${k}`, `keyup-${k}`);
+                keyboardEvents.push(
+                    new KeyboardEvent(`keydown-${k}`),
+                    new KeyboardEvent(`keyup-${k}`));
             }
 
-            console.log(keyboardEvents);
-            
             viewer.setInput([
                 ...userNames,
-                ...phaserNames,
+                ...phaserEventNames,
                 ...keyboardEvents,
                 ...animEvents]);
+        }
+    }
+
+    abstract class EventItem {
+
+        constructor(public eventName: string) {
+        }
+
+        protected getPhaserHelp(eventName: string) {
+
+            const docs = ScenePlugin.getInstance().getPhaserEventsDocs();
+
+            return docs.getDoc(eventName, false) || "";
+        }
+
+        abstract getHelp(): Promise<string>;
+    }
+
+    class PhaserEventItem extends EventItem {
+
+        public phaserNamespace: string;
+        public constantName: string;
+
+        constructor(eventName: string) {
+            super(eventName);
+
+            const label = eventName;
+            const i = label.lastIndexOf(".");
+            this.phaserNamespace = label.substring(0, i + 1);
+            this.constantName = label.substring(i + 1);
+        }
+
+        async getHelp(): Promise<string> {
+
+            return this.getPhaserHelp(this.eventName);
+        }
+    }
+
+    class UserEventItem extends EventItem {
+
+        constructor(public userEvent: core.json.IUserEvent) {
+            super(userEvent.name);
+        }
+
+        async getHelp(): Promise<string> {
+
+            const userEvents = await ScenePlugin.getInstance().getSceneFinder().findUserEvents();
+
+            const event = userEvents.find(e => e.name === this.eventName);
+
+            if (event) {
+
+                return phasereditor2d.ide.core.PhaserDocs.markdownToHtml(event.help)
+            }
+
+            return "";
+        }
+    }
+
+    class AnimationEventItem extends EventItem {
+
+        constructor(
+            name: string,
+            public animConfig: pack.core.AnimationConfigInPackItem) {
+
+            super(name);
+        }
+
+        async getHelp(): Promise<string> {
+
+            return this.getPhaserHelp("Phaser.Animations.Events.ANIMATION_COMPLETE_KEY");
+        }
+    }
+
+    class KeyboardEvent extends EventItem {
+
+        async getHelp(): Promise<string> {
+
+            console.log("get help here");
+
+            if (this.eventName.startsWith("keydown-")) {
+
+                return this.getPhaserHelp("Phaser.Input.Keyboard.Events.KEY_DOWN");
+            }
+
+            return this.getPhaserHelp("Phaser.Input.Keyboard.Events.KEY_UP");
         }
     }
 
@@ -149,76 +236,99 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const viewer = this.getViewer();
 
-            const userEvents: core.json.IUserEvent[] = [];
+            viewer.eventSelectionChanged.addListener(async (sel: EventItem[]) => {
 
-            ScenePlugin.getInstance().getSceneFinder().findUserEvents().then(events => {
+                const [item] = sel;
 
-                userEvents.push(...events);
-            })
-
-            viewer.eventSelectionChanged.addListener(sel => {
-
-                const [eventName] = sel as string[];
-
-                const phaserDocs = ScenePlugin.getInstance().getPhaserDocs();
-
-                if (eventName) {
-
-                    let help = "";
-
-                    if (eventName.startsWith("Phaser.")) {
-
-                        help = phaserDocs.getDoc(eventName, false) || "";
-
-                    } else if (eventName.startsWith("animationcomplete-")) {
-
-                        help = phaserDocs.getDoc("Phaser.Animations.Events.ANIMATION_COMPLETE_KEY", false);
-
-                    } else if (eventName.startsWith("keydown-")) {
-
-                        help = phaserDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_DOWN", false);
-
-                    } if (eventName.startsWith("keyup-")) {
-
-                        help = phaserDocs.getDoc("Phaser.Input.Keyboard.Events.KEY_UP", false);
-
-                    } else {
-
-                        const event = userEvents.find(e => e.name === eventName);
-
-                        if (event) {
-
-                            help = phasereditor2d.ide.core.PhaserDocs.markdownToHtml(event.help)
-                        }
-                    }
-
-                    docsArea.innerHTML = help;
-                }
+                docsArea.innerHTML = await item.getHelp();
             });
         }
     }
 
-    class EventPropertyStyleLabelProider implements controls.viewers.IStyledLabelProvider {
+    class EventCellRendererProvider implements controls.viewers.ICellRendererProvider {
 
-        getStyledTexts(obj: any, dark: boolean): controls.viewers.IStyledText[] {
+        constructor(private _finder: pack.core.PackFinder) {
 
-            const label = obj as string;
-            const i = label.lastIndexOf(".");
-            const namespace_ = label.substring(0, i + 1);
-            const name = label.substring(i + 1);
+        }
+
+        getCellRenderer(element: any): controls.viewers.ICellRenderer {
+
+            if (element instanceof AnimationEventItem) {
+                
+                return new AnimationEventCellRenderer(this._finder);
+            }
+
+            let icon: controls.IImage;
+
+            if (element instanceof UserEventItem) {
+
+                icon = resources.getIcon(resources.ICON_FILE_TEXT);
+
+            } else if (element instanceof KeyboardEvent) {
+
+                icon = resources.getIcon(resources.ICON_KEYBOARD_KEY);
+
+            } else {
+
+                icon = resources.getIcon(resources.ICON_BUILD);
+            }
+
+            if (icon) {
+
+                return new controls.viewers.IconImageCellRenderer(icon);
+            }
+
+            return new controls.viewers.EmptyCellRenderer();
+        }
+
+        async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
+            
+            return controls.PreloadResult.RESOURCES_LOADED;
+        }
+    }
+
+    class AnimationEventCellRenderer extends pack.ui.viewers.AnimationConfigCellRenderer {
+
+        getAnimationConfig(args: controls.viewers.RenderCellArgs | controls.viewers.PreloadCellArgs): pack.core.AnimationConfigInPackItem {
+
+            const item = args.obj as AnimationEventItem;
+
+            return item.animConfig;
+        }
+    }
+
+    class EventLabelProvider implements controls.viewers.ILabelProvider {
+
+        getLabel(obj: EventItem): string {
+
+            return obj.eventName;
+        }
+    }
+
+    class EventPropertyStyleLabelProvider implements controls.viewers.IStyledLabelProvider {
+
+        getStyledTexts(obj: EventItem, dark: boolean): controls.viewers.IStyledText[] {
 
             const theme = controls.Controls.getTheme();
 
-            return [
-                {
-                    color: theme.viewerForeground + "90",
-                    text: namespace_
-                },
-                {
-                    color: theme.viewerForeground,
-                    text: name
-                }
-            ];
+            if (obj instanceof PhaserEventItem) {
+
+                return [
+                    {
+                        color: theme.viewerForeground + "90",
+                        text: obj.phaserNamespace
+                    },
+                    {
+                        color: theme.viewerForeground,
+                        text: obj.constantName
+                    }
+                ];
+            }
+
+            return [{
+                color: theme.viewerForeground,
+                text: obj.eventName
+            }];
         }
     }
 }
