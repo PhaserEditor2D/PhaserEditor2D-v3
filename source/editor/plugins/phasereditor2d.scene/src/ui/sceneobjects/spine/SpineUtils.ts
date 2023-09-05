@@ -32,5 +32,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return result;
         }
+
+        static async getSpineAnimationItems() {
+
+            const result: pack.core.SpineAnimationItem[] = [];
+
+            const packs = await pack.core.AssetPackUtils.getAllPacks();
+
+            for(const thePack of packs) {
+
+                for(const item of thePack.getItems()) {
+
+                    if (item instanceof pack.core.SpineAssetPackItem) {
+
+                        await item.preload();
+
+                        const skins = item.getGuessAnimationItems();
+
+                        result.push(...skins);
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }

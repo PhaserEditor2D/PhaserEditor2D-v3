@@ -396,7 +396,8 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.AudioKeyPropertyType(),
                 new ui.sceneobjects.AssetKeyPropertyType(),
                 new ui.sceneobjects.SceneKeyPropertyType(),
-                new ui.sceneobjects.SpineSkinNamePropertyType()
+                new ui.sceneobjects.SpineSkinNamePropertyType(),
+                new ui.sceneobjects.SpineAnimationNamePropertyType()
             ];
         }
 

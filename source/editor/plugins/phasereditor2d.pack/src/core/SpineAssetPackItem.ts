@@ -5,6 +5,7 @@ namespace phasereditor2d.pack.core {
         private _guessHash: string;
         private _guessSkeleton: spine.SkeletonData;
         private _guessSkinItems: SpineSkinItem[] = [];
+        private _guessAnimationItems: SpineAnimationItem[] = [];
 
         getDataFile() {
 
@@ -47,6 +48,13 @@ namespace phasereditor2d.pack.core {
             return this._guessSkinItems;
         }
 
+        getGuessAnimationItems() {
+
+            this.buildGuessSkeleton();
+
+            return this._guessAnimationItems;
+        }
+
         getGuessHash() {
 
             return this._guessHash;
@@ -85,10 +93,15 @@ namespace phasereditor2d.pack.core {
                     }
 
                     this._guessSkinItems = skins.map(s => new SpineSkinItem(this, atlas, s.name));
+                    this._guessAnimationItems = this._guessSkeleton.animations.map(a => ({
+                        spineAsset: this,
+                        animationName: a.name
+                    }));
 
                 } else {
 
                     this._guessSkinItems = [];
+                    this._guessAnimationItems = [];
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async createViewer(): Promise<colibri.ui.controls.viewers.TreeViewer> {
 
-            const viewer = new controls.viewers.TreeViewer("SpineSkinUserPropertyType");
+            const viewer = new controls.viewers.TreeViewer("SpineSkinNamePropertyType");
 
             viewer.setLabelProvider(new SkinLabelProvider());
             viewer.setStyledLabelProvider(new SkinStyledCellLabelProvider());
@@ -41,8 +41,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         protected async updateIcon(iconControl: controls.IconControl, value: string): Promise<void> {
-
-            console.log("here");
 
             const skinItems = await SpineUtils.getSpineSkinItems();
 
