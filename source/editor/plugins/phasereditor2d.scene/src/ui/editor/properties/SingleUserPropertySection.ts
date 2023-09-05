@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected abstract runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection?: boolean);
 
-        static createAddProprtyButton(
+        static createAddPropertyButton(
             comp: HTMLDivElement,
             formBuilder: colibri.ui.controls.properties.FormBuilder,
             runOperation: (

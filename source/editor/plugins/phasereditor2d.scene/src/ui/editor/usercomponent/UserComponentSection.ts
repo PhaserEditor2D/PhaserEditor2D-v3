@@ -61,7 +61,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             };
 
             const { buttonElement } = editor.properties.SingleUserPropertySection
-                .createAddProprtyButton(comp, this, op, selector);
+                .createAddPropertyButton(comp, this, op, selector);
 
             buttonElement.style.marginTop = "10px";
             buttonElement.style.width = "100%";

@@ -23,7 +23,31 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.getEditor().setSelection([obj]);
             };
 
-            SingleUserPropertySection.createAddProprtyButton(comp, this, action => this.runOperation(action), selector);
+            const linksComp = this.createGridElement(comp, 1);
+
+            comp.appendChild(linksComp);
+
+            this.addUpdater(() => {
+
+                linksComp.innerHTML = "";
+
+                const props = this.getScene().getPrefabUserProperties().getProperties();
+
+                for (const prop of props) {
+
+                    const link = document.createElement("a");
+                    link.href = "#";
+                    link.textContent = prop.getLabel();
+                    link.addEventListener("click", () => {
+
+                        this.getEditor().setSelection([prop]);
+                    });
+
+                    linksComp.appendChild(link);
+                }
+            });
+
+            SingleUserPropertySection.createAddPropertyButton(comp, this, action => this.runOperation(action), selector);
         }
 
         runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection = true) {
