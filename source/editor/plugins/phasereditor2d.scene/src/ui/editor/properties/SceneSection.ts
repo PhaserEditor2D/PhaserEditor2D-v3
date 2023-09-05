@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         protected getScene() {
 
-            return this.getSelection()[0];
+            return this.getEditor().getScene();
         }
 
         canEdit(obj: any, n: number): boolean {

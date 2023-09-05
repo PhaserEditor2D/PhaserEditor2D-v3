@@ -31,7 +31,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 linksComp.innerHTML = "";
 
-                const props = this.getScene().getPrefabUserProperties().getProperties();
+                const prefabProps = this.getScene().getPrefabUserProperties();
+                
+                const props = prefabProps.getProperties();
 
                 for (const prop of props) {
 
