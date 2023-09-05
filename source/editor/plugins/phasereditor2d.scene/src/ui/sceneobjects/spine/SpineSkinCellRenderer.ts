@@ -4,11 +4,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class SpineSkinCellRenderer implements controls.viewers.ICellRenderer {
 
+        protected getSkinItem(args: controls.viewers.RenderCellArgs | controls.viewers.PreloadCellArgs)
+            : pack.core.SpineSkinItem {
+
+            return args.obj;
+        }
+
         renderCell(args: controls.viewers.RenderCellArgs): void {
 
+            const skin = this.getSkinItem(args);
+
             const cache = ScenePlugin.getInstance().getSpineThumbnailCache();
-            
-            const image = cache.getContent(args.obj);
+
+            const image = cache.getContent(skin);
 
             if (image) {
 
@@ -17,15 +25,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {
-            
+
             return args.viewer.getCellSize();
         }
 
         preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
-            
+
+            const skin = this.getSkinItem(args);
+
             const cache = ScenePlugin.getInstance().getSpineThumbnailCache();
 
-            return  cache.preload(args.obj);
+            return cache.preload(skin);
         }
     }
 }

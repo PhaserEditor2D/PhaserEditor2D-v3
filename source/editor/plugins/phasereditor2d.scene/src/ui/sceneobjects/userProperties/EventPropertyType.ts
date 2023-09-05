@@ -113,6 +113,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .flatMap(i => i.getAnimations())
                 .map(anim => new AnimationEventItem(`animationcomplete-${anim.getKey()}`, anim));
 
+            // Spine skeletons dynamic events
+
+            const spineEvents = (await SpineUtils.getSpineEventItems()).map(e => new SkeletonEventItem(e));
+
             // Phaser keyboard dynamic events
 
             const keyboardEvents: KeyboardEvent[] = [];
@@ -128,7 +132,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ...userNames,
                 ...phaserEventNames,
                 ...keyboardEvents,
-                ...animEvents]);
+                ...animEvents,
+                ...spineEvents]);
         }
     }
 
@@ -207,14 +212,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getHelp(): Promise<string> {
 
-            console.log("get help here");
-
             if (this.eventName.startsWith("keydown-")) {
 
                 return this.getPhaserHelp("Phaser.Input.Keyboard.Events.KEY_DOWN");
             }
 
             return this.getPhaserHelp("Phaser.Input.Keyboard.Events.KEY_UP");
+        }
+    }
+
+    class SkeletonEventItem extends EventItem {
+
+        constructor(public spineEvent: pack.core.SpineEventItem) {
+            super(spineEvent.eventName);
+        }
+
+        async getHelp(): Promise<string> {
+
+            return "User spine event defined in the '" + this.spineEvent.spineAsset.getKey() + "' skeleton.";
         }
     }
 
@@ -254,8 +269,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
             if (element instanceof AnimationEventItem) {
-                
+
                 return new AnimationEventCellRenderer(this._finder);
+            }
+
+            else if (element instanceof SkeletonEventItem) {
+
+                return new SpineEventCellRenderer();
             }
 
             let icon: controls.IImage;
@@ -282,7 +302,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         async preload(args: controls.viewers.PreloadCellArgs): Promise<controls.PreloadResult> {
-            
+
             return controls.PreloadResult.RESOURCES_LOADED;
         }
     }
@@ -297,9 +317,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
+    class SpineEventCellRenderer extends SpineSkinCellRenderer {
+
+        protected getSkinItem(args: controls.viewers.RenderCellArgs | controls.viewers.PreloadCellArgs): pack.core.SpineSkinItem {
+
+            const event = args.obj as SkeletonEventItem;
+
+            const skins = event.spineEvent.spineAsset.getGuessSkinItems();
+
+            return skins[Math.floor(skins.length / 2)];
+        }
+    }
+
     class EventLabelProvider implements controls.viewers.ILabelProvider {
 
         getLabel(obj: EventItem): string {
+
+            if (obj instanceof SkeletonEventItem) {
+
+                return obj.eventName + " - " + obj.spineEvent.spineAsset.getKey() + " (Spine)";
+            }
 
             return obj.eventName;
         }
@@ -321,6 +358,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     {
                         color: theme.viewerForeground,
                         text: obj.constantName
+                    }
+                ];
+            }
+
+            if (obj instanceof SkeletonEventItem) {
+
+                return [
+                    {
+                        color: theme.viewerForeground,
+                        text: obj.eventName
+                    },
+                    {
+                        color: theme.viewerForeground + "90",
+                        text: " - " + obj.spineEvent.spineAsset.getKey() + " (Spine)"
                     }
                 ];
             }

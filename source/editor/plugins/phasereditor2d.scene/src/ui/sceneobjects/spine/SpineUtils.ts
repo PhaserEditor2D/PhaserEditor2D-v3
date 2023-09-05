@@ -56,5 +56,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return result;
         }
+
+        static async getSpineEventItems() {
+
+            const result: pack.core.SpineEventItem[] = [];
+
+            const packs = await pack.core.AssetPackUtils.getAllPacks();
+
+            for(const thePack of packs) {
+
+                for(const item of thePack.getItems()) {
+
+                    if (item instanceof pack.core.SpineAssetPackItem) {
+
+                        await item.preload();
+
+                        const events = item.getGuessEventItems();
+
+                        result.push(...events);
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
