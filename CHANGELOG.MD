@@ -7,6 +7,8 @@
 * Boost load speed: migrates editor's icons from single files to a texture atlas.
 * Boost load speed: bundle all IDE text resources into a single res.json file.
 * Improves browser cache managing. Loads way faster when running in the cloud.
+* Shows property shortcuts in the prefab properties section.
+* Adds support to Spine animations.
 
 ## v3.62.2, Jul 2, 2023
 
