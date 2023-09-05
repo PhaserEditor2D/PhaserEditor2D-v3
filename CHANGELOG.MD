@@ -8,6 +8,7 @@
 * Boost load speed: bundle all IDE text resources into a single res.json file.
 * Improves browser cache managing. Loads way faster when running in the cloud.
 * Shows property shortcuts in the prefab properties section.
+* Show event icons in the Event property's dialog.
 * Adds support to Spine animations.
 
 ## v3.62.2, Jul 2, 2023
