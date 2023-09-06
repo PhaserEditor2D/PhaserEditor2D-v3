@@ -72,7 +72,7 @@ utils.makeHelpFile([
 
     "Phaser.Loader.LoaderPlugin.video(urls)",
 
-], "../source/editor/plugins/phasereditor2d.pack/data/phaser-docs.json");
+], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.pack/docs/phaser-docs.json");
 
 utils.makeHelpFile([
 
@@ -279,7 +279,7 @@ utils.makeHelpFile([
     "Phaser.Input.Keyboard.Key"
 
     
-], "../source/editor/plugins/phasereditor2d.scene/data/phaser-docs.json");
+], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/phaser.json");
 
 utils.makeHelpFile([
 
@@ -293,6 +293,6 @@ utils.makeHelpFile([
     "Phaser.Types.Animations.Animation.hideOnComplete",
     "Phaser.Types.Animations.Animation.skipMissedFrames",
 
-], "../source/editor/plugins/phasereditor2d.animations/data/phaser-docs.json");
+], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.animations/docs/phaser-docs.json");
 
 console.log("DONE!");
