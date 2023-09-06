@@ -120,7 +120,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getHelp() {
 
-            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this.getPhaserTypeName());
+            let helpKey: string;
+
+            if (this.isThirdPartyLib()) {
+
+                helpKey = this.getPhaserTypeThirdPartyLib() + "." + this.getPhaserTypeName();
+
+            } else {
+
+                helpKey = this.getPhaserTypeName();
+            }
+
+            return ScenePlugin.getInstance().getPhaserDocs().getDoc(helpKey);
         }
     }
 }

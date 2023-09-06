@@ -279,6 +279,14 @@ utils.makeHelpFile([
     "Phaser.Input.Keyboard.Key",
 
     "spine.SpineGameObject",
+    "spine.SkinsAndAnimationBoundsProvider(animation)",
+    "spine.SkinsAndAnimationBoundsProvider(skins)",
+    "spine.SkinsAndAnimationBoundsProvider(animation)",
+    "spine.SkinsAndAnimationBoundsProvider(timeStep)",
+    "spine.AnimationState.timeScale",
+    "spine.AnimationStateData.defaultMix",
+    "spine.AnimationStateData.setMixWith"
+
 
 ], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/phaser.json");
 

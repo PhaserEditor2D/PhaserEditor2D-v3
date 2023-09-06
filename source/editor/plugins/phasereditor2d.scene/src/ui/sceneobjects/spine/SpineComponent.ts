@@ -59,16 +59,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static defaultMix = SimpleProperty({
             name: "defaultMix", codeName: "animationStateData.defaultMix",
-        }, 0, "Default Mix", "The default mix duration of animations.");
+        }, 0, "Default Mix", "phaser:spine.AnimationStateData.defaultMix");
 
         static timeScale = SimpleProperty({ name: "timeScale", codeName: "animationState.timeScale" },
-            1, "Time Scale", "Multiplier for the delta time when the animation state is updated, causing time for all animations and mixes to play slower or faster. Defaults to 1.");
+            1, "Time Scale", "phaser:spine.AnimationState.timeScale");
 
         // bounds provider
 
         static bpType: IEnumProperty<SpineObject, BoundsProviderType> = {
             name: "bpType",
-            label: "BP",
+            label: "BP Type",
             tooltip: "The type of the bounds provider.",
             defValue: BoundsProviderType.SETUP_TYPE,
             values: [BoundsProviderType.SETUP_TYPE, BoundsProviderType.SKINS_AND_ANIMATION_TYPE],
@@ -84,7 +84,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static bpSkin: IEnumProperty<SpineObject, BoundsProviderSkin> = {
             name: "bpSkin",
             label: "BP Skin",
-            tooltip: "The skins to use in the SkinsAndAnimationBoundsProvider.",
+            tooltip: "phaser:spine.SkinsAndAnimationBoundsProvider(skins)",
             defValue: BoundsProviderSkin.CURRENT_SKIN,
             values: [BoundsProviderSkin.CURRENT_SKIN, BoundsProviderSkin.ALL_SKINS],
             getValue: obj => obj.bpSkin,
@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static bpAnimation: IEnumProperty<SpineObject, string> = {
             name: "bpAnimation",
             label: "BP Animation",
-            tooltip: "The animation to use in the SkinsAndAnimationBoundsProvider.",
+            tooltip: "phaser:spine.SkinsAndAnimationBoundsProvider(animation)",
             defValue: null,
             getEnumValues: obj => [...obj.skeleton.data.animations.map(a => a.name), null],
             getValue: obj => obj.bpAnimation,
@@ -113,7 +113,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static bpTimeStep = SimpleProperty(
             "bpTimeStep", SpineObject.DEFAULT_BP_TIME_STEP, "BP Time Step",
-            "The timeStep of the SkinAndAnimationBoundsProvider.",
+            "phaser:spine.SkinsAndAnimationBoundsProvider(timeStep)",
             false, (obj: SpineObject) => {
 
                 obj.updateBoundsProvider();

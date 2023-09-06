@@ -28,7 +28,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         public animationMixes: IAnimationMixes;
 
         constructor(scene: Scene, x: number, y: number, dataKey: string, atlasKey: string) {
-            // TODO: missing bounds provider
             super(scene, scene.spine, x, y, dataKey, atlasKey);
 
             this.dataKey = dataKey;

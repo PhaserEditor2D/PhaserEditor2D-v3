@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.createLock(comp, SpineComponent.animationMixes);
 
-                this.createLabel(comp, "Mixes", "The animation mixes.");
+                this.createLabel(comp, "Mixes", PhaserHelp("phaser:spine.AnimationStateData.setMixWith"));
 
                 const btn = this.createButton(comp, "Configure", () => {
 
