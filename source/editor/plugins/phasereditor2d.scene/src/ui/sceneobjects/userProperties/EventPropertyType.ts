@@ -20,11 +20,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Event";
         }
 
-        renderValue(value: any): string {
-
-            return value;
-        }
-
         private isPhaserBuiltIn(value: string) {
 
             return value.startsWith("Phaser.");

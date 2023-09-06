@@ -31,16 +31,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this.buildNumberFieldCode(prop, value);
         }
 
-        renderValue(value: number): string {
-
-            if (value === null || value === undefined) {
-
-                return "";
-            }
-
-            return value.toString();
-        }
-
         createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
 
             const element = document.createElement("input");

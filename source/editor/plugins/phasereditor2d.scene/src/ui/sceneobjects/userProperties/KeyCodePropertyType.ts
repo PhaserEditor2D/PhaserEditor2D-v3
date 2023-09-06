@@ -59,11 +59,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             section.createKeyCodeRow(parent, userProp.getComponentProperty(), lockIcon);
         }
 
-        renderValue(value: string): string {
-
-            return value;
-        }
-
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
             return this.buildExpressionFieldCode(prop, "number", `Phaser.Input.Keyboard.KeyCodes.${value}`);
