@@ -276,9 +276,10 @@ utils.makeHelpFile([
     "Phaser.Physics.Arcade.Collider(processCallback)",
     "Phaser.Physics.Arcade.Collider(callbackContext)",
 
-    "Phaser.Input.Keyboard.Key"
+    "Phaser.Input.Keyboard.Key",
 
-    
+    "spine.SpineGameObject",
+
 ], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/phaser.json");
 
 utils.makeHelpFile([
