@@ -27,6 +27,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
         protected componentTitleUpdated(): void {
 
             this.getEditor().refreshOutline();
+            this.getEditor().updateInspectorViewSection(PrefabPropertiesSection.SECTION_ID);
         }
 
         private getEditor() {

@@ -4,9 +4,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class PrefabPropertiesSection extends SceneSection {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.editor.properties.PrefabPropertiesSection";
+
         constructor(page: controls.properties.PropertyPage) {
             super(
-                page, "phasereditor2d.scene.ui.editor.properties.PrefabPropertiesSection",
+                page, PrefabPropertiesSection.SECTION_ID,
                 "Prefab Properties", false, true);
         }
 
