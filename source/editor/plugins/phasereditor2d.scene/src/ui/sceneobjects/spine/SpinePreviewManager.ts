@@ -163,6 +163,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             camera.zoom = z;
 
+            obj.animationState.addListener(new PreviewAnimationListener(this));
+
             this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
 
                 const scrollWidth = Math.abs(deltaY) * 2;
@@ -214,6 +216,36 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     const [from, to, duration] = mix;
 
                     obj.animationStateData.setMix(from, to, duration);
+                }
+            });
+        }
+    }
+
+    class PreviewAnimationListener implements spine.AnimationStateListener {
+
+        constructor(private scene: PreviewScene) {
+
+        }
+
+        event(entry: spine.TrackEntry, event: spine.Event) {
+
+            const cam = this.scene.cameras.main;
+
+            const text = this.scene.add.text(20, cam.height, event.data.name, {
+                color: "#fff",
+                stroke: "#000",
+                strokeThickness: 2,
+                fontSize: Math.max(14, Math.floor(18 * cam.zoom)) + "px"
+            });
+
+            this.scene.add.tween({
+                targets: text,
+                duration: 1000,
+                alpha: 0.2,
+                y: text.y - 100,
+                onComplete: () => {
+
+                    text.destroy();
                 }
             });
         }
