@@ -43,6 +43,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game.events.emit("updateAnimationMixes", animationMixes);
         }
 
+        setDisplayEvents(displayEvents: boolean) {
+
+            this._game.events.emit("updateDisplayEvents", displayEvents);
+        }
+
         createGame(data: IPreviewSceneData) {
 
             const { width, height } = this._parent.getBoundingClientRect();
@@ -68,6 +73,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game.canvas.classList.add("SpinePreviewCanvas");
 
             this._game.scene.add("PreviewScene", PreviewScene, true, data);
+            this._game.scene.add("EventScene", EventScene);
 
             setTimeout(() => this._game.scale.refresh(), 10);
         }
@@ -163,7 +169,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             camera.zoom = z;
 
-            obj.animationState.addListener(new PreviewAnimationListener(this));
+            this.scene.launch("EventScene");
+            const eventScene = this.scene.get("EventScene") as EventScene;
+
+            obj.animationState.addListener(eventScene);
 
             this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
 
@@ -221,24 +230,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
     }
 
-    class PreviewAnimationListener implements spine.AnimationStateListener {
+    class EventScene extends Phaser.Scene implements spine.AnimationStateListener {
 
-        constructor(private scene: PreviewScene) {
+        private _displayEvents = true;
 
+        create() {
+
+            this.game.events.on("updateDisplayEvents", (displayEvents: boolean) => {
+
+                this._displayEvents = displayEvents;
+            });
         }
 
         event(entry: spine.TrackEntry, event: spine.Event) {
 
-            const cam = this.scene.cameras.main;
+            if (!this._displayEvents) {
 
-            const text = this.scene.add.text(20, cam.height, event.data.name, {
+                return;
+            }
+
+            const cam = this.cameras.main;
+
+            const text = this.add.text(20, cam.height, event.data.name, {
                 color: "#fff",
                 stroke: "#000",
                 strokeThickness: 2,
                 fontSize: Math.max(14, Math.floor(18 * cam.zoom)) + "px"
             });
 
-            this.scene.add.tween({
+            text.setOrigin(0, 1);
+
+            this.add.tween({
                 targets: text,
                 duration: 1000,
                 alpha: 0.2,

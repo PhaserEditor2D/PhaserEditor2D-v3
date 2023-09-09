@@ -175,6 +175,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 check.checked = true;
             }
 
+            // Events
+            {
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Events"));
+
+                check.addEventListener("change", () => {
+
+                    this._previewManager.setDisplayEvents(check.checked);
+
+                    localStorage.setItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.events", check.checked ? "1" : "0");
+                });
+
+                check.checked = (localStorage.getItem("phasereditor2d.scene.ui.sceneobjects.SpinePreviewDialog.events") || "1") === "1";
+            }
+
             // Mix Time
             {
                 builder.createLabel(parentElement, "Default Mix");
