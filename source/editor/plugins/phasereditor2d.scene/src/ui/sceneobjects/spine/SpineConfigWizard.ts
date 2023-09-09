@@ -248,42 +248,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createElements(parent: HTMLElement) {
 
-            this._viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.SpineSkinPage");
+            try {
 
-            this._viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            this._viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider());
-            this._viewer.setLabelProvider(new controls.viewers.LabelProvider((skin: string) => {
+                this._viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.ui.sceneobjects.SpineSkinPage");
 
-                return skin ? skin : "NULL";
-            }));
+                this._viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+                this._viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider());
+                this._viewer.setLabelProvider(new controls.viewers.LabelProvider((skin: string) => {
+
+                    return skin ? skin : "NULL";
+                }));
 
 
-            const { dataAsset, atlasAsset } = this.getWizard().getSelection();
+                const { dataAsset, atlasAsset } = this.getWizard().getSelection();
 
-            const skeletonData = dataAsset.buildSkeleton(atlasAsset);
+                const skeletonData = dataAsset.buildSkeleton(atlasAsset);
 
-            const skins = skeletonData ? [...skeletonData.skins.map(s => s.name), null] : [];
+                const skins = skeletonData ? [...skeletonData.skins.map(s => s.name), null] : [];
 
-            this._viewer.setInput(skins);
+                this._viewer.setInput(skins);
 
-            const filteredViewer = new controls.viewers.FilteredViewerInElement(this._viewer, false);
+                const filteredViewer = new controls.viewers.FilteredViewerInElement(this._viewer, false);
 
-            parent.appendChild(filteredViewer.getElement());
+                parent.appendChild(filteredViewer.getElement());
 
-            this._viewer.eventSelectionChanged.addListener(sel => {
+                this._viewer.eventSelectionChanged.addListener(sel => {
 
-                this._skinName = this._viewer.getSelectionFirstElement();
+                    this._skinName = this._viewer.getSelectionFirstElement();
 
-                this.getWizard().updateWizardButtons();
-            });
+                    this.getWizard().updateWizardButtons();
+                });
 
-            setTimeout(() => {
+                setTimeout(() => {
 
-                this._viewer.repaint();
+                    this._viewer.repaint();
 
-            }, 100);
+                }, 100);
 
-            this.updateUI();
+                this.updateUI();
+                
+            } catch (e) {
+
+                alert(e.message);
+            }
         }
 
         private updateUI() {
