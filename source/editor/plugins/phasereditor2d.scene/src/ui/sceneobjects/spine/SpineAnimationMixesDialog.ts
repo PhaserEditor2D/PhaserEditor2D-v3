@@ -189,6 +189,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 check.checked = true;
             }
+
+            // Events
+
+            {
+                const check = builder.createCheckbox(parentElement, builder.createLabel(parentElement, "Preview Events"));
+
+                check.addEventListener("change", () => {
+
+                    this._previewManager.setDisplayEvents(check.checked);
+                });
+
+                check.checked = true;
+            }
         }
 
         private createObjectSettings(parentElement: HTMLDivElement, builder: controls.properties.FormBuilder) {
