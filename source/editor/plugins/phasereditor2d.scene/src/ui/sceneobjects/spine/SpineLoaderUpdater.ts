@@ -11,7 +11,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 scene.cache.json,
                 scene.cache.binary,
                 spineAtlasCache,
-                spineSkeletonCache];
+                spineSkeletonCache]
+                .filter(c => Boolean(c));
 
             for (const cache of caches) {
 
