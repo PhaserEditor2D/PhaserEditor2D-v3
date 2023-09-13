@@ -28,9 +28,12 @@ namespace phasereditor2d.pack.core.contentTypes {
 
                         if (typeof (skeletonData) === "object") {
 
-                            if (typeof skeletonData["spine"] === "string")
+                            const version = skeletonData["spine"];
 
-                            return CONTENT_TYPE_SPINE_JSON;
+                            if (typeof version  === "string" && version.startsWith("4")) {
+
+                                return CONTENT_TYPE_SPINE_JSON;
+                            }
                         }
                     }
 
@@ -41,7 +44,5 @@ namespace phasereditor2d.pack.core.contentTypes {
 
             return colibri.core.CONTENT_TYPE_ANY;
         }
-
     }
-
 }
