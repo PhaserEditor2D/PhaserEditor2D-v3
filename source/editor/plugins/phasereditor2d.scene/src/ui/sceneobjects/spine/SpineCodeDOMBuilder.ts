@@ -29,8 +29,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = args.obj as SpineObject;
             const objES = obj.getEditorSupport();
 
-            const { dataKey, atlasKey } = obj;
-
             const call = args.methodCallDOM;
 
             call.arg(args.sceneExpr);
@@ -38,8 +36,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.buildCreatePrefabInstanceCodeDOM_XY_Arguments(args);
 
-            call.argLiteral(dataKey);
-            call.argLiteral(atlasKey);
+            // The dataKey and atlasKey can't be overriden in instances
+            // so it uses those defined in the prefab class
+            // call.argLiteral(dataKey);
+            // call.argLiteral(atlasKey);
 
             if (objES.isUnlockedProperty(SpineComponent.bpType)) {
 
@@ -101,8 +101,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             ctr.arg("plugin", SpineCodeDOMBuilder.spineClassName(obj, "SpinePlugin"));
             ctr.arg("x", "number");
             ctr.arg("y", "number");
-            ctr.arg("dataKey", "string");
-            ctr.arg("atlasKey", "string");
+
+            // you can't override the dataKey and atlasKey of a spine game object
+            // ctr.arg("dataKey", "string");
+            // ctr.arg("atlasKey", "string");
+
             ctr.arg("boundsProvider", SpineCodeDOMBuilder.spineClassName(obj, "SpineGameObjectBoundsProvider"), true);
         }
 
@@ -130,8 +133,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
-            call.arg("dataKey");
-            call.arg("atlasKey");
+            // you can't overwrite the dataKey and atlasKey of a spine game object
+            // so the constructor doesn't receive different values
+            call.argLiteral(SpineComponent.dataKey.getValue(obj));
+            call.argLiteral(SpineComponent.atlasKey.getValue(obj));
 
             const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
 
