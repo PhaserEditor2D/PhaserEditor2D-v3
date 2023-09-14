@@ -133,10 +133,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.buildPrefabConstructorDeclarationSupperCallCodeDOM_XYParameters(args);
 
-            // you can't overwrite the dataKey and atlasKey of a spine game object
-            // so the constructor doesn't receive different values
-            call.argLiteral(SpineComponent.dataKey.getValue(obj));
-            call.argLiteral(SpineComponent.atlasKey.getValue(obj));
+            if (!objES.isPrefabInstance()) {
+                // hey, this is a prefab variant
+                // the dataKey and atlasKey are set in the super prefab
+                call.argLiteral(SpineComponent.dataKey.getValue(obj));
+                call.argLiteral(SpineComponent.atlasKey.getValue(obj));
+            }
 
             const expr = SpineCodeDOMBuilder.generateNewBoundsProviderExpression(obj, args.unit);
 
