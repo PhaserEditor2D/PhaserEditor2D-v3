@@ -1298,6 +1298,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     initObjData = childData;
                 }
 
+                // Another very ugly solution for reading the spine objects.
+                // We should find a way to generalize the deserialization of objects
+                // we complex construction
+                if (childData.type === "SpineGameObject") {
+
+                    initObjData.dataKey = childData["dataKey"];
+                    initObjData.atlasKey = childData["atlasKey"];
+                }
+
                 // creates an empty object
                 const sprite = maker.createObject(initObjData);
 
