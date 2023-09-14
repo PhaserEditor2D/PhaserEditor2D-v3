@@ -213,5 +213,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return new SpineCodeDOMBuilder();
         }
+
+        override createInitObjectDataFromChild(childData: core.json.IObjectData): core.json.IObjectData {
+
+            const data = super.createInitObjectDataFromChild(childData);
+
+            data["dataKey"] = childData["dataKey"];
+            data["atlasKey"] = childData["atlasKey"];
+
+            return data;
+        }
     }
 }

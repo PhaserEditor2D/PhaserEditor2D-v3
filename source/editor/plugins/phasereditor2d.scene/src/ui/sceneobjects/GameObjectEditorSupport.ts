@@ -1281,31 +1281,20 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const childData of children) {
 
-                let initObjData: any = {
-                    id: childData.id,
-                    prefabId: childData.prefabId,
-                    type: childData.type,
-                    label: childData.label,
-                };
+                const serializer = maker.getSerializer(childData);
 
-                // This is a very very ugly solution for this issue:
-                // https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/229
-                // but making a bigger change in serialization at this moment could introduce a lot of bugs
-                // and the TilemapLayer is a unique case in Phaser & the editor.
-                // For example, you cannot create a prefab instance of a TilemapLayer
-                if (childData.type === "TilemapLayer") {
+                const type = serializer.getType();
 
-                    initObjData = childData;
+                const ext = ScenePlugin.getInstance().getGameObjectExtensionByObjectType(type);
+
+                if (!ext) {
+
+                    alert(`Unknown type "${type}" of game object "${childData.id}".`);
+
+                    continue;
                 }
 
-                // Another very ugly solution for reading the spine objects.
-                // We should find a way to generalize the deserialization of objects
-                // we complex construction
-                if (childData.type === "SpineGameObject") {
-
-                    initObjData.dataKey = childData["dataKey"];
-                    initObjData.atlasKey = childData["atlasKey"];
-                }
+                const initObjData = ext.createInitObjectDataFromChild(childData);
 
                 // creates an empty object
                 const sprite = maker.createObject(initObjData);
@@ -1338,7 +1327,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 i++;
             }
         }
-
+        
         /**
          * Build the children data but modified by the nested prefab info.
          * 

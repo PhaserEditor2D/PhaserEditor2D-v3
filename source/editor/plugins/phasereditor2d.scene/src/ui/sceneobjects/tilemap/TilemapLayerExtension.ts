@@ -188,6 +188,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return false;
         }
+
+        override createInitObjectDataFromChild(childData: core.json.IObjectData): core.json.IObjectData {
+
+            // This is a very very ugly solution for this issue:
+            // https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/229
+            // but making a bigger change in serialization at this moment could introduce a lot of bugs
+            // and the TilemapLayer is a rare case in Phaser & the editor.
+            // For example, you cannot create a prefab instance of a TilemapLayer
+
+            return childData;
+        }
     }
 
     class DialogLabelProvider implements controls.viewers.ILabelProvider {

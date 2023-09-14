@@ -133,5 +133,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.
          */
         abstract getCodeDOMBuilder(): GameObjectCodeDOMBuilder;
+
+        createInitObjectDataFromChild(childData: json.IObjectData): json.IObjectData {
+
+            return {
+                id: childData.id,
+                prefabId: childData.prefabId,
+                type: childData.type,
+                label: childData.label,
+            }
+        }
     }
 }
