@@ -31,9 +31,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const spineAtlasAsset = packCache.findAsset(obj.atlasKey) as pack.core.SpineAtlasAssetPackItem;
 
+            if (!spineAsset || !spineAtlasAsset) {
+
+                return null;
+            }
+
             const skin = obj.skeleton.skin || obj.skeleton.data.defaultSkin;
 
-            if (!spineAsset || !spineAtlasAsset) {
+            if (!skin) {
 
                 return null;
             }
