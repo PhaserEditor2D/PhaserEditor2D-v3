@@ -1044,9 +1044,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
         static registerSpineCommands(manager: colibri.ui.ide.commands.CommandManager) {
 
-             // select all same skeleton
-            
-             manager.add({
+            // select all same skeleton
+
+            manager.add({
                 command: {
                     id: CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON,
                     name: "Select All With Same Spine Skeleton",
@@ -2036,6 +2036,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     editor, newFile));
 
                             editor.refreshBlocks();
+
+                            console.log(`Compiling scene ${newFile.getName()}`);
+
+                            core.code.SceneCompileAllExtension.compileSceneFile(newFile);
                         });
 
                         const dlg = ext.createDialog({

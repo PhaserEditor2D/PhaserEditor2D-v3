@@ -12,6 +12,7 @@
 * Show event icons in the Event property's dialog.
 * Adds support to Spine animations.
 * Allows downloading all v3 files from the Phaser Editor 2D website.
+* [249](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/249) Auto compile the scene file when it is created.
 
 ## v3.62.2, Jul 2, 2023
 
