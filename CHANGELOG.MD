@@ -11,6 +11,7 @@
 * Shows Prefab Properties section also when a property is selected.
 * Show event icons in the Event property's dialog.
 * Adds support to Spine animations.
+* Allows downloading all v3 files from the Phaser Editor 2D website.
 
 ## v3.62.2, Jul 2, 2023
 
