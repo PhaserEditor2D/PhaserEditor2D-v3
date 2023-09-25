@@ -2,7 +2,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class SpineMixesDialog extends controls.dialogs.Dialog {
+    export class SpineGameObjectPreviewDialog extends controls.dialogs.Dialog {
         private _leftArea: HTMLDivElement;
         private _rightArea: HTMLDivElement;
         private _previewManager: SpinePreviewManager;
@@ -409,7 +409,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createUI();
 
-            this.setTitle("Spine Animation Mixes");
+            this.setTitle("Spine Game Object Preview");
 
             if (this._isUnlockedDefaultMix || this._isUnlockedMixes || this._isUnlockedTimeScale) {
 

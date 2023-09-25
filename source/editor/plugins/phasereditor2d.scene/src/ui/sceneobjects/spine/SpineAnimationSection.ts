@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const btn = this.createButton(comp, "Configure", () => {
 
-                    const dlg = new SpineMixesDialog(this.getSelectionFirstElement());
+                    const dlg = new SpineGameObjectPreviewDialog(this.getSelectionFirstElement());
 
                     dlg.create();
                 });
