@@ -30,10 +30,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.getObject();
 
-            const b = obj.getBounds();
+            const bounds = obj.getBounds();
 
-            const originX = (obj.x - b.x) / b.width;
-            const originY = (obj.y - b.y) / b.height;
+            let { x, y } = obj;
+
+            if (obj.parentContainer) {
+
+                const p = obj.parentContainer
+                    .getBoundsTransformMatrix()
+                    .transformPoint(obj.x, obj.y);
+
+                x = p.x;
+                y = p.y;
+            }
+
+            const originX = (x - bounds.x) / bounds.width;
+            const originY = (y - bounds.y) / bounds.height;
 
             return { originX, originY };
         }
