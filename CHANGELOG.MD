@@ -10,9 +10,10 @@
 * Shows property shortcuts in the prefab properties section.
 * Shows Prefab Properties section also when a property is selected.
 * Show event icons in the Event property's dialog.
-* Adds support to Spine animations.
 * Allows downloading all v3 files from the Phaser Editor 2D website.
 * [249](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/249) Auto compile the scene file when it is created.
+* Adds support to Spine animations.
+* Adds spine project template to marketplace.
 
 ## v3.62.2, Jul 2, 2023
 
