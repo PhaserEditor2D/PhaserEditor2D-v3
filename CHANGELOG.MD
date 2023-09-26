@@ -14,6 +14,7 @@
 * [249](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/249) Auto compile the scene file when it is created.
 * Adds support to Spine animations.
 * Adds spine project template to marketplace.
+* [#289](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/289) Fixes hit area computation on nested containers.
 
 ## v3.62.2, Jul 2, 2023
 
