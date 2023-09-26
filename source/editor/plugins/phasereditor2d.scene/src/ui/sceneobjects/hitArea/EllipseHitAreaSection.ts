@@ -17,6 +17,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.createMenu(menu);
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/input-hit-area-ellipse.html";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElementWithPropertiesXY(parent);
