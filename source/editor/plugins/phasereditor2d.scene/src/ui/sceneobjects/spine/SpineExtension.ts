@@ -155,7 +155,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const objES = obj.getEditorSupport();
 
-            objES.setLabel(dataAsset.getKey());
+            if (skinName && skinName !== "default") {
+
+                objES.setLabel(skinName);
+
+            } else {
+
+                objES.setLabel(dataAsset.getKey());
+            }
 
             // select a skin
             SpineComponent.skin.setValue(obj, skinName);
