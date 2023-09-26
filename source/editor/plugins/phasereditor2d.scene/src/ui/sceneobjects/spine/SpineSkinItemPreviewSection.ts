@@ -10,6 +10,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, SpineSkinItemPreviewSection.ID, "Spine Preview", true, false);
         }
 
+        createMenu(menu: controls.Menu): void {
+            
+            super.createMenu(menu);
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, "scene-editor/spine-animations-assets-preview.html");
+        }
+
         protected getSelectedImage(): controls.IImage {
 
             return ScenePlugin.getInstance()

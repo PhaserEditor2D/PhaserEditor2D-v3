@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.SpineSection", "Spine");
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/spine-animations-game-object-properties.html";
+        }
+
         createForm(parent: HTMLDivElement): void {
 
             const comp = this.createGridElement(parent, 3);
@@ -88,10 +93,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createMenu(menu: controls.Menu): void {
 
-            super.createMenu(menu);
-
             menu.addCommand(ui.editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON);
             menu.addCommand(ui.editor.commands.CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN);
+
+            super.createMenu(menu);
         }
 
         canEditAll(selection: SpineObject[]): boolean {

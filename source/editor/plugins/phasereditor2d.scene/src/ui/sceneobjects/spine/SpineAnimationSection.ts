@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.SpineAnimartionSection", "Spine Animation", false, true);
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/spine-animations-game-object-animations.html";
+        }
+
         createForm(parent: HTMLDivElement): void {
 
             const comp = this.createGridElement(parent, 3);

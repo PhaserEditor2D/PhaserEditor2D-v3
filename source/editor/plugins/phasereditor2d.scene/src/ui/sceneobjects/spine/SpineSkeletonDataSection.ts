@@ -8,6 +8,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.SpineSkeletonDataSection", "Spine Skeleton", false, false);
         }
 
+        hasMenu(): boolean {
+            
+            return true;
+        }
+
+        createMenu(menu: controls.Menu): void {
+            
+            super.createMenu(menu);
+
+            ide.IDEPlugin.getInstance().createHelpMenuItem(menu, "scene-editor/spine-animations-assets-preview.html");
+        }
+
         createForm(parent: HTMLDivElement): void {
 
             const comp = this.createGridElement(parent, 2);
