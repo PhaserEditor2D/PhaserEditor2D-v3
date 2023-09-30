@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.62.3-development.
+## v3.63.0 - Sep 30, 2023
 
 * Opens the file given in the `openfile` URL search parameter. Like in `?openfile=some/file`.
 * Show splash before loading the workbench.
