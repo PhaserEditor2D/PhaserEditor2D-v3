@@ -1,6 +1,6 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class ScriptNodeCodeResources extends core.code.CodeResources {
+    export class ScriptNodeCodeResources extends core.code.CodeResources2 {
 
         private static _instance = new ScriptNodeCodeResources();
 
@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         private constructor() {
-            super(ScenePlugin.getInstance());
+            super("phasereditor2d.scene/code/scriptnode");
 
             this.addCodeResource("ScriptNode");
         }

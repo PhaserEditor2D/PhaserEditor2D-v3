@@ -87,8 +87,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private createSearchButton(getValue: () => any, callback: (value: string) => void) {
 
-            console.log("createSearchButton")
-
             const iconControl = new controls.IconControl(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
 
             const btn = document.createElement("button");

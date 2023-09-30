@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_GROUP));
+            return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_GROUP));
         }
 
         setInteractive() {

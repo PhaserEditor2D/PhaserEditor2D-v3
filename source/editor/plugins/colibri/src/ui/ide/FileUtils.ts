@@ -59,19 +59,28 @@ namespace colibri.ui.ide {
             return this.getFileString(file);
         }
 
+        static getFileBinary(file: io.FilePath): ArrayBuffer {
+
+            return Workbench.getWorkbench().getFileBinaryCache().getContent(file);
+        }
+
         static getFileString(file: io.FilePath): string {
+
             return Workbench.getWorkbench().getFileStringCache().getContent(file);
         }
 
         static setFileString_async(file: io.FilePath, content: string): Promise<void> {
+
             return Workbench.getWorkbench().getFileStringCache().setContent(file, content);
         }
 
         static getFileStringCache() {
+
             return Workbench.getWorkbench().getFileStringCache();
         }
 
         static getFileStorage() {
+
             return Workbench.getWorkbench().getFileStorage();
         }
 
@@ -144,6 +153,13 @@ namespace colibri.ui.ide {
         static async preloadFileString(file: io.FilePath): Promise<ui.controls.PreloadResult> {
 
             const cache = Workbench.getWorkbench().getFileStringCache();
+
+            return cache.preload(file);
+        }
+
+        static async preloadFileBinary(file: io.FilePath): Promise<ui.controls.PreloadResult> {
+
+            const cache = Workbench.getWorkbench().getFileBinaryCache();
 
             return cache.preload(file);
         }

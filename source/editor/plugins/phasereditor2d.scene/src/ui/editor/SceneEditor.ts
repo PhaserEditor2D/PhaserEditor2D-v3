@@ -15,9 +15,6 @@ namespace phasereditor2d.scene.ui.editor {
     export class SceneEditor extends colibri.ui.ide.FileEditor {
 
         static _factory: colibri.ui.ide.ContentTypeEditorFactory;
-        private _menuCreator: SceneEditorMenuCreator;
-        private _canvasContainer: HTMLDivElement;
-        private _layoutToolsManager: LayoutToolsManager;
 
         static getFactory() {
 
@@ -26,6 +23,9 @@ namespace phasereditor2d.scene.ui.editor {
             ));
         }
 
+        private _menuCreator: SceneEditorMenuCreator;
+        private _canvasContainer: HTMLDivElement;
+        private _layoutToolsManager: LayoutToolsManager;
         private _blocksProvider: blocks.SceneEditorBlocksProvider;
         private _outlineProvider: outline.SceneEditorOutlineProvider;
         private _propertyProvider: properties.SceneEditorSectionProvider;
@@ -343,6 +343,11 @@ namespace phasereditor2d.scene.ui.editor {
                 physics: {
                     default: "arcade"
                 },
+                plugins: {
+                    scene: [
+                        { key: "spine.SpinePlugin", plugin: spine.SpinePlugin, mapping: "spine" }
+                    ]
+                },
                 scene: this._scene,
             });
 
@@ -384,7 +389,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (ScenePlugin.getInstance().getSceneFinder().isScriptPrefabFile(file)) {
 
-                    return ScenePlugin.getInstance().getIcon(ICON_BUILD);
+                    return resources.getIcon(resources.ICON_BUILD);
                 }
 
                 const img = SceneThumbnailCache.getInstance().getContent(file);
@@ -791,25 +796,38 @@ namespace phasereditor2d.scene.ui.editor {
             this._currentRefreshHash = await this.buildDependenciesHash();
         }
 
-        async onPartActivated() {
+        override async onPartActivated() {
 
             super.onPartActivated();
 
-            {
-                if (this._scene) {
+            await this.updateWithExternalChanges();
+        }
 
-                    const hash = await this.buildDependenciesHash();
+        protected onFileStorageChanged(change: io.FileStorageChange): void {
 
-                    if (this._currentRefreshHash !== null
+            if (change.getCause() === colibri.core.io.FileStorageChangeCause.WINDOW_FOCUS) {
 
-                        && this._currentRefreshHash !== undefined
+                this.updateWithExternalChanges();
+            }
+        }
 
-                        && hash !== this._currentRefreshHash) {
+        private async updateWithExternalChanges() {
 
-                        console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
+            console.log("SceneEditor.updateWithExternalChanges()");
 
-                        await this.refreshScene();
-                    }
+            if (this._scene) {
+
+                const hash = await this.buildDependenciesHash();
+
+                if (this._currentRefreshHash !== null
+
+                    && this._currentRefreshHash !== undefined
+
+                    && hash !== this._currentRefreshHash) {
+
+                    console.log("Scene Editor: " + this.getInput().getFullName() + " dependency changed.");
+
+                    await this.refreshScene();
                 }
             }
 

@@ -26,7 +26,7 @@ namespace colibri.ui.ide {
             await super.save();
         }
 
-        private onFileStorageChanged(change: io.FileStorageChange) {
+        protected onFileStorageChanged(change: io.FileStorageChange) {
 
             const editorFile = this.getInput();
 

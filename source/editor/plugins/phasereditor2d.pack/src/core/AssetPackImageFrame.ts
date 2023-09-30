@@ -27,6 +27,7 @@ namespace phasereditor2d.pack.core {
         }
 
         getPackItem() {
+            
             return this._packItem;
         }
     }

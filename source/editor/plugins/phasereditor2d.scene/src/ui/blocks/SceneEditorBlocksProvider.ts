@@ -95,6 +95,7 @@ namespace phasereditor2d.scene.ui.blocks {
                     const item = this.getFreshItem(obj);
 
                     if (item) {
+
                         set.add(item);
                     }
 
@@ -107,9 +108,26 @@ namespace phasereditor2d.scene.ui.blocks {
                         const frame = item.findFrame(obj.getName());
 
                         if (frame) {
+
                             set.add(frame);
                         }
                     }
+                } else if (obj instanceof pack.core.SpineSkinItem) {
+
+                    const item  = this.getFreshItem(obj.spineAsset);
+
+                    if (item && item instanceof pack.core.SpineAssetPackItem) {
+
+                        const skins = item.getGuessSkinItems();
+
+                        const newName = skins.find(n => n.skinName === obj.skinName);
+
+                        if (newName) {
+
+                            set.add(newName);
+                        }
+                    }
+
                 } else {
 
                     set.add(obj);

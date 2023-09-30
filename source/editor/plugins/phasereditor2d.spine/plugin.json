@@ -1,0 +1,11 @@
+{
+    "id": "phasereditor2d.spine",
+    "priority": -90,
+    "scripts": [
+        "scripts/spine-phaser.min.js",
+        "_out/phasereditor2d.spine.js"
+    ],
+    "scripts-dev": [
+        "scripts/spine-phaser.js"
+    ]
+}

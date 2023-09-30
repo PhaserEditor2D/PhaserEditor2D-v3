@@ -7,7 +7,7 @@ namespace phasereditor2d.pack.ui.importers {
             super(core.contentTypes.CONTENT_TYPE_AUDIO_SPRITE, core.AUDIO_SPRITE_TYPE);
         }
 
-        createItemData(pack: core.AssetPack,file: colibri.core.io.FilePath) {
+        createItemData(pack: core.AssetPack, file: colibri.core.io.FilePath) {
 
             const reg = ide.Workbench.getWorkbench().getContentTypeRegistry();
 

@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.viewers {
 
             if (finder.isScriptPrefabFile(file)) {
 
-                image = ScenePlugin.getInstance().getIcon(ICON_BUILD);
+                image = resources.getIcon(resources.ICON_BUILD);
 
             } else {
 

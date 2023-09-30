@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createEnumField<TValue>(
             parent: HTMLElement, property: IEnumProperty<T, TValue>, checkUnlocked = true, filter?: (v: TValue) => boolean) {
 
-            const getItems = () => property.values
+            const getItems = () => (property.values ?? property.getEnumValues(this.getSelection()[0]))
                 .filter(v => !filter || filter(v))
                 .map(value => {
                     return {
@@ -89,7 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         createStringField(
             parent: HTMLElement, property: IProperty<T>,
-            checkUnlock = true, readOnlyOnMultiple = false, multiLine = false) {
+            checkUnlock = true, readOnlyOnMultiple = false, multiLine = false, forceReadOnly = false) {
 
             const text = multiLine ? this.createTextArea(parent, false) : this.createText(parent, false);
 
@@ -103,7 +103,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.addUpdater(() => {
 
-                text.readOnly = checkUnlock && !this.isUnlocked(property);
+                text.readOnly = forceReadOnly || checkUnlock && !this.isUnlocked(property);
+
 
                 if (readOnlyOnMultiple) {
 
@@ -200,7 +201,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         createKeyCodeField(parent: HTMLElement, property: IProperty<T>, checkUnlock = true) {
 
             const btn = this.createButton(parent, "KeyCode", e => {
-                
+
                 const viewer = new KeyboardKeysViewer();
 
                 const selObj = this.getSelectionFirstElement();
@@ -209,11 +210,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 viewer.revealAndSelect(keyCode);
 
                 const dlg = new controls.dialogs.ViewerDialog(viewer, false);
-                
+
                 dlg.create();
 
                 dlg.setTitle("Select Key Code");
-                
+
                 dlg.addOpenButton("Select", (sel) => {
 
                     const value = sel[0];

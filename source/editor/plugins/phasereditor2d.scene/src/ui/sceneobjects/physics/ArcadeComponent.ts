@@ -463,7 +463,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        getExplicitTypesForMethodFactory() {
+        getExplicitTypesForMethodFactory(baseType: string) {
 
             const obj = this.getObject();
             const objES = obj.getEditorSupport();
@@ -473,8 +473,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             } else {
 
                 if (objES.isUnlockedProperty(ArcadeComponent.bodyType)) {
-
-                    const baseType = objES.getExtension().getPhaserTypeName();
 
                     const bodyType = ArcadeComponent.isStaticBody(obj) ? "StaticBody" : "Body";
 

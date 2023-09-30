@@ -8,6 +8,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
         private _layout: "grid" | "tree";
         private _fileRendererProvider: files.ui.viewers.FileCellRendererProvider;
+        
 
         constructor(layout: "grid" | "tree") {
             this._layout = layout;
@@ -17,9 +18,19 @@ namespace phasereditor2d.pack.ui.viewers {
 
         getCellRenderer(element: any): controls.viewers.ICellRenderer {
 
+            const exts = AssetPackPlugin.getInstance().getViewerExtensions();
+            
+            for(const ext of exts) {
+
+                if (ext.acceptObject(element)) {
+
+                    return ext.getCellRenderer(element);
+                }
+            }
+
             if (element instanceof core.AssetPack) {
 
-                return this.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ASSET_PACK));
+                return this.getIconRenderer(resources.getIcon(resources.ICON_ASSET_PACK));
 
             } else if (AssetPackPlugin.getInstance().isAssetPackItemType(element)) {
 
@@ -34,7 +45,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 const extensions = AssetPackPlugin.getInstance().getExtensions();
 
-                for(const ext of extensions) {
+                for (const ext of extensions) {
 
                     const renderer = ext.getCellRenderer(element, this._layout);
 

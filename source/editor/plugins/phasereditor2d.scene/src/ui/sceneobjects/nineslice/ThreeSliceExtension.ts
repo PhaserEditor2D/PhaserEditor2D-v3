@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.GameObjects.NineSlice",
                 typeName: "ThreeSlice",
                 category: SCENE_OBJECT_IMAGE_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_3_SLICE)
+                icon: resources.getIconDescriptor(resources.ICON_3_SLICE)
             });
         }
 

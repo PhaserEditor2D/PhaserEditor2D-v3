@@ -65,11 +65,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Option";
         }
 
-        renderValue(value: string): string {
-
-            return value;
-        }
-
         createEditorElement(getValue: () => string, setValue: (value: string) => void): IPropertyEditor {
 
             const items = this._options.map(option => ({

@@ -4,9 +4,11 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
     export class PrefabPropertiesSection extends SceneSection {
 
+        static SECTION_ID = "phasereditor2d.scene.ui.editor.properties.PrefabPropertiesSection";
+
         constructor(page: controls.properties.PropertyPage) {
             super(
-                page, "phasereditor2d.scene.ui.editor.properties.PrefabPropertiesSection",
+                page, PrefabPropertiesSection.SECTION_ID,
                 "Prefab Properties", false, true);
         }
 
@@ -23,7 +25,33 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 this.getEditor().setSelection([obj]);
             };
 
-            SingleUserPropertySection.createAddProprtyButton(comp, this, action => this.runOperation(action), selector);
+            const linksComp = this.createGridElement(comp, 1);
+
+            comp.appendChild(linksComp);
+
+            this.addUpdater(() => {
+
+                linksComp.innerHTML = "";
+
+                const prefabProps = this.getScene().getPrefabUserProperties();
+
+                const props = prefabProps.getProperties();
+
+                for (const prop of props) {
+
+                    const link = document.createElement("a");
+                    link.href = "#";
+                    link.textContent = prop.getLabel();
+                    link.addEventListener("click", () => {
+
+                        this.getEditor().setSelection([prop]);
+                    });
+
+                    linksComp.appendChild(link);
+                }
+            });
+
+            SingleUserPropertySection.createAddPropertyButton(comp, this, action => this.runOperation(action), selector);
         }
 
         runOperation(action: (props?: sceneobjects.UserPropertiesManager) => void, updateSelection = true) {
@@ -33,12 +61,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
         canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof Scene && obj.isPrefabSceneType() || obj instanceof sceneobjects.PrefabUserProperties;
+            return obj instanceof Scene && obj.isPrefabSceneType()
+                || obj instanceof sceneobjects.PrefabUserProperties
+                || obj instanceof sceneobjects.UserProperty;
         }
 
         canEditNumber(n: number): boolean {
 
-            return n === 1;
+            return n > 0;
         }
     }
 }

@@ -3,53 +3,6 @@ namespace phasereditor2d.scene {
     import ide = colibri.ui.ide;
     import controls = colibri.ui.controls;
 
-    export const ICON_GROUP = "group";
-    export const ICON_TRANSLATE = "translate";
-    export const ICON_ANGLE = "angle";
-    export const ICON_SCALE = "scale";
-    export const ICON_ORIGIN = "origin";
-    export const ICON_SELECT_REGION = "select-region";
-    export const ICON_BUILD = "build";
-    export const ICON_LOCKED = "locked";
-    export const ICON_UNLOCKED = "unlocked";
-    export const ICON_LIST = "list";
-    export const ICON_USER_COMPONENT = "user-component";
-    export const ICON_USER_PROPERTY = "dot";
-    export const ICON_IMAGE_TYPE = "image-type";
-    export const ICON_SPRITE_TYPE = "sprite-type";
-    export const ICON_TILESPRITE_TYPE = "tilesprite";
-    export const ICON_TEXT_TYPE = "text-type";
-    export const ICON_BITMAP_FONT_TYPE = "bitmapfont-type";
-    export const ICON_LAYER = "layer";
-    export const ICON_ALIGN_LEFT = "align-left";
-    export const ICON_ALIGN_CENTER = "align-center";
-    export const ICON_ALIGN_RIGHT = "align-right";
-    export const ICON_ALIGN_TOP = "align-top";
-    export const ICON_ALIGN_MIDDLE = "align-middle";
-    export const ICON_ALIGN_BOTTOM = "align-bottom";
-    export const ICON_BORDER_LEFT = "border-left";
-    export const ICON_BORDER_CENTER = "border-center";
-    export const ICON_BORDER_RIGHT = "border-right";
-    export const ICON_BORDER_TOP = "border-top";
-    export const ICON_BORDER_MIDDLE = "border-middle";
-    export const ICON_BORDER_BOTTOM = "border-bottom";
-    export const ICON_GRID = "grid";
-    export const ICON_COLUMN = "column";
-    export const ICON_ROW = "row";
-    export const ICON_ORIGIN_TOP_LEFT = "origin-topleft";
-    export const ICON_ORIGIN_TOP_CENTER = "origin-topcenter";
-    export const ICON_ORIGIN_TOP_RIGHT = "origin-topright";
-    export const ICON_ORIGIN_MIDDLE_LEFT = "origin-middleleft";
-    export const ICON_ORIGIN_MIDDLE_CENTER = "origin-middlecenter";
-    export const ICON_ORIGIN_MIDDLE_RIGHT = "origin-middleright";
-    export const ICON_ORIGIN_BOTTOM_LEFT = "origin-bottomleft";
-    export const ICON_ORIGIN_BOTTOM_CENTER = "origin-bottomcenter";
-    export const ICON_ORIGIN_BOTTOM_RIGHT = "origin-bottomright";
-    export const ICON_ARCADE_COLLIDER = "collider";
-    export const ICON_KEYBOARD_KEY = "keyboard-key";
-    export const ICON_9_SLICE = "9slice";
-    export const ICON_3_SLICE = "3slice";
-
     export const SCENE_OBJECT_IMAGE_CATEGORY = "Texture";
     export const SCENE_OBJECT_TEXT_CATEGORY = "String";
     export const SCENE_OBJECT_GROUPING_CATEGORY = "Grouping";
@@ -58,6 +11,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
     export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
+    export const SCENE_OBJECT_SPINE_CATEGORY = "Spine";
 
     export const SCENE_OBJECT_CATEGORIES = [
         SCENE_OBJECT_IMAGE_CATEGORY,
@@ -67,6 +21,7 @@ namespace phasereditor2d.scene {
         SCENE_OBJECT_SHAPE_CATEGORY,
         SCENE_OBJECT_TILEMAP_CATEGORY,
         SCENE_OBJECT_INPUT_CATEGORY,
+        SCENE_OBJECT_SPINE_CATEGORY,
         SCENE_OBJECT_SCRIPT_CATEGORY
     ];
 
@@ -85,23 +40,18 @@ namespace phasereditor2d.scene {
         static DEFAULT_EDITOR_PIXEL_ART = true;
 
         private _sceneFinder: core.json.SceneFinder;
-
         private _docs: phasereditor2d.ide.core.PhaserDocs;
         private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
+        private _spineThumbnailCache: ui.SpineThumbnailCache;
 
         static getInstance() {
+
             return this._instance;
         }
 
         private constructor() {
+
             super("phasereditor2d.scene");
-
-            this._docs = new phasereditor2d.ide.core.PhaserDocs(
-                this,
-                "data/phaser-docs.json",
-                "data/events-docs.json");
-
-            this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/events-docs.json");
         }
 
         async starting() {
@@ -135,14 +85,28 @@ namespace phasereditor2d.scene {
             ScenePlugin.DEFAULT_EDITOR_PIXEL_ART = pixelArt;
         }
 
-        getPhaserDocs() {
-
-            return this._docs;
-        }
-
         getPhaserEventsDocs() {
 
+            if (!this._eventsDocs) {
+
+                this._eventsDocs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance(),
+                    "phasereditor2d.scene/docs/events.json");
+            }
+
             return this._eventsDocs;
+        }
+
+        getPhaserDocs() {
+
+            if (!this._docs) {
+
+                this._docs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance(),
+                    "phasereditor2d.scene/docs/phaser.json");
+            }
+
+            return this._docs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -154,32 +118,6 @@ namespace phasereditor2d.scene {
             reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
             reg.addExtension(new core.migrations.UnlockPositionMigration_v1_to_v2());
             reg.addExtension(new core.migrations.TextAlignMigration());
-
-            // preload docs
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ScenePlugin.getInstance().getPhaserDocs().preload();
-            }));
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ScenePlugin.getInstance().getPhaserEventsDocs().preload();
-            }));
-
-            // preload UserComponent files
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ui.editor.usercomponent.UserComponentCodeResources.getInstance().preload();
-            }));
-
-            // preload ScriptNode files
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await ui.sceneobjects.ScriptNodeCodeResources.getInstance().preload();
-            }));
 
             ui.sceneobjects.ScriptNodeCodeResources.getInstance().registerCommands(
                 "phasereditor.scene.ScriptNodeCategory", "ScriptNode", reg);
@@ -215,68 +153,10 @@ namespace phasereditor2d.scene {
                 )
             );
 
-            // icons loader
-
             reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_USER_COMPONENT,
-                    ICON_USER_PROPERTY,
-                    ICON_SELECT_REGION,
-                    ICON_TRANSLATE,
-                    ICON_SCALE,
-                    ICON_ANGLE,
-                    ICON_ORIGIN,
-                    ICON_TEXT_TYPE,
-                    ICON_BITMAP_FONT_TYPE,
-                    ICON_SPRITE_TYPE,
-                    ICON_TILESPRITE_TYPE,
-                    ICON_LIST,
-                    ICON_IMAGE_TYPE,
-                    ICON_GROUP,
-                    ICON_BUILD,
-                    ICON_LAYER,
-                    ICON_ALIGN_LEFT,
-                    ICON_ALIGN_CENTER,
-                    ICON_ALIGN_RIGHT,
-                    ICON_ALIGN_TOP,
-                    ICON_ALIGN_MIDDLE,
-                    ICON_ALIGN_BOTTOM,
-                    ICON_BORDER_LEFT,
-                    ICON_BORDER_CENTER,
-                    ICON_BORDER_RIGHT,
-                    ICON_BORDER_TOP,
-                    ICON_BORDER_MIDDLE,
-                    ICON_BORDER_BOTTOM,
-                    ICON_GRID,
-                    ICON_COLUMN,
-                    ICON_ROW,
-                    ICON_ORIGIN_TOP_LEFT,
-                    ICON_ORIGIN_TOP_CENTER,
-                    ICON_ORIGIN_TOP_RIGHT,
-                    ICON_ORIGIN_MIDDLE_LEFT,
-                    ICON_ORIGIN_MIDDLE_CENTER,
-                    ICON_ORIGIN_MIDDLE_RIGHT,
-                    ICON_ORIGIN_BOTTOM_LEFT,
-                    ICON_ORIGIN_BOTTOM_CENTER,
-                    ICON_ORIGIN_BOTTOM_RIGHT,
-                    ICON_ARCADE_COLLIDER,
-                    ICON_KEYBOARD_KEY,
-                    ICON_9_SLICE,
-                    ICON_3_SLICE
-                ])
-            );
-
-            reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_LOCKED,
-                    ICON_UNLOCKED
-                ])
-            );
-
-            reg.addExtension(
-                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(this, [
+                colibri.ui.ide.ContentTypeIconExtension.withPluginIcons(resources.ResourcesPlugin.getInstance(), [
                     {
-                        iconName: ICON_USER_COMPONENT,
+                        iconName: resources.ICON_USER_COMPONENT,
                         contentType: core.CONTENT_TYPE_USER_COMPONENTS
                     }
                 ]));
@@ -286,7 +166,8 @@ namespace phasereditor2d.scene {
             reg.addExtension(
                 new ui.sceneobjects.ImageLoaderExtension(),
                 new ui.sceneobjects.BitmapFontLoaderUpdater(),
-                new ui.sceneobjects.TilemapLoaderUpdater()
+                new ui.sceneobjects.TilemapLoaderUpdater(),
+                new ui.sceneobjects.SpineLoaderUpdater()
             );
 
             // outline extensions
@@ -354,7 +235,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ArcadeSpriteExtension.getInstance(),
                 ui.sceneobjects.ColliderExtension.getInstance(),
                 ui.sceneobjects.KeyboardKeyExtension.getInstance(),
-                ui.sceneobjects.ScriptNodeExtension.getInstance()
+                ui.sceneobjects.ScriptNodeExtension.getInstance(),
+                ui.sceneobjects.SpineExtension.getInstance()
             );
 
             // scene plain object extensions
@@ -423,6 +305,9 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
+                page => new ui.sceneobjects.SpineSection(page),
+                page => new ui.sceneobjects.SpineBoundsProviderSection(page),
+                page => new ui.sceneobjects.SpineAnimationSection(page)
             ));
 
             // scene tools
@@ -452,6 +337,18 @@ namespace phasereditor2d.scene {
                     section: phasereditor2d.files.ui.views.TAB_SECTION_DESIGN,
                     contentType: core.CONTENT_TYPE_USER_COMPONENTS
                 }
+            ));
+
+            // asset pack renderer extension
+
+            reg.addExtension(new ui.sceneobjects.SpineAssetPackCellRendererExtension());
+
+            // asset pack preview extension
+
+            reg.addExtension(new pack.ui.AssetPackPreviewPropertyProviderExtension(
+                page => new ui.sceneobjects.SpineSkeletonDataSection(page),
+                page => new ui.sceneobjects.SpineSkinItemPreviewSection(page),
+                page => new ui.sceneobjects.SpineAssetPreviewSection(page)
             ));
         }
 
@@ -510,7 +407,9 @@ namespace phasereditor2d.scene {
                 new ui.sceneobjects.AnimationKeyPropertyType(),
                 new ui.sceneobjects.AudioKeyPropertyType(),
                 new ui.sceneobjects.AssetKeyPropertyType(),
-                new ui.sceneobjects.SceneKeyPropertyType()
+                new ui.sceneobjects.SceneKeyPropertyType(),
+                new ui.sceneobjects.SpineSkinNamePropertyType(),
+                new ui.sceneobjects.SpineAnimationNamePropertyType()
             ];
         }
 
@@ -710,6 +609,47 @@ namespace phasereditor2d.scene {
                     console.error(e);
                 }
             }
+        }
+
+        getSpineThumbnailCache() {
+
+            if (!this._spineThumbnailCache) {
+
+                this._spineThumbnailCache = new ui.SpineThumbnailCache();
+            }
+
+            return this._spineThumbnailCache;
+        }
+
+        buildSpineSkinThumbnailImage(skinItem: pack.core.SpineSkinItem) {
+
+            const { spineAsset, spineAtlasAsset, skinName } = skinItem;
+
+            const data: core.json.ISceneData = {
+                "id": "ad829e9b-d82c-466a-a31c-a2789656ef84",
+                "sceneType": core.json.SceneType.SCENE,
+                "settings": {},
+                "displayList": [
+                    {
+                        "type": "SpineGameObject",
+                        "id": "spine-thumbnail-id",
+                        "label": "spine",
+                        "dataKey": spineAsset.getKey(),
+                        "atlasKey": spineAtlasAsset.getKey(),
+                        "skinName": skinName,
+                        "bpType": ui.sceneobjects.BoundsProviderType.SKINS_AND_ANIMATION_TYPE,
+                        "bpSkin": ui.sceneobjects.BoundsProviderSkin.CURRENT_SKIN,
+                        "x": 0,
+                        "y": 0
+                    } as any
+                ],
+                "plainObjects": [],
+                "meta": {
+                    "version": 4
+                } as any
+            };
+
+            return new ui.SceneThumbnailImage(data);
         }
     }
 

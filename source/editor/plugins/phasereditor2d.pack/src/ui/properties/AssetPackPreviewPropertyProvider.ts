@@ -18,6 +18,13 @@ namespace phasereditor2d.pack.ui.properties {
             const provider = new files.ui.views.FilePropertySectionProvider();
 
             provider.addSections(page, sections);
+
+            const exts = AssetPackPlugin.getInstance().getPreviewPropertyProviderExtensions();
+
+            for(const ext of exts) {
+
+                sections.push(...ext.getSections(page));
+            }
         }
     }
 }

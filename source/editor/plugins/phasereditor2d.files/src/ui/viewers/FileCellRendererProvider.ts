@@ -25,6 +25,7 @@ namespace phasereditor2d.files.ui.viewers {
                 const provider = extension.getRendererProvider(contentType);
 
                 if (provider !== null) {
+                    
                     return provider.getCellRenderer(file);
                 }
             }

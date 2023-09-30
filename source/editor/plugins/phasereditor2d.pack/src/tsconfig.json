@@ -6,6 +6,12 @@
     "references": [
         {
             "path": "../../colibri/src"
+        },
+        {
+            "path": "../../phasereditor2d.spine/src",            
+        },
+        {
+            "path": "../../phasereditor2d.resources/src",            
         },        
         {
             "path": "../../phasereditor2d.phaser/src",            

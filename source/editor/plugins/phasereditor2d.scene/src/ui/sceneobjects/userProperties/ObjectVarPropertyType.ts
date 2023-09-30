@@ -27,11 +27,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Object Variable";
         }
 
-        renderValue(value: any): string {
-
-            return value;
-        }
-
         buildDeclarePropertyCodeDOM(prop: UserProperty, value: string): core.code.FieldDeclCodeDOM {
 
             return this.buildExpressionFieldCode(prop, this.getExpressionType(), value);

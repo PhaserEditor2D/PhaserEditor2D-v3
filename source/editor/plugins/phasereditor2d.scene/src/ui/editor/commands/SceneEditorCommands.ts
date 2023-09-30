@@ -67,6 +67,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
     export const CMD_SORT_OBJ_BOTTOM = "phasereditor2d.scene.ui.editor.commands.SortObjectBottom";
     export const CMD_ADD_USER_COMPONENT = "phasereditor2d.scene.ui.editor.commands.AddUserComponent";
     export const CMD_BROWSE_USER_COMPONENTS = "phasereditor2d.scene.ui.editor.commands.BrowseUserComponents";
+    export const CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameSpineSkin";
+    export const CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON = "phasereditor2d.scene.ui.editor.commands.SelectAllObjectsWithSameSpineSkeleton";
 
     function isCommandDialogActive() {
 
@@ -192,6 +194,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerPrefabCommands(manager);
 
             this.registerPropertiesCommands(manager);
+
+            this.registerSpineCommands(manager);
         }
 
         static registerPlainObjectOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {
@@ -343,7 +347,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                             (obj: core.json.IUserComponentsModelInfo | usercomponent.UserComponent) =>
                                 new controls.viewers.IconImageCellRenderer(
                                     obj instanceof usercomponent.UserComponent ?
-                                        ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT)
+                                        resources.getIcon(resources.ICON_USER_COMPONENT)
                                         : colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER))));
 
                         viewer.setContentProvider(new ContentProvider());
@@ -959,7 +963,8 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 handler: {
                     executeFunc: args => {
 
-                        ui.SceneThumbnailCache.clearCache();
+                        ui.SceneThumbnailCache.getInstance().clearCache();
+                        ScenePlugin.getInstance().getSpineThumbnailCache().clearCache();
                     }
                 }
             });
@@ -1033,6 +1038,109 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 },
                 keys: {
                     key: "KeyW"
+                }
+            });
+        }
+
+        static registerSpineCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            // select all same skeleton
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKELETON,
+                    name: "Select All With Same Spine Skeleton",
+                    tooltip: "Select all the objects with the same Spine skeleton.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection()
+                            .filter(
+                                obj => obj instanceof sceneobjects.SpineObject)
+                            .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const skeletons = new Set<string>();
+
+                        for (const obj of args.activeEditor.getSelection()) {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                skeletons.add(obj.dataKey);
+                            }
+                        }
+
+                        const sel = [];
+
+                        editor.getScene().visitAll(obj => {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                if (skeletons.has(obj.dataKey)) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        editor.setSelection(sel);
+                    }
+                }
+            });
+
+            // select all same skin
+
+            manager.add({
+                command: {
+                    id: CMD_SELECT_ALL_OBJECTS_SAME_SPINE_SKIN,
+                    name: "Select All With Same Spine Skin",
+                    tooltip: "Select all the objects with the same Spine skin.",
+                    category: CAT_SCENE_EDITOR
+                },
+                handler: {
+
+                    testFunc: args => isSceneScope(args)
+                        && args.activeEditor.getSelection()
+                            .filter(
+                                obj => obj instanceof sceneobjects.SpineObject)
+                            .length > 0,
+
+                    executeFunc: args => {
+
+                        const editor = args.activeEditor as SceneEditor;
+
+                        const skins = new Set<string>();
+
+                        for (const obj of args.activeEditor.getSelection()) {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                skins.add(`${obj.dataKey}+${obj.skeleton.skin?.name}`);
+                            }
+                        }
+
+                        const sel = [];
+
+                        editor.getScene().visitAll(obj => {
+
+                            if (obj instanceof sceneobjects.SpineObject) {
+
+                                const skin = `${obj.dataKey}+${obj.skeleton.skin?.name}`;
+
+                                if (skins.has(skin)) {
+
+                                    sel.push(obj);
+                                }
+                            }
+                        });
+
+                        editor.setSelection(sel);
+                    }
                 }
             });
         }
@@ -1928,6 +2036,10 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     editor, newFile));
 
                             editor.refreshBlocks();
+
+                            console.log(`Compiling scene ${newFile.getName()}`);
+
+                            core.code.SceneCompileAllExtension.compileSceneFile(newFile);
                         });
 
                         const dlg = ext.createDialog({
@@ -2006,7 +2118,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_OPEN_COMPILED_FILE,
-                    icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                    icon: resources.getIcon(resources.ICON_FILE_SCRIPT),
                     name: "Open Output File",
                     tooltip: "Open the output source file of the scene.",
                     category: CAT_SCENE_EDITOR
@@ -2022,7 +2134,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
             manager.add({
                 command: {
                     id: CMD_COMPILE_SCENE_EDITOR,
-                    icon: ScenePlugin.getInstance().getIcon(ICON_BUILD),
+                    icon: resources.getIcon(resources.ICON_BUILD),
                     name: "Compile Scene",
                     tooltip: "Compile the editor's Scene.",
                     category: CAT_SCENE_EDITOR
@@ -2040,7 +2152,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_TRANSLATE_SCENE_OBJECT,
                     name: "Translate Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_TRANSLATE),
+                    icon: resources.getIcon(resources.ICON_TRANSLATE),
                     tooltip: "Translate the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2058,7 +2170,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_ROTATE_SCENE_OBJECT,
                     name: "Rotate Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_ANGLE),
+                    icon: resources.getIcon(resources.ICON_ANGLE),
                     tooltip: "Rotate the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2093,7 +2205,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SCALE_SCENE_OBJECT,
                     name: "Scale Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_SCALE),
+                    icon: resources.getIcon(resources.ICON_SCALE),
                     tooltip: "Scale the selected scene objects",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2111,7 +2223,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                 command: {
                     id: CMD_SET_ORIGIN_SCENE_OBJECT,
                     name: "Origin Tool",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_ORIGIN),
+                    icon: resources.getIcon(resources.ICON_ORIGIN),
                     tooltip: "Change the origin of the selected scene object",
                     category: CAT_SCENE_EDITOR
                 },
@@ -2131,7 +2243,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     name: "Select Region Tool",
                     category: CAT_SCENE_EDITOR,
                     tooltip: "Select all objects inside a region",
-                    icon: ScenePlugin.getInstance().getIcon(ICON_SELECT_REGION)
+                    icon: resources.getIcon(resources.ICON_SELECT_REGION)
                 },
                 handler: {
                     testFunc: isSceneScope,
@@ -2432,7 +2544,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                         id: data.command,
                         name: data.name,
                         tooltip: `Set the origin of the object to (${data.x},${data.y})`,
-                        icon: ScenePlugin.getInstance().getIcon(data.icon),
+                        icon: resources.getIcon(data.icon),
                         category: CAT_SCENE_EDITOR
                     },
                     keys: {

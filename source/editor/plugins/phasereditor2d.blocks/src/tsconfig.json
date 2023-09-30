@@ -5,6 +5,8 @@
     },
     "references": [{
         "path": "../../colibri/src"
+    },{
+        "path": "../../phasereditor2d.resources/src"
     }],
     "exclude": ["../_out/"]
 }

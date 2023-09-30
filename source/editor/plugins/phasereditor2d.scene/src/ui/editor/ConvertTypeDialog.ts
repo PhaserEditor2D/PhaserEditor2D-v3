@@ -59,7 +59,6 @@ namespace phasereditor2d.scene.ui.editor {
                         extraData = result.data;
                     }
 
-
                     if (typeof extraData !== "object") {
 
                         extraData = {};

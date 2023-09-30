@@ -17,8 +17,8 @@ namespace colibri.ui.controls.dialogs {
             clientArea.style.display = "grid";
             clientArea.style.alignItems = "center";
             clientArea.style.gridTemplateColumns = "auto 1fr";
-            clientArea.style.gridRowGap = "5px";
-            clientArea.style.gridColumnGap = "5px";
+            clientArea.style.rowGap = "5px";
+            clientArea.style.columnGap = "5px";
             clientArea.style.height = "min-content";
 
             this.getElement().appendChild(clientArea);

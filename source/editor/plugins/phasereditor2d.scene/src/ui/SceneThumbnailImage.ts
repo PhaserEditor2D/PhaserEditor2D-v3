@@ -54,18 +54,33 @@ namespace phasereditor2d.scene.ui {
 
             if (singleObject) {
 
-                if (singleObject.getEditorSupport().hasComponent(sceneobjects.OriginComponent)) {
+                if (singleObject instanceof sceneobjects.Container) {
+
+                    const container = singleObject as sceneobjects.Container;
+
+                    this.breakContainers([container]);
+
+                } else if (singleObject.getEditorSupport().hasComponent(sceneobjects.OriginComponent)) {
 
                     const sprite = singleObject as any as Phaser.GameObjects.Sprite;
 
                     sprite.setOrigin(0.5, 0.5);
                     sprite.setPosition(s.borderX + s.borderWidth / 2, s.borderY + s.borderHeight / 2);
 
-                } else if (singleObject instanceof sceneobjects.Container) {
+                } else {
 
-                    const container = singleObject as sceneobjects.Container;
+                    const sprite = singleObject as any as Phaser.GameObjects.Sprite;
+                    
+                    const displayOriginX = sprite.displayWidth * sprite.originX;
+                    const displayOriginY = sprite.displayHeight * sprite.originY;
+                    const spriteCX = sprite.displayWidth / 2;
+                    const spriteCY = sprite.displayHeight / 2;
+                    const dx = spriteCX - displayOriginX;
+                    const dy = spriteCY - displayOriginY;
+                    const cx = s.borderX + s.borderWidth / 2 + dx;
+                    const cy = s.borderY + s.borderHeight / 2 + dy;
 
-                    this.breakContainers([container]);
+                    sprite.setPosition(cx, cy);
                 }
 
             } else {
@@ -75,7 +90,7 @@ namespace phasereditor2d.scene.ui {
 
             let bounds = this.computeSceneBounds();
 
-            if (bounds.width > s.borderWidth || bounds.height > s.borderHeight) {
+            if (!singleObject && (bounds.width > s.borderWidth || bounds.height > s.borderHeight)) {
 
                 bounds = {
                     x: s.borderX,
@@ -114,12 +129,12 @@ namespace phasereditor2d.scene.ui {
                     bounds.y = 0;
                 }
 
-                if (bounds.width < 0) {
+                if (bounds.width <= 0) {
 
                     bounds.width = 800;
                 }
 
-                if (bounds.height < 0) {
+                if (bounds.height <= 0) {
 
                     bounds.height = 600;
                 }
@@ -197,17 +212,28 @@ namespace phasereditor2d.scene.ui {
     export class SceneThumbnailImage implements controls.IImage {
 
         private _file: io.FilePath;
+        private _data: core.json.ISceneData;
         private _image: controls.ImageWrapper;
         private _promise: Promise<controls.PreloadResult>;
 
-        constructor(file: io.FilePath) {
-            this._file = file;
+        constructor(file: io.FilePath | core.json.ISceneData) {
+
+            if (file instanceof io.FilePath) {
+
+                this._file = file;
+
+            } else {
+
+                this._data = file;
+            }
+
             this._image = null;
         }
 
         paint(context: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, center: boolean): void {
 
             if (this._image) {
+
                 this._image.paint(context, x, y, w, h, center);
             }
         }
@@ -217,19 +243,23 @@ namespace phasereditor2d.scene.ui {
             dstX: number, dstY: number, dstW: number, dstH: number): void {
 
             if (this._image) {
+
                 this._image.paintFrame(context, srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH);
             }
         }
 
         getWidth(): number {
+
             return this._image ? this._image.getWidth() : 16;
         }
 
         getHeight(): number {
+
             return this._image ? this._image.getHeight() : 16;
         }
 
         preloadSize(): Promise<controls.PreloadResult> {
+
             return this.preload();
         }
 
@@ -238,10 +268,11 @@ namespace phasereditor2d.scene.ui {
             if (this._image == null) {
 
                 if (this._promise) {
+
                     return this._promise;
                 }
 
-                this._promise = ide.FileUtils.preloadFileString(this._file)
+                this._promise = this.preloadData()
 
                     .then(() => this.createImageElement())
 
@@ -260,6 +291,16 @@ namespace phasereditor2d.scene.ui {
             return controls.Controls.resolveNothingLoaded();
         }
 
+        private async preloadData() {
+
+            if (this._file) {
+
+                return ide.FileUtils.preloadFileString(this._file);
+            }
+
+            return controls.Controls.resolveResourceLoaded();
+        }
+
         getImageElement() {
 
             if (this._image) {
@@ -276,9 +317,18 @@ namespace phasereditor2d.scene.ui {
 
             return new Promise<HTMLImageElement>((resolve, reject) => {
 
-                const content = ide.FileUtils.getFileString(this._file);
+                let data: core.json.ISceneData
 
-                const data: core.json.ISceneData = JSON.parse(content);
+                if (this._file) {
+
+                    const content = ide.FileUtils.getFileString(this._file);
+
+                    data = JSON.parse(content);
+
+                } else {
+
+                    data = this._data;
+                }
 
                 ScenePlugin.getInstance().runSceneDataMigrations(data);
 
@@ -327,7 +377,12 @@ namespace phasereditor2d.scene.ui {
                     },
                     physics: {
                         default: "arcade"
-                    }
+                    },
+                    plugins: {
+                        scene: [
+                            { key: "spine.SpinePlugin", plugin: spine.SpinePlugin, mapping: "spine" }
+                        ]
+                    },
                 });
 
                 const scene = new ThumbnailScene(data, image => {

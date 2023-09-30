@@ -24,8 +24,10 @@ namespace colibri.ui.ide {
         public eventBeforeOpenProject = new controls.ListenerList();
         public eventProjectOpened = new controls.ListenerList();
         public eventThemeChanged = new controls.ListenerList<ui.controls.ITheme>();
+        public eventWindowFocused = new controls.ListenerList();
 
         private _fileStringCache: core.io.FileStringCache;
+        private _fileBinaryCache: core.io.FileBinaryCache;
         private _fileImageCache: ImageFileCache;
         private _fileImageSizeCache: ImageSizeFileCache;
         private _activeWindow: ide.WorkbenchWindow;
@@ -56,18 +58,56 @@ namespace colibri.ui.ide {
 
             this._fileImageSizeCache = new ImageSizeFileCache();
 
-            if (CAPABILITY_FILE_STORAGE) {
-
-                this._fileStorage = new core.io.FileStorage_HTTPServer();
-
-                this._fileStringCache = new core.io.FileStringCache(this._fileStorage);
-            }
-
             this._globalPreferences = new core.preferences.Preferences("__global__");
 
             this._projectPreferences = null;
 
             this._editorSessionStateRegistry = new Map();
+        }
+
+        getFileStringCache() {
+            
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileStringCache) {
+
+                this._fileStringCache = new core.io.FileStringCache(this.getFileStorage());
+            }
+
+            return this._fileStringCache;
+        }
+
+        getFileBinaryCache() {
+
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileBinaryCache) {
+
+                this._fileBinaryCache = new core.io.FileBinaryCache(this.getFileStorage());
+            }
+
+            return this._fileBinaryCache;
+        }
+
+        getFileStorage() {
+
+            if (!CAPABILITY_FILE_STORAGE) {
+
+                return undefined;
+            }
+
+            if (!this._fileStorage) {
+
+                this._fileStorage = new core.io.FileStorage_HTTPServer();
+            }
+
+            return this._fileStorage;
         }
 
         getEditorSessionStateRegistry() {
@@ -121,9 +161,17 @@ namespace colibri.ui.ide {
             {
                 const plugins = Platform.getPlugins();
 
+                const registry = Platform.getExtensionRegistry();
+
                 for (const plugin of plugins) {
 
-                    plugin.registerExtensions(Platform.getExtensionRegistry());
+                    // register default extensions
+                    registry.addExtension(new IconAtlasLoaderExtension(plugin));
+                    
+                    registry.addExtension(new PluginResourceLoaderExtension(
+                        () => plugin.preloadResources()));
+
+                    plugin.registerExtensions(registry);
                 }
 
                 for (const plugin of plugins) {
@@ -182,7 +230,9 @@ namespace colibri.ui.ide {
 
         private resetCache() {
 
-            this._fileStringCache.reset();
+            this.getFileStringCache().reset();
+            this.getFileBinaryCache().reset();
+
             this._fileImageCache.reset();
             this._fileImageSizeCache.reset();
             this._contentTypeRegistry.resetCache();
@@ -198,9 +248,11 @@ namespace colibri.ui.ide {
 
             console.log(`Workbench: opening project.`);
 
-            await this._fileStorage.openProject();
+            const fileStorage = this.getFileStorage();
 
-            const projectName = this._fileStorage.getRoot().getName();
+            await fileStorage.openProject();
+
+            const projectName = fileStorage.getRoot().getName();
 
             console.log(`Workbench: project ${projectName} loaded.`);
 
@@ -311,9 +363,12 @@ namespace colibri.ui.ide {
             dlg.setCloseWithEscapeKey(false);
             dlg.setProgress(0);
 
-            let resCount = 0;
-
             // count icon extensions
+
+            const iconAtlasExtensions: IconAtlasLoaderExtension[] = Platform
+                .getExtensionRegistry()
+                .getExtensions(IconAtlasLoaderExtension.POINT_ID);
+
 
             const icons: controls.IconImage[] = [];
             {
@@ -324,38 +379,31 @@ namespace colibri.ui.ide {
 
                     icons.push(...extension.getIcons());
                 }
-
-                resCount = icons.length;
             }
 
             // count resource extensions
+
             const resExtensions = Platform
                 .getExtensions<PluginResourceLoaderExtension>(PluginResourceLoaderExtension.POINT_ID);
 
-            resCount += resExtensions.length;
+            // start preload
 
+            const preloads = [
+                ...iconAtlasExtensions,
+                ...icons,
+                ...resExtensions
+            ];
 
             let i = 0;
 
-            for (const icon of icons) {
+            for (const preloader of preloads) {
 
-                await icon.preload();
-
-                i++;
-
-                dlg.setProgress(i / resCount);
-            }
-
-            for (const resExt of resExtensions) {
-
-                await resExt.preload();
+                await preloader.preload();
 
                 i++;
 
-                dlg.setProgress(i / resCount);
+                dlg.setProgress(i / preloads.length);
             }
-
-            // resources
 
             dlg.close();
         }
@@ -376,11 +424,13 @@ namespace colibri.ui.ide {
         }
 
         private initCommands() {
+
             this._commandManager = new commands.CommandManager();
 
             const extensions = Platform.getExtensions<commands.CommandExtension>(commands.CommandExtension.POINT_ID);
 
             for (const extension of extensions) {
+
                 extension.getConfigurer()(this._commandManager);
             }
         }
@@ -416,6 +466,45 @@ namespace colibri.ui.ide {
                     });
                 }
             });
+
+            /*
+
+            This flag is needed by Firefox.
+            In Firefox the focus event is emitted when an object is drop into the window
+            so we should filter that case.
+
+            */
+            const flag = { drop: false };
+
+            window.addEventListener("drop", e => {
+
+                flag.drop = true;
+            });
+
+            window.addEventListener("focus", () => {
+
+                if (flag.drop) {
+
+                    flag.drop = false;
+
+                    return;
+                }
+
+                this.eventWindowFocused.fire();
+
+                for(const window of this._windows) {
+
+                    for(const editor of this.getEditors()) {
+
+                        editor.onWindowFocus();
+                    }
+
+                    for(const part of window.getViews()) {
+
+                        part.onWindowFocus();
+                    }
+                }
+            });
         }
 
         private registerEditors(): void {
@@ -430,41 +519,40 @@ namespace colibri.ui.ide {
             }
         }
 
-        getFileStringCache() {
-            return this._fileStringCache;
-        }
-
-        getFileStorage() {
-            return this._fileStorage;
-        }
-
         getCommandManager() {
+
             return this._commandManager;
         }
 
         getActiveDialog() {
+
             return controls.dialogs.Dialog.getActiveDialog();
         }
 
         getActiveWindow() {
+
             return this._activeWindow;
         }
 
         getActiveElement() {
+
             return this._activeElement;
         }
 
         getActivePart() {
+
             return this._activePart;
         }
 
         getActiveEditor() {
+
             return this._activeEditor;
         }
 
         setActiveEditor(editor: EditorPart) {
 
             if (editor === this._activeEditor) {
+
                 return;
             }
 
@@ -599,11 +687,13 @@ namespace colibri.ui.ide {
         }
 
         getContentTypeRegistry() {
+
             return this._contentTypeRegistry;
         }
 
         getProjectRoot(): core.io.FilePath {
-            return this._fileStorage.getRoot();
+
+            return this.getFileStorage().getRoot();
         }
 
         getContentTypeIcon(contentType: string): controls.IImage {

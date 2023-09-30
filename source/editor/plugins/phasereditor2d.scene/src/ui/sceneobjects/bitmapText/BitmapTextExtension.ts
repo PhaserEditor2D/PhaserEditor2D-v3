@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 phaserTypeName: "Phaser.GameObjects.BitmapText",
                 typeName: "BitmapText",
                 category: SCENE_OBJECT_TEXT_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_BITMAP_FONT_TYPE)
+                icon: resources.getIconDescriptor(resources.ICON_BITMAP_FONT_TYPE)
             });
         }
 
@@ -42,7 +42,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if ("height" in originalObject) {
 
-                    size = originalObject["height"];
+                    size = originalObject["height"] as number;
                 }
 
                 if (typeof originalObject["text"] !== "string") {

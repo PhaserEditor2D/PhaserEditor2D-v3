@@ -46,7 +46,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._active = active;
         }
 
-        getExplicitTypesForMethodFactory(): string | undefined {
+        getExplicitTypesForMethodFactory(baseType: string): string | undefined {
 
             return undefined;
         }

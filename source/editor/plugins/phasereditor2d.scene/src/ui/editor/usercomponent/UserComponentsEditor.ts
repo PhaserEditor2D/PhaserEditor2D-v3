@@ -86,7 +86,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             manager.add({
                 command: {
                     id: CMD_OPEN_COMPONENT_OUTPUT_FILE,
-                    icon: webContentTypes.WebContentTypesPlugin.getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                    icon: resources.getIcon(resources.ICON_FILE_SCRIPT),
                     name: "Open Component Output File",
                     tooltip: "Open the output source file of the selected component.",
                     category: CAT_USER_COMPONENTS_EDITOR
@@ -317,15 +317,14 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     resourceMenu.addAction({
                         text: `Create UserComponent.${ext}${mod ? " (ES Module)" : ""}`,
-                        icon: webContentTypes.WebContentTypesPlugin
-                            .getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT),
+                        icon: resources.getIcon(resources.ICON_FILE_SCRIPT),
                         callback: async () => {
 
-                            const resources = UserComponentCodeResources.getInstance();
-                            const id = "usercomponent" + (mod ? ".module" : "") + "." + ext;
+                            const codeResources = UserComponentCodeResources.getInstance();
+                            // const id = "UserComponent" + (mod ? ".module" : "") + "." + ext;
+                            const id = `${ext}${mod? "-module" : ""}/UserComponent.${ext}`;
                             const parent = this.getInput().getParent();
                             const name = "UserComponent." + ext
-
 
                             if (parent.getFile(name)) {
 
@@ -335,7 +334,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
                                 }
                             }
 
-                            const file = await resources.createFile(id, parent, name);
+                            const file = await codeResources.createFile(id, parent, name);
 
                             colibri.Platform.getWorkbench().openEditor(file);
                         }
@@ -516,10 +515,10 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                     if (obj instanceof UserComponent) {
 
-                        return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT))
+                        return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_USER_COMPONENT))
                     }
 
-                    return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_PROPERTY));
+                    return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_USER_PROPERTY));
                 }
             ));
             // tslint:disable-next-line:new-parens

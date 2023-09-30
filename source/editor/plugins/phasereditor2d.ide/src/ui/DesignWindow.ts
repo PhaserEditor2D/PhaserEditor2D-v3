@@ -94,9 +94,15 @@ namespace phasereditor2d.ide.ui {
 
                 manager.add(new files.ui.actions.OpenNewFileDialogAction());
 
-                // manager.add(new ui.actions.OpenProjectsDialogAction());
+                {
+                    const openDialog = colibri.Platform
+                        .getProductOption("phasereditor2d.ide.playButton") === "open-dialog";
 
-                manager.addCommand(actions.CMD_PLAY_PROJECT, { showText: false });
+                    const id = openDialog ?
+                        actions.CMD_QUICK_PLAY_PROJECT : actions.CMD_PLAY_PROJECT;
+
+                    manager.addCommand(id, { showText: false });
+                }
             }
 
             {
@@ -111,6 +117,7 @@ namespace phasereditor2d.ide.ui {
         }
 
         getEditorArea() {
+
             return this._editorArea;
         }
 

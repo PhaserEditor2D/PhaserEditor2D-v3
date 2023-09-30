@@ -8,7 +8,8 @@ namespace colibri.ui.controls {
     }
 
     export const DEVICE_PIXEL_RATIO = window.devicePixelRatio || 1;
-    export const ICON_SIZE = DEVICE_PIXEL_RATIO > 1 ? 32 : 16;
+    export const DEVICE_PIXEL_RATIO_x2 = DEVICE_PIXEL_RATIO > 1;
+    export const ICON_SIZE = DEVICE_PIXEL_RATIO_x2 ? 32 : 16;
     export const RENDER_ICON_SIZE = 16;
 
     export type IImageOrCanvas = HTMLImageElement|HTMLCanvasElement;
@@ -185,10 +186,12 @@ namespace colibri.ui.controls {
         }
 
         static resolveResourceLoaded() {
+
             return Promise.resolve(PreloadResult.RESOURCES_LOADED);
         }
 
         static resolveNothingLoaded() {
+            
             return Promise.resolve(PreloadResult.NOTHING_LOADED);
         }
 
@@ -201,7 +204,7 @@ namespace colibri.ui.controls {
 
             if (appendVersion) {
 
-                url += "?v=" + CACHE_VERSION;
+                url += "?v=" + PRODUCT_VERSION;
             }
 
             const img = new DefaultImage(new Image(), url);
@@ -341,6 +344,47 @@ namespace colibri.ui.controls {
             }
 
             ctx.restore();
+        }
+
+        static createBlobFromImage(img: controls.IImageOrCanvas): Promise<Blob> {
+
+            return new Promise((resolve, reject) => {
+    
+                let canvas: HTMLCanvasElement;
+    
+                if (img instanceof HTMLCanvasElement) {
+    
+                    canvas = img;
+    
+                } else {
+    
+                    canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    canvas.style.width = img.width + "px";
+                    canvas.style.height = img.height + "px";
+    
+                    const ctx = canvas.getContext("2d");
+                    ctx.imageSmoothingEnabled = false;
+    
+                    ctx.drawImage(img, 0, 0);
+                }
+    
+                canvas.toBlob((blob) => {
+    
+                    resolve(blob);
+    
+                }, 'image/png');
+            });
+        }
+    
+        static createImageFromBlob(blob: Blob) {
+    
+            const img = document.createElement("img");
+    
+            img.src = URL.createObjectURL(blob);
+    
+            return img;
         }
     }
 }

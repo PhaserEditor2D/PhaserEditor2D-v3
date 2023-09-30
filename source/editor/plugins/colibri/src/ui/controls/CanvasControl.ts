@@ -2,7 +2,7 @@
 
 namespace colibri.ui.controls {
 
-    export abstract class CanvasControl extends Control {
+    export class CanvasControl extends Control {
 
         protected _canvas: HTMLCanvasElement;
         protected _context: CanvasRenderingContext2D;
@@ -70,6 +70,9 @@ namespace colibri.ui.controls {
             this._context.font = `${controls.getCanvasFontHeight()}px sans-serif`;
         }
 
-        protected abstract paint(): void;
+        protected paint() {
+
+            // nothing
+        };
     }
 }

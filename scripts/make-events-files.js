@@ -34,6 +34,6 @@ const output = JSON.stringify(docsMap, null, 2);
 console.log("---");
 console.log("Writing to file events.json...");
 
-fs.writeFileSync("../source/editor/plugins/phasereditor2d.scene/data/events-docs.json", output);
+fs.writeFileSync("../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/events.json", output);
 
 console.log("Done.");

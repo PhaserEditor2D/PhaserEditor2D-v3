@@ -20,11 +20,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return "Expression";
         }
 
-        renderValue(value: any): string {
-
-            return value;
-        }
-
         createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
 
             const element = document.createElement("input");

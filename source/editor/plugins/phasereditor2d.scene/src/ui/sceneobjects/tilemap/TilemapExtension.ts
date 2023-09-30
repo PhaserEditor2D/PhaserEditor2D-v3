@@ -20,7 +20,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private constructor() {
             super({
                 category: SCENE_OBJECT_TILEMAP_CATEGORY,
-                icon: pack.AssetPackPlugin.getInstance().getIconDescriptor(pack.ICON_TILEMAP),
+                icon: resources.getIconDescriptor(resources.ICON_TILEMAP),
                 phaserTypeName: "Phaser.Tilemaps.Tilemap",
                 typeName: "Tilemap"
             });

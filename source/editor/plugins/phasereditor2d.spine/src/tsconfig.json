@@ -1,0 +1,14 @@
+{
+    "extends": "../../../tsconfig-base.json",
+    "compilerOptions": {
+        "outFile": "../_out/phasereditor2d.spine.js"
+    },
+    "references": [
+        {
+            "path": "../../phasereditor2d.phaser/src"
+        }
+    ],
+    "exclude": [
+        "../_out/"
+    ]
+}

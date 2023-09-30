@@ -37,7 +37,7 @@ namespace phasereditor2d.scene.ui {
 
             for (const updater of updaters) {
 
-                updater.clearCache(this._scene.game);
+                updater.clearCache(this._scene);
             }
         }
     }

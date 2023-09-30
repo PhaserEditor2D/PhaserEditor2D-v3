@@ -10,6 +10,7 @@
     "editor-dev": "PhaserEditor2D -editor . -project \"$PHASEREDITOR_DEMO_PROJECT\" -dev"
   },
   "devDependencies": {
+    "colibri-packer": "^1.0.1",
     "tslint": "^6.1.3",
     "typescript": "^4.3.2"
   },

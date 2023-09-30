@@ -32,7 +32,7 @@ namespace phasereditor2d.files.ui.viewers {
                     return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
                 }
 
-                return FilesPlugin.getInstance().getIcon(ICON_PROJECT);
+                return resources.getIcon(resources.ICON_PROJECT);
             }
 
             return colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE);

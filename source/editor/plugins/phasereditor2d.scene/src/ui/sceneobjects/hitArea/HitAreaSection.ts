@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(page, "phasereditor2d.scene.ui.sceneobjects.HitAreaSection", "Hit Area");
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/input-hit-area.html";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);

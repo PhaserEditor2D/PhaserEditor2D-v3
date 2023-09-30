@@ -1,6 +1,8 @@
+///<reference path="../../../core/code/CodeResources2.ts">
+
 namespace phasereditor2d.scene.ui.editor.usercomponent {
 
-    export class UserComponentCodeResources extends core.code.CodeResources {
+    export class UserComponentCodeResources extends core.code.CodeResources2 {
 
         private static _instance = new UserComponentCodeResources();
 
@@ -10,12 +12,9 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         }
 
         private constructor() {
-            super(ScenePlugin.getInstance());
+            super("phasereditor2d.scene/code/usercomponent");
 
-            this.addResource("usercomponent.js", "data/UserComponent.js.txt");
-            this.addResource("usercomponent.module.js", "data/UserComponent.module.js.txt");
-            this.addResource("usercomponent.ts", "data/UserComponent.ts.txt");
-            this.addResource("usercomponent.module.ts", "data/UserComponent.module.ts.txt");
+            this.addCodeResource("UserComponent");
         }
     }
 }

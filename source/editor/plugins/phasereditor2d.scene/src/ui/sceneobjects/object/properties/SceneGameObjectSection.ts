@@ -60,8 +60,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             element.classList.add("PropertyLockIcon");
             parent.appendChild(element);
 
-            const lockedIcon = ScenePlugin.getInstance().getIcon(ICON_LOCKED);
-            const unlockedIcon = ScenePlugin.getInstance().getIcon(ICON_UNLOCKED);
+            const lockedIcon = resources.getIcon(resources.ICON_LOCKED);
+            const unlockedIcon = resources.getIcon(resources.ICON_UNLOCKED);
 
             element.addEventListener("click", e => {
 
@@ -161,7 +161,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true) {
+        createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true, readOnly = false) {
 
             if (lockIcon) {
 
@@ -171,7 +171,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const text = this.createStringField(parent, prop);
+            const text = this.createStringField(parent, prop, true, false, false, readOnly);
 
             return { label, text };
         }

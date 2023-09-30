@@ -16,6 +16,7 @@ namespace phasereditor2d.pack.ui.importers {
         }
 
         getContentType() {
+            
             return this._contentType;
         }
 

@@ -45,7 +45,6 @@ namespace colibri.ui.controls.properties {
                             this.removePanesWithSameTypeHash(section.getTypeHash());
                         }
                         
-                        console.log("PropertyPage: create pane for", section.getTitle(), section.getId());
                         this.add(pane);
 
                         this._sectionPaneMap.set(section.getId(), pane);
@@ -82,7 +81,6 @@ namespace colibri.ui.controls.properties {
 
                 if (section.getTypeHash() === typeHash) {
 
-                    console.log("PropertyPage: remove dynamic pane", section.getTitle(), section.getId());
                     this.remove(pane);
                 }
             }
@@ -173,6 +171,8 @@ namespace colibri.ui.controls.properties {
                     }
 
                 } else {
+
+                    section.onSectionHidden();
 
                     pane.getElement().style.display = "none";
                 }

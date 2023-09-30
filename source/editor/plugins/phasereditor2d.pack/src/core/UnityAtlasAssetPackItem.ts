@@ -7,9 +7,8 @@ namespace phasereditor2d.pack.core {
         }
 
         protected createParser(): parsers.ImageFrameParser {
+            
             return new parsers.UnityAtlasParser(this);
         }
-
     }
-
 }

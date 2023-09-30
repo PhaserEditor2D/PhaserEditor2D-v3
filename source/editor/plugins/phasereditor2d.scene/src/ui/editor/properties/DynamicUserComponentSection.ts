@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             super(page,
                 DynamicUserComponentSection.computeId(componentName, hash),
                 componentName, false, true,
-                ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT),
+                resources.getIcon(resources.ICON_USER_COMPONENT),
                 `DynamicUserComponentSection_${componentName}}`);
 
             this._componentName = componentName;
@@ -335,7 +335,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 if (userComp.hasUserComponent(this._componentName)) {
 
-                    return true;
+                    if (userComp.hasLocalUserComponent(this._componentName)) {
+
+                        return true;
+                    }
+
+                    const exported = userComp.isComponentPublished(this._componentName);
+
+                    return exported;
                 }
             }
 

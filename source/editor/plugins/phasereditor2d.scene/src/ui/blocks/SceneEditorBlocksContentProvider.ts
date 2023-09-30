@@ -11,7 +11,9 @@ namespace phasereditor2d.scene.ui.blocks {
             pack.core.MULTI_ATLAS_TYPE,
             pack.core.UNITY_ATLAS_TYPE,
             pack.core.SPRITESHEET_TYPE,
-            pack.core.BITMAP_FONT_TYPE
+            pack.core.BITMAP_FONT_TYPE,
+            pack.core.SPINE_JSON_TYPE,
+            pack.core.SPINE_BINARY_TYPE,
         ]);
 
     const grouping = pack.ui.viewers.AssetPackGrouping;
@@ -214,6 +216,11 @@ namespace phasereditor2d.scene.ui.blocks {
                 const items = this.getPackItems().filter(item => grouping.getItemFolder(item) === parent);
 
                 return [...scenes, ...items];
+            }
+
+            if (parent instanceof pack.core.SpineAssetPackItem) {
+
+                return parent.getGuessSkinItems();
             }
 
             return super.getChildren(parent);

@@ -36,6 +36,8 @@ namespace colibri.core.io {
 
         setFileString(file: FilePath, content: string): Promise<void>;
 
+        getFileBinary(file: FilePath): Promise<ArrayBuffer>;
+
         createFile(container: FilePath, fileName: string, content: string): Promise<FilePath>;
 
         createFolder(container: FilePath, folderName: string): Promise<FilePath>;

@@ -306,12 +306,7 @@ namespace colibri.ui.controls.viewers {
 
         getSelection() {
 
-            const sel = [];
-
-            for (const obj of this._selectedObjects) {
-
-                sel.push(obj);
-            }
+            const sel = [...this._selectedObjects];
 
             return sel;
         }
@@ -321,6 +316,7 @@ namespace colibri.ui.controls.viewers {
             const sel = this.getSelection();
 
             if (sel.length > 0) {
+
                 return sel[0];
             }
 
@@ -401,6 +397,7 @@ namespace colibri.ui.controls.viewers {
             }
 
             if (e.button !== 0 && e.button !== 2) {
+
                 return;
             }
 
@@ -416,6 +413,7 @@ namespace colibri.ui.controls.viewers {
             if (item === null) {
 
                 this._selectedObjects.clear();
+
                 selChanged = true;
 
             } else {

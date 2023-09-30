@@ -20,5 +20,4 @@ namespace phasereditor2d.pack.core.parsers {
 
         abstract parseFrames(): AssetPackImageFrame[];
     }
-
 }

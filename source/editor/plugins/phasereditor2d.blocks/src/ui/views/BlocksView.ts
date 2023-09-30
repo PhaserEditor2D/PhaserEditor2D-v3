@@ -12,7 +12,7 @@ namespace phasereditor2d.blocks.ui.views {
 
             this.setTitle("Blocks");
 
-            this.setIcon(BlocksPlugin.getInstance().getIcon(ICON_BLOCKS));
+            this.setIcon(resources.getIcon(resources.ICON_BLOCKS));
         }
 
         getViewerProvider(editor: ide.EditorPart) {

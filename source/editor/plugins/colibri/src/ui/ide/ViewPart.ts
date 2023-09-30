@@ -4,6 +4,7 @@ namespace colibri.ui.ide {
 
         constructor(id: string) {
             super(id);
+            
             this.addClass("View");
         }
     }

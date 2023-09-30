@@ -17,6 +17,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super.createMenu(menu);
         }
 
+        protected getSectionHelpPath() {
+            
+            return "scene-editor/input-hit-area-pixel-perfect.html";
+        }
+
         createForm(parent: HTMLDivElement) {
 
             const comp = this.createGridElement(parent, 3);

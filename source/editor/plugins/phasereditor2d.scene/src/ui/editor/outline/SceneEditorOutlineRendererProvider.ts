@@ -21,7 +21,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (element instanceof sceneobjects.ObjectList) {
 
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_LIST));
+                return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_LIST));
 
             } else if (element instanceof sceneobjects.ObjectListItem) {
 
@@ -30,11 +30,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (element instanceof sceneobjects.UserComponentNode) {
 
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_COMPONENT));
+                return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_USER_COMPONENT));
 
             } else if (element instanceof sceneobjects.UserProperty) {
 
-                return new controls.viewers.IconImageCellRenderer(ScenePlugin.getInstance().getIcon(ICON_USER_PROPERTY));
+                return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_USER_PROPERTY));
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();

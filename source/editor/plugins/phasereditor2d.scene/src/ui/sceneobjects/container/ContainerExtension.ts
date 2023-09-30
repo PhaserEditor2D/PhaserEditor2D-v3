@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 typeName: "Container",
                 phaserTypeName: "Phaser.GameObjects.Container",
                 category: SCENE_OBJECT_GROUPING_CATEGORY,
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP)
+                icon: resources.getIconDescriptor(resources.ICON_GROUP)
             });
         }
 

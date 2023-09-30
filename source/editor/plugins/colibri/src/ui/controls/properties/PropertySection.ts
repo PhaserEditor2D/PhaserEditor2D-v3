@@ -42,6 +42,10 @@ namespace colibri.ui.controls.properties {
 
         abstract canEdit(obj: any, n: number): boolean;
 
+        onSectionHidden() {
+            // nothing
+        }
+
         canEditAll(selection: any[]) {
 
             return true;

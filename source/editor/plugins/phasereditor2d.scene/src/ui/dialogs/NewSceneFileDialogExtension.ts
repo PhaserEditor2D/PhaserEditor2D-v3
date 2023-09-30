@@ -1,14 +1,25 @@
 namespace phasereditor2d.scene.ui.dialogs {
 
+    import io = colibri.core.io;
+
     export class NewSceneFileDialogExtension extends files.ui.dialogs.NewFileContentExtension {
 
         constructor() {
             super({
                 dialogName: "Scene File",
-                dialogIconDescriptor: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
+                dialogIconDescriptor: resources.getIconDescriptor(resources.ICON_GROUP),
                 fileExtension: "scene",
                 initialFileName: "Scene"
             });
+
+            this.setCreatedCallback(file => this.compileTypeScriptFile(file));
+        }
+
+        private compileTypeScriptFile(file: io.FilePath) {
+
+            console.log(`Compiling scene ${file.getName()}`);
+
+            core.code.SceneCompileAllExtension.compileSceneFile(file);
         }
 
         getCreateFileContentFunc() {
@@ -56,6 +67,7 @@ namespace phasereditor2d.scene.ui.dialogs {
         }
 
         getInitialFileLocation() {
+
             return super.findInitialFileLocationBasedOnContentType(scene.core.CONTENT_TYPE_SCENE);
         }
     }

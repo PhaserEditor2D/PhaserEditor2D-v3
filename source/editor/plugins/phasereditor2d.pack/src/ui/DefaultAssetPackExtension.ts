@@ -15,6 +15,9 @@ namespace phasereditor2d.pack.ui {
         core.TILEMAP_CSV_TYPE,
         core.TILEMAP_IMPACT_TYPE,
         core.TILEMAP_TILED_JSON_TYPE,
+        core.SPINE_JSON_TYPE,
+        core.SPINE_BINARY_TYPE,
+        core.SPINE_ATLAS_TYPE,
         core.PLUGIN_TYPE,
         core.SCENE_FILE_TYPE,
         core.SCENE_PLUGIN_TYPE,
@@ -46,6 +49,9 @@ namespace phasereditor2d.pack.ui {
         tilemapCSV: "Tilemap CSV",
         tilemapImpact: "Tilemap Impact",
         tilemapTiledJSON: "Tilemap Tiled JSON",
+        spineJson: "Spine JSON",
+        spineBinary: "Spine Binary",
+        spineAtlas: "Spine Atlas",
         plugin: "Plugin",
         sceneFile: "Scene File",
         scenePlugin: "Scene Plugin",
@@ -106,6 +112,15 @@ namespace phasereditor2d.pack.ui {
                 case core.TILEMAP_TILED_JSON_TYPE:
                     return new core.TilemapTiledJSONAssetPackItem(pack, data);
 
+                case core.SPINE_JSON_TYPE:
+                    return new core.SpineJsonAssetPackItem(pack, data);
+
+                case core.SPINE_BINARY_TYPE:
+                    return new core.SpineBinaryAssetPackItem(pack, data);
+
+                case core.SPINE_ATLAS_TYPE:
+                    return new core.SpineAtlasAssetPackItem(pack, data);
+
                 case core.PLUGIN_TYPE:
                     return new core.PluginAssetPackItem(pack, data);
 
@@ -150,7 +165,7 @@ namespace phasereditor2d.pack.ui {
 
                 case core.JSON_TYPE:
                     return new core.JSONAssetPackItem(pack, data);
-                    
+
                 case core.XML_TYPE:
                     return new core.XMLAssetPackItem(pack, data);
             }
@@ -159,6 +174,8 @@ namespace phasereditor2d.pack.ui {
         }
 
         createEditorPropertySections(page: controls.properties.PropertyPage): controls.properties.PropertySection<any>[] {
+
+            const exts = AssetPackPlugin.getInstance().getPreviewPropertyProviderExtensions();
 
             return [
 
@@ -197,6 +214,14 @@ namespace phasereditor2d.pack.ui {
                 new editor.properties.TilemapImpactSection(page),
 
                 new editor.properties.TilemapTiledJSONSection(page),
+
+                new editor.properties.SimpleURLSection(page,
+                    "phasereditor2d.pack.ui.editor.properties.SpineJsonSection",
+                    "Spine JSON",
+                    "URL",
+                    "url",
+                    core.contentTypes.CONTENT_TYPE_SPINE_JSON,
+                    core.SPINE_JSON_TYPE),
 
                 new editor.properties.PluginSection(page),
 
@@ -294,6 +319,8 @@ namespace phasereditor2d.pack.ui {
                 new ui.properties.ImagePreviewSection(page),
 
                 new ui.properties.ManyImagePreviewSection(page),
+
+                ...exts.flatMap(ext => ext.getSections(page))
             ];
         }
 
@@ -311,8 +338,6 @@ namespace phasereditor2d.pack.ui {
 
                 const type = element.getType();
 
-                const webPlugin = webContentTypes.WebContentTypesPlugin.getInstance();
-
                 switch (type) {
 
                     case core.IMAGE_TYPE:
@@ -323,7 +348,8 @@ namespace phasereditor2d.pack.ui {
                     case core.MULTI_ATLAS_TYPE:
                     case core.ATLAS_TYPE:
                     case core.UNITY_ATLAS_TYPE:
-                    case core.ATLAS_XML_TYPE: {
+                    case core.ATLAS_XML_TYPE:
+                    case core.SPINE_ATLAS_TYPE: {
 
                         return new viewers.AtlasItemCellRenderer();
                     }
@@ -334,7 +360,7 @@ namespace phasereditor2d.pack.ui {
 
                     case core.AUDIO_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SOUND), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_FILE_SOUND), layout);
 
                     case core.SCRIPT_TYPE:
                     case core.SCENE_FILE_TYPE:
@@ -353,15 +379,15 @@ namespace phasereditor2d.pack.ui {
                     case core.HTML_TYPE:
                     case core.JSON_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_SCRIPT), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_FILE_SCRIPT), layout);
 
                     case core.TEXT_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_TEXT), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_FILE_TEXT), layout);
 
                     case core.HTML_TEXTURE_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_IMAGE), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_FILE_IMAGE), layout);
 
                     case core.BITMAP_FONT_TYPE:
 
@@ -369,17 +395,22 @@ namespace phasereditor2d.pack.ui {
 
                     case core.VIDEO_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(webPlugin.getIcon(webContentTypes.ICON_FILE_VIDEO), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_FILE_VIDEO), layout);
 
                     case core.ANIMATION_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
 
                     case core.TILEMAP_CSV_TYPE:
                     case core.TILEMAP_IMPACT_TYPE:
                     case core.TILEMAP_TILED_JSON_TYPE:
 
-                        return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_TILEMAP), layout);
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_TILEMAP), layout);
+
+                    case core.SPINE_JSON_TYPE:
+                    case core.SPINE_BINARY_TYPE:
+
+                        return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_SPINE), layout);
 
                     default:
                         break;
@@ -391,7 +422,7 @@ namespace phasereditor2d.pack.ui {
 
             } else if (element instanceof core.AnimationConfigInPackItem) {
 
-                return DefaultAssetPackExtension.getIconRenderer(AssetPackPlugin.getInstance().getIcon(ICON_ANIMATIONS), layout);
+                return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
             }
 
             return undefined;
@@ -411,8 +442,7 @@ namespace phasereditor2d.pack.ui {
                 }
             }
 
-            return this.getIconRenderer(webContentTypes.WebContentTypesPlugin
-                .getInstance().getIcon(webContentTypes.ICON_FILE_SCRIPT), layout);
+            return this.getIconRenderer(resources.getIcon(resources.ICON_FILE_SCRIPT), layout);
         }
 
         static getIconRenderer(icon: controls.IImage, layout: "grid" | "tree") {
@@ -460,6 +490,12 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
                     core.TILEMAP_TILED_JSON_TYPE),
+
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
+
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
+
+                new importers.SpineAtlasImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,

@@ -1,5 +1,25 @@
 # Change Log
 
+## v3.62.3-development.
+
+* Opens the file given in the `openfile` URL search parameter. Like in `?openfile=some/file`.
+* Show splash before loading the workbench.
+* Boost load speed: migrates editor's icons from single files to a texture atlas.
+* Boost load speed: bundle all IDE text resources into a single res.json file.
+* Improves browser cache managing. Loads way faster when running in the cloud.
+* Shows property shortcuts in the prefab properties section.
+* Shows Prefab Properties section also when a property is selected.
+* Show event icons in the Event property's dialog.
+* Allows downloading all v3 files from the Phaser Editor 2D website.
+* [249](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/249) Auto compile the scene file when it is created.
+* Adds support to Spine animations.
+* Adds spine project template to marketplace.
+* [#289](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/289) Fixes hit area computation on nested containers.
+
+## v3.62.2, Jul 2, 2023
+
+* Fixes exporting user components in prefabs.
+
 ## v3.62.1, Jun 30, 2023
 
 * Fixes KeyCode user property editor.

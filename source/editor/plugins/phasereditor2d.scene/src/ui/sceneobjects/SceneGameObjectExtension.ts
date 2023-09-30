@@ -37,6 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         gameObjectFactoryExpr: string;
         sceneExpr: string;
         parentVarName: string;
+        unit: code.UnitCodeDOM;
     }
 
     export interface IBuildPrefabConstructorCodeDOMArgs {
@@ -45,6 +46,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         sceneExpr: string;
         parentVarName?: string;
         methodCallDOM: code.MethodCallCodeDOM;
+        unit: code.UnitCodeDOM;
         prefabSerializer: json.Serializer;
     }
 
@@ -53,12 +55,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         ctrDeclCodeDOM: code.MethodDeclCodeDOM;
         prefabObj: ISceneGameObject;
         importTypes: string[];
+        unit: code.UnitCodeDOM;
+        isESModule: boolean;
     }
 
     export interface IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs {
 
         superMethodCallCodeDOM: code.MethodCallCodeDOM;
         prefabObj: ISceneGameObject;
+        unit: code.UnitCodeDOM;
     }
 
     export abstract class SceneGameObjectExtension extends SceneObjectExtension {
@@ -67,8 +72,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(config: {
             typeName: string,
+            typeNameES?: string;
             typeNameAlias?: string[],
             phaserTypeName: string,
+            phaserTypeThirdPartyLib?: string,
+            phaserTypeThirdPartyLibModule?: string,
             category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {
@@ -103,7 +111,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          *
          * @param args The data involved in a drop action.
          */
-        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject;
+        abstract createSceneObjectWithAsset(args: ICreateWithAssetArgs): sceneobjects.ISceneGameObject | Promise<sceneobjects.ISceneGameObject>;
 
         /**
          * Create the scene object of this extension with the data involved in a deserialization.
@@ -125,5 +133,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
          * Gets a CodeDOM provider used by the Scene compiler to generate the object creation and prefab class codes.
          */
         abstract getCodeDOMBuilder(): GameObjectCodeDOMBuilder;
+
+        createInitObjectDataFromChild(childData: json.IObjectData): json.IObjectData {
+
+            return {
+                id: childData.id,
+                prefabId: childData.prefabId,
+                type: childData.type,
+                label: childData.label,
+            }
+        }
     }
 }

@@ -22,6 +22,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private _typeName: string;
         private _typeNameAlias: string[];
         private _phaserTypeName: string;
+        private _phaserTypeThirdPartyLib: string;
+        private _phaserTypeThirdPartyLibModule: string;
         private _iconDescriptor: controls.IconDescriptor;
         private _category: string;
 
@@ -30,6 +32,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             typeName: string,
             typeNameAlias?: string[],
             phaserTypeName: string,
+            phaserTypeThirdPartyLib?: string;
+            phaserTypeThirdPartyLibModule?: string;
             category: string,
             icon: colibri.ui.controls.IconDescriptor,
         }) {
@@ -38,6 +42,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._typeName = config.typeName;
             this._typeNameAlias = config.typeNameAlias || [];
             this._phaserTypeName = config.phaserTypeName;
+            this._phaserTypeThirdPartyLib = config.phaserTypeThirdPartyLib;
+            this._phaserTypeThirdPartyLibModule = config.phaserTypeThirdPartyLibModule;
             this._category = config.category;
             this._iconDescriptor = config.icon;
         }
@@ -83,6 +89,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getTypeName() {
+
             return this._typeName;
         }
 
@@ -92,12 +99,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getPhaserTypeName() {
+
             return this._phaserTypeName;
+        }
+
+        getPhaserTypeThirdPartyLib() {
+
+            return this._phaserTypeThirdPartyLib;
+        }
+
+        getPhaserTypeThirdPartyLibModule() {
+
+            return this._phaserTypeThirdPartyLibModule;
+        }
+
+        isThirdPartyLib() {
+
+            return Boolean(this._phaserTypeThirdPartyLib);
         }
 
         getHelp() {
 
-            return ScenePlugin.getInstance().getPhaserDocs().getDoc(this.getPhaserTypeName());
+            let helpKey: string;
+
+            if (this.isThirdPartyLib()) {
+
+                helpKey = this.getPhaserTypeThirdPartyLib() + "." + this.getPhaserTypeName();
+
+            } else {
+
+                helpKey = this.getPhaserTypeName();
+            }
+
+            return ScenePlugin.getInstance().getPhaserDocs().getDoc(helpKey);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace phasereditor2d.ide.ui.actions {
                     id: CMD_PLAY_PROJECT,
                     name: "Play Project",
                     tooltip: "Run this project in the browser.",
-                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    icon: resources.getIcon(resources.ICON_PLAY),
                     category: CAT_PROJECT
                 },
 
@@ -92,7 +92,7 @@ namespace phasereditor2d.ide.ui.actions {
                     id: CMD_QUICK_PLAY_PROJECT,
                     name: "Quick Play Project",
                     tooltip: "Run this project in a dialog.",
-                    icon: IDEPlugin.getInstance().getIcon(ICON_PLAY),
+                    icon: resources.getIcon(resources.ICON_PLAY),
                     category: CAT_PROJECT
                 },
 
@@ -103,10 +103,19 @@ namespace phasereditor2d.ide.ui.actions {
                     executeFunc: async (args) => {
 
                         const config = await IDEPlugin.getInstance().requestProjectConfig();
+                        let url: string;
 
-                        const url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+                        if (colibri.Platform.isOnElectron()) {
+
+                            url = config.playUrl || colibri.ui.ide.FileUtils.getRoot().getExternalUrl();
+
+                        } else {
+
+                            url = config.playUrl || "./external/";
+                        }
 
                         const dlg = new dialogs.PlayDialog(url);
+                        
                         dlg.create();
                     }
                 },

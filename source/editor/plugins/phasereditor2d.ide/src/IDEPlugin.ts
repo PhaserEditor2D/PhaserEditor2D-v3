@@ -3,10 +3,8 @@ namespace phasereditor2d.ide {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export const ICON_PLAY = "play";
-
     export class IDEPlugin extends colibri.Plugin {
-        
+
         public eventActivationChanged = new controls.ListenerList<boolean>();
 
         private static _instance = new IDEPlugin();
@@ -36,13 +34,6 @@ namespace phasereditor2d.ide {
                     () => new ui.DesignWindow()
                 )
             );
-
-            // icons
-
-            reg.addExtension(
-                colibri.ui.ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_PLAY
-                ]));
 
             // keys
 
@@ -159,9 +150,16 @@ namespace phasereditor2d.ide {
 
             } else {
 
-                const {protocol, host} = window.location;
+                if (colibri.Platform.isOnElectron()) {
 
-                url = `${protocol}//${host}/editor/external/${search}`;
+                    const { protocol, host } = window.location;
+
+                    url = `${protocol}//${host}/editor/external/${search}`;
+
+                } else {
+
+                    url = `./external/${search}`;
+                }
             }
 
             this.openBrowser(url);
@@ -235,7 +233,7 @@ namespace phasereditor2d.ide {
 
                 console.log(`IDEPlugin: opening project`);
 
-                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
+                document.title = `Phaser Editor 2D v${colibri.PRODUCT_VERSION} ${this.isLicenseActivated() ? "Premium" : "Free"}`;
 
                 const designWindow = wb.activateWindow(ui.DesignWindow.ID) as ui.DesignWindow;
 
@@ -254,7 +252,7 @@ namespace phasereditor2d.ide {
 
                 const projectName = wb.getFileStorage().getRoot().getName();
 
-                document.title = `Phaser Editor 2D v${VER} ${this.isLicenseActivated() ? "Premium" : "Free"} ${projectName}`;
+                document.title = `Phaser Editor 2D v${colibri.PRODUCT_VERSION} ${this.isLicenseActivated() ? "Premium" : "Free"} ${projectName}`;
 
             } finally {
 
@@ -265,7 +263,7 @@ namespace phasereditor2d.ide {
         }
 
         isOpeningProject() {
-            
+
             return this._openingProject;
         }
 
@@ -275,8 +273,8 @@ namespace phasereditor2d.ide {
         }
 
         setEnableOpenCodeFileInExternalEditor(enabled: boolean) {
-            
-            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled? "1" : "0");
+
+            window.localStorage.setItem("phasereditor2d.ide.enableOpenCodeFileInExternalEditor", enabled ? "1" : "0");
         }
 
         isEnableOpenCodeFileInExternalEditor() {
@@ -323,13 +321,11 @@ namespace phasereditor2d.ide {
 
     /* program entry point */
 
-    export const VER = "3.62.1";
-
     async function main() {
 
-        colibri.CACHE_VERSION = VER;
+        await colibri.Platform.loadProduct();
 
-        console.log(`%c %c Phaser Editor 2D %c v${VER} %c %c https://phasereditor2d.com `,
+        console.log(`%c %c Phaser Editor 2D %c v${colibri.PRODUCT_VERSION} %c %c https://phasereditor2d.com `,
             "background-color:red",
             "background-color:#3f3f3f;color:whitesmoke",
             "background-color:orange;color:black",

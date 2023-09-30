@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                icon: ScenePlugin.getInstance().getIconDescriptor(ICON_GROUP),
+                icon: resources.getIconDescriptor(resources.ICON_GROUP),
                 phaserTypeName: "Phaser.GameObjects.Polygon",
                 typeName: "Polygon",
                 category: SCENE_OBJECT_SHAPE_CATEGORY,

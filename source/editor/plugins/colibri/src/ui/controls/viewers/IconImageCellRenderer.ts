@@ -9,6 +9,7 @@ namespace colibri.ui.controls.viewers {
         }
 
         getIcon(obj: any): IImage {
+
             return this._icon;
         }
 
@@ -17,7 +18,6 @@ namespace colibri.ui.controls.viewers {
             let icon = this.getIcon(args.obj);
 
             if (icon) {
-
 
                 const x = args.x + (args.w - RENDER_ICON_SIZE) / 2;
                 const y = args.y + (args.h - RENDER_ICON_SIZE) / 2;
@@ -41,10 +41,12 @@ namespace colibri.ui.controls.viewers {
         }
 
         cellHeight(args: RenderCellArgs) {
+            
             return ROW_HEIGHT;
         }
 
         preload(args: PreloadCellArgs): Promise<PreloadResult> {
+
             return controls.Controls.resolveNothingLoaded();
         }
     }

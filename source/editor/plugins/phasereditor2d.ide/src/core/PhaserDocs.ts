@@ -2,14 +2,25 @@ namespace phasereditor2d.ide.core {
 
     export class PhaserDocs {
 
-        private _data: any = null;
-        private _plugin: colibri.Plugin;
-        private _files: string[];
+        private _data: any = {};
 
-        constructor(plugin: colibri.Plugin, ...files: string[]) {
+        constructor(plugin: colibri.Plugin, ...resKeys: string[]) {
 
-            this._plugin = plugin;
-            this._files = files;
+            for (const resKey of resKeys) {
+
+                const resData = plugin.getResources().getResData(resKey);
+
+                const converter = new showdown.Converter();
+
+                for (const k of Object.keys(resData)) {
+
+                    const help = resData[k];
+
+                    const html = converter.makeHtml(help);
+
+                    this._data[k] = html;
+                }
+            }
         }
 
         static markdownToHtml(txt: string) {
@@ -17,31 +28,6 @@ namespace phasereditor2d.ide.core {
             const converter = new showdown.Converter();
 
             return converter.makeHtml(txt);
-        }
-
-        async preload() {
-
-            if (!this._data) {
-
-                this._data = {};
-
-                for (const file of this._files) {
-
-                    console.log("Loading jsdoc " + this._plugin.getId() + ": " + file);
-
-                    const fileData = await this._plugin.getJSON(file);
-
-                    const converter = new showdown.Converter();
-
-                    // tslint:disable-next-line:forin
-                    for (const k in fileData) {
-
-                        const help = fileData[k];
-
-                        this._data[k] = converter.makeHtml(help);
-                    }
-                }
-            }
         }
 
         getDoc(helpKey: string, wrap = true): string {

@@ -52,16 +52,21 @@ namespace phasereditor2d.pack.ui.importers {
 
         async importFile(pack: core.AssetPack, file: io.FilePath | io.FilePath[]): Promise<core.AssetPackItem> {
 
-            const computer = new ide.utils.NameMaker(i => i.getKey());
-
-            computer.update(pack.getItems());
-
             const data = this.createItemData(pack, file);
 
             const firstFile = Array.isArray(file) ? file[0] : file;
 
             data.type = this.getType();
-            data.key = computer.makeName(firstFile.getNameWithoutExtension());
+            
+            const computer = new ide.utils.NameMaker(i => i.getKey());
+
+            computer.update(pack.getItems());
+
+            const baseKey = this.computeItemFromKey(firstFile);
+
+            const key = computer.makeName(baseKey);
+
+            data.key = key;
 
             const item = pack.createPackItem(data);
 
@@ -70,6 +75,11 @@ namespace phasereditor2d.pack.ui.importers {
             await item.preload();
 
             return item;
+        }
+
+        protected computeItemFromKey(file: io.FilePath) {
+
+            return file.getNameWithoutExtension();
         }
 
         async importMultipleFiles(pack: core.AssetPack, files: io.FilePath[]): Promise<core.AssetPackItem> {

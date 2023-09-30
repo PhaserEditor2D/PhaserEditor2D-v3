@@ -17,24 +17,20 @@ namespace phasereditor2d.animations {
 
         constructor() {
             super("phasereditor2d.animations");
-
-            this._docs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json");
         }
 
         getPhaserDocs() {
 
+            if (!this._docs) {
+
+                this._docs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance(), "phasereditor2d.animations/docs/phaser-docs.json");
+            }
+            
             return this._docs;
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
-
-            // preload docs
-
-            reg.addExtension(new colibri.ui.ide.PluginResourceLoaderExtension(async () => {
-
-                await this.getPhaserDocs().preload();
-            }));
-
 
             // editors
 

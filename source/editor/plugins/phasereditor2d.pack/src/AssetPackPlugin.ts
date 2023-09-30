@@ -4,11 +4,6 @@ namespace phasereditor2d.pack {
 
     import ide = colibri.ui.ide;
 
-    export const ICON_ASSET_PACK = "asset-pack";
-    export const ICON_ANIMATIONS = "animations";
-    export const ICON_TILEMAP = "tilemap";
-    export const ICON_TILEMAP_LAYER = "tilemap-layer";
-
     export const CAT_ASSET_PACK = "phasereditor2d.pack.ui.editor.category";
     export const CMD_ASSET_PACK_EDITOR_ADD_FILE = "phasereditor2d.pack.ui.editor.AddFile";
     export const CMD_TOGGLE_SIMPLE_RENDERING_OF_TEXTURE_ATLAS = "phasereditor2d.pack.ui.editor.ToggleSimpleRenderingOfTextureAtlas";
@@ -21,6 +16,8 @@ namespace phasereditor2d.pack {
         private _assetPackItemTypeSet: Set<string>;
         private _assetPackItemTypeDisplayNameMap: Map<string, string>;
         private _assetPackExtensionByTypeMap: Map<string, ui.AssetPackExtension>;
+        private _viewerExtensions: ui.AssetPackViewerExtension[];
+        private _previewPropertyProviderExtension: ui.AssetPackPreviewPropertyProviderExtension[];
 
         static getInstance() {
             return this._instance;
@@ -56,6 +53,28 @@ namespace phasereditor2d.pack {
             return this._assetPackExtensionByTypeMap.get(assetPackItemType);
         }
 
+        getViewerExtensions() {
+
+            if (!this._viewerExtensions) {
+
+                this._viewerExtensions = colibri.Platform
+                    .getExtensions(ui.AssetPackViewerExtension.POINT_ID);
+            }
+
+            return this._viewerExtensions;
+        }
+
+        getPreviewPropertyProviderExtensions() {
+
+            if (!this._previewPropertyProviderExtension) {
+
+                this._previewPropertyProviderExtension = colibri.Platform
+                    .getExtensions(ui.AssetPackPreviewPropertyProviderExtension.POINT_ID);
+            }
+
+            return this._previewPropertyProviderExtension;
+        }
+
         async starting(): Promise<void> {
 
             await super.starting();
@@ -86,17 +105,6 @@ namespace phasereditor2d.pack {
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
-
-            // icons loader
-
-            reg.addExtension(
-                ide.IconLoaderExtension.withPluginFiles(this, [
-                    ICON_ASSET_PACK,
-                    ICON_ANIMATIONS,
-                    ICON_TILEMAP,
-                    ICON_TILEMAP_LAYER
-                ])
-            );
 
             // asset pack extensions
 
@@ -160,6 +168,16 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(
                 new colibri.core.ContentTypeExtension(
+                    [
+                        new pack.core.contentTypes.SpineJsonContentTypeResolver(),
+                        new pack.core.contentTypes.SpineBinaryContentTypeResolver(),
+                        new pack.core.contentTypes.SpineAtlasContentTypeResolver()
+                    ],
+                    5
+                ));
+
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
                     [new pack.core.contentTypes.AudioSpriteContentTypeResolver()],
                     5
                 ));
@@ -167,32 +185,36 @@ namespace phasereditor2d.pack {
             // content type icons
 
             reg.addExtension(
-                ide.ContentTypeIconExtension.withPluginIcons(this, [
+                ide.ContentTypeIconExtension.withPluginIcons(resources.ResourcesPlugin.getInstance(), [
                     {
-                        iconName: ICON_ASSET_PACK,
+                        iconName: resources.ICON_ASSET_PACK,
                         contentType: core.contentTypes.CONTENT_TYPE_ASSET_PACK
                     },
                     {
-                        iconName: ICON_ANIMATIONS,
+                        iconName: resources.ICON_ANIMATIONS,
                         contentType: core.contentTypes.CONTENT_TYPE_ANIMATIONS
                     },
                     {
-                        iconName: ICON_TILEMAP,
+                        iconName: resources.ICON_TILEMAP,
                         contentType: core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON
                     },
                     {
-                        plugin: webContentTypes.WebContentTypesPlugin.getInstance(),
-                        iconName: webContentTypes.ICON_FILE_FONT,
+                        iconName: resources.ICON_FILE_FONT,
                         contentType: core.contentTypes.CONTENT_TYPE_BITMAP_FONT
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_JSON
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_BINARY
+                    },
+                    {
+                        iconName: resources.ICON_SPINE,
+                        contentType: core.contentTypes.CONTENT_TYPE_SPINE_ATLAS
                     }
                 ]));
-
-            // plugin resources loader
-
-            reg.addExtension(new ide.PluginResourceLoaderExtension(async () => {
-
-                await AssetPackPlugin.getInstance().getPhaserDocs().preload();
-            }));
 
             // project resources preloader
 
@@ -281,9 +303,15 @@ namespace phasereditor2d.pack {
         private _phaserDocs: phasereditor2d.ide.core.PhaserDocs;
 
         getPhaserDocs() {
-            return this._phaserDocs ?
-                this._phaserDocs :
-                (this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(this, "data/phaser-docs.json"));
+
+            if (!this._phaserDocs) {
+
+                this._phaserDocs = this._phaserDocs = new phasereditor2d.ide.core.PhaserDocs(
+                    resources.ResourcesPlugin.getInstance()
+                    , "phasereditor2d.pack/docs/phaser-docs.json");
+            }
+
+            return this._phaserDocs;
         }
     }
 
