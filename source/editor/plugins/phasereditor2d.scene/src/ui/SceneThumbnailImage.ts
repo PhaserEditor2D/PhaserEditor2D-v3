@@ -54,7 +54,7 @@ namespace phasereditor2d.scene.ui {
 
             if (singleObject) {
 
-                if (singleObject instanceof sceneobjects.Container) {
+                if (singleObject instanceof sceneobjects.Container || singleObject instanceof sceneobjects.Layer) {
 
                     const container = singleObject as sceneobjects.Container;
 

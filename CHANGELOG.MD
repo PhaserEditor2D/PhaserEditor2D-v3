@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Fixes making thumbnails of single-layer prefabs.
+
 ## v3.63.0 - Sep 30, 2023
 
 * Opens the file given in the `openfile` URL search parameter. Like in `?openfile=some/file`.
