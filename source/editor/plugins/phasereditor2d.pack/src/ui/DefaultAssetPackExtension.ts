@@ -467,6 +467,12 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.UnityAtlasImporter(),
 
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
+
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
+
+                new importers.SpineAtlasImporter(),
+
                 new importers.BitmapFontImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_IMAGE, core.IMAGE_TYPE),
@@ -480,6 +486,7 @@ namespace phasereditor2d.pack.ui {
                         scale: 0
                     }
                 }),
+
                 new importers.SpritesheetImporter(),
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_ANIMATIONS, core.ANIMATION_TYPE),
@@ -490,12 +497,6 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
                     core.TILEMAP_TILED_JSON_TYPE),
-
-                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
-
-                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
-
-                new importers.SpineAtlasImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,

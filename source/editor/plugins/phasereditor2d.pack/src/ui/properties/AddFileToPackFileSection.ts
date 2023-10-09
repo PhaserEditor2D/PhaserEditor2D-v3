@@ -29,116 +29,127 @@ namespace phasereditor2d.pack.ui.properties {
 
             this.addUpdater(async () => {
 
+                comp.innerHTML = "";
+
                 const finder = new core.PackFinder();
 
                 await finder.preload();
 
-                const packItems = await this.getPackItems(finder);
+                await this.buildImportButtons(finder, comp);
 
-                comp.innerHTML = "";
-
-                const used = new Set();
-
-                for (const item of packItems) {
-
-                    const btn = document.createElement("button");
-
-                    const key = item.getKey();
-                    const packPath = item.getPack().getFile().getProjectRelativeName();
-                    const hash = `${key}@${packPath}`;
-
-                    if (used.has(hash)) {
-
-                        continue;
-                    }
-
-                    used.add(hash);
-
-                    btn.innerHTML =
-                        `${key} at ${packPath}`;
-
-                    btn.addEventListener("click", async (e) => {
-
-                        const editor = colibri.Platform.getWorkbench()
-                            .openEditor(item.getPack().getFile()) as editor.AssetPackEditor;
-
-                        editor.revealKey(item.getKey());
-                    });
-
-                    comp.appendChild(btn);
-                }
-
-                if (packItems.length === 0) {
-
-                    const importList = this.buildImportList();
-
-                    for (const importData of importList) {
-
-                        const btn = document.createElement("button");
-
-                        btn.innerText = `Import as ${importData.importer.getType()} (${importData.files.length})`;
-
-                        btn.addEventListener("click", async (e) => {
-
-                            const packs = finder.getPacks();
-
-                            const menu = new controls.Menu();
-
-                            for (const pack of packs) {
-
-                                const validFiles = importData.files
-                                    .filter(file => {
-
-                                        const publicRoot = colibri.ui.ide.FileUtils.getPublicRoot(pack.getFile().getParent());
-
-                                        return file.getFullName().startsWith(publicRoot.getFullName())
-                                    });
-
-                                menu.add(new controls.Action({
-                                    text: "Add To " + pack.getFile().getProjectRelativeName(),
-                                    enabled: validFiles.length > 0,
-                                    callback: () => {
-
-                                        this.importWithImporter(importData, pack);
-                                    }
-                                }));
-                            }
-
-                            menu.add(new controls.Action({
-                                text: "Add To New Pack File",
-                                callback: () => {
-
-                                    const ext = new pack.ui.dialogs.NewAssetPackFileWizardExtension();
-
-                                    const dlg = ext.createDialog({
-                                        initialFileLocation: this.getSelectionFirstElement().getParent()
-                                    });
-
-                                    dlg.setTitle("New " + ext.getDialogName());
-
-                                    const callback = dlg.getFileCreatedCallback();
-
-                                    dlg.setFileCreatedCallback(async (file) => {
-
-                                        await callback(file);
-
-                                        const content = colibri.ui.ide.FileUtils.getFileString(file);
-
-                                        const pack = new core.AssetPack(file, content);
-
-                                        this.importWithImporter(importData, pack);
-
-                                    });
-                                }
-                            }));
-
-                            menu.createWithEvent(e);
-                        });
-
-                        comp.appendChild(btn);
-                    }
-                }
+                await this.buildOpenButtons(finder, comp);
             });
+        }
+
+        private async buildOpenButtons(finder: core.PackFinder, comp: HTMLDivElement) {
+
+            const packItems = await this.getPackItems(finder);
+
+            const used = new Set();
+
+            for (const item of packItems) {
+
+                const btn = document.createElement("button");
+
+                const key = item.getKey();
+                const packName = item.getPack().getFile().getName();
+                const packPath = item.getPack().getFile().getProjectRelativeName();
+                const hash = `${key}@${packPath}`;
+
+                if (used.has(hash)) {
+
+                    continue;
+                }
+
+                used.add(hash);
+
+                btn.innerHTML =
+                    `Open ${key} at ${packName}`;
+
+                btn.addEventListener("click", async (e) => {
+
+                    const editor = colibri.Platform.getWorkbench()
+                        .openEditor(item.getPack().getFile()) as editor.AssetPackEditor;
+
+                    editor.revealKey(item.getKey());
+                });
+
+                comp.appendChild(btn);
+            }
+        }
+
+        private async buildImportButtons(finder: core.PackFinder, comp: HTMLDivElement) {
+
+            const importersData = await this.buildImportersData(finder);
+
+            for (const importerData of importersData) {
+
+                const btn = document.createElement("button");
+
+                const importDesc = importerData.files.length === 1 ?
+                    importerData.files[0].getName() : importerData.files.length.toString();
+
+                btn.innerText = `Import as ${importerData.importer.getType()} (${importDesc})`;
+
+                btn.addEventListener("click", async (e) => {
+
+                    const packs = finder.getPacks();
+
+                    const menu = new controls.Menu();
+
+                    for (const pack of packs) {
+
+                        const validFiles = importerData.files
+                            .filter(file => {
+
+                                const publicRoot = colibri.ui.ide.FileUtils.getPublicRoot(pack.getFile().getParent());
+
+                                return file.getFullName().startsWith(publicRoot.getFullName());
+                            });
+
+                        menu.add(new controls.Action({
+                            text: "Add To " + pack.getFile().getProjectRelativeName(),
+                            enabled: validFiles.length > 0,
+                            callback: () => {
+
+                                this.importWithImporter(importerData, pack);
+                            }
+                        }));
+                    }
+
+                    menu.add(new controls.Action({
+                        text: "Add To New Pack File",
+                        callback: () => {
+
+                            const ext = new pack.ui.dialogs.NewAssetPackFileWizardExtension();
+
+                            const dlg = ext.createDialog({
+                                initialFileLocation: this.getSelectionFirstElement().getParent()
+                            });
+
+                            dlg.setTitle("New " + ext.getDialogName());
+
+                            const callback = dlg.getFileCreatedCallback();
+
+                            dlg.setFileCreatedCallback(async (file) => {
+
+                                await callback(file);
+
+                                const content = colibri.ui.ide.FileUtils.getFileString(file);
+
+                                const pack = new core.AssetPack(file, content);
+
+                                this.importWithImporter(importerData, pack);
+
+                            });
+                        }
+                    }));
+
+                    menu.createWithEvent(e);
+                });
+
+                comp.appendChild(btn);
+            }
         }
 
         private async importWithImporter(importData: editor.IImportData, pack: core.AssetPack) {
@@ -158,13 +169,25 @@ namespace phasereditor2d.pack.ui.properties {
             blocks.BlocksPlugin.getInstance().refreshBlocksView();
         }
 
-        private buildImportList() {
+        private async buildImportersData(finder: core.PackFinder) {
 
             const importList: editor.IImportData[] = [];
 
+            const selection: io.FilePath[] = [];
+
+            for (const file of this.getSelection()) {
+
+                const items = await finder.findPackItemsFor(file);
+
+                if (items.length === 0) {
+
+                    selection.push(file);
+                }
+            }
+
             for (const importer of importers.Importers.getAll()) {
 
-                const files = this.getSelection().filter(file => importer.acceptFile(file));
+                const files = selection.filter(file => importer.acceptFile(file));
 
                 if (files.length > 0) {
 
@@ -193,14 +216,16 @@ namespace phasereditor2d.pack.ui.properties {
                 }
             }
 
-            if (n > 0) {
+            return n > 0;
 
-                const list = this.buildImportList();
+            // if (n > 0) {
 
-                return list.length > 0;
-            }
+            //     const list = this.buildImportList();
 
-            return false;
+            //     return list.length > 0;
+            // }
+
+            // return false;
         }
     }
 }
