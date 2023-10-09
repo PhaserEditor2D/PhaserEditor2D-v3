@@ -3,6 +3,7 @@
 ## dev
 
 * Fixes making thumbnails of single-layer prefabs.
+* Allows merging Import and Open buttons in the Asset Pack Entry section.
 
 ## v3.63.0 - Sep 30, 2023
 
