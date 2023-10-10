@@ -5,6 +5,7 @@
 * Fixes making thumbnails of single-layer prefabs.
 * Allows merging Import and Open buttons in the Asset Pack Entry section.
 * [#251](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/251) Fixes sprite positioning in Animations Editor.
+* [#209](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/209) Improves scene border painting.
 
 ## v3.63.0 - Sep 30, 2023
 
