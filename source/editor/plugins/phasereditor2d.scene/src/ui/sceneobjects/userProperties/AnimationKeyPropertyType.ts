@@ -34,17 +34,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (animation) {
 
-                const frames = animation.getFrames();
-
-                if (frames.length > 0) {
-
-                    const frame = frames[Math.floor(frames.length / 2)];
-
-                    if (frame) {
-
-                        return finder.getAssetPackItemImage(frame.getTextureKey(), frame.getFrameKey());
-                    }
-                }
+                return animation.getPreviewImageAsset();
             }
 
             return null;

@@ -31,5 +31,27 @@ namespace phasereditor2d.pack.core {
 
             return this._frames;
         }
+
+        getPreviewFrame() {
+
+            if (this._frames.length > 0) {
+
+                return this._frames[Math.floor(frames.length / 2)];
+            }
+
+            return null;
+        }
+
+        getPreviewImageAsset() {
+
+            const frame = this.getPreviewFrame();
+
+            if (frame) {
+
+                return frame.getImageAsset();
+            }
+
+            return null;
+        }
     }
 }

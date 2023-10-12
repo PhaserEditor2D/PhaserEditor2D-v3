@@ -11,6 +11,23 @@ namespace phasereditor2d.pack.core {
             this._textureFrame = textureFrame;
         }
 
+        getImageAsset() {
+
+            if (this._textureFrame) {
+
+                if (this._textureFrame instanceof pack.core.ImageAssetPackItem) {
+
+                    return this._textureFrame.getFrames()[0];
+
+                } else if (this._textureFrame instanceof pack.core.AssetPackImageFrame) {
+
+                    return this._textureFrame;
+                }
+            }
+
+            return null;
+        }
+
         getTextureFrame() {
 
             return this._textureFrame;

@@ -30,17 +30,13 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const cellSize = args.viewer.getCellSize();
 
-            const len = frames.length;
-
-            const indexes = [0, Math.floor(len / 2), len - 1];
-
             const ctx = args.canvasContext;
 
             ctx.save();
 
             if (cellSize <= controls.ROW_HEIGHT * 2 || this.layout === "square") {
 
-                const img = this.getImage(frames[0]);
+                const img = anim.getPreviewImageAsset();
 
                 if (img) {
 
@@ -49,12 +45,16 @@ namespace phasereditor2d.pack.ui.viewers {
 
             } else {
 
+                const len = frames.length;
+
+                const indexes = [0, Math.floor(len / 2), len - 1];
+
                 // tslint:disable-next-line:prefer-for-of
                 for (let i = 0; i < indexes.length; i++) {
 
                     const frame = frames[indexes[i]];
 
-                    const img = this.getImage(frame);
+                    const img = frame.getImageAsset();
 
                     if (img) {
 
@@ -66,22 +66,6 @@ namespace phasereditor2d.pack.ui.viewers {
             }
 
             ctx.restore();
-        }
-
-        private getImage(frame: pack.core.AnimationFrameConfigInPackItem) {
-
-            const texture = frame.getTextureFrame();
-
-            if (texture instanceof pack.core.ImageAssetPackItem) {
-
-                return texture.getFrames()[0];
-
-            } else if (texture instanceof pack.core.AssetPackImageFrame) {
-
-                return texture;
-            }
-
-            return null;
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {

@@ -322,6 +322,8 @@ namespace phasereditor2d.pack.ui {
 
                 new ui.properties.AnimationsPreviewSection(page),
 
+                new ui.properties.AnimationPreviewSection(page),
+
                 ...exts.flatMap(ext => ext.getSections(page))
             ];
         }
