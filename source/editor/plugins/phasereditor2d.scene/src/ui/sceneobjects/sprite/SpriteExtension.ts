@@ -45,7 +45,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 asset: frame.getTextureFrame()
             }
             
-            const sprite = super.createSceneObjectWithAsset(args2);
+            const sprite = super.createSceneObjectWithAsset(args2) as Sprite;
+
+            sprite.playMethod = PlayMethod.PLAY;
+            sprite.playAnimation = animConfig.getKey();
 
             return sprite;
         }

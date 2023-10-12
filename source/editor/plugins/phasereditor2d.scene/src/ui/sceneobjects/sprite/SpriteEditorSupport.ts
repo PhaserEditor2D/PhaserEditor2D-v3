@@ -6,6 +6,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(obj: Sprite, scene: Scene) {
             super(SpriteExtension.getInstance(), obj, scene);
+
+            this.addComponent(new SpriteComponent(obj));
         }
     }
 }

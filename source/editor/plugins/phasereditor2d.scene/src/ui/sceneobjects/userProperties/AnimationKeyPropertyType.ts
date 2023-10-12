@@ -14,7 +14,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
+
         protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
+
+            return AnimationKeyPropertyType.getAnimationIcon(finder, value);
+        }
+
+        static getAnimationIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
 
             const animation = finder.getPacks()
 
