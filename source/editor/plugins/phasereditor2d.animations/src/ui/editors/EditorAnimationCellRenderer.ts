@@ -37,7 +37,7 @@ namespace phasereditor2d.animations.ui.editors {
 
             ctx.save();
 
-            if (cellSize <= controls.ROW_HEIGHT) {
+            if (cellSize <= controls.ROW_HEIGHT * 2) {
 
                 const img = this.getImage(frames[0]);
 
