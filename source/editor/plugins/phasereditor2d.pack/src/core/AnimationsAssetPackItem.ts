@@ -22,6 +22,11 @@ namespace phasereditor2d.pack.core {
             return this._animations || [];
         }
 
+        getAnimationsFile() {
+
+            return this.getFileFromAssetUrl(this.getUrl());
+        }
+
         async preload() {
 
             if (this._animations) {
@@ -33,7 +38,7 @@ namespace phasereditor2d.pack.core {
 
             try {
 
-                const file = this.getFileFromAssetUrl(this.getUrl());
+                const file = this.getAnimationsFile();
 
                 if (file) {
 

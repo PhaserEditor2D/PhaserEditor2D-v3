@@ -21,6 +21,8 @@ namespace phasereditor2d.animations.ui.editors {
         private _currentDependenciesHash: string;
         private _menuCreator: AnimationsEditorMenuCreator;
         private _model: AnimationsModel;
+        private _editorReady = false;
+        private _selectAnimationKeyOnBoot: string;
 
         static getFactory() {
 
@@ -502,7 +504,21 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.refreshOutline();
 
-            this.setSelection([]);
+            let selection: Phaser.Animations.Animation[] = [];
+
+            if (this._selectAnimationKeyOnBoot) {
+
+                const anims = this.getAnimations();
+
+                if (anims) {
+
+                    selection = anims.filter(a => a.key === this._selectAnimationKeyOnBoot);
+                }
+            }
+
+            this.setSelection(selection);
+
+            this._editorReady = true;
         }
 
         private async readScene() {
@@ -742,6 +758,18 @@ namespace phasereditor2d.animations.ui.editors {
             }
 
             return list;
+        }
+
+        selectAnimationByKey(animationKey: string) {
+
+            if (this._editorReady) {
+
+                this.setSelection(this.getAnimations().filter(a => a.key === animationKey));
+
+            } else {
+
+                this._selectAnimationKeyOnBoot = animationKey;
+            }
         }
 
         getAnimations() {

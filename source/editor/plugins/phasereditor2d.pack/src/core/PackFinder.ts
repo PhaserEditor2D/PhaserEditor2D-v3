@@ -25,7 +25,7 @@ namespace phasereditor2d.pack.core {
             for (const item of items) {
 
                 const result2 = await item.preload();
-                
+
                 result = Math.max(result, result2);
 
                 if (monitor) {
@@ -53,6 +53,17 @@ namespace phasereditor2d.pack.core {
                 .flatMap(p => p.getItems())
 
                 .filter(i => !filter || filter(i));
+        }
+
+        findAnimationByKey(key: string) {
+
+            return this.getAssets()
+            
+                .filter(i => i instanceof AnimationsAssetPackItem)
+
+                .flatMap((i: AnimationsAssetPackItem) => i.getAnimations())
+
+                .find(a => a.getKey() === key);
         }
 
         findAssetPackItem(key: string) {

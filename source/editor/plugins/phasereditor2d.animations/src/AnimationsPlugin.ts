@@ -19,6 +19,23 @@ namespace phasereditor2d.animations {
             super("phasereditor2d.animations");
         }
 
+        async openAnimationInEditor(anim: pack.core.AnimationConfigInPackItem) {
+
+            const animationsItem = anim.getParent();
+
+            const file = animationsItem.getAnimationsFile();
+
+            if (file) {
+
+                const editor = colibri.Platform.getWorkbench().openEditor(file);
+
+                if (editor instanceof ui.editors.AnimationsEditor) {
+
+                    editor.selectAnimationByKey(anim.getKey());
+                }
+            }
+        }
+
         getPhaserDocs() {
 
             if (!this._docs) {
@@ -26,7 +43,7 @@ namespace phasereditor2d.animations {
                 this._docs = new phasereditor2d.ide.core.PhaserDocs(
                     resources.ResourcesPlugin.getInstance(), "phasereditor2d.animations/docs/phaser-docs.json");
             }
-            
+
             return this._docs;
         }
 
@@ -48,6 +65,12 @@ namespace phasereditor2d.animations {
             reg.addExtension(
                 new colibri.ui.ide.commands.CommandExtension(manager => this.registerCommands(manager))
             );
+
+            // asset pack preview extension
+
+            reg.addExtension(new pack.ui.AssetPackPreviewPropertyProviderExtension(
+                page => new ui.editors.properties.AnimationInfoSection(page),
+            ));
         }
 
         private registerCommands(manager: colibri.ui.ide.commands.CommandManager) {
