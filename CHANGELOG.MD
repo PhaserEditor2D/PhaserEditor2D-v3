@@ -6,6 +6,11 @@
 * Allows merging Import and Open buttons in the Asset Pack Entry section.
 * [#251](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/251) Fixes sprite positioning in Animations Editor.
 * [#209](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/209) Improves scene border painting.
+* Improves animations preview UI:
+    - New Animation preview section.
+    - New Animations Preview section.
+* Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
+* Shows Sprite Animation blocks in the Scene Editor's Blocks view.
 
 ## v3.63.0 - Sep 30, 2023
 
