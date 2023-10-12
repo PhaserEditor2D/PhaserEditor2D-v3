@@ -128,6 +128,20 @@ namespace phasereditor2d.scene.ui.blocks {
                         }
                     }
 
+                } else if (obj instanceof pack.core.AnimationConfigInPackItem) {
+
+                    const item = this.getFreshItem(obj.getParent()) as pack.core.AnimationsAssetPackItem;
+
+                    if (item) {
+
+                        const found = item.getAnimations().find(a => a.getKey() === obj.getKey());
+
+                        if (found) {
+
+                            set.add(found);
+                        }
+                    }
+
                 } else {
 
                     set.add(obj);

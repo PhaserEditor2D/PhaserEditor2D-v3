@@ -80,7 +80,10 @@ namespace phasereditor2d.scene.ui {
                     const cx = s.borderX + s.borderWidth / 2 + dx;
                     const cy = s.borderY + s.borderHeight / 2 + dy;
 
-                    sprite.setPosition(cx, cy);
+                    if (sprite.setPosition) {
+
+                        sprite.setPosition(cx, cy);
+                    }
                 }
 
             } else {

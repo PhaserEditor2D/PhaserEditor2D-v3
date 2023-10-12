@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (element instanceof pack.core.AnimationConfigInPackItem) {
 
-                return new pack.ui.viewers.AnimationConfigCellRenderer(this._finder);
+                return new pack.ui.viewers.AnimationConfigCellRenderer();
             }
 
             return super.getCellRenderer(element);

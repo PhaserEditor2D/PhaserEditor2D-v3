@@ -4,6 +4,17 @@ namespace phasereditor2d.pack.core {
 
         private _textureKey: string;
         private _frameKey: string | number;
+        private _textureFrame: ImageAssetPackItem | AssetPackImageFrame;
+
+        setTextureFrame(textureFrame: ImageAssetPackItem | AssetPackImageFrame) {
+
+            this._textureFrame = textureFrame;
+        }
+
+        getTextureFrame() {
+
+            return this._textureFrame;
+        }
 
         getTextureKey() {
 

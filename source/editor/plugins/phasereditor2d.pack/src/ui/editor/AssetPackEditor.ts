@@ -136,7 +136,18 @@ namespace phasereditor2d.pack.ui.editor {
 
             const content = await ide.FileUtils.preloadAndGetFileString(file);
 
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
             this._pack = new core.AssetPack(file, content);
+
+            for(const item of this._pack.getItems()) {
+
+                await item.preload();
+                
+                await item.build(finder);
+            }
 
             this.getViewer().repaint();
 

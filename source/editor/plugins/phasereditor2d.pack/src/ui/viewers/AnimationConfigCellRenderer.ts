@@ -4,12 +4,12 @@ namespace phasereditor2d.pack.ui.viewers {
 
     export class AnimationConfigCellRenderer implements controls.viewers.ICellRenderer {
 
-        private _finder: pack.core.PackFinder;
-        public layout: "square" | "full-width" = "full-width";
+        public layout: "square" | "full-width";
+        private static _finder: pack.core.PackFinder;
 
-        constructor(finder: pack.core.PackFinder) {
+        constructor(layout: "square" | "full-width" = "full-width") {
 
-            this._finder = finder;
+            this.layout = layout;
         }
 
         getAnimationConfig(args: controls.viewers.RenderCellArgs | controls.viewers.PreloadCellArgs): pack.core.AnimationConfigInPackItem {
@@ -38,7 +38,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
             ctx.save();
 
-            if (cellSize <= controls.ROW_HEIGHT) {
+            if (cellSize <= controls.ROW_HEIGHT || this.layout === "square") {
 
                 const img = this.getImage(frames[0]);
 
@@ -70,9 +70,18 @@ namespace phasereditor2d.pack.ui.viewers {
 
         private getImage(frame: pack.core.AnimationFrameConfigInPackItem) {
 
-            const image = this._finder.getAssetPackItemImage(frame.getTextureKey(), frame.getFrameKey());
+            const texture = frame.getTextureFrame();
 
-            return image;
+            if (texture instanceof pack.core.ImageAssetPackItem) {
+
+                return texture.getFrames()[0];
+
+            } else if (texture instanceof pack.core.AssetPackImageFrame) {
+
+                return texture;
+            }
+
+            return null;
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {
@@ -88,11 +97,11 @@ namespace phasereditor2d.pack.ui.viewers {
 
             for (const frame of anim.getFrames()) {
 
-                const obj = this._finder.getAssetPackItemOrFrame(frame.getTextureKey(), frame.getFrameKey());
+                const asset = frame.getTextureFrame();
 
-                if (obj) {
+                if (asset) {
 
-                    const objResult = await obj.preload();
+                    const objResult = await asset.preload();
 
                     result = Math.max(result, objResult);
                 }

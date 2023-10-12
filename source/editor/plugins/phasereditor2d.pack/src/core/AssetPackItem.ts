@@ -99,6 +99,16 @@ namespace phasereditor2d.pack.core {
             return controls.Controls.resolveNothingLoaded();
         }
 
+        /**
+         * For building connections with other assets.
+         * It is the case of the frames of the sprite animations.
+         * 
+         * @param finder 
+         */
+        async build(finder: pack.core.PackFinder) {
+            // empty
+        }
+
         resetCache() {
             // empty
         }
@@ -111,12 +121,12 @@ namespace phasereditor2d.pack.core {
         computeHash() {
 
             const files = new Set<io.FilePath>();
-            
+
             this.computeUsedFiles(files);
 
             const builder = new ide.core.MultiHashBuilder();
 
-            for(const file of files) {
+            for (const file of files) {
 
                 builder.addPartialFileToken(file);
             }

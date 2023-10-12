@@ -29,10 +29,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         acceptAsset(asset: any): boolean {
 
             return asset instanceof pack.core.ImageFrameContainerAssetPackItem
-                || asset instanceof pack.core.AssetPackImageFrame;
+                || asset instanceof pack.core.AssetPackImageFrame
+                || asset instanceof pack.core.AnimationConfigInPackItem;
         }
 
         async updateLoader(scene: BaseScene, asset: any) {
+
+            if (asset instanceof pack.core.AnimationConfigInPackItem) {
+
+                for(const animFrame of asset.getFrames()) {
+
+                    const textureFrame = animFrame.getTextureFrame();
+
+                    if (textureFrame) {
+
+                        await this.updateLoader(scene, textureFrame);
+                    }
+                }
+            }
 
             let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
 

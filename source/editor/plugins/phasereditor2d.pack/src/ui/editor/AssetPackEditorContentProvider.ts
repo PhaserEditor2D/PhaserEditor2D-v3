@@ -13,6 +13,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getPack() {
+
             return this._editor.getPack();
         }
 
@@ -29,6 +30,7 @@ namespace phasereditor2d.pack.ui.editor {
         getChildren(parent: any): any[] {
 
             if (typeof (parent) === "string") {
+                
                 const type = parent;
 
                 if (this.getPack()) {

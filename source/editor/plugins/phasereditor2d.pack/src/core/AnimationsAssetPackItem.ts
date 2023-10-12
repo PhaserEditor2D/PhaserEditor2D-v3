@@ -43,7 +43,7 @@ namespace phasereditor2d.pack.core {
 
                     for (const animData of data.anims) {
 
-                        const animConfig = new AnimationConfigInPackItem();
+                        const animConfig = new AnimationConfigInPackItem(this);
 
                         animConfig.setKey(animData.key);
 
@@ -67,6 +67,22 @@ namespace phasereditor2d.pack.core {
             }
 
             return controls.PreloadResult.RESOURCES_LOADED;
+        }
+
+        async build(finder: PackFinder) {
+
+            for (const anim of this._animations) {
+
+                for (const frameConfig of anim.getFrames()) {
+
+                    const textureKey = frameConfig.getTextureKey();
+                    const frameKey = frameConfig.getFrameKey();
+                    
+                    const textureFrame = finder.getAssetPackItemOrFrame(textureKey, frameKey);
+
+                    frameConfig.setTextureFrame(textureFrame);
+                }
+            }
         }
     }
 }

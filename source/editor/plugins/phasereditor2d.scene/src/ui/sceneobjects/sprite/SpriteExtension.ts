@@ -17,12 +17,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
+        override getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
             return new BaseImageCodeDOMBuilder("sprite");
         }
 
-        protected newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
+        override acceptsDropData(data: any): boolean {
+            
+            if (data instanceof pack.core.AnimationConfigInPackItem) {
+
+                return data.getFrames().length > 0;
+            }
+
+            return super.acceptsDropData(data);
+        }
+
+        override createSceneObjectWithAsset(args: ICreateWithAssetArgs): ISceneGameObject {
+            
+            const animConfig = args.asset as pack.core.AnimationConfigInPackItem;
+
+            const frames = animConfig.getFrames();
+
+            const frame = frames[0];
+
+            const args2: ICreateWithAssetArgs = {
+                ...args,
+                asset: frame.getTextureFrame()
+            }
+            
+            const sprite = super.createSceneObjectWithAsset(args2);
+
+            return sprite;
+        }
+
+        protected override newObject(scene: Scene, x: number, y: number, key?: string, frame?: string | number): ISceneGameObject {
 
             return new Sprite(scene, x, y, key || null, frame);
         }

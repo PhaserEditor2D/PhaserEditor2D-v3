@@ -422,7 +422,9 @@ namespace phasereditor2d.pack.ui {
 
             } else if (element instanceof core.AnimationConfigInPackItem) {
 
-                return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
+                // return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
+
+                return new viewers.AnimationConfigCellRenderer();
             }
 
             return undefined;

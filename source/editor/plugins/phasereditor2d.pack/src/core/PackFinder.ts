@@ -25,12 +25,18 @@ namespace phasereditor2d.pack.core {
             for (const item of items) {
 
                 const result2 = await item.preload();
+                
                 result = Math.max(result, result2);
 
                 if (monitor) {
 
                     monitor.step();
                 }
+            }
+
+            for (const item of items) {
+
+                await item.build(this);
             }
 
             return Promise.resolve(result);
@@ -85,11 +91,12 @@ namespace phasereditor2d.pack.core {
             return null;
         }
 
-        getAssetPackItemOrFrame(key: string, frame: any) {
+        getAssetPackItemOrFrame(key: string, frame: any): ImageAssetPackItem | AssetPackImageFrame {
 
             const item = this.findAssetPackItem(key);
 
             if (!item) {
+
                 return null;
             }
 
@@ -104,7 +111,12 @@ namespace phasereditor2d.pack.core {
                 return imageFrame;
             }
 
-            return item;
+            if (item instanceof ImageAssetPackItem) {
+
+                return item;
+            }
+
+            return null;
         }
 
         getAssetPackItemImage(key: string, frame: any): AssetPackImageFrame {
@@ -118,7 +130,6 @@ namespace phasereditor2d.pack.core {
             } else if (asset instanceof AssetPackImageFrame) {
 
                 return asset;
-
             }
 
             return null;

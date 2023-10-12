@@ -24,10 +24,15 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         getChildren(parent: any): any[] {
-            
+
             if (parent instanceof core.SpineAssetPackItem) {
 
                 return parent.getGuessSkinItems();
+            }
+
+            if (parent instanceof core.AnimationsAssetPackItem) {
+
+                return parent.getAnimations();
             }
 
             return super.getChildren(parent);
