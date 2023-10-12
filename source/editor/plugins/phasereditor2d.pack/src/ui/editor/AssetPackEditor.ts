@@ -151,7 +151,9 @@ namespace phasereditor2d.pack.ui.editor {
 
             this.getViewer().repaint();
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
+
+            this._outlineProvider.repaint();
 
             if (this._revealKey) {
 
@@ -212,7 +214,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             await this.resetPackCache();
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
         }
 
         private async resetPackCache() {
@@ -408,7 +410,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             this.setDirty(true);
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
 
             this._viewer.setSelection(items);
 
@@ -419,7 +421,7 @@ namespace phasereditor2d.pack.ui.editor {
             this.getUndoManager().add(new undo.AssetPackEditorOperation(this, before, after));
         }
 
-        async updateBlocks() {
+        async refreshBlocks() {
 
             if (!this._pack) {
                 return;

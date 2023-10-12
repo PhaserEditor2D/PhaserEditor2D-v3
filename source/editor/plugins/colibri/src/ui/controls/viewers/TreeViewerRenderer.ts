@@ -170,7 +170,7 @@ namespace colibri.ui.controls.viewers {
 
                 y += 15;
 
-            } else if (renderer.layout === "full-width") {
+            } else if (renderer.layout === "full-width" && args.h > ROW_HEIGHT * 2) {
 
                 args2 = new RenderCellArgs(
                     args.canvasContext, args.x, args.y, args.w, args.h - 20, args.obj, args.viewer);

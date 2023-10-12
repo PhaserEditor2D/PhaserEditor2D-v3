@@ -38,7 +38,7 @@ namespace phasereditor2d.pack.ui.viewers {
 
             ctx.save();
 
-            if (cellSize <= controls.ROW_HEIGHT || this.layout === "square") {
+            if (cellSize <= controls.ROW_HEIGHT * 2 || this.layout === "square") {
 
                 const img = this.getImage(frames[0]);
 

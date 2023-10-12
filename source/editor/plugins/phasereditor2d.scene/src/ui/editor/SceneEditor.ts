@@ -866,10 +866,12 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getOutlineProvider() {
+            
             return this._outlineProvider;
         }
 
         refreshOutline() {
+
             this._outlineProvider.repaint();
         }
 
