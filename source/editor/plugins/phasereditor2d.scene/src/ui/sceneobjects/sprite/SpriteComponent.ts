@@ -34,7 +34,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            // TODO
+
+            this.buildSetObjectPropertyCodeDOM([SpriteComponent.playMethod], args2 => {
+                
+                const sprite = args.obj as Sprite;
+
+                const method = sprite.playMethod;
+
+                if (method === PlayMethod.PLAY || method === PlayMethod.PLAY_REVERSE) {
+
+                    const name = method === PlayMethod.PLAY? "play" : "playReverse";
+
+                    const call = new core.code.MethodCallCodeDOM(name, args.objectVarName);
+                    call.argLiteral(sprite.playAnimation);
+
+                    args.statements.push(call);
+                }
+            });
         }
     }
 }
