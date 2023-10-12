@@ -11,6 +11,7 @@ namespace phasereditor2d.pack.ui {
         core.MULTI_ATLAS_TYPE,
         core.SPRITESHEET_TYPE,
         core.ANIMATION_TYPE,
+        core.ASEPRITE_TYPE,
         core.BITMAP_FONT_TYPE,
         core.TILEMAP_CSV_TYPE,
         core.TILEMAP_IMPACT_TYPE,
@@ -99,6 +100,9 @@ namespace phasereditor2d.pack.ui {
 
                 case core.ANIMATION_TYPE:
                     return new core.AnimationsAssetPackItem(pack, data);
+
+                case core.ASEPRITE_TYPE:
+                    return new core.AsepriteAssetPackItem(pack, data);
 
                 case core.BITMAP_FONT_TYPE:
                     return new core.BitmapFontAssetPackItem(pack, data);

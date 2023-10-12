@@ -14,6 +14,7 @@ namespace phasereditor2d.pack.core {
     export const SPINE_ATLAS_TYPE = "spineAtlas";
     export const SPRITESHEET_TYPE = "spritesheet";
     export const ANIMATION_TYPE = "animation";
+    export const ASEPRITE_TYPE = "asprite";
     export const AUDIO_TYPE = "audio";
     export const AUDIO_SPRITE_TYPE = "audioSprite";
     export const BINARY_TYPE = "binary";

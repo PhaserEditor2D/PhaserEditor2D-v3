@@ -150,6 +150,12 @@ namespace phasereditor2d.pack {
 
             reg.addExtension(
                 new colibri.core.ContentTypeExtension(
+                    [new pack.core.contentTypes.AsepriteContentTypeResolver()],
+                    4
+                ));
+
+            reg.addExtension(
+                new colibri.core.ContentTypeExtension(
                     [new pack.core.contentTypes.BitmapFontContentTypeResolver()],
                     5
                 ));
@@ -193,6 +199,10 @@ namespace phasereditor2d.pack {
                     {
                         iconName: resources.ICON_ANIMATIONS,
                         contentType: core.contentTypes.CONTENT_TYPE_ANIMATIONS
+                    },
+                    {
+                        iconName: resources.ICON_ASEPRITE,
+                        contentType: core.contentTypes.CONTENT_TYPE_ASEPRITE
                     },
                     {
                         iconName: resources.ICON_TILEMAP,
