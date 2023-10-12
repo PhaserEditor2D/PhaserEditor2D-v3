@@ -71,6 +71,11 @@ namespace phasereditor2d.animations {
             reg.addExtension(new pack.ui.AssetPackPreviewPropertyProviderExtension(
                 page => new ui.editors.properties.AnimationInfoSection(page),
             ));
+
+            scene.ScenePlugin.getInstance().openAnimationInEditor = anim => {
+
+                return this.openAnimationInEditor(anim);
+            };
         }
 
         private registerCommands(manager: colibri.ui.ide.commands.CommandManager) {

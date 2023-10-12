@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    export class AnimationSection extends SceneGameObjectSection<Sprite> {
+    export class SpriteAnimationSection extends SceneGameObjectSection<Sprite> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.AnimationSection", "Animation");
+            super(page, "phasereditor2d.scene.ui.sceneobjects.SpriteAnimationSection", "Animation");
         }
 
         protected getSectionHelpPath() {
@@ -88,6 +88,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     btnUI.updateDialogButtonIcon();
                 });
+            }
+            {
+                // open animations editor
+                const btn = this.createButton(comp, "Open Animation", async () => {
+
+                    const sprite = this.getSelectionFirstElement();
+
+                    const finder = new pack.core.PackFinder();
+
+                    await finder.preload();
+
+                     const anim = finder.findAnimationByKey(sprite.playAnimation);
+
+                     if (anim) {
+
+                        ScenePlugin.getInstance().openAnimationInEditor(anim);
+                     }
+                });
+
+                btn.style.gridColumn = "1 / span 4";
             }
         }
 

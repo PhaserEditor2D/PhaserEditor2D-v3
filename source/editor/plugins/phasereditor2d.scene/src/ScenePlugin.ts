@@ -289,7 +289,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ArcadeGeometrySection(page),
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
                 page => new ui.sceneobjects.ArcadeBodyCollisionSection(page),
-                page => new ui.sceneobjects.AnimationSection(page),
+                page => new ui.sceneobjects.SpriteAnimationSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),
@@ -351,6 +351,10 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.SpineSkinItemPreviewSection(page),
                 page => new ui.sceneobjects.SpineAssetPreviewSection(page)
             ));
+        }
+
+        async openAnimationInEditor(anim: pack.core.AnimationConfigInPackItem) {
+            // nothing, it is injected in the AnimationsPlugin.
         }
 
         getTools() {
