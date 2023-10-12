@@ -6,7 +6,7 @@ namespace phasereditor2d.animations.ui.editors.properties {
         extends controls.properties.PropertySection<pack.core.AnimationConfigInPackItem> {
 
         constructor(page: controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.animations.ui.editors.properties", "Animation Info");
+            super(page, "phasereditor2d.animations.ui.editors.properties", "Animation Info", false);
         }
 
         createForm(parent: HTMLDivElement): void {

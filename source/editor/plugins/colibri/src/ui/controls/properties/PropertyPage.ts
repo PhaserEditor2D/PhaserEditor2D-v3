@@ -192,6 +192,7 @@ namespace colibri.ui.controls.properties {
             const sortedPanes = this._sectionPanes
                 .map(p => p)
                 .sort((a, b) =>
+
                     sectionIdList.indexOf(a.getSection().getId()) - sectionIdList.indexOf(b.getSection().getId())
                 );
 

@@ -81,6 +81,7 @@ namespace colibri.ui.controls.properties {
         }
 
         isFillSpace() {
+            
             return this._fillSpace;
         }
 

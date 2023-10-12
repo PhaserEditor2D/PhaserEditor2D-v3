@@ -27,6 +27,8 @@ namespace phasereditor2d.pack.ui.properties {
 
                 sections.push(...ext.getSections(page));
             }
+
+            this.sortSections(sections);
         }
     }
 }
