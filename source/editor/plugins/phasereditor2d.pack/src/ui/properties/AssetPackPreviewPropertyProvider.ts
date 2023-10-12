@@ -11,6 +11,7 @@ namespace phasereditor2d.pack.ui.properties {
             sections.push(new pack.ui.properties.AtlasFrameInfoSection(page));
             sections.push(new pack.ui.properties.ImagePreviewSection(page));
             sections.push(new pack.ui.properties.ManyImagePreviewSection(page));
+            sections.push(new pack.ui.properties.AnimationsPreviewSection(page));
             sections.push(new pack.ui.properties.BitmapFontPreviewSection(page));
             sections.push(new pack.ui.properties.ManyBitmapFontPreviewSection(page));
             sections.push(new pack.ui.properties.TilemapTiledSection(page));

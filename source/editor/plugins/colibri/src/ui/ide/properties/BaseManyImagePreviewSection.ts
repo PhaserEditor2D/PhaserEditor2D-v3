@@ -11,7 +11,7 @@ namespace colibri.ui.ide.properties {
             const viewer = new controls.viewers.TreeViewer("colibri.ui.ide.properties.ManyImagePreviewFormArea");
 
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-            viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer, false, true).setPaintItemShadow(true));
+            viewer.setTreeRenderer(this.createTreeRenderer(viewer));
 
             this.prepareViewer(viewer);
 
@@ -33,6 +33,11 @@ namespace colibri.ui.ide.properties {
 
                 filteredViewer.resizeTo();
             });
+        }
+
+        protected createTreeRenderer(viewer: controls.viewers.TreeViewer): controls.viewers.TreeViewerRenderer {
+            
+            return new controls.viewers.GridTreeViewerRenderer(viewer, false, true).setPaintItemShadow(true);
         }
 
         protected abstract getViewerInput(): Promise<unknown>;
