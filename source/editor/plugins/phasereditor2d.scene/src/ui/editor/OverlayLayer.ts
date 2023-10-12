@@ -297,7 +297,8 @@ namespace phasereditor2d.scene.ui.editor {
                 ctx.restore();
 
                 ctx.lineWidth = 1;
-                ctx.strokeRect(a.x - 3, a.y - 3, b.x - a.x + 6, b.y - a.y + 6);
+                ctx.strokeStyle = theme.dark ? "#a0a0a0" : "#f0f0f0";
+                ctx.strokeRect(a.x - 1, a.y - 1, b.x - a.x + 2, b.y - a.y + 2);
                 ctx.restore();
             }
         }
