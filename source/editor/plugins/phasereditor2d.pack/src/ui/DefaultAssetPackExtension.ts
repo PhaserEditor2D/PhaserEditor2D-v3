@@ -46,6 +46,7 @@ namespace phasereditor2d.pack.ui {
         multiatlas: "Multiatlas",
         spritesheet: "Spritesheet",
         animation: "Animation",
+        aseprite: "Aseprite",
         bitmapFont: "Bitmap Font",
         tilemapCSV: "Tilemap CSV",
         tilemapImpact: "Tilemap Impact",
@@ -210,6 +211,8 @@ namespace phasereditor2d.pack.ui {
                     "url",
                     core.contentTypes.CONTENT_TYPE_ANIMATIONS,
                     core.ANIMATION_TYPE),
+
+                new editor.properties.AsepriteSection(page),
 
                 new editor.properties.BitmapFontSection(page),
 
@@ -484,6 +487,8 @@ namespace phasereditor2d.pack.ui {
                 new importers.SpineAtlasImporter(),
 
                 new importers.BitmapFontImporter(),
+
+                new importers.AsepriteImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_IMAGE, core.IMAGE_TYPE),
 

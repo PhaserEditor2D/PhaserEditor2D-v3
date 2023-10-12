@@ -27,6 +27,7 @@ namespace phasereditor2d.pack.ui.importers {
         }
 
         static getImporter(type: string) {
+            
             return this.getAll().find(i => i.getType() === type);
         }
     }

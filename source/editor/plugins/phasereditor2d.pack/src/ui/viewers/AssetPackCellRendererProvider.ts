@@ -46,6 +46,10 @@ namespace phasereditor2d.pack.ui.viewers {
 
                 return new viewers.AnimationsItemCellRenderer();
 
+            } else if (element instanceof pack.core.AsepriteAssetPackItem) {
+
+                return new viewers.AsepriteItemCellRenderer();
+
             } else {
 
                 const extensions = AssetPackPlugin.getInstance().getExtensions();

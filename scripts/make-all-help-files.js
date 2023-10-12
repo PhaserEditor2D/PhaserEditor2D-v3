@@ -8,6 +8,9 @@ utils.makeHelpFile([
     "Phaser.Loader.LoaderPlugin.atlas(textureURL)",
     "Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig.normalMap",
 
+    "Phaser.Loader.LoaderPlugin.aseprite(atlasURL)",
+    "Phaser.Loader.LoaderPlugin.aseprite(textureURL)",
+
     "Phaser.Loader.LoaderPlugin.atlasXML(atlasURL)",
     "Phaser.Loader.LoaderPlugin.atlasXML(textureURL)",
     "Phaser.Types.Loader.FileTypes.AtlasXMLFileConfig.normalMap",
