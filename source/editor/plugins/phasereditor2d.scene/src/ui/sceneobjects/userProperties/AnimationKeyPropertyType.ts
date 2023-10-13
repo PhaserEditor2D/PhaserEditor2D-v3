@@ -26,9 +26,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 .flatMap(pack => pack.getItems())
 
-                .filter(item => item instanceof pack.core.AnimationsAssetPackItem)
+                .filter(item => item instanceof pack.core.BaseAnimationsAssetPackItem)
 
-                .flatMap((item: pack.core.AnimationsAssetPackItem) => item.getAnimations())
+                .flatMap((item: pack.core.BaseAnimationsAssetPackItem) => item.getAnimations())
 
                 .find(anim => anim.getKey() === value);
 
@@ -60,9 +60,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 .flatMap(pack => pack.getItems())
 
-                .filter(item => item instanceof pack.core.AnimationsAssetPackItem)
+                .filter(item => item instanceof pack.core.BaseAnimationsAssetPackItem)
 
-                .flatMap((item: pack.core.AnimationsAssetPackItem) => item.getAnimations());
+                .flatMap((item: pack.core.BaseAnimationsAssetPackItem) => item.getAnimations());
         }
 
         getChildren(parent: any): any[] {

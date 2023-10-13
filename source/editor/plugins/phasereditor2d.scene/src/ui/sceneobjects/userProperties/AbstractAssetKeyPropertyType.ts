@@ -125,7 +125,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return parent.getFrames();
             }
 
-            if (parent instanceof pack.core.AnimationsAssetPackItem) {
+            if (parent instanceof pack.core.BaseAnimationsAssetPackItem) {
 
                 return parent.getAnimations();
             }

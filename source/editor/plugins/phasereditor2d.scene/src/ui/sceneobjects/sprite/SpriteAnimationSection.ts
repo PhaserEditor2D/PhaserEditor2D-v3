@@ -43,8 +43,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         await finder.preload();
 
                         const animations = finder
-                            .getAssets(i => i instanceof pack.core.AnimationsAssetPackItem)
-                            .flatMap((i: pack.core.AnimationsAssetPackItem) => i.getAnimations());
+                            .getAssets(i => i instanceof pack.core.BaseAnimationsAssetPackItem)
+                            .flatMap((i: pack.core.BaseAnimationsAssetPackItem) => i.getAnimations());
 
                         viewer.setInput(animations);
 

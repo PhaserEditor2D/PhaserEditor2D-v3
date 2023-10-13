@@ -12,7 +12,7 @@ namespace phasereditor2d.pack.ui.viewers {
             
             super.preload(args);
 
-            return (args.obj as pack.core.AnimationsAssetPackItem).preload();
+            return (args.obj as pack.core.BaseAnimationsAssetPackItem).preload();
         }
     }
 }

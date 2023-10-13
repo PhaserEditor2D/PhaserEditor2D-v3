@@ -13,6 +13,7 @@ namespace phasereditor2d.scene.ui.blocks {
         pack.core.ATLAS_TYPE,
         pack.core.SPRITESHEET_TYPE,
         pack.core.ANIMATION_TYPE,
+        pack.core.ASEPRITE_TYPE,
         pack.core.BITMAP_FONT_TYPE,
         pack.core.SPINE_JSON_TYPE,
         pack.core.SPINE_BINARY_TYPE

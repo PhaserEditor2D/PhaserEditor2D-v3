@@ -100,8 +100,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             await packFinder.preload();
 
             const animEvents = packFinder
-                .getAssets(i => i instanceof pack.core.AnimationsAssetPackItem)
-                .map(i => i as pack.core.AnimationsAssetPackItem)
+                .getAssets(i => i instanceof pack.core.BaseAnimationsAssetPackItem)
+                .map(i => i as pack.core.BaseAnimationsAssetPackItem)
                 .flatMap(i => i.getAnimations())
                 .map(anim => new AnimationEventItem(`animationcomplete-${anim.getKey()}`, anim));
 

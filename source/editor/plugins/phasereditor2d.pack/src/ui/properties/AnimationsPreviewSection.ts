@@ -2,7 +2,7 @@ namespace phasereditor2d.pack.ui.properties {
 
     import controls = colibri.ui.controls;
 
-    export class AnimationsPreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection<core.AnimationsAssetPackItem> {
+    export class AnimationsPreviewSection extends colibri.ui.ide.properties.BaseManyImagePreviewSection<core.BaseAnimationsAssetPackItem> {
 
         constructor(page: controls.properties.PropertyPage) {
             super(page, "phasereditor2d.pack.ui.properties.AnimationsPreviewSection", "Animations Preview", true);
@@ -27,7 +27,7 @@ namespace phasereditor2d.pack.ui.properties {
 
         override canEdit(obj: any, n: number): boolean {
 
-            return obj instanceof core.AnimationsAssetPackItem;
+            return obj instanceof core.BaseAnimationsAssetPackItem;
         }
 
         override canEditNumber(n: number): boolean {

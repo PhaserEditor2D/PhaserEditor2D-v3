@@ -47,6 +47,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             
             const sprite = super.createSceneObjectWithAsset(args2) as Sprite;
 
+            sprite.getEditorSupport().setLabel(animConfig.getKey());
+
             sprite.playMethod = PlayMethod.PLAY;
             sprite.playAnimation = animConfig.getKey();
 

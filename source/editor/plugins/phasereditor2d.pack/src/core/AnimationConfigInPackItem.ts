@@ -2,11 +2,11 @@ namespace phasereditor2d.pack.core {
 
     export class AnimationConfigInPackItem {
 
-        private _parent: AnimationsAssetPackItem;
+        private _parent: BaseAnimationsAssetPackItem;
         private _key: string;
         private _frames: AnimationFrameConfigInPackItem[];
 
-        constructor(parent: AnimationsAssetPackItem) {
+        constructor(parent: BaseAnimationsAssetPackItem) {
 
             this._parent = parent;
             this._frames = [];

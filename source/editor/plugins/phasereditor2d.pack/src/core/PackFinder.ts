@@ -58,10 +58,10 @@ namespace phasereditor2d.pack.core {
         findAnimationByKey(key: string) {
 
             return this.getAssets()
-            
-                .filter(i => i instanceof AnimationsAssetPackItem)
 
-                .flatMap((i: AnimationsAssetPackItem) => i.getAnimations())
+                .filter(i => i instanceof BaseAnimationsAssetPackItem)
+
+                .flatMap((i: BaseAnimationsAssetPackItem) => i.getAnimations())
 
                 .find(a => a.getKey() === key);
         }
@@ -77,31 +77,6 @@ namespace phasereditor2d.pack.core {
                 .find(item => item.getKey() === key);
         }
 
-        findPackItemOrFrameWithKey(key: string) {
-
-            for (const pack of this._packs) {
-
-                for (const item of pack.getItems()) {
-
-                    if (item.getKey() === key) {
-                        return item;
-                    }
-
-                    if (item instanceof ImageFrameContainerAssetPackItem) {
-
-                        for (const frame of item.getFrames()) {
-
-                            if (frame.getName() === key) {
-                                return frame;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
         getAssetPackItemOrFrame(key: string, frame: any): ImageAssetPackItem | AssetPackImageFrame {
 
             const item = this.findAssetPackItem(key);
@@ -115,7 +90,8 @@ namespace phasereditor2d.pack.core {
 
                 return item;
 
-            } else if (item instanceof ImageFrameContainerAssetPackItem) {
+            } else if (item instanceof ImageFrameContainerAssetPackItem
+                || item instanceof AsepriteAssetPackItem) {
 
                 const imageFrame = item.findFrame(frame);
 

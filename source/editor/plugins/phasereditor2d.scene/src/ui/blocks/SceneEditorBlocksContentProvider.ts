@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui.blocks {
             pack.core.UNITY_ATLAS_TYPE,
             pack.core.SPRITESHEET_TYPE,
             pack.core.ANIMATION_TYPE,
+            pack.core.ASEPRITE_TYPE,
             pack.core.BITMAP_FONT_TYPE,
             pack.core.SPINE_JSON_TYPE,
             pack.core.SPINE_BINARY_TYPE,
@@ -157,7 +158,7 @@ namespace phasereditor2d.scene.ui.blocks {
                 return parent.getItems().filter(i => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(i.getType()));
             }
 
-            if (parent instanceof pack.core.AnimationsAssetPackItem) {
+            if (parent instanceof pack.core.BaseAnimationsAssetPackItem) {
 
                 return parent.getAnimations();
             }

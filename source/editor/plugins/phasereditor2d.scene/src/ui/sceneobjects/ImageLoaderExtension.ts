@@ -29,11 +29,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         acceptAsset(asset: any): boolean {
 
             return asset instanceof pack.core.ImageFrameContainerAssetPackItem
+                || asset instanceof pack.core.AsepriteAssetPackItem
                 || asset instanceof pack.core.AssetPackImageFrame
                 || asset instanceof pack.core.AnimationConfigInPackItem;
         }
 
         async updateLoader(scene: BaseScene, asset: any) {
+
+            console.log("here");
 
             if (asset instanceof pack.core.AnimationConfigInPackItem) {
 
@@ -48,24 +51,25 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             }
 
-            let imageFrameContainerPackItem: pack.core.ImageFrameContainerAssetPackItem = null;
+            let framesContainer: pack.core.ImageFrameContainerAssetPackItem | pack.core.AsepriteAssetPackItem = null;
 
-            if (asset instanceof pack.core.ImageFrameContainerAssetPackItem) {
+            if (asset instanceof pack.core.ImageFrameContainerAssetPackItem 
+                || asset instanceof pack.core.AsepriteAssetPackItem) {
 
-                imageFrameContainerPackItem = asset;
+                framesContainer = asset;
 
             } else if (asset instanceof pack.core.AssetPackImageFrame) {
 
-                imageFrameContainerPackItem = (asset.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
+                framesContainer = (asset.getPackItem() as pack.core.ImageFrameContainerAssetPackItem);
             }
 
-            if (imageFrameContainerPackItem !== null) {
+            if (framesContainer !== null) {
 
-                await imageFrameContainerPackItem.preload();
+                await framesContainer.preload();
 
-                await imageFrameContainerPackItem.preloadImages();
+                await framesContainer.preloadImages();
 
-                imageFrameContainerPackItem.addToPhaserCache(scene.game, scene.getPackCache());
+                framesContainer.addToPhaserCache(scene.game, scene.getPackCache());
             }
         }
 

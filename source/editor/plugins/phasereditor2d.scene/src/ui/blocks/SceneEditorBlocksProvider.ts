@@ -130,7 +130,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
                 } else if (obj instanceof pack.core.AnimationConfigInPackItem) {
 
-                    const item = this.getFreshItem(obj.getParent()) as pack.core.AnimationsAssetPackItem;
+                    const item = this.getFreshItem(obj.getParent()) as pack.core.BaseAnimationsAssetPackItem;
 
                     if (item) {
 

@@ -1,91 +1,43 @@
-/// <reference path="./AssetPackItem.ts" />
+/// <reference path="./BaseAnimationsAssetPackItem.ts" />
 
 namespace phasereditor2d.pack.core {
 
-    import controls = colibri.ui.controls;
+    export class AnimationsAssetPackItem extends BaseAnimationsAssetPackItem {
 
-    export class AnimationsAssetPackItem extends AssetPackItem {
+        override getAnimationsFile() {
 
-        private _animations: AnimationConfigInPackItem[];
-
-        constructor(pack: AssetPack, data: any) {
-            super(pack, data);
+            const url = this.getData()["url"];
+            
+            return this.getFileFromAssetUrl(url);
         }
 
-        getUrl() {
+        protected override async parseAnimations(animations: AnimationConfigInPackItem[]): Promise<void> {
 
-            return this.getData()["url"];
-        }
+            const file = this.getAnimationsFile();
 
-        getAnimations() {
+            if (file) {
 
-            return this._animations || [];
-        }
+                const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-        getAnimationsFile() {
+                const data = JSON.parse(content) as Phaser.Types.Animations.JSONAnimations;
 
-            return this.getFileFromAssetUrl(this.getUrl());
-        }
+                for (const animData of data.anims) {
 
-        async preload() {
+                    const animConfig = new AnimationConfigInPackItem(this);
 
-            if (this._animations) {
+                    animConfig.setKey(animData.key);
 
-                return controls.PreloadResult.NOTHING_LOADED;
-            }
+                    for (const frameData of animData.frames) {
 
-            this._animations = [];
+                        const frameConfig = new AnimationFrameConfigInPackItem();
 
-            try {
+                        frameConfig.setTextureKey(frameData.key);
+                        frameConfig.setFrameKey(frameData.frame);
 
-                const file = this.getAnimationsFile();
-
-                if (file) {
-
-                    const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-
-                    const data = JSON.parse(content) as Phaser.Types.Animations.JSONAnimations;
-
-                    for (const animData of data.anims) {
-
-                        const animConfig = new AnimationConfigInPackItem(this);
-
-                        animConfig.setKey(animData.key);
-
-                        for (const frameData of animData.frames) {
-
-                            const frameConfig = new AnimationFrameConfigInPackItem();
-
-                            frameConfig.setTextureKey(frameData.key);
-                            frameConfig.setFrameKey(frameData.frame);
-
-                            animConfig.getFrames().push(frameConfig);
-                        }
-
-                        this._animations.push(animConfig);
+                        animConfig.getFrames().push(frameConfig);
                     }
-                }
 
-            } catch (e) {
-
-                console.error(e);
-            }
-
-            return controls.PreloadResult.RESOURCES_LOADED;
-        }
-
-        async build(finder: PackFinder) {
-
-            for (const anim of this._animations) {
-
-                for (const frameConfig of anim.getFrames()) {
-
-                    const textureKey = frameConfig.getTextureKey();
-                    const frameKey = frameConfig.getFrameKey();
-                    
-                    const textureFrame = finder.getAssetPackItemOrFrame(textureKey, frameKey);
-
-                    frameConfig.setTextureFrame(textureFrame);
+                    animations.push(animConfig);
                 }
             }
         }

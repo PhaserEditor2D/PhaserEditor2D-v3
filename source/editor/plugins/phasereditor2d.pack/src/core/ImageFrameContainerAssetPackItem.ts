@@ -181,8 +181,8 @@ namespace phasereditor2d.pack.core {
 
         protected abstract createParser(): parsers.ImageFrameParser;
 
-        findFrame(frameName: any) {
-            
+        findFrame(frameName: string | number) {
+
             return this.getFrames().find(f => f.getName() === frameName);
         }
 

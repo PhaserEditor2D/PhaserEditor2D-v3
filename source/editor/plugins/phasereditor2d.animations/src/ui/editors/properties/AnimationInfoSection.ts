@@ -32,7 +32,6 @@ namespace phasereditor2d.animations.ui.editors.properties {
                 });
             }
 
-
             {
                 // Animations File
                 this.createLabel(comp, "Animations File");

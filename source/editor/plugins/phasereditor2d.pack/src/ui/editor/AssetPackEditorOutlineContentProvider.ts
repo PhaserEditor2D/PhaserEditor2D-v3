@@ -30,7 +30,7 @@ namespace phasereditor2d.pack.ui.editor {
                 return parent.getGuessSkinItems();
             }
 
-            if (parent instanceof core.AnimationsAssetPackItem) {
+            if (parent instanceof core.BaseAnimationsAssetPackItem) {
 
                 return parent.getAnimations();
             }
