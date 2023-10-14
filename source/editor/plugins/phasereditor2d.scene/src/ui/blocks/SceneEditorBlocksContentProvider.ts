@@ -195,6 +195,10 @@ namespace phasereditor2d.scene.ui.blocks {
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
 
+                    case pack.core.ANIMATION_TYPE:
+                        return this.getPackItems()
+                            .filter(item => item instanceof pack.core.BaseAnimationsAssetPackItem);
+
                     case BUILTIN_SECTION:
 
                         return SCENE_OBJECT_CATEGORIES;
