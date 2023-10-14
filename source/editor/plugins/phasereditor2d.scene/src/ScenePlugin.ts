@@ -290,6 +290,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ArcadeBodyMovementSection(page),
                 page => new ui.sceneobjects.ArcadeBodyCollisionSection(page),
                 page => new ui.sceneobjects.SpriteAnimationSection(page),
+                page => new ui.sceneobjects.SpriteAnimationConfigSection(page),
                 page => new ui.sceneobjects.TextContentSection(page),
                 page => new ui.sceneobjects.TextSection(page),
                 page => new ui.sceneobjects.BitmapTextSection(page),

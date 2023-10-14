@@ -19,14 +19,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             comp.style.gridTemplateColumns = "auto auto 1fr auto";
 
             {
-                const btn = this.createPropertyEnumRow(comp, SpriteComponent.playMethod);
+                const btn = this.createPropertyEnumRow(comp, SpriteComponent.animationPlayMethod);
                 btn.style.gridColumn = "3 / span 2";
             }
 
             {
                 // play animation
 
-                this.createPropertyStringRow(comp, SpriteComponent.playAnimation);
+                this.createPropertyStringRow(comp, SpriteComponent.animationKey);
 
                 const btnUI = this.createButtonDialog({
                     dialogTittle: "Select Animation Key",
@@ -54,12 +54,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     },
                     getValue: () => {
 
-                        return this.getSelection()[0].playAnimation || "";
+                        return this.getSelection()[0].animationKey || "";
                     },
                     onValueSelected: (value: string) => {
 
                         this.getEditor().getUndoManager().add(
-                            new SimpleOperation(this.getEditor(), this.getSelection(), SpriteComponent.playAnimation, value));
+                            new SimpleOperation(this.getEditor(), this.getSelection(), SpriteComponent.animationKey, value));
                     },
                     dialogElementToString: (viewer: controls.viewers.TreeViewer, value: pack.core.AnimationConfigInPackItem): string => {
 
@@ -83,11 +83,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     btnUI.buttonElement.disabled = this.getSelection()
                         .filter(sprite => !sprite.getEditorSupport()
-                            .isUnlockedProperty(SpriteComponent.playAnimation))
+                            .isUnlockedProperty(SpriteComponent.animationKey))
                         .length > 0;
 
                     btnUI.updateDialogButtonIcon();
                 });
+            }
+            {
+                // enable config
+
+                this.createPropertyBoolean(comp, SpriteComponent.animationCustomConfig);
             }
             {
                 // open animations editor
@@ -99,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     await finder.preload();
 
-                     const anim = finder.findAnimationByKey(sprite.playAnimation);
+                     const anim = finder.findAnimationByKey(sprite.animationKey);
 
                      if (anim) {
 

@@ -8,12 +8,16 @@
   "Phaser.Types.Animations.Animation.yoyo": "Should the animation yoyo? (reverse back down to the start) before repeating?",
   "Phaser.Types.Animations.Animation.showOnStart": "Should sprite.visible = true when the animation starts to play? This happens _after_ any delay, if set.",
   "Phaser.Types.Animations.Animation.hideOnComplete": "Should sprite.visible = false when the animation finishes?",
-  "Phaser.Types.Animations.Animation.skipMissedFrames": "Skip frames if the time lags, or always advanced anyway?"
+  "Phaser.Types.Animations.Animation.showBeforeDelay": "If this animation has a delay, should it show the first frame immediately (true), or only after the delay (false)",
+  "Phaser.Types.Animations.Animation.skipMissedFrames": "Skip frames if the time lags, or always advanced anyway?",
+  "Phaser.Types.Animations.PlayAnimationConfig.startFrame": "The frame of the animation to start playback from."
  },
  "phasereditor2d.pack/docs/phaser-docs.json": {
   "Phaser.Loader.LoaderPlugin.atlas(atlasURL)": "The absolute or relative URL to load the texture atlas json data file from. If undefined or `null` it will be set to `<key>.json`, i.e. if `key` was \"alien\" then the URL will be \"alien.json\". Or, a well formed JSON object.",
   "Phaser.Loader.LoaderPlugin.atlas(textureURL)": "The absolute or relative URL to load the texture image file from. If undefined or `null` it will be set to `<key>.png`, i.e. if `key` was \"alien\" then the URL will be \"alien.png\".",
   "Phaser.Types.Loader.FileTypes.AtlasJSONFileConfig.normalMap": "The filename of an associated normal map. It uses the same path and url to load as the texture image.",
+  "Phaser.Loader.LoaderPlugin.aseprite(atlasURL)": "The absolute or relative URL to load the texture atlas json data file from. If undefined or `null` it will be set to `<key>.json`, i.e. if `key` was \"alien\" then the URL will be \"alien.json\". Or, a well formed JSON object.",
+  "Phaser.Loader.LoaderPlugin.aseprite(textureURL)": "The absolute or relative URL to load the texture image file from. If undefined or `null` it will be set to `<key>.png`, i.e. if `key` was \"alien\" then the URL will be \"alien.png\".",
   "Phaser.Loader.LoaderPlugin.atlasXML(atlasURL)": "The absolute or relative URL to load the texture atlas xml data file from. If undefined or `null` it will be set to `<key>.xml`, i.e. if `key` was \"alien\" then the URL will be \"alien.xml\".",
   "Phaser.Loader.LoaderPlugin.atlasXML(textureURL)": "The absolute or relative URL to load the texture image file from. If undefined or `null` it will be set to `<key>.png`, i.e. if `key` was \"alien\" then the URL will be \"alien.png\".",
   "Phaser.Types.Loader.FileTypes.AtlasXMLFileConfig.normalMap": "The filename of an associated normal map. It uses the same path and url to load as the texture image.",
@@ -500,6 +504,16 @@
   "spine.SkinsAndAnimationBoundsProvider(timeStep)": "The time step to use for calculating the bounds. A smaller time step means more precision, but slower calculation.",
   "spine.AnimationState.timeScale": "Multiplier for the delta time when the animation state is updated, causing time for all animations and mixes to play slower\nor faster. Defaults to 1.\n\nSee TrackEntry {@link TrackEntry#timeScale} for affecting a single animation.",
   "spine.AnimationStateData.defaultMix": "The mix duration to use when no mix duration has been defined between two animations.",
-  "spine.AnimationStateData.setMixWith": "Sets the mix duration when changing from the specified animation to the other.\n\nSee {@link TrackEntry#mixDuration}."
+  "spine.AnimationStateData.setMixWith": "Sets the mix duration when changing from the specified animation to the other.\n\nSee {@link TrackEntry#mixDuration}.",
+  "Phaser.Types.Animations.PlayAnimationConfig.frameRate": "The frame rate of playback in frames per second (default 24 if duration is null)",
+  "Phaser.Types.Animations.PlayAnimationConfig.delay": "Delay before starting playback. Value given in milliseconds.",
+  "Phaser.Types.Animations.PlayAnimationConfig.repeat": "Number of times to repeat the animation (-1 for infinity)",
+  "Phaser.Types.Animations.PlayAnimationConfig.repeatDelay": "Delay before the animation repeats. Value given in milliseconds.",
+  "Phaser.Types.Animations.PlayAnimationConfig.yoyo": "Should the animation yoyo? (reverse back down to the start) before repeating?",
+  "Phaser.Types.Animations.PlayAnimationConfig.showOnStart": "Should sprite.visible = true when the animation starts to play?",
+  "Phaser.Types.Animations.PlayAnimationConfig.hideOnComplete": "Should sprite.visible = false when the animation finishes?",
+  "Phaser.Types.Animations.PlayAnimationConfig.showBeforeDelay": "If this animation has a delay, should it show the first frame immediately (true), or only after the delay (false)",
+  "Phaser.Types.Animations.PlayAnimationConfig.startFrame": "The frame of the animation to start playback from.",
+  "Phaser.Types.Animations.PlayAnimationConfig.timeScale": "The time scale to be applied to playback of this animation."
  }
 }

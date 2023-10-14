@@ -49,8 +49,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             sprite.getEditorSupport().setLabel(animConfig.getKey());
 
-            sprite.playMethod = PlayMethod.PLAY;
-            sprite.playAnimation = animConfig.getKey();
+            sprite.animationPlayMethod = AnimationPlayMethod.PLAY;
+            sprite.animationKey = animConfig.getKey();
 
             return sprite;
         }

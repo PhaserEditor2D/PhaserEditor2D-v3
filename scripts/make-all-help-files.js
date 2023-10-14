@@ -288,7 +288,18 @@ utils.makeHelpFile([
     "spine.SkinsAndAnimationBoundsProvider(timeStep)",
     "spine.AnimationState.timeScale",
     "spine.AnimationStateData.defaultMix",
-    "spine.AnimationStateData.setMixWith"
+    "spine.AnimationStateData.setMixWith",
+
+    "Phaser.Types.Animations.PlayAnimationConfig.frameRate",
+    "Phaser.Types.Animations.PlayAnimationConfig.delay",
+    "Phaser.Types.Animations.PlayAnimationConfig.repeat",
+    "Phaser.Types.Animations.PlayAnimationConfig.repeatDelay",
+    "Phaser.Types.Animations.PlayAnimationConfig.yoyo",
+    "Phaser.Types.Animations.PlayAnimationConfig.showOnStart",
+    "Phaser.Types.Animations.PlayAnimationConfig.hideOnComplete",
+    "Phaser.Types.Animations.PlayAnimationConfig.showBeforeDelay",
+    "Phaser.Types.Animations.PlayAnimationConfig.startFrame",
+    "Phaser.Types.Animations.PlayAnimationConfig.timeScale",
 
 
 ], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/phaser.json");
@@ -303,7 +314,9 @@ utils.makeHelpFile([
     "Phaser.Types.Animations.Animation.yoyo",
     "Phaser.Types.Animations.Animation.showOnStart",
     "Phaser.Types.Animations.Animation.hideOnComplete",
+    "Phaser.Types.Animations.Animation.showBeforeDelay",
     "Phaser.Types.Animations.Animation.skipMissedFrames",
+    "Phaser.Types.Animations.PlayAnimationConfig.startFrame",
 
 ], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.animations/docs/phaser-docs.json");
 
