@@ -401,9 +401,13 @@ namespace phasereditor2d.pack.ui.editor {
 
             const items = await importData.importer.autoImport(this._pack, importData.files);
 
+            const finder = new pack.core.PackFinder(this._pack);
+
             for (const item of items) {
 
                 await item.preload();
+
+                await item.build(finder);
             }
 
             this._viewer.repaint();

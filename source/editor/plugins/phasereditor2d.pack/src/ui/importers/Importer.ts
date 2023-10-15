@@ -72,7 +72,6 @@ namespace phasereditor2d.pack.ui.importers {
 
             pack.addItem(item);
 
-
             await item.preload();
 
             const finder = new core.PackFinder();
