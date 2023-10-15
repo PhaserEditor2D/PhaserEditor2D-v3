@@ -113,6 +113,8 @@ namespace phasereditor2d.scene {
 
             this._sceneFinder = new core.json.SceneFinder();
 
+            this.registerAnimationsPreviewDialogInAssetPack();
+
             // migrations
 
             reg.addExtension(new core.migrations.OriginMigration_v2_to_v3());
@@ -352,6 +354,18 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.SpineSkinItemPreviewSection(page),
                 page => new ui.sceneobjects.SpineAssetPreviewSection(page)
             ));
+        }
+
+        private registerAnimationsPreviewDialogInAssetPack() {
+            
+            pack.ui.properties.AnimationsPreviewSection.openPreviewDialog = elem => {
+            
+                const dlg = new ui.sceneobjects.AnimationPreviewDialog(elem.getParent(), {
+                    key: elem.getKey()
+                });
+
+                dlg.create();
+            };
         }
 
         async openAnimationInEditor(anim: pack.core.AnimationConfigInPackItem) {

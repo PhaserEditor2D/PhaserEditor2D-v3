@@ -23,6 +23,16 @@ namespace phasereditor2d.pack.ui.properties {
             viewer.setLabelProvider(new viewers.AssetPackLabelProvider());
             viewer.setCellRendererProvider(new controls.viewers.EmptyCellRendererProvider(
                 e => new viewers.AnimationConfigCellRenderer("square")));
+
+            viewer.eventOpenItem.addListener((elem: pack.core.AnimationConfigInPackItem) => {
+
+                AnimationsPreviewSection.openPreviewDialog(elem);
+            });
+        }
+
+        static openPreviewDialog(elem: core.AnimationConfigInPackItem) {
+
+            alert("Preview dialog not found.");
         }
 
         override canEdit(obj: any, n: number): boolean {
