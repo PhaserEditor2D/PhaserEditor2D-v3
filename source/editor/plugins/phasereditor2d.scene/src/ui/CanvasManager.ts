@@ -33,9 +33,16 @@ namespace phasereditor2d.scene.ui {
 
         releaseCanvas(canvas: HTMLCanvasElement) {
 
-            console.log("CanvasManager: release canvas. Total available: " + (this._freeCanvases.length + 1));
+            if (this._freeCanvases.indexOf(canvas) < 0) {
 
-            this._freeCanvases.push(canvas);
+                console.log("CanvasManager: release canvas. Total available: " + (this._freeCanvases.length + 1));
+                
+                this._freeCanvases.push(canvas);
+
+            } else {
+
+                console.log("CanvasManager: Hey, releasing a released canvas?");
+            }
         }
     }
 }
