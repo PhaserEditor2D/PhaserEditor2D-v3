@@ -11,6 +11,7 @@
     - New Animations Preview section.
 * Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
 * Shows Sprite Animation blocks in the Scene Editor's Blocks view.
+* Optimizes pooling of WEBGL contexts.
 
 ## v3.63.0 - Sep 30, 2023
 
