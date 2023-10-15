@@ -14,6 +14,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._game) {
 
+                ScenePlugin.getInstance().getCanvasManager().releaseCanvas(this._game.canvas);
+
                 this._game.destroy(true);
             }
         }
@@ -52,8 +54,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { width, height } = this._parent.getBoundingClientRect();
 
+            const canvas = ScenePlugin.getInstance().getCanvasManager().takeCanvas();
+
+            canvas.style.visibility = "hidden";
+
             this._game = new Phaser.Game({
+                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                 width, height,
+                canvas,
                 parent: this._parent,
                 transparent: true,
                 fps: {
@@ -75,7 +83,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._game.scene.add("PreviewScene", PreviewScene, true, data);
             this._game.scene.add("EventScene", EventScene);
 
-            setTimeout(() => this._game.scale.refresh(), 10);
+            setTimeout(() => { 
+
+                canvas.style.visibility = "visible";
+
+                this._game.scale.refresh(); 
+
+            }, 10);
         }
     }
 

@@ -47,9 +47,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             });
 
+            canvas.style.visibility = "hidden";
+
             this._game.scene.add("PreviewScene", PreviewScene, true, data);
 
-            setTimeout(() => this._game.scale.refresh(), 10);
+            setTimeout(() => {
+
+                canvas.style.visibility = "visible";
+
+                this._game.scale.refresh();
+                
+            }, 10);
         }
     }
 
