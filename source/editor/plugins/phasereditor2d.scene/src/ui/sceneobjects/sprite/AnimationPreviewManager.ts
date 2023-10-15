@@ -14,7 +14,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (this._game) {
 
-                this._game.destroy(true);
+                ScenePlugin.getInstance().getCanvasManager().releaseCanvas(this._game.canvas);
+
+                this._game.destroy(false);
             }
         }
 
@@ -27,9 +29,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const { width, height } = this._parent.getBoundingClientRect();
 
+            const canvas = ScenePlugin.getInstance().getCanvasManager().takeCanvas();
+
             this._game = new Phaser.Game({
                 width, height: height - 5,
                 parent: this._parent,
+                canvas,
+                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
                 transparent: true,
                 pixelArt: true,
                 fps: {

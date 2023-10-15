@@ -11,7 +11,7 @@ namespace phasereditor2d.scene.ui {
 
          async clearCache() {
 
-            await this._database.clear();
+            await this._database?.clear();
         }
 
         constructor(dbName: string) {

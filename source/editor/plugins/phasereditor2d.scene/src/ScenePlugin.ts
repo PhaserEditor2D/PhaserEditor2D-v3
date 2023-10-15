@@ -43,6 +43,7 @@ namespace phasereditor2d.scene {
         private _docs: phasereditor2d.ide.core.PhaserDocs;
         private _eventsDocs: phasereditor2d.ide.core.PhaserDocs;
         private _spineThumbnailCache: ui.SpineThumbnailCache;
+        private _canvasManager: ui.CanvasManager;
 
         static getInstance() {
 
@@ -52,6 +53,11 @@ namespace phasereditor2d.scene {
         private constructor() {
 
             super("phasereditor2d.scene");
+        }
+
+        getCanvasManager() {
+
+            return this._canvasManager;
         }
 
         async starting() {
@@ -67,6 +73,8 @@ namespace phasereditor2d.scene {
             this.setDefaultRenderPixelArt(pixelArt);
 
             console.log("ScenePlugin: default pixelArt: " + pixelArt);
+
+            this._canvasManager = new ui.CanvasManager();
         }
 
         setDefaultRenderType(type?: "canvas" | "webgl") {

@@ -108,8 +108,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (anim) {
 
-                        console.log("here");
-
                         const config: Phaser.Types.Animations.PlayAnimationConfig = {
                             key: anim.getKey()
                         }
