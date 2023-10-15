@@ -24,11 +24,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             clientArea.classList.add("DialogClientArea");
 
-            const style = clientArea.style;
-
-            style.width = "100%";
-            style.height = "100%";
-
             this.getElement().appendChild(clientArea);
 
             this._previewManager = new AnimationPreviewManager(clientArea);

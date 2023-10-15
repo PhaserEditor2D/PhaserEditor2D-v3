@@ -95,8 +95,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.createPropertyBoolean(comp, SpriteComponent.animationCustomConfig);
             }
             {
-                // open animations editor
-                const btn = this.createButton(comp, "Open Animation", async () => {
+                // preview animations editor
+                const btn = this.createButton(comp, "Preview Animation", async () => {
+
+                    console.log("here");
 
                     const sprite = this.getSelectionFirstElement();
 
@@ -104,12 +106,39 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     await finder.preload();
 
-                     const anim = finder.findAnimationByKey(sprite.animationKey);
+                    const anim = finder.findAnimationByKey(sprite.animationKey);
 
-                     if (anim) {
+                    if (anim) {
+
+                        const dlg = new AnimationPreviewDialog(anim.getParent(), anim.getKey());
+
+                        dlg.create();
+
+                    } else {
+
+                        alert("Animation not found.");
+                    }
+                });
+
+                btn.style.gridColumn = "1 / span 4";
+            }
+
+            {
+                // open animations editor
+                const btn = this.createButton(comp, "Open Animation File", async () => {
+
+                    const sprite = this.getSelectionFirstElement();
+
+                    const finder = new pack.core.PackFinder();
+
+                    await finder.preload();
+
+                    const anim = finder.findAnimationByKey(sprite.animationKey);
+
+                    if (anim) {
 
                         ScenePlugin.getInstance().openAnimationInEditor(anim);
-                     }
+                    }
                 });
 
                 btn.style.gridColumn = "1 / span 4";

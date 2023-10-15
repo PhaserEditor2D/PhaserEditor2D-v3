@@ -36,8 +36,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async updateLoader(scene: BaseScene, asset: any) {
 
-            console.log("here");
-
             if (asset instanceof pack.core.AnimationConfigInPackItem) {
 
                 for(const animFrame of asset.getFrames()) {

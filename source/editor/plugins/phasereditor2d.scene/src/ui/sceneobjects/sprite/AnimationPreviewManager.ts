@@ -36,8 +36,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
             });
 
-            this._game.canvas.classList.add("SpinePreviewCanvas");
-
             this._game.scene.add("PreviewScene", PreviewScene, true, data);
 
             setTimeout(() => this._game.scale.refresh(), 10);

@@ -65,11 +65,8 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
                     const elem = this.getSelectionFirstElement();
 
-
                     const animAsset = elem.getParent();
                     const animationKey = elem.getKey();
-
-                    await animAsset.preload();
 
                     const dlg = new scene.ui.sceneobjects.AnimationPreviewDialog(
                         animAsset, animationKey);
