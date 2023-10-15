@@ -10,8 +10,7 @@ namespace phasereditor2d.pack.core {
             frameTags: {
                 name: string,
                 from: number,
-                to: number,
-                direction: "forward" | "backward"
+                to: number
             }[]
         }
     }
