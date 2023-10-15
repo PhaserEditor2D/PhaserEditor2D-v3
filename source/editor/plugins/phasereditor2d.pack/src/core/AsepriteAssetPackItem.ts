@@ -32,6 +32,18 @@ namespace phasereditor2d.pack.core {
             return this.getFileFromAssetUrl(url);
         }
 
+        getAtlasFile() {
+
+            return this.getAnimationsFile();
+        }
+
+        getTextureFile() {
+
+            const url = this.getData()["textureURL"];
+            
+            return this.getFileFromAssetUrl(url);
+        }
+
         preloadImages(): Promise<controls.PreloadResult> {
 
             return this._atlasItem.preloadImages();

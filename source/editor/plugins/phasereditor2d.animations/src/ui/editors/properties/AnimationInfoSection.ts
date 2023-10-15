@@ -57,6 +57,27 @@ namespace phasereditor2d.animations.ui.editors.properties {
                         : "<not found>";
                 });
             }
+
+            {
+                // preview button
+
+                this.createButton(comp, "Preview Animation", async () => {
+
+                    const elem = this.getSelectionFirstElement();
+
+
+                    const animAsset = elem.getParent();
+                    const animationKey = elem.getKey();
+
+                    await animAsset.preload();
+
+                    const dlg = new scene.ui.sceneobjects.AnimationPreviewDialog(
+                        animAsset, animationKey);
+
+                    dlg.create();
+
+                }).style.gridColumn = "span 2";
+            }
         }
 
         canEdit(obj: any, n: number): boolean {
