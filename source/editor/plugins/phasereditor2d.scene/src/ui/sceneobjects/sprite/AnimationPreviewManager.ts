@@ -23,7 +23,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const { width, height } = this._parent.getBoundingClientRect();
 
             this._game = new Phaser.Game({
-                width, height,
+                width, height: height - 5,
                 parent: this._parent,
                 transparent: true,
                 pixelArt: true,
