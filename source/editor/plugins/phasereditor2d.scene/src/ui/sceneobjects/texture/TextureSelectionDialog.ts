@@ -8,7 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         pack.core.IMAGE_TYPE,
         pack.core.SVG_TYPE,
         pack.core.ATLAS_TYPE,
-        pack.core.SPRITESHEET_TYPE
+        pack.core.SPRITESHEET_TYPE,
+        pack.core.ASEPRITE_TYPE
     ];
 
     export class TextureSelectionDialog extends controls.dialogs.ViewerDialog {
@@ -73,7 +74,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setLabelProvider(new pack.ui.viewers.AssetPackLabelProvider());
             viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
 
-            viewer.setCellRendererProvider(new pack.ui.viewers.AssetPackCellRendererProvider("grid"));
+
+            viewer.setCellRendererProvider(new class extends pack.ui.viewers.AssetPackCellRendererProvider {
+
+                getCellRenderer(element: any): controls.viewers.ICellRenderer {
+                    
+                    if (element instanceof pack.core.AnimationConfigInPackItem) {
+
+                        return new pack.ui.viewers.AnimationConfigCellRenderer("square");
+                    }
+
+                    return super.getCellRenderer(element);
+                }
+            }("grid"));
 
             viewer.setContentProvider(new (class extends ui.blocks.SceneEditorBlocksContentProvider {
 
@@ -81,6 +94,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     return input;
                 }
+
+                getChildren(parent: any): any[] {
+                    
+                    if (parent instanceof pack.core.AsepriteAssetPackItem) {
+
+                        return parent.getFrames();
+                    }
+
+                    return super.getChildren(parent);
+                }
+
             })(this._editor, () => this._editor.getPackFinder().getPacks()));
 
             viewer.setCellSize(64, true);

@@ -92,7 +92,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const finder = new pack.core.PackFinder();
             await finder.preload();
-            
+
             const viewer = await super.createViewer();
             viewer.setContentProvider(new TextureContentProvider(finder));
             viewer.setTreeRenderer(new pack.ui.viewers.AssetPackTreeViewerRenderer(viewer, false));
@@ -114,6 +114,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 pack.core.IMAGE_TYPE,
                 pack.core.SVG_TYPE,
                 pack.core.ATLAS_TYPE,
+                pack.core.ASEPRITE_TYPE,
                 pack.core.SPRITESHEET_TYPE];
         }
 
@@ -132,7 +133,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return this.getItems(parent);
             }
 
-            if (parent instanceof pack.core.ImageFrameContainerAssetPackItem) {
+            if (parent instanceof pack.core.ImageFrameContainerAssetPackItem
+                || parent instanceof pack.core.AsepriteAssetPackItem) {
 
                 if (!(parent instanceof pack.core.ImageAssetPackItem)) {
 

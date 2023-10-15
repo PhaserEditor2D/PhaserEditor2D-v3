@@ -7,7 +7,6 @@ namespace phasereditor2d.scene.ui.blocks {
 
         constructor() {
             super("grid");
-
         }
 
         getCellRenderer(element: any) {

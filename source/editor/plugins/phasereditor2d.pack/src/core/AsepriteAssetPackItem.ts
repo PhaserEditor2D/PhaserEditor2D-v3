@@ -50,6 +50,11 @@ namespace phasereditor2d.pack.core {
             return this._atlasItem.findFrame(frameName);
         }
 
+        getFrames() {
+
+            return this._atlasItem.getFrames();
+        }
+
         protected async parseAnimations(animations: AnimationConfigInPackItem[]): Promise<void> {
 
             const atlasURL = this.getData().atlasURL;
