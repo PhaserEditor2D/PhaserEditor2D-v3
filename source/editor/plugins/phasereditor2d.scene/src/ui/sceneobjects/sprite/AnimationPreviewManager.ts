@@ -18,6 +18,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        play(forceRepeat: boolean) {
+
+            this._game.events.emit("play", forceRepeat);
+        }
+
         createGame(data: IAnimationPreviewSceneData) {
 
             const { width, height } = this._parent.getBoundingClientRect();
@@ -44,7 +49,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export interface IAnimationPreviewSceneData {
         animationAsset: pack.core.BaseAnimationsAssetPackItem;
-        animationKey: string;
+        config: Phaser.Types.Animations.PlayAnimationConfig,
         finder: pack.core.PackFinder
     }
 
@@ -64,8 +69,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             if (asset instanceof pack.core.AnimationsAssetPackItem) {
 
                 const cache = new pack.core.parsers.AssetPackCache();
-                
-                for(const item of this._data.finder.getAssets()) {
+
+                for (const item of this._data.finder.getAssets()) {
 
                     item.addToPhaserCache(this.game, cache);
                 }
@@ -79,8 +84,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const textureURL = asset2.getTextureFile().getExternalUrl();
                 const atlasURL = asset2.getAnimationsFile().getExternalUrl();
 
-                console.log("load", textureURL, atlasURL);
-
                 this.load.aseprite(asset2.getKey(), textureURL, atlasURL);
             }
         }
@@ -91,10 +94,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const obj = this.add.sprite(400, 400, null);
 
-            obj.play({
-                key: this._data.animationKey,
-                repeat: -1
-            });
+            obj.play(this._data.config);
 
             obj.on("drag", (pointer: any, dragX: number, dragY: number) => {
 
@@ -136,6 +136,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 camera.zoom *= zoomFactor;
                 camera.zoom = Math.min(100, Math.max(0.2, camera.zoom));
+            });
+
+            this.game.events.on("play", (forceRepeat: boolean) => {
+
+                if (forceRepeat) {
+
+                    obj.play({ ...this._data.config, repeat: -1 });
+
+                } else {
+
+                    obj.play(this._data.config);
+                }
             });
         }
     }

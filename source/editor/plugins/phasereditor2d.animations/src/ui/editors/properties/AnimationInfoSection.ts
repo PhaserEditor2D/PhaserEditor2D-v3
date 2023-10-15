@@ -69,7 +69,9 @@ namespace phasereditor2d.animations.ui.editors.properties {
                     const animationKey = elem.getKey();
 
                     const dlg = new scene.ui.sceneobjects.AnimationPreviewDialog(
-                        animAsset, animationKey);
+                        animAsset, {
+                            key: animationKey
+                        });
 
                     dlg.create();
 

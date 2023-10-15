@@ -98,8 +98,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 // preview animations editor
                 const btn = this.createButton(comp, "Preview Animation", async () => {
 
-                    console.log("here");
-
                     const sprite = this.getSelectionFirstElement();
 
                     const finder = new pack.core.PackFinder();
@@ -110,7 +108,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (anim) {
 
-                        const dlg = new AnimationPreviewDialog(anim.getParent(), anim.getKey());
+                        console.log("here");
+
+                        const config: Phaser.Types.Animations.PlayAnimationConfig = {
+                            key: anim.getKey()
+                        }
+
+                        if (sprite.animationCustomConfig) {
+
+                            SpriteComponent.buildPlayConfig(sprite, config);
+                        }
+
+                        const dlg = new AnimationPreviewDialog(anim.getParent(), config);
 
                         dlg.create();
 

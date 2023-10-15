@@ -5,9 +5,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class AnimationPreviewDialog extends controls.dialogs.Dialog {
         private _previewManager: AnimationPreviewManager;
         private _animationAsset: pack.core.BaseAnimationsAssetPackItem;
-        private _animationKey: string;
+        private _config: Phaser.Types.Animations.PlayAnimationConfig;
 
-        constructor(animationAsset: pack.core.BaseAnimationsAssetPackItem, animationKey: string) {
+        constructor(animationAsset: pack.core.BaseAnimationsAssetPackItem, config: Phaser.Types.Animations.PlayAnimationConfig) {
             super();
 
             const size = Math.min(window.innerWidth * 0.5, window.innerHeight * 0.5);
@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setSize(size, size);
 
             this._animationAsset = animationAsset;
-            this._animationKey = animationKey;
+            this._config = config;
         }
 
         protected createDialogArea(): void {
@@ -39,7 +39,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     this._previewManager.createGame({
                         animationAsset: this._animationAsset,
-                        animationKey: this._animationKey,
+                        config: this._config,
                         finder
                     });
                 }, 10);
@@ -55,6 +55,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.setTitle("Animation Preview");
 
             this.addButton("Close", () => this.close());
+
+            this.addButton("Play", () => {
+
+                this._previewManager.play(false);
+            });
+
+            this.addButton("Play Repeat", () => {
+
+                this._previewManager.play(true);
+            });
 
             this.eventDialogClose.addListener(() => {
 

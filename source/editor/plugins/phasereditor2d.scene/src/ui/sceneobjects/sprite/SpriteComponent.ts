@@ -71,24 +71,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                     if (sprite.animationCustomConfig) {
 
-                        const config = {};
+                        const config: Phaser.Types.Animations.PlayAnimationConfig = {} as any;
 
-                        for (const prop of [
-                            SpriteComponent.animationKey,
-                            SpriteComponent.animationFrameRate,
-                            SpriteComponent.animationDelay,
-                            SpriteComponent.animationRepeat,
-                            SpriteComponent.animationRepeatDelay,
-                            SpriteComponent.animationYoyo,
-                            SpriteComponent.animationShowBeforeDelay,
-                            SpriteComponent.animationShowOnStart,
-                            SpriteComponent.animationHideOnComplete,
-                            SpriteComponent.animationStartFrame,
-                            SpriteComponent.animationTimeScale
-                        ]) {
-
-                            colibri.core.json.write(config, prop.codeName, prop.getValue(sprite), prop.defValue);
-                        }
+                        SpriteComponent.buildPlayConfig(sprite, config);
 
                         call.arg(JSON.stringify(config));
 
@@ -100,6 +85,26 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     args.statements.push(call);
                 }
             });
+        }
+
+        public static buildPlayConfig(sprite: Sprite, config: Phaser.Types.Animations.PlayAnimationConfig) {
+
+            for (const prop of [
+                SpriteComponent.animationKey,
+                SpriteComponent.animationFrameRate,
+                SpriteComponent.animationDelay,
+                SpriteComponent.animationRepeat,
+                SpriteComponent.animationRepeatDelay,
+                SpriteComponent.animationYoyo,
+                SpriteComponent.animationShowBeforeDelay,
+                SpriteComponent.animationShowOnStart,
+                SpriteComponent.animationHideOnComplete,
+                SpriteComponent.animationStartFrame,
+                SpriteComponent.animationTimeScale
+            ]) {
+
+                colibri.core.json.write(config, prop.codeName, prop.getValue(sprite), prop.defValue);
+            }
         }
     }
 }
