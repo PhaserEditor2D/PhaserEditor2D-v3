@@ -104,6 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     class PreviewScene extends Phaser.Scene {
 
         private _data: IPreviewSceneData;
+        private _wheelListener: (e: WheelEvent) => void;
 
         init(data: IPreviewSceneData) {
 
@@ -188,7 +189,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             obj.animationState.addListener(eventScene);
 
-            this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
+            this._wheelListener = (e: WheelEvent) => {
+
+                const deltaY = e.deltaY;
 
                 const scrollWidth = Math.abs(deltaY) * 2;
 
@@ -199,8 +202,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const zoomFactor = (deltaY > 0 ? 1 - zoomDelta : 1 + zoomDelta);
 
                 camera.zoom *= zoomFactor;
-                camera.zoom = Math.min(4, Math.max(0.2, camera.zoom));
-            });
+                camera.zoom = Math.min(100, Math.max(0.2, camera.zoom));
+            };
+
+            this.game.canvas.addEventListener("wheel", this._wheelListener);
 
             this.game.events.on("updateAnimation", (track: number, animationName: string, loop: boolean) => {
 
@@ -241,6 +246,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     obj.animationStateData.setMix(from, to, duration);
                 }
             });
+
+            this.game.events.once(Phaser.Core.Events.DESTROY, () => this.removeListeners());
+        }
+
+        private removeListeners() {
+
+            this.game.canvas.removeEventListener("wheel", this._wheelListener);
         }
     }
 

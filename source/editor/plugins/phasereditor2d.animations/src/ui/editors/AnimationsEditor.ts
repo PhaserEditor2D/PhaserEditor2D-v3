@@ -410,7 +410,11 @@ namespace phasereditor2d.animations.ui.editors {
 
         private registerDropListeners() {
 
-            this._gameCanvas.addEventListener("dragover", e => {
+            // canvas can be reused, don't use it for events
+
+            const eventElement = this._gameCanvas.parentElement;
+
+            eventElement.addEventListener("dragover", e => {
 
                 const dataArray = controls.Controls.getApplicationDragData();
 
@@ -426,7 +430,7 @@ namespace phasereditor2d.animations.ui.editors {
                 }
             });
 
-            this._gameCanvas.addEventListener("drop", e => {
+            eventElement.addEventListener("drop", e => {
 
                 e.preventDefault();
 
@@ -442,7 +446,11 @@ namespace phasereditor2d.animations.ui.editors {
 
             this._menuCreator = new AnimationsEditorMenuCreator(this);
 
-            this._gameCanvas.addEventListener("contextmenu", e => this.onMenu(e));
+            // canvas can be reused, don't use it for events
+
+            const eventElement = this._gameCanvas.parentElement;
+
+            eventElement.addEventListener("contextmenu", e => this.onMenu(e));
         }
 
         private onMenu(e: MouseEvent) {

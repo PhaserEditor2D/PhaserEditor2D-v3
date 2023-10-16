@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 canvas.style.visibility = "visible";
 
                 this._game.scale.refresh();
-                
+
             }, 10);
         }
     }
@@ -70,6 +70,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     class PreviewScene extends Phaser.Scene {
 
         private _data: IAnimationPreviewSceneData;
+        private _wheelListener: (e: WheelEvent) => void;
 
         init(data: IAnimationPreviewSceneData) {
 
@@ -138,7 +139,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             camera.zoom = z;
 
-            this.input.on("wheel", (pointer: any, over: any, deltaX: number, deltaY: number, deltaZ: number) => {
+            this._wheelListener = (e: WheelEvent) => {
+
+                const deltaY = e.deltaY;
 
                 const scrollWidth = Math.abs(deltaY) * 2;
 
@@ -150,7 +153,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 camera.zoom *= zoomFactor;
                 camera.zoom = Math.min(100, Math.max(0.2, camera.zoom));
-            });
+            };
+
+            this.game.canvas.addEventListener("wheel", this._wheelListener);
 
             this.game.events.on("play", (forceRepeat: boolean) => {
 
@@ -163,6 +168,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     obj.play(this._data.config);
                 }
             });
+
+            this.game.events.once(Phaser.Core.Events.DESTROY, () => this.removeListeners());
+        }
+
+        private removeListeners() {
+
+            this.game.canvas.removeEventListener("wheel", this._wheelListener);
         }
     }
 }

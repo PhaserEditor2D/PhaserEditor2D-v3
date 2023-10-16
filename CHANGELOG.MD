@@ -10,6 +10,7 @@
     - New Animation preview section.
     - New Animations Preview section.
 * Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
+* Adds `showBeforeDelay` to the Animations Editor.
 * Shows Sprite Animation blocks in the Scene Editor's Blocks view.
 * Optimizes pooling of WEBGL contexts.
 
