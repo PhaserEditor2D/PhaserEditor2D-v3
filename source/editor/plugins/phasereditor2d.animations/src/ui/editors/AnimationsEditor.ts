@@ -394,9 +394,9 @@ namespace phasereditor2d.animations.ui.editors {
             this._overlayLayer = new AnimationsOverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
 
-            const pool = Phaser.Display.Canvas.CanvasPool;
+            this._gameCanvas = scene.ScenePlugin.getInstance().getCanvasManager().takeCanvas();
+            this._gameCanvas.style.visibility = "hidden";
 
-            this._gameCanvas = pool.create2D(this.getElement(), 100, 100);
             this._gameCanvas.style.position = "absolute";
             this._gameCanvas.tabIndex = 1;
             container.appendChild(this._gameCanvas);
@@ -494,6 +494,8 @@ namespace phasereditor2d.animations.ui.editors {
         private async onGameBoot() {
 
             this._gameBooted = true;
+
+            this._gameCanvas.style.visibility = "visible";
 
             if (!this._sceneRead) {
 

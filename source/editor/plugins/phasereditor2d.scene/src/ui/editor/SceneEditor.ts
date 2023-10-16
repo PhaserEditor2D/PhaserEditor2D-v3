@@ -275,13 +275,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             this.getElement().appendChild(container);
 
-            const pool = Phaser.Display.Canvas.CanvasPool;
-
-            this._gameCanvas = ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT === Phaser.CANVAS
-
-                ? pool.create2D(this.getElement(), 100, 100)
-
-                : pool.createWebGL(this.getElement(), 100, 100);
+            this._gameCanvas = ScenePlugin.getInstance().getCanvasManager().takeCanvas();
+            this._gameCanvas.style.visibility = "hidden";
 
             this._gameCanvas.classList.add("GameCanvas");
 
@@ -724,6 +719,8 @@ namespace phasereditor2d.scene.ui.editor {
                 if (this._scene) {
 
                     this._scene.destroyGame();
+
+                    ScenePlugin.getInstance().getCanvasManager().releaseCanvas( this._game.canvas);
                 }
 
                 this._cellRendererCache.clear();
@@ -878,6 +875,8 @@ namespace phasereditor2d.scene.ui.editor {
         private async onGameBoot() {
 
             this._gameBooted = true;
+
+            this._gameCanvas.style.visibility = "visible";
 
             if (!this._sceneRead) {
 
