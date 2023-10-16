@@ -635,11 +635,6 @@ namespace phasereditor2d.scene.ui.editor {
             return this._overlayLayer;
         }
 
-        getGameCanvas() {
-
-            return this._gameCanvas;
-        }
-
         getScene() {
 
             return this._scene;
