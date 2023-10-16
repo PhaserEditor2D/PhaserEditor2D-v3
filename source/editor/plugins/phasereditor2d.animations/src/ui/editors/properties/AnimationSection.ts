@@ -69,6 +69,8 @@ namespace phasereditor2d.animations.ui.editors.properties {
 
             this.createBooleanProperty(comp, "yoyo", "Yoyo");
 
+            this.createBooleanProperty(comp, "showBeforeDelay", "Show Before Delay");
+
             this.createBooleanProperty(comp, "showOnStart", "Show On Start");
 
             this.createBooleanProperty(comp, "hideOnComplete", "Hide On Complete");

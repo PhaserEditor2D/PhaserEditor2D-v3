@@ -73,6 +73,8 @@ namespace phasereditor2d.animations.ui.editors {
 
                 if (!a.yoyo) delete a.yoyo;
 
+                if (!a.showBeforeDelay) delete a.showBeforeDelay;
+
                 if (!a.showOnStart) delete a.showOnStart;
 
                 if (!a.hideOnComplete) delete a.hideOnComplete;
