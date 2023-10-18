@@ -8,6 +8,11 @@ namespace phasereditor2d.scene.ui.codesnippets {
             super(CreateFromAsepriteCodeSnippetExtension.TYPE, "Create Animations From Aseprite");
         }
 
+        isEnabledFor(_editor: editor.SceneEditor): boolean {
+            
+            return !_editor.getScene().isPrefabSceneType();
+        }
+
         createEmptyCodeSnippet(): CodeSnippet {
 
             return new CreateFromAsepriteCodeSnippet();

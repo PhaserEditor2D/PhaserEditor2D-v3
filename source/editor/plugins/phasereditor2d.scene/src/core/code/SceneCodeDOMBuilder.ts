@@ -382,6 +382,8 @@ namespace phasereditor2d.scene.core.code {
                 varname: "this"
             });
 
+            this.buildCodeSnippets(result.statements);
+
             lazyStatements.push(...result.lazyStatements);
 
             body.push(...result.statements);
@@ -418,6 +420,24 @@ namespace phasereditor2d.scene.core.code {
             this.buildCustomPropertiesInit(body);
 
             return ctrDecl;
+        }
+
+        buildCodeSnippets(statements: CodeDOM[]) {
+
+            const snippets = this._scene.getCodeSnippets().getSnippets();
+
+            if (snippets.length > 0) {
+
+                statements.push(new code.RawCodeDOM(""));
+                statements.push(new code.RawCodeDOM("// snippets"));
+
+                for (const codeSnippet of snippets) {
+
+                    const code = codeSnippet.buildCodeDOM();
+
+                    statements.push(...code);
+                }
+            }
         }
 
         private buildPrefabTypeScriptDefinitionsCodeDOM(prefabObj: ISceneGameObject, objBuilder: ui.sceneobjects.GameObjectCodeDOMBuilder) {
@@ -479,7 +499,10 @@ namespace phasereditor2d.scene.core.code {
             }
 
             const body = createMethodDecl.getBody();
+
             const lazyStatements: CodeDOM[] = [];
+
+            this.buildCodeSnippets(body);
 
             this.addCreateAllPlainObjectCode(body, lazyStatements);
 

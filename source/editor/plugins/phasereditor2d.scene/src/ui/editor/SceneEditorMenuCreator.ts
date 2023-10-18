@@ -63,6 +63,7 @@ namespace phasereditor2d.scene.ui.editor {
                 menu.addAction({
                     text: "Add " + ext.getName(),
                     icon: resources.getIcon(resources.ICON_BUILD),
+                    enabled: ext.isEnabledFor(this._editor),
                     callback: async () => {
 
                         const snippets = await ext.createAndConfigureCodeSnippets();

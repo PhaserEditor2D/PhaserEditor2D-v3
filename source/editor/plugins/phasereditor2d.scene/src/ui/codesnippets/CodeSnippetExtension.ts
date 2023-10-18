@@ -25,6 +25,8 @@ namespace phasereditor2d.scene.ui.codesnippets {
             return this._name;
         }
 
+        abstract isEnabledFor(_editor: editor.SceneEditor): boolean;
+
         abstract createAndConfigureCodeSnippets(): Promise<CodeSnippet[]>;
 
         abstract createEmptyCodeSnippet(): CodeSnippet;
