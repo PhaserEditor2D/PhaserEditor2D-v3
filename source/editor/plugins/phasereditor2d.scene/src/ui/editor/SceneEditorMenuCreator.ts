@@ -23,6 +23,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createAddObjectMenu())
 
+            menu.addMenu(this.createAddCodeSnippetMenu())
+
             menu.addSeparator();
 
             menu.addMenu(this.createPrefabMenu());
@@ -52,7 +54,39 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createCompilerMenu());
         }
 
-        createScriptingMenu(): controls.Menu {
+        private createAddCodeSnippetMenu(): controls.Menu {
+
+            const menu = new controls.Menu("Code Snippets");
+
+            for (const ext of ScenePlugin.getInstance().getCodeSnippetExtensions()) {
+
+                menu.addAction({
+                    text: "Add " + ext.getName(),
+                    icon: resources.getIcon(resources.ICON_BUILD),
+                    callback: async () => {
+
+                        const snippets = await ext.createAndConfigureCodeSnippets();
+
+                        if (snippets) {
+
+                            this._editor.getUndoManager().add(new codesnippets.CodeSnippetsSnapshotOperation(this._editor, async () => {
+
+                                for (const snippet of snippets) {
+
+                                    this._editor.getScene().addCodeSnippet(snippet);
+                                }
+
+                                this._editor.setSelection(snippets);
+                            }));
+                        }
+                    }
+                });
+            }
+
+            return menu;
+        }
+
+        private createScriptingMenu(): controls.Menu {
 
             const menu = new controls.Menu("Scripting");
 
@@ -68,7 +102,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         createArcadePhysicsMenu(): controls.Menu {
-           
+
             const menu = new controls.Menu("Arcade Physics");
 
             menu.addCommand(editor.commands.CMD_ARCADE_ENABLE_BODY, {

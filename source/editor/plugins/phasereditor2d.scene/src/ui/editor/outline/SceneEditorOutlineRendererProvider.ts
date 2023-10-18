@@ -35,6 +35,14 @@ namespace phasereditor2d.scene.ui.editor.outline {
             } else if (element instanceof sceneobjects.UserProperty) {
 
                 return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_USER_PROPERTY));
+
+            } else if (element instanceof codesnippets.CodeSnippets) {
+
+                return new controls.viewers.IconImageCellRenderer(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER));
+
+            } else if (element instanceof codesnippets.CodeSnippet) {
+
+                return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_BUILD));
             }
 
             const extensions = ScenePlugin.getInstance().getSceneEditorOutlineExtensions();

@@ -255,6 +255,10 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.TilemapExtension.getInstance()
             );
 
+            reg.addExtension(
+                new ui.codesnippets.CreateFromAsepriteCodeSnippetExtension()
+            );
+
             // align extensions
 
             reg.addExtension(...ui.editor.layout.DefaultLayoutExtensions.ALL);
@@ -319,7 +323,8 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
                 page => new ui.sceneobjects.SpineBoundsProviderSection(page),
-                page => new ui.sceneobjects.SpineAnimationSection(page)
+                page => new ui.sceneobjects.SpineAnimationSection(page),
+                page => new ui.codesnippets.CreateFromAsepriteCodeSnippetSection(page)
             ));
 
             // scene tools
@@ -365,9 +370,9 @@ namespace phasereditor2d.scene {
         }
 
         private registerAnimationsPreviewDialogInAssetPack() {
-            
+
             pack.ui.properties.AnimationsPreviewSection.openPreviewDialog = elem => {
-            
+
                 const dlg = new ui.sceneobjects.AnimationPreviewDialog(elem.getParent(), {
                     key: elem.getKey()
                 });
@@ -464,6 +469,17 @@ namespace phasereditor2d.scene {
         isSceneContentType(file: colibri.core.io.FilePath) {
 
             return !file.isFolder() && colibri.Platform.getWorkbench().getContentTypeRegistry().getCachedContentType(file) === core.CONTENT_TYPE_SCENE;
+        }
+
+        getCodeSnippetExtensions() {
+
+            return colibri.Platform
+                .getExtensions<ui.codesnippets.CodeSnippetExtension>(ui.codesnippets.CodeSnippetExtension.POINT_ID);
+        }
+
+        getCodeSnippetExtensionByType(type: string) {
+
+            return this.getCodeSnippetExtensions().find(e => e.getType() === type);
         }
 
         getPlainObjectExtensions() {
