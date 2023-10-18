@@ -590,6 +590,12 @@ namespace phasereditor2d.scene.ui.editor {
             return this.getSelection().filter(obj => sceneobjects.ScenePlainObjectEditorSupport.hasEditorSupport(obj));
         }
 
+        getSelectedCodeSnippets(): codesnippets.CodeSnippet[] {
+
+            return this.getSelection()
+                .filter(obj => obj instanceof codesnippets.CodeSnippet);
+        }
+
         getSelectedUserComponentNodes(): sceneobjects.UserComponentNode[] {
 
             return this.getSelection().filter(obj => obj instanceof sceneobjects.UserComponentNode);
@@ -715,7 +721,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     this._scene.destroyGame();
 
-                    ScenePlugin.getInstance().getCanvasManager().releaseCanvas( this._game.canvas);
+                    ScenePlugin.getInstance().getCanvasManager().releaseCanvas(this._game.canvas);
                 }
 
                 this._cellRendererCache.clear();
@@ -858,7 +864,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         getOutlineProvider() {
-            
+
             return this._outlineProvider;
         }
 

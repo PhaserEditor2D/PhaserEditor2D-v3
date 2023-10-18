@@ -9,6 +9,13 @@ namespace phasereditor2d.scene.ui.codesnippets {
             this._list.push(snippet);
         }
 
+        removeByIds(ids: string[]) {
+
+            const removeSet = new Set(ids);
+
+            this._list = this._list.filter(s => !removeSet.has(s.getId()));
+        }
+
         getSnippets() {
 
             return this._list;

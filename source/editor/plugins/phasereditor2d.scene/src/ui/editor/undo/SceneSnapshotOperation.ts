@@ -9,6 +9,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
         lists: json.IObjectListData[];
         plainObjects: json.IScenePlainObjectData[],
         prefabUserProperties: any[];
+        codeSnippets: codesnippets.ICodeSnippetData[];
     }
 
     export class SceneSnapshotOperation extends SceneEditorOperation {
@@ -81,7 +82,9 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 prefabUserProperties: scene.getPrefabUserProperties().toJSON(),
 
-                selection: this.getEditor().getSelectionManager().getSelectionIds()
+                codeSnippets: scene.getCodeSnippets().toJSON(),
+
+                selection: this.getEditor().getSelectionManager().getSelectionIds(),
             };
         }
 
@@ -101,6 +104,8 @@ namespace phasereditor2d.scene.ui.editor.undo {
             }
 
             scene.getObjectLists().readJSON_lists(snapshot.lists);
+
+            scene.getCodeSnippets().readJSON(snapshot.codeSnippets);
 
             scene.getPrefabUserProperties().readJSON(snapshot.prefabUserProperties);
 
