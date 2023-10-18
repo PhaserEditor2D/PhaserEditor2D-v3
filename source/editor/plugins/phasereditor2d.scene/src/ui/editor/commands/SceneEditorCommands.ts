@@ -196,6 +196,33 @@ namespace phasereditor2d.scene.ui.editor.commands {
             this.registerPropertiesCommands(manager);
 
             this.registerSpineCommands(manager);
+
+            this.registerCodeSnippetOrderCommands(manager);
+        }
+
+        static registerCodeSnippetOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {
+
+            const moves: [undo.DepthMove, string][] = [
+                ["Up", CMD_SORT_OBJ_UP],
+                ["Down", CMD_SORT_OBJ_DOWN],
+                ["Top", CMD_SORT_OBJ_TOP],
+                ["Bottom", CMD_SORT_OBJ_BOTTOM]
+            ];
+
+            for (const tuple of moves) {
+
+                const move = tuple[0];
+                const cmd = tuple[1];
+
+                manager.addHandlerHelper(cmd,
+                    // testFunc 
+                    args => isSceneScope(args) && args.activeEditor.getSelection().length > 0
+                        && codesnippets.CodeSnippetOrderOperation.allow(args.activeEditor as any, move),
+                    // execFunc
+                    args => args.activeEditor.getUndoManager().add(
+                        new codesnippets.CodeSnippetOrderOperation(args.activeEditor as editor.SceneEditor, move)
+                    ));
+            }
         }
 
         static registerPlainObjectOrderCommands(manager: colibri.ui.ide.commands.CommandManager) {

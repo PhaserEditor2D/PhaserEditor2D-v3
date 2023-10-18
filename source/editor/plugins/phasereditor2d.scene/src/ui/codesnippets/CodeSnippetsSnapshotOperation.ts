@@ -1,21 +1,18 @@
-/// <reference path="../../editor/undo/SceneEditorOperation.ts" />
+/// <reference path="../editor/undo/SceneEditorOperation.ts" />
 namespace phasereditor2d.scene.ui.codesnippets {
 
     import json = core.json;
 
-    export interface ISceneSnapshot {
+    export interface ICodeSnippetSnapshot {
 
         selection: string[];
-        displayList: json.IObjectData[];
-        lists: json.IObjectListData[];
-        plainObjects: json.IScenePlainObjectData[],
-        prefabUserProperties: any[];
+        codeSnippets: ICodeSnippetData[];
     }
 
     export class CodeSnippetsSnapshotOperation extends editor.undo.SceneEditorOperation {
 
-        private _before: ICodeSnippetData[];
-        private _after: ICodeSnippetData[];
+        private _before: ICodeSnippetSnapshot;
+        private _after: ICodeSnippetSnapshot;
         private _operation: () => Promise<void>;
 
         constructor(editor: editor.SceneEditor, operation?: () => Promise<void>) {
@@ -46,24 +43,27 @@ namespace phasereditor2d.scene.ui.codesnippets {
             }
         }
 
-        private takeSnapshot(): ICodeSnippetData[] {
+        private takeSnapshot(): ICodeSnippetSnapshot {
 
             const scene = this.getScene();
 
-            return scene.getCodeSnippets().toJSON();
+            return {
+                selection: this.getEditor().getSelectedCodeSnippets().map(s => s.getId()),
+                codeSnippets: scene.getCodeSnippets().toJSON()
+            };
         }
 
-        protected loadSnapshot(snapshot: ICodeSnippetData[]) {
+        protected loadSnapshot(snapshot: ICodeSnippetSnapshot) {
 
             const editor = this.getEditor();
             const scene = this.getScene();
 
-            scene.getCodeSnippets().readJSON(snapshot);
+            scene.getCodeSnippets().readJSON(snapshot.codeSnippets);
 
             editor.setDirty(true);
             editor.repaint();
             editor.refreshOutline();
-            editor.getSelectionManager().setSelectionByIds(snapshot.map(s => s.id));
+            editor.getSelectionManager().setSelectionByIds(snapshot.selection);
         }
 
         undo(): void {

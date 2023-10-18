@@ -18,12 +18,16 @@ namespace phasereditor2d.scene.ui.editor {
             const selection = this._editor.getSelection();
             const selectedObjects = this._editor.getSelectedGameObjects();
             const selectedPlainObjects = this._editor.getSelectedPlainObjects();
+            const selectedCodeSnippets = this._editor.getSelectedCodeSnippets();
 
             list.push(...selectedObjects
                 .map(obj => obj.getEditorSupport().getId()));
 
             list.push(...selectedPlainObjects
                 .map(obj => obj.getEditorSupport().getId()));
+
+            list.push(...selectedCodeSnippets
+                .map((s: codesnippets.CodeSnippet) => s.getId()));
 
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.ObjectList)
@@ -40,10 +44,6 @@ namespace phasereditor2d.scene.ui.editor {
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.UserProperty)
                 .map((p: sceneobjects.UserProperty) => `prefabProperty#${p.getName()}`));
-
-            list.push(...selection
-                .filter(obj => obj instanceof codesnippets.CodeSnippet)
-                .map((s: codesnippets.CodeSnippet) => s.getId()));
 
             return list;
         }
