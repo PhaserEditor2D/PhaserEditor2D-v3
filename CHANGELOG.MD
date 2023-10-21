@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.64.0
 
 * Fixes making thumbnails of single-layer prefabs.
 * Allows merging Import and Open buttons in the Asset Pack Entry section.
