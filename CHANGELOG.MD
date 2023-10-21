@@ -12,6 +12,8 @@
 * Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
 * Adds `showBeforeDelay` to the Animations Editor.
 * Shows Sprite Animation blocks in the Scene Editor's Blocks view.
+* Aseprite animations support.
+* New Code Snippets scene elements.
 * Optimizes pooling of WEBGL contexts.
 
 ## v3.63.0 - Sep 30, 2023
