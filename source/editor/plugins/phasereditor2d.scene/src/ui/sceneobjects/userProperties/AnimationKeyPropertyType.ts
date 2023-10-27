@@ -14,7 +14,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-
         protected getIcon(finder: pack.core.PackFinder, value: string): controls.IImage {
 
             return AnimationKeyPropertyType.getAnimationIcon(finder, value);
@@ -47,6 +46,64 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             viewer.setContentProvider(new AnimationKeyContentProvider());
 
             return viewer;
+        }
+
+        createInspectorPropertyEditor(section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
+
+            super.createInspectorPropertyEditor(section, parent, userProp, lockIcon, async () => {
+
+                const finder = new pack.core.PackFinder();
+
+                await finder.preload();
+
+                const values = section.getSelection()
+                    .map(o => userProp.getComponentProperty().getValue(o));
+
+                const key = section.flatValues_StringOneOrNothing(
+                    values);
+
+                const anim = finder.findAnimationByKey(key);
+
+                if (anim) {
+
+                    const dlg = new AnimationPreviewDialog(anim.getParent(), {
+                        key
+                    });
+
+                    dlg.create();
+
+                } else {
+
+                    alert("Animation key not found.");
+                }
+            });
+        }
+
+        createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
+
+            return super.createEditorElement(getValue, setValue, async () => {
+
+                const finder = new pack.core.PackFinder();
+
+                await finder.preload();
+
+                const key = getValue() as string;
+
+                const anim = finder.findAnimationByKey(key);
+
+                if (anim) {
+
+                    const dlg = new AnimationPreviewDialog(anim.getParent(), {
+                        key
+                    });
+
+                    dlg.create();
+
+                } else {
+
+                    alert("Animation key not found.");
+                }
+            });
         }
     }
 

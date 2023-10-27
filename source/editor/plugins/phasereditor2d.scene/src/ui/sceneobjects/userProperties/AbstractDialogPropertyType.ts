@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         createInspectorPropertyEditor(
-            section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean): void {
+            section: SceneGameObjectSection<any>, parent: HTMLElement, userProp: UserProperty, lockIcon: boolean, previewAction?: () => void): void {
 
             const prop = userProp.getComponentProperty();
 
@@ -47,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = section.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const comp = this.createEditorComp();
+            const comp = this.createEditorComp(Boolean(previewAction));
             parent.appendChild(comp);
 
             const text = section.createStringField(comp, prop);
@@ -72,13 +72,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
 
             comp.appendChild(buttonElement);
+
+            if (previewAction) {
+
+                section.createButton(comp, resources.getIcon(resources.ICON_PLAY), () => {
+
+                    previewAction();
+                });
+            }
         }
 
-        private createEditorComp() {
+        private createEditorComp(withPreviewButton = false) {
 
             const comp = document.createElement("div");
             comp.style.display = "grid";
-            comp.style.gridTemplateColumns = "1fr auto";
+            comp.style.gridTemplateColumns = withPreviewButton ? "1fr auto auto" : "1fr auto";
             comp.style.gap = "5px";
             comp.style.alignItems = "center";
 
@@ -188,14 +196,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        createEditorElement(getValue: () => any, setValue: (value: any) => void): IPropertyEditor {
+        createEditorElement(getValue: () => any, setValue: (value: any) => void, previewAction?: () => void): IPropertyEditor {
 
-            const comp = this.createEditorComp();
+            const comp = this.createEditorComp(Boolean(previewAction));
 
-            const inputElement = document.createElement("input");
-            comp.appendChild(inputElement);
-            inputElement.type = "text";
-            inputElement.classList.add("formText");
+            const formBuilder = new controls.properties.FormBuilder();
+
+            const inputElement = formBuilder.createText(comp, false);
 
             inputElement.addEventListener("change", e => {
 
@@ -214,6 +221,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 this.updateIcon(iconControl, value);
             };
+
+            if (previewAction) {
+
+                formBuilder.createButton(comp, resources.getIcon(resources.ICON_PLAY), () => {
+
+                    console.log("here");
+                    
+                    previewAction();
+                });
+            }
 
             return {
                 element: comp,
