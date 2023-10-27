@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
 
         static animationKey = SimpleProperty({ name: "animationKey", codeName: "key" }, "", "Animation Key", "The animation key to auto-play.");
-        static animationCustomConfig = SimpleProperty("animationCustomConfig", false, "Animation Config", "Set a new configuration?");
+        static animationCustomConfig = SimpleProperty("animationCustomConfig", false, "Custom Config", "Set a new configuration?");
         static animationFrameRate = SimpleProperty({ name: "animationFrameRate", codeName: "frameRate" }, 24, "Frame Rate", "phaser:Phaser.Types.Animations.PlayAnimationConfig.frameRate");
         static animationDelay = SimpleProperty({ name: "animationDelay", codeName: "delay" }, 0, "Delay", "phaser:Phaser.Types.Animations.PlayAnimationConfig.delay");
         static animationRepeat = SimpleProperty({ name: "animationRepeat", codeName: "repeat" }, 0, "Repeat", "phaser:Phaser.Types.Animations.PlayAnimationConfig.repeat");
