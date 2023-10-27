@@ -474,7 +474,7 @@ namespace phasereditor2d.animations.ui.editors {
             this._scene = new AnimationsScene(this);
 
             this._game = new Phaser.Game({
-                type: Phaser.CANVAS,
+                type: scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
                 scale: {
                     mode: Phaser.Scale.NONE

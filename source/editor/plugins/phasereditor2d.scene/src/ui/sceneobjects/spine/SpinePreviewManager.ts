@@ -59,7 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             canvas.style.visibility = "hidden";
 
             this._game = new Phaser.Game({
-                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
+                type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 width, height,
                 canvas,
                 parent: this._parent,

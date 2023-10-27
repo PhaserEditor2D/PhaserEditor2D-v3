@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 width, height: height - 5,
                 parent: this._parent,
                 canvas,
-                type: ScenePlugin.DEFAULT_CANVAS_CONTEXT,
+                type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 transparent: true,
                 pixelArt: true,
                 fps: {
