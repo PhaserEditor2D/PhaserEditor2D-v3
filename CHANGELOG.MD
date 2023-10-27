@@ -9,6 +9,7 @@
 * Improves animations preview UI:
     - New Animation preview section.
     - New Animations Preview section.
+    - Shows a preview button in the Animation Key user property.
 * Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
 * Adds `showBeforeDelay` to the Animations Editor.
 * Shows Sprite Animation blocks in the Scene Editor's Blocks view.
