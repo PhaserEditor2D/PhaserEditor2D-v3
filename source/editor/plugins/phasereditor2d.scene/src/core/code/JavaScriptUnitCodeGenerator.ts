@@ -418,11 +418,25 @@ namespace phasereditor2d.scene.core.code {
             this.join(args);
 
             if (this.isTypeScript()
-                && call.getExplicitType()
+                && (call.getExplicitType() || call.isDisableReturnTypeNullable())
                 && call.isDeclareReturnToVar()
                 && call.getReturnToVar()) {
 
-                this.line(`) as ${call.getExplicitType()};`);
+                let line = ")";
+
+                if (call.isDisableReturnTypeNullable()) {
+
+                    line += "!";
+                }
+
+                if (call.getExplicitType()) {
+
+                    line += ` as ${call.getExplicitType()}`;
+                }
+
+                line += ";";
+
+                this.line(line);
 
             } else {
 
