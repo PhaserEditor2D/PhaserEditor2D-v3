@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.core.code {
         private _isConstructor: boolean;
         private _explicitType: string;
         private _optionalContext: boolean;
-        private _disableReturnTypeNullable: boolean;
+        private _nonNullAssertion: boolean;
 
         constructor(methodName: string, contextExpr = "") {
             super();
@@ -20,17 +20,17 @@ namespace phasereditor2d.scene.core.code {
             this._args = [];
             this._declareReturnToVar = false;
             this._isConstructor = false;
-            this._disableReturnTypeNullable = false;
+            this._nonNullAssertion = false;
         }
 
-        setDisableReturnTypeNullable(disableReturnTypeNullable: boolean) {
+        setNonNullAssertion(nonNullAssertion: boolean) {
 
-            this._disableReturnTypeNullable = disableReturnTypeNullable;
+            this._nonNullAssertion = nonNullAssertion;
         }
 
-        isDisableReturnTypeNullable() {
+        isNonNullAssertion() {
 
-            return this._disableReturnTypeNullable;
+            return this._nonNullAssertion;
         }
 
         setOptionalContext(optionalContext: boolean) {

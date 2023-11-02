@@ -418,13 +418,13 @@ namespace phasereditor2d.scene.core.code {
             this.join(args);
 
             if (this.isTypeScript()
-                && (call.getExplicitType() || call.isDisableReturnTypeNullable())
+                && (call.getExplicitType() || call.isNonNullAssertion())
                 && call.isDeclareReturnToVar()
                 && call.getReturnToVar()) {
 
                 let line = ")";
 
-                if (call.isDisableReturnTypeNullable()) {
+                if (call.isNonNullAssertion()) {
 
                     line += "!";
                 }
