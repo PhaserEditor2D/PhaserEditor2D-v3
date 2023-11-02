@@ -16,6 +16,7 @@
 * Aseprite animations support.
 * New Code Snippets scene elements.
 * Optimizes pooling of WEBGL contexts.
+* [#295](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/295) Fixes tilemapLayer nullable method factory.
 
 ## v3.63.0 - Sep 30, 2023
 
