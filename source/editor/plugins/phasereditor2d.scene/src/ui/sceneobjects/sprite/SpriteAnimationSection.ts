@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected getSectionHelpPath() {
 
-            return "TODO";
+            return "scene-editor/animations-properties.html";
         }
 
         createMenu(menu: controls.Menu): void {
