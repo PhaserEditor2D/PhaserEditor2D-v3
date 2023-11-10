@@ -11,6 +11,17 @@ namespace colibri.ui.controls.properties {
 
         abstract addSections(page: PropertyPage, sections: Array<PropertySection<any>>): void;
 
+        sortSections(sections: controls.properties.PropertySection<any>[]) {
+
+            sections.sort((a, b) => {
+
+                const aa = a.isFillSpace() ? 1 : 0;
+                const bb = b.isFillSpace() ? 1 : 0;
+
+                return aa - bb;
+            });
+        }
+
         getEmptySelectionObject() {
 
             return null;

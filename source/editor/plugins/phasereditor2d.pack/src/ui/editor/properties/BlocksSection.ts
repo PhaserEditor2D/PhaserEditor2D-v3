@@ -18,7 +18,7 @@ namespace phasereditor2d.pack.ui.editor.properties {
 
                 this.getSelectionFirstElement().setShowAllFilesInBlocks(check.checked);
                 const editor = colibri.Platform.getWorkbench().getActiveEditor() as AssetPackEditor;
-                editor.updateBlocks();
+                editor.refreshBlocks();
                 editor.setDirty(true);
             });
 

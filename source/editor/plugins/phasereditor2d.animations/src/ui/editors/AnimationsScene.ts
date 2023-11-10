@@ -207,8 +207,8 @@ namespace phasereditor2d.animations.ui.editors {
 
                     sprite.setScale(scale, scale);
 
-                    const marginX = size - sprite.width * scale;
-                    const marginY = size - sprite.height * scale;
+                    const marginX = size / 2 - sprite.width * scale / 2;
+                    const marginY = size / 2 - sprite.height * scale / 2;
 
                     sprite.setData("cell", { x, y, size });
 

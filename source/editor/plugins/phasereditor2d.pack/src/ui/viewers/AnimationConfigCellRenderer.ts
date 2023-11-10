@@ -4,12 +4,12 @@ namespace phasereditor2d.pack.ui.viewers {
 
     export class AnimationConfigCellRenderer implements controls.viewers.ICellRenderer {
 
-        private _finder: pack.core.PackFinder;
-        public layout: "square" | "full-width" = "full-width";
+        public layout: "square" | "full-width";
+        private static _finder: pack.core.PackFinder;
 
-        constructor(finder: pack.core.PackFinder) {
+        constructor(layout: "square" | "full-width" = "full-width") {
 
-            this._finder = finder;
+            this.layout = layout;
         }
 
         getAnimationConfig(args: controls.viewers.RenderCellArgs | controls.viewers.PreloadCellArgs): pack.core.AnimationConfigInPackItem {
@@ -30,17 +30,13 @@ namespace phasereditor2d.pack.ui.viewers {
 
             const cellSize = args.viewer.getCellSize();
 
-            const len = frames.length;
-
-            const indexes = [0, Math.floor(len / 2), len - 1];
-
             const ctx = args.canvasContext;
 
             ctx.save();
 
-            if (cellSize <= controls.ROW_HEIGHT) {
+            if (cellSize <= controls.ROW_HEIGHT * 2 || this.layout === "square") {
 
-                const img = this.getImage(frames[0]);
+                const img = anim.getPreviewImageAsset();
 
                 if (img) {
 
@@ -49,12 +45,16 @@ namespace phasereditor2d.pack.ui.viewers {
 
             } else {
 
+                const len = frames.length;
+
+                const indexes = [0, Math.floor(len / 2), len - 1];
+
                 // tslint:disable-next-line:prefer-for-of
                 for (let i = 0; i < indexes.length; i++) {
 
                     const frame = frames[indexes[i]];
 
-                    const img = this.getImage(frame);
+                    const img = frame.getImageAsset();
 
                     if (img) {
 
@@ -66,13 +66,6 @@ namespace phasereditor2d.pack.ui.viewers {
             }
 
             ctx.restore();
-        }
-
-        private getImage(frame: pack.core.AnimationFrameConfigInPackItem) {
-
-            const image = this._finder.getAssetPackItemImage(frame.getTextureKey(), frame.getFrameKey());
-
-            return image;
         }
 
         cellHeight(args: controls.viewers.RenderCellArgs): number {
@@ -88,11 +81,11 @@ namespace phasereditor2d.pack.ui.viewers {
 
             for (const frame of anim.getFrames()) {
 
-                const obj = this._finder.getAssetPackItemOrFrame(frame.getTextureKey(), frame.getFrameKey());
+                const asset = frame.getTextureFrame();
 
-                if (obj) {
+                if (asset) {
 
-                    const objResult = await obj.preload();
+                    const objResult = await asset.preload();
 
                     result = Math.max(result, objResult);
                 }

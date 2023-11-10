@@ -1,72 +1,45 @@
-/// <reference path="./AssetPackItem.ts" />
+/// <reference path="./BaseAnimationsAssetPackItem.ts" />
 
 namespace phasereditor2d.pack.core {
 
-    import controls = colibri.ui.controls;
+    export class AnimationsAssetPackItem extends BaseAnimationsAssetPackItem {
 
-    export class AnimationsAssetPackItem extends AssetPackItem {
+        override getAnimationsFile() {
 
-        private _animations: AnimationConfigInPackItem[];
-
-        constructor(pack: AssetPack, data: any) {
-            super(pack, data);
+            const url = this.getData()["url"];
+            
+            return this.getFileFromAssetUrl(url);
         }
 
-        getUrl() {
+        protected override async parseAnimations(animations: AnimationConfigInPackItem[]): Promise<void> {
 
-            return this.getData()["url"];
-        }
+            const file = this.getAnimationsFile();
 
-        getAnimations() {
+            if (file) {
 
-            return this._animations || [];
-        }
+                const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
 
-        async preload() {
+                const data = JSON.parse(content) as Phaser.Types.Animations.JSONAnimations;
 
-            if (this._animations) {
+                for (const animData of data.anims) {
 
-                return controls.PreloadResult.NOTHING_LOADED;
-            }
+                    const animConfig = new AnimationConfigInPackItem(this);
 
-            this._animations = [];
+                    animConfig.setKey(animData.key);
 
-            try {
+                    for (const frameData of animData.frames) {
 
-                const file = this.getFileFromAssetUrl(this.getUrl());
+                        const frameConfig = new AnimationFrameConfigInPackItem();
 
-                if (file) {
+                        frameConfig.setTextureKey(frameData.key);
+                        frameConfig.setFrameKey(frameData.frame);
 
-                    const content = await colibri.ui.ide.FileUtils.preloadAndGetFileString(file);
-
-                    const data = JSON.parse(content) as Phaser.Types.Animations.JSONAnimations;
-
-                    for (const animData of data.anims) {
-
-                        const animConfig = new AnimationConfigInPackItem();
-
-                        animConfig.setKey(animData.key);
-
-                        for (const frameData of animData.frames) {
-
-                            const frameConfig = new AnimationFrameConfigInPackItem();
-
-                            frameConfig.setTextureKey(frameData.key);
-                            frameConfig.setFrameKey(frameData.frame);
-
-                            animConfig.getFrames().push(frameConfig);
-                        }
-
-                        this._animations.push(animConfig);
+                        animConfig.getFrames().push(frameConfig);
                     }
+
+                    animations.push(animConfig);
                 }
-
-            } catch (e) {
-
-                console.error(e);
             }
-
-            return controls.PreloadResult.RESOURCES_LOADED;
         }
     }
 }

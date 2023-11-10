@@ -136,11 +136,24 @@ namespace phasereditor2d.pack.ui.editor {
 
             const content = await ide.FileUtils.preloadAndGetFileString(file);
 
+            const finder = new pack.core.PackFinder();
+
+            await finder.preload();
+
             this._pack = new core.AssetPack(file, content);
+
+            for(const item of this._pack.getItems()) {
+
+                await item.preload();
+                
+                await item.build(finder);
+            }
 
             this.getViewer().repaint();
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
+
+            this._outlineProvider.repaint();
 
             if (this._revealKey) {
 
@@ -201,7 +214,7 @@ namespace phasereditor2d.pack.ui.editor {
 
             await this.resetPackCache();
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
         }
 
         private async resetPackCache() {
@@ -388,16 +401,20 @@ namespace phasereditor2d.pack.ui.editor {
 
             const items = await importData.importer.autoImport(this._pack, importData.files);
 
+            const finder = new pack.core.PackFinder(this._pack);
+
             for (const item of items) {
 
                 await item.preload();
+
+                await item.build(finder);
             }
 
             this._viewer.repaint();
 
             this.setDirty(true);
 
-            await this.updateBlocks();
+            await this.refreshBlocks();
 
             this._viewer.setSelection(items);
 
@@ -408,7 +425,7 @@ namespace phasereditor2d.pack.ui.editor {
             this.getUndoManager().add(new undo.AssetPackEditorOperation(this, before, after));
         }
 
-        async updateBlocks() {
+        async refreshBlocks() {
 
             if (!this._pack) {
                 return;

@@ -64,11 +64,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         protected async createViewer() {
 
-            const finder = new pack.core.PackFinder();
-            await finder.preload();
-
             const viewer = new controls.viewers.TreeViewer("phasereditor2d.scene.editor.EventPropertyType.Dialog");
-            viewer.setCellRendererProvider(new EventCellRendererProvider(finder));
+            viewer.setCellRendererProvider(new EventCellRendererProvider());
             viewer.setLabelProvider(new EventLabelProvider());
             viewer.setStyledLabelProvider(new EventPropertyStyleLabelProvider());
             viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
@@ -103,8 +100,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             await packFinder.preload();
 
             const animEvents = packFinder
-                .getAssets(i => i instanceof pack.core.AnimationsAssetPackItem)
-                .map(i => i as pack.core.AnimationsAssetPackItem)
+                .getAssets(i => i instanceof pack.core.BaseAnimationsAssetPackItem)
+                .map(i => i as pack.core.BaseAnimationsAssetPackItem)
                 .flatMap(i => i.getAnimations())
                 .map(anim => new AnimationEventItem(`animationcomplete-${anim.getKey()}`, anim));
 
@@ -257,7 +254,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     class EventCellRendererProvider implements controls.viewers.ICellRendererProvider {
 
-        constructor(private _finder: pack.core.PackFinder) {
+        constructor() {
 
         }
 
@@ -265,7 +262,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (element instanceof AnimationEventItem) {
 
-                return new AnimationEventCellRenderer(this._finder);
+                return new AnimationEventCellRenderer();
             }
 
             else if (element instanceof SkeletonEventItem) {

@@ -81,6 +81,15 @@ namespace phasereditor2d.scene.core.json {
                 sceneData.prefabProperties = prefabProperties;
             }
 
+            // code snippets
+
+            const codeSnippets = this._scene.getCodeSnippets();
+
+            if (codeSnippets.getSnippets().length > 0) {
+
+                sceneData.codeSnippets = codeSnippets.toJSON();
+            }
+
             return sceneData;
         }
 

@@ -44,11 +44,20 @@ namespace colibri.ui.controls.properties {
             return label;
         }
 
-        createButton(parent: HTMLElement, text: string, callback: (e?: MouseEvent) => void) {
+        createButton(parent: HTMLElement, textOrIcon: string | IImage, callback: (e?: MouseEvent) => void) {
 
             const btn = document.createElement("button");
 
-            btn.innerText = text;
+            if (typeof textOrIcon === "string") {
+
+                btn.innerText = textOrIcon;
+
+            } else {
+
+                const iconControl = new controls.IconControl(textOrIcon);
+
+                btn.appendChild(iconControl.getCanvas());
+            }
 
             btn.addEventListener("click", e => callback(e));
 

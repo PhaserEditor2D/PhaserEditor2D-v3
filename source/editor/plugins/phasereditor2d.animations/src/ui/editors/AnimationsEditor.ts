@@ -21,6 +21,8 @@ namespace phasereditor2d.animations.ui.editors {
         private _currentDependenciesHash: string;
         private _menuCreator: AnimationsEditorMenuCreator;
         private _model: AnimationsModel;
+        private _editorReady = false;
+        private _selectAnimationKeyOnBoot: string;
 
         static getFactory() {
 
@@ -392,9 +394,9 @@ namespace phasereditor2d.animations.ui.editors {
             this._overlayLayer = new AnimationsOverlayLayer(this);
             container.appendChild(this._overlayLayer.getCanvas());
 
-            const pool = Phaser.Display.Canvas.CanvasPool;
+            this._gameCanvas = scene.ScenePlugin.getInstance().getCanvasManager().takeCanvas();
+            this._gameCanvas.style.visibility = "hidden";
 
-            this._gameCanvas = pool.create2D(this.getElement(), 100, 100);
             this._gameCanvas.style.position = "absolute";
             this._gameCanvas.tabIndex = 1;
             container.appendChild(this._gameCanvas);
@@ -408,7 +410,11 @@ namespace phasereditor2d.animations.ui.editors {
 
         private registerDropListeners() {
 
-            this._gameCanvas.addEventListener("dragover", e => {
+            // canvas can be reused, don't use it for events
+
+            const eventElement = this._gameCanvas.parentElement;
+
+            eventElement.addEventListener("dragover", e => {
 
                 const dataArray = controls.Controls.getApplicationDragData();
 
@@ -424,7 +430,7 @@ namespace phasereditor2d.animations.ui.editors {
                 }
             });
 
-            this._gameCanvas.addEventListener("drop", e => {
+            eventElement.addEventListener("drop", e => {
 
                 e.preventDefault();
 
@@ -440,7 +446,11 @@ namespace phasereditor2d.animations.ui.editors {
 
             this._menuCreator = new AnimationsEditorMenuCreator(this);
 
-            this._gameCanvas.addEventListener("contextmenu", e => this.onMenu(e));
+            // canvas can be reused, don't use it for events
+
+            const eventElement = this._gameCanvas.parentElement;
+
+            eventElement.addEventListener("contextmenu", e => this.onMenu(e));
         }
 
         private onMenu(e: MouseEvent) {
@@ -464,7 +474,7 @@ namespace phasereditor2d.animations.ui.editors {
             this._scene = new AnimationsScene(this);
 
             this._game = new Phaser.Game({
-                type: Phaser.CANVAS,
+                type: scene.ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
                 scale: {
                     mode: Phaser.Scale.NONE
@@ -493,6 +503,8 @@ namespace phasereditor2d.animations.ui.editors {
 
             this._gameBooted = true;
 
+            this._gameCanvas.style.visibility = "visible";
+
             if (!this._sceneRead) {
 
                 await this.readScene();
@@ -502,7 +514,21 @@ namespace phasereditor2d.animations.ui.editors {
 
             this.refreshOutline();
 
-            this.setSelection([]);
+            let selection: Phaser.Animations.Animation[] = [];
+
+            if (this._selectAnimationKeyOnBoot) {
+
+                const anims = this.getAnimations();
+
+                if (anims) {
+
+                    selection = anims.filter(a => a.key === this._selectAnimationKeyOnBoot);
+                }
+            }
+
+            this.setSelection(selection);
+
+            this._editorReady = true;
         }
 
         private async readScene() {
@@ -742,6 +768,18 @@ namespace phasereditor2d.animations.ui.editors {
             }
 
             return list;
+        }
+
+        selectAnimationByKey(animationKey: string) {
+
+            if (this._editorReady) {
+
+                this.setSelection(this.getAnimations().filter(a => a.key === animationKey));
+
+            } else {
+
+                this._selectAnimationKeyOnBoot = animationKey;
+            }
         }
 
         getAnimations() {

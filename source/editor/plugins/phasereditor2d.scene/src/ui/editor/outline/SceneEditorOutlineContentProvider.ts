@@ -44,6 +44,12 @@ namespace phasereditor2d.scene.ui.editor.outline {
                 }));
             }
 
+            if (!scene.isPrefabSceneType()
+                && scene.getCodeSnippets().getSnippets().length > 0) {
+
+                roots.push(scene.getCodeSnippets());
+            }
+
             if (scene.isPrefabSceneType()) {
 
                 roots.push(scene.getPrefabUserProperties());
@@ -53,6 +59,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
         }
 
         getChildren(parent: any): any[] {
+
+            if (parent instanceof codesnippets.CodeSnippets) {
+
+                return parent.getSnippets();
+            }
 
             if (parent instanceof sceneobjects.PrefabUserProperties) {
 

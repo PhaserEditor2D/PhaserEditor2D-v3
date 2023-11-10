@@ -18,12 +18,16 @@ namespace phasereditor2d.scene.ui.editor {
             const selection = this._editor.getSelection();
             const selectedObjects = this._editor.getSelectedGameObjects();
             const selectedPlainObjects = this._editor.getSelectedPlainObjects();
+            const selectedCodeSnippets = this._editor.getSelectedCodeSnippets();
 
             list.push(...selectedObjects
                 .map(obj => obj.getEditorSupport().getId()));
 
             list.push(...selectedPlainObjects
-                .map(obj => obj.getEditorSupport().getId()))
+                .map(obj => obj.getEditorSupport().getId()));
+
+            list.push(...selectedCodeSnippets
+                .map((s: codesnippets.CodeSnippet) => s.getId()));
 
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.ObjectList)
@@ -31,7 +35,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.ObjectListItem)
-                .map(obj => (obj as sceneobjects.ObjectListItem).getId()))
+                .map(obj => (obj as sceneobjects.ObjectListItem).getId()));
 
             list.push(...selection
                 .filter(i => i instanceof sceneobjects.UserComponentNode)
@@ -39,7 +43,7 @@ namespace phasereditor2d.scene.ui.editor {
 
             list.push(...selection
                 .filter(obj => obj instanceof sceneobjects.UserProperty)
-                .map((p: sceneobjects.UserProperty) => `prefabProperty#${p.getName()}`))
+                .map((p: sceneobjects.UserProperty) => `prefabProperty#${p.getName()}`));
 
             return list;
         }
@@ -70,15 +74,20 @@ namespace phasereditor2d.scene.ui.editor {
 
                 map.set(list.getId(), list);
 
-                for(const item of list.getItems()) {
+                for (const item of list.getItems()) {
 
                     map.set(item.getId(), item);
                 }
             }
 
-            for(const prop of scene.getPrefabUserProperties().getProperties()) {
+            for (const prop of scene.getPrefabUserProperties().getProperties()) {
 
                 map.set(`prefabProperty#${prop.getName()}`, prop);
+            }
+
+            for (const snippet of scene.getCodeSnippets().getSnippets()) {
+
+                map.set(snippet.getId(), snippet);
             }
 
             const sel = selectionIds

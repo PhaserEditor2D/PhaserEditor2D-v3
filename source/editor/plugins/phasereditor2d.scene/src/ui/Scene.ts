@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui {
 
     export class Scene extends BaseScene {
 
-        static CURRENT_VERSION = 4;
+        static CURRENT_VERSION = 5;
 
         private _id: string;
         private _sceneType: core.json.SceneType;
@@ -12,6 +12,7 @@ namespace phasereditor2d.scene.ui {
         private _prefabProperties: sceneobjects.PrefabUserProperties;
         private _objectLists: sceneobjects.ObjectLists;
         private _plainObjects: sceneobjects.IScenePlainObject[];
+        private _codeSnippets: codesnippets.CodeSnippets;
         private _version: number;
 
         constructor(editor?: editor.SceneEditor) {
@@ -26,6 +27,8 @@ namespace phasereditor2d.scene.ui {
             this._objectLists = new sceneobjects.ObjectLists();
 
             this._plainObjects = [];
+
+            this._codeSnippets = new codesnippets.CodeSnippets();
 
             this._prefabProperties = new sceneobjects.PrefabUserProperties();
 
@@ -144,6 +147,16 @@ namespace phasereditor2d.scene.ui {
         addGameObjectAt(obj: sceneobjects.ISceneGameObject, index: number, skipCallback = false) {
 
             this.children.addAt(obj, index, skipCallback);
+        }
+
+        getCodeSnippets() {
+
+            return this._codeSnippets;
+        }
+
+        addCodeSnippet(codeSnippet: codesnippets.CodeSnippet) {
+
+            this._codeSnippets.add(codeSnippet);
         }
 
         addPlainObject(obj: sceneobjects.IScenePlainObject) {

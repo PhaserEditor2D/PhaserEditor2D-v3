@@ -10,6 +10,7 @@ namespace phasereditor2d.scene.core.code {
         private _isConstructor: boolean;
         private _explicitType: string;
         private _optionalContext: boolean;
+        private _nonNullAssertion: boolean;
 
         constructor(methodName: string, contextExpr = "") {
             super();
@@ -19,6 +20,17 @@ namespace phasereditor2d.scene.core.code {
             this._args = [];
             this._declareReturnToVar = false;
             this._isConstructor = false;
+            this._nonNullAssertion = false;
+        }
+
+        setNonNullAssertion(nonNullAssertion: boolean) {
+
+            this._nonNullAssertion = nonNullAssertion;
+        }
+
+        isNonNullAssertion() {
+
+            return this._nonNullAssertion;
         }
 
         setOptionalContext(optionalContext: boolean) {

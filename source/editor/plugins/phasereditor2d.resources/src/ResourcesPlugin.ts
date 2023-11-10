@@ -9,6 +9,7 @@ namespace phasereditor2d.resources {
     // phasereditor2d.blocks
     export const ICON_ASSET_PACK = "asset-pack";
     export const ICON_ANIMATIONS = "animations";
+    export const ICON_ASEPRITE = "aseprite";
     export const ICON_TILEMAP = "tilemap";
     export const ICON_TILEMAP_LAYER = "tilemap-layer";
     export const ICON_SPINE = "spine";

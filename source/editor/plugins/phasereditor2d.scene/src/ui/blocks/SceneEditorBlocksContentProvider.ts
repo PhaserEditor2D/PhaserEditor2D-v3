@@ -11,6 +11,8 @@ namespace phasereditor2d.scene.ui.blocks {
             pack.core.MULTI_ATLAS_TYPE,
             pack.core.UNITY_ATLAS_TYPE,
             pack.core.SPRITESHEET_TYPE,
+            pack.core.ANIMATION_TYPE,
+            pack.core.ASEPRITE_TYPE,
             pack.core.BITMAP_FONT_TYPE,
             pack.core.SPINE_JSON_TYPE,
             pack.core.SPINE_BINARY_TYPE,
@@ -156,6 +158,11 @@ namespace phasereditor2d.scene.ui.blocks {
                 return parent.getItems().filter(i => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(i.getType()));
             }
 
+            if (parent instanceof pack.core.BaseAnimationsAssetPackItem) {
+
+                return parent.getAnimations();
+            }
+
             if (typeof (parent) === "string") {
 
                 if (SCENE_OBJECT_CATEGORY_SET.has(parent)) {
@@ -187,6 +194,10 @@ namespace phasereditor2d.scene.ui.blocks {
 
                         return this.getPackItems()
                             .filter(item => item instanceof pack.core.BitmapFontAssetPackItem);
+
+                    case pack.core.ANIMATION_TYPE:
+                        return this.getPackItems()
+                            .filter(item => item instanceof pack.core.BaseAnimationsAssetPackItem);
 
                     case BUILTIN_SECTION:
 

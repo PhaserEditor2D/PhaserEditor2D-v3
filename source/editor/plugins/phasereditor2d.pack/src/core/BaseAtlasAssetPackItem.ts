@@ -10,7 +10,7 @@ namespace phasereditor2d.pack.core {
 
             super.computeUsedFiles(files);
 
-            this.addFilesFromDataKey(files, "atlasURL", "textureURL");
+            this.addFilesFromDataKey(files, "atlasURL", "textureURL", "normalMap");
         }
     }
 }

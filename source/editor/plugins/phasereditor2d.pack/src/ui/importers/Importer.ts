@@ -74,6 +74,11 @@ namespace phasereditor2d.pack.ui.importers {
 
             await item.preload();
 
+            const finder = new core.PackFinder();
+            await finder.preload();
+            
+            await item.build(finder);
+
             return item;
         }
 
@@ -98,6 +103,12 @@ namespace phasereditor2d.pack.ui.importers {
             pack.addItem(item);
 
             await item.preload();
+
+            const finder = new core.PackFinder();
+            
+            await finder.preload();
+
+            await item.build(finder);
 
             return item;
         }

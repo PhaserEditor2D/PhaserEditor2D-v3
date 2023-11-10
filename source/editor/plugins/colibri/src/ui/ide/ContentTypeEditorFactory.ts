@@ -6,14 +6,14 @@ namespace colibri.ui.ide {
     export class ContentTypeEditorFactory extends EditorFactory {
 
         private _name: string;
-        private _contentType: string;
+        private _contentTypeSet: Set<string>;
         private _newEditor?: (factory?: ContentTypeEditorFactory) => EditorPart;
 
-        constructor(name: string, contentType: string, newEditor: (factory?: ContentTypeEditorFactory) => EditorPart) {
+        constructor(name: string, contentType: string | string[], newEditor: (factory?: ContentTypeEditorFactory) => EditorPart) {
             super();
 
             this._name = name;
-            this._contentType = contentType;
+            this._contentTypeSet = new Set(Array.isArray(contentType) ? contentType : [contentType]);
             this._newEditor = newEditor;
         }
 
@@ -29,7 +29,7 @@ namespace colibri.ui.ide {
                 const contentType = colibri.Platform.getWorkbench()
                     .getContentTypeRegistry().getCachedContentType(input);
 
-                return this._contentType === contentType;
+                return this._contentTypeSet.has(contentType);
             }
 
             return false;

@@ -11,6 +11,7 @@ namespace phasereditor2d.pack.ui {
         core.MULTI_ATLAS_TYPE,
         core.SPRITESHEET_TYPE,
         core.ANIMATION_TYPE,
+        core.ASEPRITE_TYPE,
         core.BITMAP_FONT_TYPE,
         core.TILEMAP_CSV_TYPE,
         core.TILEMAP_IMPACT_TYPE,
@@ -45,6 +46,7 @@ namespace phasereditor2d.pack.ui {
         multiatlas: "Multiatlas",
         spritesheet: "Spritesheet",
         animation: "Animation",
+        aseprite: "Aseprite",
         bitmapFont: "Bitmap Font",
         tilemapCSV: "Tilemap CSV",
         tilemapImpact: "Tilemap Impact",
@@ -99,6 +101,9 @@ namespace phasereditor2d.pack.ui {
 
                 case core.ANIMATION_TYPE:
                     return new core.AnimationsAssetPackItem(pack, data);
+
+                case core.ASEPRITE_TYPE:
+                    return new core.AsepriteAssetPackItem(pack, data);
 
                 case core.BITMAP_FONT_TYPE:
                     return new core.BitmapFontAssetPackItem(pack, data);
@@ -206,6 +211,8 @@ namespace phasereditor2d.pack.ui {
                     "url",
                     core.contentTypes.CONTENT_TYPE_ANIMATIONS,
                     core.ANIMATION_TYPE),
+
+                new editor.properties.AsepriteSection(page),
 
                 new editor.properties.BitmapFontSection(page),
 
@@ -320,6 +327,10 @@ namespace phasereditor2d.pack.ui {
 
                 new ui.properties.ManyImagePreviewSection(page),
 
+                new ui.properties.AnimationsPreviewSection(page),
+
+                new ui.properties.AnimationPreviewSection(page),
+
                 ...exts.flatMap(ext => ext.getSections(page))
             ];
         }
@@ -422,7 +433,9 @@ namespace phasereditor2d.pack.ui {
 
             } else if (element instanceof core.AnimationConfigInPackItem) {
 
-                return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
+                // return DefaultAssetPackExtension.getIconRenderer(resources.getIcon(resources.ICON_ANIMATIONS), layout);
+
+                return new viewers.AnimationConfigCellRenderer();
             }
 
             return undefined;
@@ -467,7 +480,15 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.UnityAtlasImporter(),
 
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
+
+                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
+
+                new importers.SpineAtlasImporter(),
+
                 new importers.BitmapFontImporter(),
+
+                new importers.AsepriteImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_IMAGE, core.IMAGE_TYPE),
 
@@ -480,6 +501,7 @@ namespace phasereditor2d.pack.ui {
                         scale: 0
                     }
                 }),
+
                 new importers.SpritesheetImporter(),
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_ANIMATIONS, core.ANIMATION_TYPE),
@@ -490,12 +512,6 @@ namespace phasereditor2d.pack.ui {
 
                 new importers.SingleFileImporter(core.contentTypes.CONTENT_TYPE_TILEMAP_TILED_JSON,
                     core.TILEMAP_TILED_JSON_TYPE),
-
-                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_JSON, core.SPINE_JSON_TYPE),
-
-                new importers.SpineImporter(core.contentTypes.CONTENT_TYPE_SPINE_BINARY, core.SPINE_BINARY_TYPE),
-
-                new importers.SpineAtlasImporter(),
 
                 new importers.SingleFileImporter(webContentTypes.core.CONTENT_TYPE_JAVASCRIPT, core.PLUGIN_TYPE, false, {
                     start: false,

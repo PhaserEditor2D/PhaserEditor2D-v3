@@ -183,6 +183,7 @@
             <key type="filename">x2/dark/align-top@2x.png</key>
             <key type="filename">x2/dark/angle@2x.png</key>
             <key type="filename">x2/dark/animations@2x.png</key>
+            <key type="filename">x2/dark/aseprite@2x.png</key>
             <key type="filename">x2/dark/asset-pack@2x.png</key>
             <key type="filename">x2/dark/bitmapfont-type@2x.png</key>
             <key type="filename">x2/dark/blocks@2x.png</key>
@@ -246,6 +247,7 @@
             <key type="filename">x2/light/align-top@2x.png</key>
             <key type="filename">x2/light/angle@2x.png</key>
             <key type="filename">x2/light/animations@2x.png</key>
+            <key type="filename">x2/light/aseprite@2x.png</key>
             <key type="filename">x2/light/asset-pack@2x.png</key>
             <key type="filename">x2/light/bitmapfont-type@2x.png</key>
             <key type="filename">x2/light/blocks@2x.png</key>

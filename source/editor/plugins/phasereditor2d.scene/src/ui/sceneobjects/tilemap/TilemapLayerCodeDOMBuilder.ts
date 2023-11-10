@@ -29,6 +29,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.arg(tilesetArray);
             call.argInt(tilemapLayer.x);
             call.argInt(tilemapLayer.y);
+            call.setNonNullAssertion(true);
 
             return call;
         }

@@ -11,10 +11,12 @@ namespace phasereditor2d.pack.ui.editor.properties {
         }
 
         canEdit(obj: any, n: number) {
+
             return super.canEdit(obj, n) && obj instanceof core.AtlasAssetPackItem;
         }
 
         createForm(parent: HTMLDivElement) {
+            
             const comp = this.createGridElement(parent, 3);
 
             comp.style.gridTemplateColumns = "auto 1fr auto";

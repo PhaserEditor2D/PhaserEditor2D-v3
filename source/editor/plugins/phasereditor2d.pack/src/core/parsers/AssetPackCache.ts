@@ -29,11 +29,6 @@ namespace phasereditor2d.pack.core.parsers {
             this._assets.add(asset);
         }
 
-        getAssets() {
-
-            return this._assets;
-        }
-
         findAsset(key: string) {
 
             for(const asset of this._assets) {
@@ -80,7 +75,7 @@ namespace phasereditor2d.pack.core.parsers {
 
             const files = new Set<io.FilePath>();
 
-            for (const asset of this.getAssets()) {
+            for (const asset of this._assets) {
 
                 files.add(asset.getPack().getFile());
 

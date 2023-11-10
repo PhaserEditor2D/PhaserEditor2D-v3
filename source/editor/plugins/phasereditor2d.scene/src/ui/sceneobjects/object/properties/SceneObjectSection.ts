@@ -105,7 +105,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 text.readOnly = forceReadOnly || checkUnlock && !this.isUnlocked(property);
 
-
                 if (readOnlyOnMultiple) {
 
                     text.readOnly = text.readOnly || readOnlyOnMultiple && this.getSelection().length > 1;
@@ -388,8 +387,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             fieldElement.appendChild(result.buttonElement);
 
             this.addUpdater(() => {
-
-                console.log("update button man!");
 
                 result.updateDialogButtonIcon();
             });

@@ -23,13 +23,7 @@ namespace phasereditor2d.files.ui.views {
                 }
             }
 
-            sections.sort((a, b) => {
-
-                const aa = a.isFillSpace() ? 1 : 0;
-                const bb = b.isFillSpace() ? 1 : 0;
-
-                return aa - bb;
-            });
+           this.sortSections(sections);
         }
 
         protected acceptSection(section: controls.properties.PropertySection<any>) {

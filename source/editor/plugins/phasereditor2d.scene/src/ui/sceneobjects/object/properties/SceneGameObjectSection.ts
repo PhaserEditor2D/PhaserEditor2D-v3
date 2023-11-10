@@ -99,7 +99,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.createLock(parent, prop);
 
             this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip))
-                .style.gridColumn = "2/ span 2";
+                .style.gridColumn = "2 / span 2";
 
             this.createFloatField(parent, prop)
                 .style.gridColumn = fullWidth ? "4 / span 3" : "4";

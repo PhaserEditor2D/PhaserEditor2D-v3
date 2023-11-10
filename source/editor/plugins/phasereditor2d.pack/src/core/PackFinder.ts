@@ -25,12 +25,18 @@ namespace phasereditor2d.pack.core {
             for (const item of items) {
 
                 const result2 = await item.preload();
+
                 result = Math.max(result, result2);
 
                 if (monitor) {
 
                     monitor.step();
                 }
+            }
+
+            for (const item of items) {
+
+                await item.build(this);
             }
 
             return Promise.resolve(result);
@@ -49,6 +55,17 @@ namespace phasereditor2d.pack.core {
                 .filter(i => !filter || filter(i));
         }
 
+        findAnimationByKey(key: string) {
+
+            return this.getAssets()
+
+                .filter(i => i instanceof BaseAnimationsAssetPackItem)
+
+                .flatMap((i: BaseAnimationsAssetPackItem) => i.getAnimations())
+
+                .find(a => a.getKey() === key);
+        }
+
         findAssetPackItem(key: string) {
 
             if (!key) {
@@ -60,36 +77,12 @@ namespace phasereditor2d.pack.core {
                 .find(item => item.getKey() === key);
         }
 
-        findPackItemOrFrameWithKey(key: string) {
-
-            for (const pack of this._packs) {
-
-                for (const item of pack.getItems()) {
-
-                    if (item.getKey() === key) {
-                        return item;
-                    }
-
-                    if (item instanceof ImageFrameContainerAssetPackItem) {
-
-                        for (const frame of item.getFrames()) {
-
-                            if (frame.getName() === key) {
-                                return frame;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        getAssetPackItemOrFrame(key: string, frame: any) {
+        getAssetPackItemOrFrame(key: string, frame: any): ImageAssetPackItem | AssetPackImageFrame {
 
             const item = this.findAssetPackItem(key);
 
             if (!item) {
+
                 return null;
             }
 
@@ -97,14 +90,20 @@ namespace phasereditor2d.pack.core {
 
                 return item;
 
-            } else if (item instanceof ImageFrameContainerAssetPackItem) {
+            } else if (item instanceof ImageFrameContainerAssetPackItem
+                || item instanceof AsepriteAssetPackItem) {
 
                 const imageFrame = item.findFrame(frame);
 
                 return imageFrame;
             }
 
-            return item;
+            if (item instanceof ImageAssetPackItem) {
+
+                return item;
+            }
+
+            return null;
         }
 
         getAssetPackItemImage(key: string, frame: any): AssetPackImageFrame {
@@ -118,7 +117,6 @@ namespace phasereditor2d.pack.core {
             } else if (asset instanceof AssetPackImageFrame) {
 
                 return asset;
-
             }
 
             return null;

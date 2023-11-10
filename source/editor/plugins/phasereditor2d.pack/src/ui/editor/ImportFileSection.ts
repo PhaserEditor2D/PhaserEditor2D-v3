@@ -16,6 +16,7 @@ namespace phasereditor2d.pack.ui.editor {
             this.addUpdater(() => {
 
                 while (comp.children.length > 0) {
+
                     comp.children.item(0).remove();
                 }
 
@@ -58,6 +59,7 @@ namespace phasereditor2d.pack.ui.editor {
         }
 
         canEditNumber(n: number): boolean {
+
             return n > 0;
         }
     }

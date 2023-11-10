@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.core.json {
         plainObjects?: IScenePlainObjectData[];
         displayList: IObjectData[];
         prefabProperties?: any[];
+        codeSnippets?: ui.codesnippets.ICodeSnippetData[];
         meta: {
             app: string,
             url: string,

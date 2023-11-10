@@ -15,6 +15,8 @@ namespace phasereditor2d.pack.ui.editor.properties {
                 .flatMap(ext => ext.createEditorPropertySections(page));
 
             sections.push(...list);
+
+            this.sortSections(sections);
         }
 
         getEmptySelectionObject() {

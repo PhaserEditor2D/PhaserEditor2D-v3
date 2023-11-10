@@ -152,7 +152,9 @@ namespace phasereditor2d.pack.ui.editor.properties {
                 text.value = val === undefined ? "" : val;
             });
 
-            this.createButton(comp, "Browse", () => {
+            const icon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
+            
+            this.createButton(comp, icon, () => {
 
                 this.browseFile_onlyContentType("Select File", contentType, (files) => {
 

@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (element instanceof pack.core.AnimationConfigInPackItem) {
 
-                return new pack.ui.viewers.AnimationConfigCellRenderer(this._finder);
+                return new pack.ui.viewers.AnimationConfigCellRenderer();
             }
 
             return super.getCellRenderer(element);
@@ -125,7 +125,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 return parent.getFrames();
             }
 
-            if (parent instanceof pack.core.AnimationsAssetPackItem) {
+            if (parent instanceof pack.core.BaseAnimationsAssetPackItem) {
 
                 return parent.getAnimations();
             }

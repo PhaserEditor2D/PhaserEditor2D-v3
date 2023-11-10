@@ -15,7 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(
 
                 new TransformComponent(obj as unknown as ITransformLikeObject),
-                new VisibleComponent(obj as unknown as IVisibleLikeObject),
+                new VisibleComponent(obj as unknown as IVisibleLikeObject)
             );
 
             this.setLabel(obj.layer.name);

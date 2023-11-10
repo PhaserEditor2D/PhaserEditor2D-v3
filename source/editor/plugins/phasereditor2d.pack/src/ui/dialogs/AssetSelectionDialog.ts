@@ -7,11 +7,14 @@ namespace phasereditor2d.pack.ui.dialogs {
         private _selectionCallback: (selection: any[]) => void;
         private _cancelCallback: () => void;
         private _viewerLayout: "tree" | "grid";
+        private _selectOnlyOne: boolean;
 
-        constructor(layout: "tree" | "grid" = "grid") {
+        constructor(layout: "tree" | "grid" = "grid", selectOnlyOne = true) {
             super(new controls.viewers.TreeViewer("phasereditor2d.pack.ui.dialogs.AssetSelectionDialog"), true);
 
             this._viewerLayout = layout;
+
+            this._selectOnlyOne = selectOnlyOne;
 
             const size = this.getSize();
 
@@ -28,7 +31,7 @@ namespace phasereditor2d.pack.ui.dialogs {
             this._cancelCallback = callback;
         }
 
-        async getResultPromise(): Promise<any[]> {
+        async getResultPromise(): Promise<any[] | undefined> {
 
             const promise = new Promise<any[]>((resolve, reject) => {
 
@@ -39,7 +42,7 @@ namespace phasereditor2d.pack.ui.dialogs {
 
                 this.setCancelCallback(() => {
 
-                    reject();
+                    resolve(undefined);
                 })
             });
 
@@ -50,7 +53,7 @@ namespace phasereditor2d.pack.ui.dialogs {
 
             const sel = await this.getResultPromise();
 
-            return sel[0];
+            return sel ?? sel[0];
         }
 
         create(hideParentDialog = true) {
@@ -61,7 +64,7 @@ namespace phasereditor2d.pack.ui.dialogs {
 
             if (this._viewerLayout === "tree") {
 
-                viewer.setTreeRenderer(new controls.viewers.GridTreeViewerRenderer(viewer));
+                viewer.setTreeRenderer(new controls.viewers.TreeViewerRenderer(viewer));
 
             } else {
 
@@ -79,15 +82,18 @@ namespace phasereditor2d.pack.ui.dialogs {
 
             this.setTitle("Select Asset");
 
-            this.enableButtonOnlyWhenOneElementIsSelected(
+            const openBtn = this.addOpenButton("Select", sel => {
 
-                this.addOpenButton("Select", sel => {
+                if (this._selectionCallback) {
 
-                    if (this._selectionCallback) {
+                    this._selectionCallback(sel);
+                }
+            });
 
-                        this._selectionCallback(sel);
-                    }
-                }));
+            if (this._selectOnlyOne) {
+
+                this.enableButtonOnlyWhenOneElementIsSelected(openBtn);
+            }
 
             this.addButton("Cancel", () => {
 

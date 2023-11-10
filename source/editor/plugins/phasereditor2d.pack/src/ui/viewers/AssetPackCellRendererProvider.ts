@@ -11,6 +11,7 @@ namespace phasereditor2d.pack.ui.viewers {
         
 
         constructor(layout: "grid" | "tree") {
+
             this._layout = layout;
 
             this._fileRendererProvider = new files.ui.viewers.FileCellRendererProvider(layout);
@@ -40,6 +41,14 @@ namespace phasereditor2d.pack.ui.viewers {
             } if (element instanceof io.FilePath) {
 
                 return this._fileRendererProvider.getCellRenderer(element);
+
+            } else if (element instanceof pack.core.AnimationsAssetPackItem) {
+
+                return new viewers.AnimationsItemCellRenderer();
+
+            } else if (element instanceof pack.core.AsepriteAssetPackItem) {
+
+                return new viewers.AsepriteItemCellRenderer();
 
             } else {
 

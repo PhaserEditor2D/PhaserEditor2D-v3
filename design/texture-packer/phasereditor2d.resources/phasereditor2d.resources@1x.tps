@@ -183,6 +183,7 @@
             <key type="filename">x1/dark/align-top.png</key>
             <key type="filename">x1/dark/angle.png</key>
             <key type="filename">x1/dark/animations.png</key>
+            <key type="filename">x1/dark/aseprite.png</key>
             <key type="filename">x1/dark/asset-pack.png</key>
             <key type="filename">x1/dark/bitmapfont-type.png</key>
             <key type="filename">x1/dark/blocks.png</key>
@@ -246,6 +247,7 @@
             <key type="filename">x1/light/align-top.png</key>
             <key type="filename">x1/light/angle.png</key>
             <key type="filename">x1/light/animations.png</key>
+            <key type="filename">x1/light/aseprite.png</key>
             <key type="filename">x1/light/asset-pack.png</key>
             <key type="filename">x1/light/bitmapfont-type.png</key>
             <key type="filename">x1/light/blocks.png</key>

@@ -1,5 +1,23 @@
 # Change Log
 
+## v3.64.0 - Nov 10, 2023
+
+* Fixes making thumbnails of single-layer prefabs.
+* Allows merging Import and Open buttons in the Asset Pack Entry section.
+* [#251](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/251) Fixes sprite positioning in Animations Editor.
+* [#209](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/209) Improves scene border painting.
+* Improves animations preview UI:
+    - New Animation preview section.
+    - New Animations Preview section.
+    - Shows a preview button in the Animation Key user property.
+* Adds new Animation section to Sprite game objects. It is about to auto-start a sprite animation.
+* Adds `showBeforeDelay` to the Animations Editor.
+* Shows Sprite Animation blocks in the Scene Editor's Blocks view.
+* Aseprite animations support.
+* New Code Snippets scene elements.
+* Optimizes pooling of WEBGL contexts.
+* [#295](https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/295) Fixes tilemapLayer nullable method factory.
+
 ## v3.63.0 - Sep 30, 2023
 
 * Opens the file given in the `openfile` URL search parameter. Like in `?openfile=some/file`.

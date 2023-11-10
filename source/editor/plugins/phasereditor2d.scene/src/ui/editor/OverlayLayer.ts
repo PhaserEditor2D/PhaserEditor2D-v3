@@ -293,11 +293,12 @@ namespace phasereditor2d.scene.ui.editor {
                 const b = camera.getScreenPoint(borderX + borderWidth, borderY + borderHeight);
                 ctx.save();
                 ctx.strokeStyle = theme.dark ? "#0a0a0a" : "#404040";
-                ctx.strokeRect(a.x + 2, a.y + 2, b.x - a.x, b.y - a.y);
+                ctx.strokeRect(a.x - 2, a.y - 2, b.x - a.x + 4, b.y - a.y + 4);
                 ctx.restore();
 
                 ctx.lineWidth = 1;
-                ctx.strokeRect(a.x, a.y, b.x - a.x, b.y - a.y);
+                ctx.strokeStyle = theme.dark ? "#a0a0a0" : "#f0f0f0";
+                ctx.strokeRect(a.x - 1, a.y - 1, b.x - a.x + 2, b.y - a.y + 2);
                 ctx.restore();
             }
         }
