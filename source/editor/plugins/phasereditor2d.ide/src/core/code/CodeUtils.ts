@@ -2,6 +2,21 @@ namespace phasereditor2d.ide.core.code {
 
     import io = colibri.core.io;
 
+    export function isNodeModuleFile(file: io.FilePath) {
+
+        if (file.isFolder() && file.getName() === "node_modules") {
+
+            return true;
+        }
+
+        if (file.isRoot()) {
+
+            return false;
+        }
+
+        return isNodeModuleFile(file.getParent());
+    }
+
     function findNodeModule(file: io.FilePath) {
 
         if (file.isRoot() || file.getParent().isRoot()) {

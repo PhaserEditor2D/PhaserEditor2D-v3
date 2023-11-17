@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.core.code {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            return finder.getSceneFiles();
+            return finder.getSceneFiles(false);
         }
 
         getTotal(): number {

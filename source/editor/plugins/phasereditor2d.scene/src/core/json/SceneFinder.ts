@@ -312,7 +312,13 @@ namespace phasereditor2d.scene.core.json {
             return this._compFilename_Data_Map.get(file.getFullName());
         }
 
-        getUserComponentsModels() {
+        getUserComponentsModels(includeNodeModules = true) {
+
+            if (!includeNodeModules) {
+
+                return this._compModelsInfo
+                    .filter(info => !ide.core.code.isNodeModuleFile(info.file))
+            }
 
             return this._compModelsInfo;
         }
@@ -352,7 +358,13 @@ namespace phasereditor2d.scene.core.json {
             return null;
         }
 
-        getSceneFiles() {
+        getSceneFiles(includeNodeModules = true) {
+
+            if (!includeNodeModules) {
+
+                return this._sceneFiles
+                    .filter(f => !ide.core.code.isNodeModuleFile(f))
+            }
 
             return this._sceneFiles;
         }

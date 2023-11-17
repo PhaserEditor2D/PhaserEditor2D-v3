@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Allows using prefabs and user components from node modules.
+
 ## v3.64.0 - Nov 10, 2023
 
 * Fixes making thumbnails of single-layer prefabs.

@@ -936,7 +936,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                        const files = finder.getSceneFiles();
+                        const files = finder.getSceneFiles(false);
 
                         const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
 
