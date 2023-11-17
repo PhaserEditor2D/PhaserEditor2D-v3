@@ -1,8 +1,44 @@
-namespace phasereditor2d.ide.core.code  {
+namespace phasereditor2d.ide.core.code {
 
     import io = colibri.core.io;
 
-    export function getImportPath(file: io.FilePath, importFile: io.FilePath): string {
+    function findNodeModule(file: io.FilePath) {
+
+        if (file.isRoot() || file.getParent().isRoot()) {
+
+            return null;
+        }
+
+        const parentName = file.getParent().getName();
+        const fileName = file.getName();
+
+        // try case node_modules/<current-files>
+
+        if (parentName === "node_modules") {
+
+            return fileName;
+        }
+
+        const parentParentName = file.getParent().getParent().getName();
+
+        // try case node_modules/@org/<current-file>
+
+        if (parentName.startsWith("@") && parentParentName === "node_modules") {
+
+            return parentName + "/" + fileName;
+        }
+
+        return findNodeModule(file.getParent());
+    }
+
+    export function getImportPath(file: io.FilePath, importFile: io.FilePath): { importPath: string, asDefault: boolean } {
+
+        const nodeModule = findNodeModule(importFile);
+
+        if (nodeModule) {
+
+            return { importPath: nodeModule, asDefault: false };
+        }
 
         const parent = file.getParent();
         const parentPath = parent.getFullName();
@@ -12,15 +48,18 @@ namespace phasereditor2d.ide.core.code  {
 
         if (parent === importFile.getParent()) {
 
-            return "./" + importFile.getNameWithoutExtension();
+            return { importPath: "./" + importFile.getNameWithoutExtension(), asDefault: true };
         }
 
         if (importFilePath.startsWith(parentPath + "/")) {
 
-            return "./" + importFileElements.slice(parentElements.length).join("/");
+            return {
+                importPath: "./" + importFileElements.slice(parentElements.length).join("/"),
+                asDefault: true
+            };
         }
 
-        while(parentElements.length > 0) {
+        while (parentElements.length > 0) {
 
             const parentFirst = parentElements.shift();
             const importFileFirst = importFileElements.shift();
@@ -29,11 +68,14 @@ namespace phasereditor2d.ide.core.code  {
 
                 importFileElements.unshift(importFileFirst);
 
-                return "../".repeat(parentElements.length + 1) + importFileElements.join("/");
+                return {
+                    importPath: "../".repeat(parentElements.length + 1) + importFileElements.join("/"),
+                    asDefault: true
+                };
             }
         }
 
-        return "";
+        return { importPath: "", asDefault: true };
     }
 
     function isAlphaNumeric(c: string) {

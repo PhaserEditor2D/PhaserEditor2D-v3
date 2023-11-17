@@ -52,14 +52,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (obj.bpType === BoundsProviderType.SETUP_TYPE) {
 
-                unit.addImport("{ SetupPoseBoundsProvider }", "@esotericsoftware/spine-phaser");
+                unit.addImport("SetupPoseBoundsProvider", "@esotericsoftware/spine-phaser", false);
 
                 const cls = this.spineClassName(obj, "SetupPoseBoundsProvider");
 
                 return `new ${cls}()`;
             }
 
-            unit.addImport("{ SkinsAndAnimationBoundsProvider }", "@esotericsoftware/spine-phaser");
+            unit.addImport("SkinsAndAnimationBoundsProvider", "@esotericsoftware/spine-phaser", false);
 
             const cls = this.spineClassName(obj, "SkinsAndAnimationBoundsProvider");
 
@@ -93,8 +93,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const objES = obj.getEditorSupport();
 
             args.importTypes.push("Phaser.Scene");
-            args.unit.addImport("{ SpinePlugin }", "@esotericsoftware/spine-phaser");
-            args.unit.addImport("{ SpineGameObjectBoundsProvider }", "@esotericsoftware/spine-phaser");
+            args.unit.addImport("SpinePlugin", "@esotericsoftware/spine-phaser", false);
+            args.unit.addImport("SpineGameObjectBoundsProvider", "@esotericsoftware/spine-phaser", false);
 
             const ctr = args.ctrDeclCodeDOM;
 
