@@ -33,6 +33,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const collisionProp of [
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.onWorldBounds,
                 ArcadeComponent.checkCollisionNone,
                 ArcadeComponent.checkCollisionUp,
                 ArcadeComponent.checkCollisionDown,

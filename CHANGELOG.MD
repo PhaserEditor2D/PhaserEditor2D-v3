@@ -3,6 +3,7 @@
 ## dev
 
 * Allows using prefabs and user components from node modules.
+* Adds onWorldBounds property to the Arcade Physics Body.
 
 ## v3.64.0 - Nov 10, 2023
 
