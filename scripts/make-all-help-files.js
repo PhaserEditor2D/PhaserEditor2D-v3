@@ -266,6 +266,7 @@ utils.makeHelpFile([
     "Phaser.Physics.Arcade.Body.pushable",
     "Phaser.Physics.Arcade.Body.immovable",
     "Phaser.Physics.Arcade.Body.collideWorldBounds",
+    "Phaser.Physics.Arcade.Body.onWorldBounds",
     "Phaser.Physics.Arcade.Body.mass",
     "Phaser.Physics.Arcade.Body.bounce",
     "Phaser.Physics.Arcade.Body.friction",
