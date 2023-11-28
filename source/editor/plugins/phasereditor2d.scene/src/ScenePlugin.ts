@@ -451,6 +451,11 @@ namespace phasereditor2d.scene {
             return this.getUserPropertyTypes().find(t => t.getId() === typeId);
         }
 
+        getScriptsLibraryColor() {
+
+            return colibri.ui.controls.Controls.getTheme().dark ? "lightBlue" : "blue";
+        }
+
         getPrefabColor() {
 
             return colibri.ui.controls.Controls.getTheme().dark ? "lightGreen" : "darkGreen";

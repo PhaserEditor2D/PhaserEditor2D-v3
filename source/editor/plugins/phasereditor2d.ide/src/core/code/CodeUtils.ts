@@ -17,7 +17,7 @@ namespace phasereditor2d.ide.core.code {
         return isNodeModuleFile(file.getParent());
     }
 
-    function findNodeModule(file: io.FilePath) {
+    export function findNodeModule(file: io.FilePath): string {
 
         if (file.isRoot() || file.getParent().isRoot()) {
 
