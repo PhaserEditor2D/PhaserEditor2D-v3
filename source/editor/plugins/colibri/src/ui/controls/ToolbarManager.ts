@@ -86,6 +86,7 @@ namespace colibri.ui.controls {
             const keyString = action.getCommandKeyString();
 
             if (tooltip) {
+                
                 controls.Tooltip.tooltipWithKey(btnElement, keyString, tooltip);
             }
 
