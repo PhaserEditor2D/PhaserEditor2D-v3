@@ -70,12 +70,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
-        const output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
+        let output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
 
             const variableValue = data[p1.trim()];
 
             return variableValue !== undefined ? variableValue : match;
         });
+
+        output = output.replace(/\#{(.*?)}/g, (match, p1) => {
+
+            const k = p1.trim();
+
+            const variableValue = data[k];
+
+            return Boolean(variableValue) ? "#" + k : "";
+        });
+
+        output = output.replace(/ +/g, " ").trim();
 
         return output;
     }
