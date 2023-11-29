@@ -14,16 +14,18 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } if (sceneobjects.isGameObject(obj)) {
 
-                const support = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
-                if (support.getScene().isPrefabSceneType() && obj === support.getScene().getPrefabObject()) {
+                if (objES.getScene().isPrefabSceneType() && obj === objES.getScene().getPrefabObject()) {
 
-                    const file = support.getScene().getEditor().getInput();
+                    const file = objES.getScene().getEditor().getInput();
 
-                    return `${file.getNameWithoutExtension()} (Prefab Object: ${support.isPrefabInstance() ? support.getPrefabName() : support.getObjectType()})`;
+                    return `${file.getNameWithoutExtension()} (Prefab Object: ${objES.isPrefabInstance() ? objES.getPrefabName() : objES.getObjectType()})`;
                 }
 
-                return support.getLabel();
+                let label = sceneobjects.formatObjectDisplayText(obj);
+
+                return label;
 
             } else if (obj instanceof Phaser.GameObjects.DisplayList) {
 
@@ -104,6 +106,13 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                     hintText += " (comp)";
                 }
+            }
+
+            if (sceneobjects.isGameObject(obj) && sceneobjects.findObjectDisplayFormat(obj)) {
+
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+
+                hintText += ` (${objES.getLabel()})`;
             }
 
             if (sceneobjects.GameObjectEditorSupport.hasObjectComponent(obj, sceneobjects.VisibleComponent)) {

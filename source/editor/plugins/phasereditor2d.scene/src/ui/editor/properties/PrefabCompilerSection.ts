@@ -12,7 +12,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
         }
 
         getSectionHelpPath() {
-            // TODO
             return "scene-editor/scene-compiler-scene-settings.html";
         }
 

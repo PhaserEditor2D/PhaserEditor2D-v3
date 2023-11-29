@@ -35,7 +35,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             this.addUpdater(() => {
 
-                textElement.value = this.getSettings()[name].toString();
+                const value = this.getSettings()[name];
+                
+                textElement.value = value === undefined ? "" : value.toString();
             });
 
             textElement.addEventListener("change", e => {

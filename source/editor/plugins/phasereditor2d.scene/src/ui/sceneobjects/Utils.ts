@@ -1,5 +1,85 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    export function findObjectDisplayFormat(obj: ISceneGameObject): string | undefined {
+
+        const objES = obj.getEditorSupport();
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        if (objES.isPrefabInstance()) {
+
+            const hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
+
+            for (const prefabFile of hierarchy) {
+
+                const { displayFormat } = finder.getSceneSettings(prefabFile);
+
+                if (displayFormat !== undefined && displayFormat.trim().length > 0) {
+
+                    return displayFormat;
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    export function formatObjectDisplayText(obj: ISceneGameObject): string {
+
+        const displayFormat = findObjectDisplayFormat(obj);
+
+        if (displayFormat) {
+
+            return applyFormat(obj, displayFormat);
+        }
+
+        const objES = obj.getEditorSupport();
+
+        return objES.getLabel();
+    }
+
+    function applyFormat(obj: ISceneGameObject, displayFormat: string) {
+
+        const objES = obj.getEditorSupport();
+
+        const data: any = {
+            label: objES.getLabel()
+        };
+
+        // from user components
+        {
+            const comp = objES.getUserComponentsComponent();
+
+            const props = comp.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.codeName] = prop.getValue(obj);
+            }
+        }
+
+        // from prefabs
+        {
+            const comp = objES.getComponent(PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
+
+            const props = comp.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.name] = prop.getValue(obj);
+            }
+        }
+
+        const output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
+
+            const variableValue = data[p1.trim()];
+
+            return variableValue !== undefined ? variableValue : match;
+        });
+
+        return output;
+    }
+
     export function sortGameObjects(objects: ISceneGameObject[]) {
 
         const sorted = new Set();
@@ -30,7 +110,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const start = countPrefabChildren;
         const len = children.length;
 
-        for (let i = start; i < len - 1 ; i++) {
+        for (let i = start; i < len - 1; i++) {
 
             for (let j = i + 1; j < len; j++) {
 
