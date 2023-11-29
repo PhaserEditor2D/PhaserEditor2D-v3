@@ -79,7 +79,7 @@ namespace phasereditor2d.files.ui.actions {
 
                         const viewer = new controls.viewers.TreeViewer("phasereditor2d.files.ui.actions.GoToFile");
                         viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
-                        viewer.setStyledLabelProvider(new viewers.FileStyledLabelProvider());
+                        viewer.setStyledLabelProvider(new viewers.OpenFileLabelProvider());
                         viewer.setCellRendererProvider(new viewers.FileCellRendererProvider());
 
                         viewer.setInput(colibri.ui.ide.FileUtils.getAllFiles()

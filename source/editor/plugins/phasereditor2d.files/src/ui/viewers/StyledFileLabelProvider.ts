@@ -8,7 +8,20 @@ namespace phasereditor2d.files.ui.viewers {
 
             const theme = controls.Controls.getTheme();
 
+            const extensions = FilesPlugin.getInstance().getFileStyledLabelExtensions();
+
+            for(const ext of extensions) {
+
+                const styles = ext.getStyledText(file);
+
+                if (styles) {
+
+                    return styles;
+                }
+            }
+
             if (file.getName() === "publicroot") {
+
                 return [{
                     text: file.getName(),
                     color: dark ? "red" : "brown"

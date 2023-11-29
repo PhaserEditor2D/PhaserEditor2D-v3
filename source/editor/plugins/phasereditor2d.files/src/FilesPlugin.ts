@@ -26,6 +26,12 @@ namespace phasereditor2d.files {
             return this._openFileAction;
         }
 
+        getFileStyledLabelExtensions(): ui.viewers.StyledFileLabelProviderExtension[] {
+
+            return colibri.Platform.getExtensions(
+                ui.viewers.StyledFileLabelProviderExtension.POINT_ID);
+        }
+
         public registerExtensions(reg: colibri.ExtensionRegistry) {
 
             // new files
