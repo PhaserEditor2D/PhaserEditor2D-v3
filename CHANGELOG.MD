@@ -5,6 +5,7 @@
 * Allows using prefabs and user components from node modules.
 * Adds onWorldBounds property to the Arcade Physics Body.
 * The Add Script Node dialog groups scripts by folder and node module.
+* Allows custom display format of prefab instances.
 
 ## v3.64.0 - Nov 10, 2023
 
