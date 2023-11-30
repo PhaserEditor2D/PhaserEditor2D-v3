@@ -119,7 +119,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 for (const prefabFile of prefabFiles) {
 
                     menu.addAction({
-                        text: `Reveal In ${prefabFile.getNameWithoutExtension()} File`,
+                        text: `Reveal In ${sceneobjects.getSceneDisplayName(prefabFile)} File`,
                         callback: () => this.openPrefabDefInSceneEditor(prefabFile)
                     });
                 }
