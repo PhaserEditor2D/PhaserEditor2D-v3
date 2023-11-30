@@ -17,7 +17,7 @@ namespace phasereditor2d.ide.core.code {
         return isNodeModuleFile(file.getParent());
     }
 
-    export function findNodeModule(file: io.FilePath): string {
+    export function findNodeModuleName(file: io.FilePath): string {
 
         if (file.isRoot() || file.getParent().isRoot()) {
 
@@ -43,12 +43,12 @@ namespace phasereditor2d.ide.core.code {
             return parentName + "/" + fileName;
         }
 
-        return findNodeModule(file.getParent());
+        return findNodeModuleName(file.getParent());
     }
 
     export function getImportPath(file: io.FilePath, importFile: io.FilePath): { importPath: string, asDefault: boolean } {
 
-        const nodeModule = findNodeModule(importFile);
+        const nodeModule = findNodeModuleName(importFile);
 
         if (nodeModule) {
 

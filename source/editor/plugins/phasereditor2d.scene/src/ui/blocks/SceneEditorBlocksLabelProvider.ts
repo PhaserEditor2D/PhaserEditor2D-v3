@@ -1,12 +1,18 @@
 namespace phasereditor2d.scene.ui.blocks {
 
     import core = colibri.core;
+    import code = ide.core.code;
 
     export class SceneEditorBlocksLabelProvider extends pack.ui.viewers.AssetPackLabelProvider {
 
         getLabel(obj: any) {
 
-            if (obj instanceof core.io.FilePath && !obj.isFolder()) {
+            if (obj instanceof core.io.FilePath) {
+
+                if (obj.isFolder() && code.isNodeModuleFile(obj)) {
+
+                    return code.findNodeModuleName(obj);
+                }
 
                 return sceneobjects.getSceneDisplayName(obj);
 

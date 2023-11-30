@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.dialogs {
 
             viewer.setContentProvider(new AddObjectContentProvider(editor));
             viewer.setLabelProvider(new blocks.SceneEditorBlocksLabelProvider());
-            viewer.setStyledLabelProvider(new blocks.SceneEditorBlocksStyledLabelProvider());
+            viewer.setStyledLabelProvider(new blocks.SceneEditorBlocksStyledLabelProvider(editor));
             viewer.setCellRendererProvider(new blocks.SceneEditorBlocksCellRendererProvider());
             viewer.setInput([]);
 
