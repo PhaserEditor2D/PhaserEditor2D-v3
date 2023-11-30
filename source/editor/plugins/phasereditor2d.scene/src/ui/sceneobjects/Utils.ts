@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const prefabFile of hierarchy) {
 
-                const { displayFormat } = finder.getSceneSettings(prefabFile);
+                const { prefabObjDisplayFmt: displayFormat } = finder.getSceneSettings(prefabFile);
 
                 if (displayFormat !== undefined && displayFormat.trim().length > 0) {
 
