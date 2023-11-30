@@ -9,6 +9,7 @@
 * Allows custom display format of prefab instances, using ${} and #{} expressions.
 * Shows tooltip with prefab property info.
 * Allows setting a Scene Display Name for scenes.
+* Allows setting the Display Name of user components.
 
 ## v3.64.0 - Nov 10, 2023
 
