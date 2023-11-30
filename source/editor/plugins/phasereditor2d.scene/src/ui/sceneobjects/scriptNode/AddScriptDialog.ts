@@ -26,13 +26,49 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         return new controls.viewers.IconImageCellRenderer(icon)
                     }));
 
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            const input = [ScriptNodeExtension.getInstance(), ...finder.getScriptPrefabFiles()];
+            const input = AddScriptDialog.buildViewerInput();
 
             viewer.setInput(input);
 
             return viewer;
+        }
+
+        private static buildViewerInput() {
+            
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const files = finder.getScriptPrefabFiles();
+
+            files.sort((a, b) => {
+
+                const aa = a.getFullName();
+                const bb = b.getFullName();
+
+                return aa.localeCompare(bb);
+            });
+
+            files.sort((a, b) => {
+
+                const aa = code.isNodeModuleFile(a)? -1 : 1;
+                const bb = code.isNodeModuleFile(b)? -1 : 1;
+
+                return aa - bb;
+            });
+
+            const folders: io.FilePath[] = [];
+
+            for (const file of files) {
+
+                let parent = file.getParent();
+
+                if (folders.indexOf(parent) < 0) {
+
+                    folders.push(parent);
+                }
+            }
+
+            const input = [ScriptNodeExtension.getInstance(), ...folders];
+            return input;
         }
 
         private _editor: ui.editor.SceneEditor;
@@ -105,25 +141,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     class ScriptsContentProvider implements controls.viewers.ITreeContentProvider {
 
-        getRoots(input: any): any[] {
+        getRoots(input: any[]): any[] {
 
-            const finder = ScenePlugin.getInstance().getSceneFinder();
-
-            const files = finder.getScriptPrefabFiles();
-
-            const folders: io.FilePath[] = [];
-
-            for (const file of files) {
-
-                let parent = file.getParent();
-
-                if (folders.indexOf(parent) < 0) {
-
-                    folders.push(parent);
-                }
-            }
-
-            return [ScriptNodeExtension.getInstance(), ...folders];
+            return input;
         }
 
         getChildren(parent: any): any[] {
