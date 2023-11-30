@@ -131,7 +131,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             } else {
 
-                text = obj.getNameWithoutExtension();
+                text = getSceneDisplayName(obj);
                 color = ScenePlugin.getInstance().getPrefabColor();
             }
 

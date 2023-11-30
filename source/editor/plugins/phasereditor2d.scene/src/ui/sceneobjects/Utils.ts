@@ -1,5 +1,21 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import io = colibri.core.io;
+
+    export function getSceneDisplayName(file: io.FilePath) {
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        const settings = finder.getSceneSettings(file);
+
+        if (settings && settings.displayName && settings.displayName.trim() !== "") {
+
+            return settings.displayName;
+        }
+
+        return file.getNameWithoutExtension();
+    }
+
     export function findObjectDisplayFormat(obj: ISceneGameObject): string | undefined {
 
         const objES = obj.getEditorSupport();

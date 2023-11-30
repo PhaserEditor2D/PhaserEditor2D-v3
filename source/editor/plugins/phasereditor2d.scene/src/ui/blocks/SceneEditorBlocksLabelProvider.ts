@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (obj instanceof core.io.FilePath && !obj.isFolder()) {
 
-                return obj.getNameWithoutExtension();
+                return sceneobjects.getSceneDisplayName(obj);
 
             } else if (obj instanceof sceneobjects.SceneObjectExtension) {
 
