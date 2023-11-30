@@ -359,13 +359,24 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     }];
                                 }
 
+                                const folder = obj.file.getParent();
+
+                                let folderName = folder.getName();
+
+                                const isNodeModuleFolder = ide.core.code.isNodeModuleFile(folder);
+                                if (isNodeModuleFolder) {
+
+                                    folderName = ide.core.code.findNodeModuleName(folder);
+                                }
+
                                 return [{
                                     text: obj.file.getNameWithoutExtension(),
                                     color: theme.viewerForeground
                                 }, {
-                                    text: " - " + obj.file.getParent().getProjectRelativeName()
-                                        .split("/").filter(s => s !== "").reverse().join("/"),
-                                    color: theme.viewerForeground + "90"
+                                    text: " - " + folderName,
+                                    color: isNodeModuleFolder ?
+                                        ScenePlugin.getInstance().getScriptsLibraryColor()
+                                        : theme.viewerForeground + "90"
                                 }];
                             }
                         });
