@@ -354,7 +354,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                 if (obj instanceof usercomponent.UserComponent) {
 
                                     return [{
-                                        text: obj.getName(),
+                                        text: obj.getDisplayNameOrName(),
                                         color: theme.viewerForeground
                                     }];
                                 }

@@ -45,7 +45,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
             } else if (obj instanceof sceneobjects.UserComponentNode) {
 
-                return obj.getComponentName();
+                return obj.getUserComponent().getDisplayNameOrName();
 
             } else if (obj instanceof sceneobjects.PrefabUserProperties) {
 
