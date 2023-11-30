@@ -16,7 +16,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             comp.style.gridTemplateColumns = "auto 1fr";
 
-            this.createStringField(comp, "displayName", "Scene Display Name", "The display name of the scene.");
             this.createStringField(comp, "prefabObjDisplayFmt", "Object Display Format", "To format the object's display label.");
         }
 
