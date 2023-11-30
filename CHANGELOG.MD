@@ -7,6 +7,7 @@
 * The Add Script Node dialog groups scripts by folder and node module.
 * Allows custom display format of prefab instances, using ${} and #{} expressions.
 * Shows tooltip with prefab property info.
+* Allows setting a Scene Display Name for scenes.
 
 ## v3.64.0 - Nov 10, 2023
 
