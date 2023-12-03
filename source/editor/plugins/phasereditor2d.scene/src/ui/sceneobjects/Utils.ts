@@ -22,7 +22,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const finder = ScenePlugin.getInstance().getSceneFinder();
 
-        if (objES.isPrefabInstance()) {
+        if (objES.isPrefabInstance() && !objES.isNestedPrefabDefined()) {
 
             const hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
 
