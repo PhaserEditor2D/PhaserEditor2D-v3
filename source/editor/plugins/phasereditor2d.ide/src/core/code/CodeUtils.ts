@@ -2,22 +2,31 @@ namespace phasereditor2d.ide.core.code {
 
     import io = colibri.core.io;
 
-    export function isLibraryFile(file: io.FilePath) {
+    export function isCopiedLibraryFile(file: io.FilePath) {
 
         if (file.isRoot()) {
 
             return false;
         }
 
-        if (file.getSibling("library.txt")) {
+        const name = "library.txt";
+
+        if (file.isFolder()) {
+
+            if (file.getFile(name)) {
+
+                return true;
+            }
+
+        } else if (file.getName() === name || file.getSibling(name)) {
 
             return true;
         }
 
-        return isLibraryFile(file.getParent());
+        return isCopiedLibraryFile(file.getParent());
     }
 
-    export function isNodeModuleFile(file: io.FilePath) {
+    export function isNodeLibraryFile(file: io.FilePath) {
 
         if (file.isFolder() && file.getName() === "node_modules") {
 
@@ -29,7 +38,7 @@ namespace phasereditor2d.ide.core.code {
             return false;
         }
 
-        return isNodeModuleFile(file.getParent());
+        return isNodeLibraryFile(file.getParent());
     }
 
     export function findNodeModuleName(file: io.FilePath): string {

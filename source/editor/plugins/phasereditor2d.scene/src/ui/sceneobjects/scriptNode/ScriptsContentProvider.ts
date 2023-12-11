@@ -22,8 +22,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             files.sort((a, b) => {
 
-                const aa = code.isNodeModuleFile(a)? -1 : 1;
-                const bb = code.isNodeModuleFile(b)? -1 : 1;
+                const aa = code.isNodeLibraryFile(a) || code.isCopiedLibraryFile(a)  ? -1 : 1;
+                const bb = code.isNodeLibraryFile(b) || code.isCopiedLibraryFile(b) ? -1 : 1;
 
                 return aa - bb;
             });

@@ -363,8 +363,9 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                                 let folderName = folder.getName();
 
-                                const isNodeModuleFolder = ide.core.code.isNodeModuleFile(folder);
-                                if (isNodeModuleFolder) {
+                                const isNodeLibraryFolder = ide.core.code.isNodeLibraryFile(folder);
+
+                                if (isNodeLibraryFolder) {
 
                                     folderName = ide.core.code.findNodeModuleName(folder);
                                 }
@@ -374,7 +375,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     color: theme.viewerForeground
                                 }, {
                                     text: " - " + folderName,
-                                    color: isNodeModuleFolder ?
+                                    color: isNodeLibraryFolder ?
                                         ScenePlugin.getInstance().getScriptsLibraryColor()
                                         : theme.viewerForeground + "90"
                                 }];

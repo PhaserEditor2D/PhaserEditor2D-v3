@@ -13,9 +13,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (obj instanceof io.FilePath && obj.isFolder()) {
 
-                if (code.isNodeModuleFile(obj)) {
+                if (code.isNodeLibraryFile(obj)) {
 
                     text = code.findNodeModuleName(obj);
+                    color = ScenePlugin.getInstance().getScriptsLibraryColor();
+
+                } else if (code.isCopiedLibraryFile(obj)) {
+
+                    text = obj.getName();
                     color = ScenePlugin.getInstance().getScriptsLibraryColor();
 
                 } else {

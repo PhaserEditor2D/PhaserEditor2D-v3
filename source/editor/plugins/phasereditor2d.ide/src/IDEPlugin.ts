@@ -74,7 +74,7 @@ namespace phasereditor2d.ide {
                 }));
             }
 
-            reg.addExtension(new core.code.NodeModuleStyledFileLabelProviderExtension());
+            reg.addExtension(new ui.viewers.LibraryFileStyledLabelProviderExtension());
 
             phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
         }

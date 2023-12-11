@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
             if (obj instanceof core.io.FilePath) {
 
-                if (obj.isFolder() && code.isNodeModuleFile(obj)) {
+                if (obj.isFolder() && code.isNodeLibraryFile(obj)) {
 
                     return code.findNodeModuleName(obj);
                 }

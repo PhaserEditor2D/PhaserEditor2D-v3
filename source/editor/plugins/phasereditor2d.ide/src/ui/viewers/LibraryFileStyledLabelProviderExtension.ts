@@ -1,8 +1,8 @@
-namespace phasereditor2d.ide.core.code {
+namespace phasereditor2d.ide.ui.viewers {
 
     import controls = colibri.ui.controls;
 
-    export class NodeModuleStyledFileLabelProviderExtension extends colibri.Extension {
+    export class LibraryFileStyledLabelProviderExtension extends colibri.Extension {
 
         constructor() {
             super(files.ui.viewers.StyledFileLabelProviderExtension.POINT_ID);
@@ -10,7 +10,7 @@ namespace phasereditor2d.ide.core.code {
 
         getStyledText(file: colibri.core.io.FilePath): colibri.ui.controls.viewers.IStyledText[] {
 
-            if (isNodeModuleFile(file)) {
+            if (core.code.isNodeLibraryFile(file) || core.code.isCopiedLibraryFile(file)) {
 
                 const theme = controls.Controls.getTheme();
 

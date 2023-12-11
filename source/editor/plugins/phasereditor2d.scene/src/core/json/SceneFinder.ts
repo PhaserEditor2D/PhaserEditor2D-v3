@@ -317,7 +317,8 @@ namespace phasereditor2d.scene.core.json {
             if (!includeLibraryFiles) {
 
                 return this._compModelsInfo
-                    .filter(info => !ide.core.code.isNodeModuleFile(info.file) && !ide.core.code.isLibraryFile(info.file))
+                    .filter(info => !ide.core.code.isNodeLibraryFile(info.file)
+                        && !ide.core.code.isCopiedLibraryFile(info.file))
             }
 
             return this._compModelsInfo;
@@ -363,7 +364,8 @@ namespace phasereditor2d.scene.core.json {
             if (!includeLibraryFiles) {
 
                 return this._sceneFiles
-                    .filter(f => !ide.core.code.isNodeModuleFile(f) && !ide.core.code.isLibraryFile(f))
+                    .filter(f => !ide.core.code.isNodeLibraryFile(f)
+                        && !ide.core.code.isCopiedLibraryFile(f))
             }
 
             return this._sceneFiles;
