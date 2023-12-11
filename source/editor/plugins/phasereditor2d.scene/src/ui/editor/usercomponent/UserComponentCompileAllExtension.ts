@@ -13,7 +13,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            const infos = finder.getUserComponentsModels();
+            const infos = finder.getUserComponentsModels(false);
 
             for (const info of infos) {
 
