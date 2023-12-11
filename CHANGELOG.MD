@@ -3,6 +3,7 @@
 ## dev
 
 * Allows using prefabs and user components from node modules.
+* Allows tagging folders as "copied" libraries, with the `library.txt` file.
 * Adds onWorldBounds property to the Arcade Physics Body.
 * The Add Script Node dialog groups scripts by folder and node modules.
 * The Blocks view groups the scripts by folder and node modules.
