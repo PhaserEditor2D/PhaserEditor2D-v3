@@ -12,6 +12,6 @@ namespace phasereditor2d.ide.core {
 
         abstract getTotal(): number;
 
-        abstract preload(monitor: controls.IProgressMonitor);
+        abstract compile(monitor: controls.IProgressMonitor): Promise<void>;
     }
 }

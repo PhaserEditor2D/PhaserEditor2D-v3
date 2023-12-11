@@ -97,7 +97,7 @@ namespace phasereditor2d.ide {
 
             for (const ext of exts) {
 
-                await ext.preload(monitor);
+                await ext.compile(monitor);
             }
 
             dlg.close();

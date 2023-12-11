@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             return finder.getUserComponentsModels().length;
         }
 
-        async preload(monitor: colibri.ui.controls.IProgressMonitor) {
+        async compile(monitor: colibri.ui.controls.IProgressMonitor) {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
