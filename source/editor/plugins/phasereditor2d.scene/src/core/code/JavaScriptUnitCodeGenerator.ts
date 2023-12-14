@@ -94,7 +94,7 @@ namespace phasereditor2d.scene.core.code {
                 this.line();
             }
         }
-        
+
         protected generateInterface(interfaceDecl: InterfaceDeclCodeDOM) {
             // nothing, it is for the TypeScript generator
         }
@@ -109,7 +109,14 @@ namespace phasereditor2d.scene.core.code {
 
             for (const importDom of imports) {
 
-                this.line(`import ${importDom.getElementName()} from "${importDom.getFilePath()}";`);
+                let name = importDom.getElementName();
+
+                if (!importDom.isAsDefault()) {
+
+                    name = `{ ${name} }`;
+                }
+
+                this.line(`import ${name} from "${importDom.getFilePath()}";`);
             }
 
             this.section("/* START-USER-IMPORTS */", "/* END-USER-IMPORTS */", "\n");
@@ -396,7 +403,7 @@ namespace phasereditor2d.scene.core.code {
             if (call.getContextExpr() && call.getContextExpr().length > 0) {
 
                 this.append(call.getContextExpr());
-                
+
                 if (this.isTypeScript() && call.isOptionalContext()) {
 
                     this.append("!");

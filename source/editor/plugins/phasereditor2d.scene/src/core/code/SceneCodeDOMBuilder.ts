@@ -34,7 +34,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (this._scene.isESModule()) {
 
-                    this._unit.addImport(`{ ${typeName} }`, objExt.getPhaserTypeThirdPartyLibModule())
+                    this._unit.addImport(`${typeName}`, objExt.getPhaserTypeThirdPartyLibModule(), false);
 
                     return typeName;
                 }
@@ -113,7 +113,7 @@ namespace phasereditor2d.scene.core.code {
 
                 if (superCls.startsWith("Phaser.")) {
 
-                    unit.addImport("Phaser", "phaser");
+                    unit.addImport("Phaser", "phaser", true);
 
                 } else {
 
@@ -121,9 +121,9 @@ namespace phasereditor2d.scene.core.code {
 
                     if (superClsFile) {
 
-                        const filePath = code.getImportPath(this._sceneFile, superClsFile);
+                        const { importPath, asDefault } = code.getImportPath(this._sceneFile, superClsFile);
 
-                        unit.addImport(superCls, filePath);
+                        unit.addImport(superCls, importPath, asDefault);
                     }
                 }
 
@@ -210,15 +210,15 @@ namespace phasereditor2d.scene.core.code {
 
                 if (type.startsWith("Phaser.")) {
 
-                    this._unit.addImport("Phaser", "phaser");
+                    this._unit.addImport("Phaser", "phaser", true);
 
                 } else if (this._fileNameMap.has(type)) {
 
                     const importFile = this._fileNameMap.get(type);
 
-                    const importPath = code.getImportPath(this._sceneFile, importFile);
+                    const { importPath, asDefault } = code.getImportPath(this._sceneFile, importFile);
 
-                    this._unit.addImport(type, importPath);
+                    this._unit.addImport(type, importPath, asDefault);
                 }
             }
         }
@@ -779,8 +779,9 @@ namespace phasereditor2d.scene.core.code {
                         prefabSerializer
                     });
 
-                    const filePath = code.getImportPath(this._sceneFile, objES.getPrefabFile());
-                    this._unit.addImport(clsName, filePath);
+                    const { importPath, asDefault } = code.getImportPath(this._sceneFile, objES.getPrefabFile());
+
+                    this._unit.addImport(clsName, importPath, asDefault);
 
                 } else {
 
@@ -810,9 +811,9 @@ namespace phasereditor2d.scene.core.code {
 
                     if (clsFile) {
 
-                        const filePath = code.getImportPath(this._sceneFile, clsFile);
+                        const { importPath, asDefault } = code.getImportPath(this._sceneFile, clsFile);
 
-                        this._unit.addImport(clsName, filePath);
+                        this._unit.addImport(clsName, importPath, asDefault);
                     }
                 }
 

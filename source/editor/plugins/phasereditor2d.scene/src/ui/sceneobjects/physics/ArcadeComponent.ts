@@ -191,6 +191,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static drag = SimpleBodyVectorProperty("drag", "Drag", 0);
         static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0);
         static collideWorldBounds = SimpleBodyProperty("collideWorldBounds", false, "Collide World Bounds");
+        static onWorldBounds = SimpleBodyProperty("onWorldBounds", false, "On World Bounds");
         static checkCollisionNone = CheckCollisionProperty("none", false);
         static checkCollisionUp = CheckCollisionProperty("up", true);
         static checkCollisionDown = CheckCollisionProperty("down", true);
@@ -287,6 +288,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.bounce.x,
                 ArcadeComponent.bounce.y,
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.onWorldBounds,
                 ArcadeComponent.checkCollisionNone,
                 ArcadeComponent.checkCollisionUp,
                 ArcadeComponent.checkCollisionDown,
@@ -404,6 +406,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 ArcadeComponent.allowDrag,
                 ArcadeComponent.allowRotation,
                 ArcadeComponent.collideWorldBounds,
+                ArcadeComponent.onWorldBounds,
                 ArcadeComponent.checkCollisionNone,
                 ArcadeComponent.checkCollisionUp,
                 ArcadeComponent.checkCollisionDown,

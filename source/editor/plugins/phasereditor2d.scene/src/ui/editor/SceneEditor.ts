@@ -549,6 +549,8 @@ namespace phasereditor2d.scene.ui.editor {
                         alert(errors.join("<br>"));
                     }
 
+                    this.refreshBlocks();
+
                 } else {
 
                     alert("Invalid file format.");

@@ -7,8 +7,9 @@ namespace phasereditor2d.scene.ui.editor.properties {
     export class DynamicUserComponentSection extends sceneobjects.SceneGameObjectSection<sceneobjects.ISceneGameObject> {
 
         private _componentName: string;
+        private _componentDisplayName: string;
 
-        constructor(page: controls.properties.PropertyPage, componentName: string, hash: string) {
+        constructor(page: controls.properties.PropertyPage, componentName: string, componentDisplayName: string, hash: string) {
             super(page,
                 DynamicUserComponentSection.computeId(componentName, hash),
                 componentName, false, true,
@@ -16,6 +17,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 `DynamicUserComponentSection_${componentName}}`);
 
             this._componentName = componentName;
+            this._componentDisplayName = componentDisplayName;
         }
 
         private static computeId(compName: string, hash: string) {
@@ -35,7 +37,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     .getUserComponentsComponent()
                     .getPrefabUserComponents())
                 .filter(i => i.components.find(c => c.getName() === this._componentName))
-                .map(i => i.prefabFile.getNameWithoutExtension());
+                .map(i => sceneobjects.getSceneDisplayName(i.prefabFile));
 
             const distinctPrefabNames: string[] = [];
 
@@ -54,10 +56,10 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     distinctPrefabNames.push(prefabName);
                 }
 
-                return `${this._componentName} <span class="UserComponentTitle_PrefabsPart">← ${distinctPrefabNames.join(" &amp; ")}</span>`;
+                return `${this._componentDisplayName} <span class="UserComponentTitle_PrefabsPart">← ${distinctPrefabNames.join(" &amp; ")}</span>`;
             }
 
-            return this._componentName;
+            return this._componentDisplayName;
         }
 
         createMenu(menu: controls.Menu): void {
@@ -66,7 +68,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             const objES = obj.getEditorSupport();
 
             menu.addAction({
-                text: `Select Objects With ${this._componentName}`,
+                text: `Select Objects With ${this._componentDisplayName}`,
                 callback: () => {
 
                     const sel = [];
@@ -90,7 +92,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
             });
 
             menu.addAction({
-                text: "Open Definition Of " + this._componentName,
+                text: "Open Definition Of " + this._componentDisplayName,
                 callback: () => this.openComponentEditor()
             });
 
@@ -117,7 +119,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 for (const prefabFile of prefabFiles) {
 
                     menu.addAction({
-                        text: `Reveal In ${prefabFile.getNameWithoutExtension()} File`,
+                        text: `Reveal In ${sceneobjects.getSceneDisplayName(prefabFile)} File`,
                         callback: () => this.openPrefabDefInSceneEditor(prefabFile)
                     });
                 }

@@ -25,9 +25,9 @@ namespace phasereditor2d.scene.core.code {
             return this._imports;
         }
 
-        addImport(elementName: string, filePath: string) {
+        addImport(elementName: string, filePath: string, asDefault: boolean) {
 
-            const key = elementName + " form " + filePath;
+            const key = (asDefault ? elementName : `{ ${elementName} }`) + " form " + filePath;
 
             if (this._used.has(key)) {
 
@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.core.code {
             }
 
             this._used.add(key);
-            this._imports.push(new ImportCodeDOM(elementName, filePath));
+            this._imports.push(new ImportCodeDOM(elementName, filePath, asDefault));
         }
 
         getBody() {

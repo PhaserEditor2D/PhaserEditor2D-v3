@@ -8,7 +8,7 @@ namespace phasereditor2d.scene.core.code {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
 
-            return finder.getSceneFiles();
+            return finder.getSceneFiles(false);
         }
 
         getTotal(): number {
@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.core.code {
             scene.destroyGame();
         }
 
-        async preload(monitor: colibri.ui.controls.IProgressMonitor) {
+        async compile(monitor: colibri.ui.controls.IProgressMonitor) {
 
             const files = this.getFiles();
 

@@ -36,6 +36,7 @@ namespace colibri.ui.controls.properties {
             label.innerText = text;
 
             if (tooltip) {
+                
                 Tooltip.tooltip(label, tooltip);
             }
 

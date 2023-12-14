@@ -172,7 +172,7 @@ namespace phasereditor2d.scene.ui.blocks {
 
         getStyledLabelProvider(): controls.viewers.IStyledLabelProvider {
             
-            return new SceneEditorBlocksStyledLabelProvider();
+            return new SceneEditorBlocksStyledLabelProvider(this._editor);
         }
 
         getCellRendererProvider(): controls.viewers.ICellRendererProvider {

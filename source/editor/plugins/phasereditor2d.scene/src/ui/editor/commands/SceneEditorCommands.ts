@@ -354,18 +354,30 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                 if (obj instanceof usercomponent.UserComponent) {
 
                                     return [{
-                                        text: obj.getName(),
+                                        text: obj.getDisplayNameOrName(),
                                         color: theme.viewerForeground
                                     }];
+                                }
+
+                                const folder = obj.file.getParent();
+
+                                let folderName = folder.getName();
+
+                                const isNodeLibraryFolder = ide.core.code.isNodeLibraryFile(folder);
+
+                                if (isNodeLibraryFolder) {
+
+                                    folderName = ide.core.code.findNodeModuleName(folder);
                                 }
 
                                 return [{
                                     text: obj.file.getNameWithoutExtension(),
                                     color: theme.viewerForeground
                                 }, {
-                                    text: " - " + obj.file.getParent().getProjectRelativeName()
-                                        .split("/").filter(s => s !== "").reverse().join("/"),
-                                    color: theme.viewerForeground + "90"
+                                    text: " - " + folderName,
+                                    color: isNodeLibraryFolder ?
+                                        ScenePlugin.getInstance().getScriptsLibraryColor()
+                                        : theme.viewerForeground + "90"
                                 }];
                             }
                         });
@@ -936,7 +948,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
 
                         const finder = ScenePlugin.getInstance().getSceneFinder();
 
-                        const files = finder.getSceneFiles();
+                        const files = finder.getSceneFiles(false);
 
                         const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
 

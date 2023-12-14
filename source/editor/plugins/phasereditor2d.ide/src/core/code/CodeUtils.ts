@@ -1,8 +1,83 @@
-namespace phasereditor2d.ide.core.code  {
+namespace phasereditor2d.ide.core.code {
 
     import io = colibri.core.io;
 
-    export function getImportPath(file: io.FilePath, importFile: io.FilePath): string {
+    export function isCopiedLibraryFile(file: io.FilePath) {
+
+        if (file.isRoot()) {
+
+            return false;
+        }
+
+        const name = "library.txt";
+
+        if (file.isFolder()) {
+
+            if (file.getFile(name)) {
+
+                return true;
+            }
+
+        } else if (file.getName() === name || file.getSibling(name)) {
+
+            return true;
+        }
+
+        return isCopiedLibraryFile(file.getParent());
+    }
+
+    export function isNodeLibraryFile(file: io.FilePath) {
+
+        if (file.isFolder() && file.getName() === "node_modules") {
+
+            return true;
+        }
+
+        if (file.isRoot()) {
+
+            return false;
+        }
+
+        return isNodeLibraryFile(file.getParent());
+    }
+
+    export function findNodeModuleName(file: io.FilePath): string {
+
+        if (file.isRoot() || file.getParent().isRoot()) {
+
+            return null;
+        }
+
+        const parentName = file.getParent().getName();
+        const fileName = file.getName();
+
+        // try case node_modules/<current-files>
+
+        if (parentName === "node_modules") {
+
+            return fileName;
+        }
+
+        const parentParentName = file.getParent().getParent().getName();
+
+        // try case node_modules/@org/<current-file>
+
+        if (parentName.startsWith("@") && parentParentName === "node_modules") {
+
+            return parentName + "/" + fileName;
+        }
+
+        return findNodeModuleName(file.getParent());
+    }
+
+    export function getImportPath(file: io.FilePath, importFile: io.FilePath): { importPath: string, asDefault: boolean } {
+
+        const nodeModule = findNodeModuleName(importFile);
+
+        if (nodeModule) {
+
+            return { importPath: nodeModule, asDefault: false };
+        }
 
         const parent = file.getParent();
         const parentPath = parent.getFullName();
@@ -12,15 +87,18 @@ namespace phasereditor2d.ide.core.code  {
 
         if (parent === importFile.getParent()) {
 
-            return "./" + importFile.getNameWithoutExtension();
+            return { importPath: "./" + importFile.getNameWithoutExtension(), asDefault: true };
         }
 
         if (importFilePath.startsWith(parentPath + "/")) {
 
-            return "./" + importFileElements.slice(parentElements.length).join("/");
+            return {
+                importPath: "./" + importFileElements.slice(parentElements.length).join("/"),
+                asDefault: true
+            };
         }
 
-        while(parentElements.length > 0) {
+        while (parentElements.length > 0) {
 
             const parentFirst = parentElements.shift();
             const importFileFirst = importFileElements.shift();
@@ -29,11 +107,14 @@ namespace phasereditor2d.ide.core.code  {
 
                 importFileElements.unshift(importFileFirst);
 
-                return "../".repeat(parentElements.length + 1) + importFileElements.join("/");
+                return {
+                    importPath: "../".repeat(parentElements.length + 1) + importFileElements.join("/"),
+                    asDefault: true
+                };
             }
         }
 
-        return "";
+        return { importPath: "", asDefault: true };
     }
 
     function isAlphaNumeric(c: string) {

@@ -26,11 +26,12 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 for (const compInfo of localComps) {
 
                     const compName = compInfo.component.getName();
+                    const compDisplayName = compInfo.component.getDisplayNameOrName();
 
                     visitedComps.add(compName);
 
                     result.push(page => new DynamicUserComponentSection(
-                        page, compName, `${compInfo.file.getModTime()}`));
+                        page, compName, compDisplayName, `${compInfo.file.getModTime()}`));
                 }
             }
 
@@ -69,14 +70,16 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     const userComps = objES.getUserComponentsComponent();
 
-                    const compNames = userComps
+                    const components = userComps
                         .getPrefabUserComponents()
                         .filter(i => i.prefabFile === prefabInfo.prefabFile)
                         .flatMap(i => i.components)
-                        .map(c => c.getName())
-                        .filter(name => !visitedComps.has(name));
+                        .filter(c => !visitedComps.has(c.getName()));
 
-                    for (const compName of compNames) {
+                    for (const comp of components) {
+
+                        const compName = comp.getName();
+                        const compDisplayName = comp.getDisplayNameOrName();
 
                         visitedComps.add(compName);
 
@@ -85,7 +88,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         if (findResult) {
 
                             result.push(page => new DynamicUserComponentSection(
-                                page, compName, `${findResult.file.getModTime()}`));
+                                page, compName, compDisplayName, `${findResult.file.getModTime()}`));
                         }
                     }
                 }

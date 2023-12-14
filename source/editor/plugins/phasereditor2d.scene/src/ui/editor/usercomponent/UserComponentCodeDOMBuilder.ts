@@ -148,15 +148,15 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
                 if (type.startsWith("Phaser.")) {
 
-                    this._unitDom.addImport("Phaser", "phaser");
+                    this._unitDom.addImport("Phaser", "phaser", true);
 
                 } else if (this._typeFileMap.has(type)) {
 
                     const importFile = this._typeFileMap.get(type);
 
-                    const importPath = code.getImportPath(this._modelFile, importFile);
+                    const { importPath, asDefault } = code.getImportPath(this._modelFile, importFile);
 
-                    this._unitDom.addImport(type, importPath);
+                    this._unitDom.addImport(type, importPath, asDefault);
                 }
             }
         }

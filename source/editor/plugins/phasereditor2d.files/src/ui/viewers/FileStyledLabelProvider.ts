@@ -3,22 +3,22 @@ namespace phasereditor2d.files.ui.viewers {
     import controls = colibri.ui.controls;
     import io = colibri.core.io;
 
-    export class FileStyledLabelProvider implements controls.viewers.IStyledLabelProvider {
+    export class OpenFileLabelProvider implements controls.viewers.IStyledLabelProvider {
 
-        getStyledTexts(obj: io.FilePath, dark: boolean): controls.viewers.IStyledText[] {
+        getStyledTexts(file: io.FilePath, dark: boolean): controls.viewers.IStyledText[] {
 
             const theme = controls.Controls.getTheme();
 
             const result = [
                 {
-                    text: obj.getName(),
+                    text: file.getName(),
                     color: theme.viewerForeground
                 }
             ];
 
-            if (obj.getParent()) {
+            if (file.getParent()) {
 
-                let path = obj.getParent().getProjectRelativeName();
+                let path = file.getParent().getProjectRelativeName();
 
                 if (path.startsWith("/")) {
 

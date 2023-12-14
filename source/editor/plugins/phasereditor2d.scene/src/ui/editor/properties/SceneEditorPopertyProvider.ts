@@ -26,6 +26,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 new CompilerSection(page),
                 new SceneCompilerSection(page),
                 new PrefabCompilerSection(page),
+                new SceneDisplaySection(page),
+                new PrefabDisplaySection(page),
                 new PrefabPropertiesSection(page),
             );
 

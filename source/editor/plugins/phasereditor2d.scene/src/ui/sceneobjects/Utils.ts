@@ -1,5 +1,112 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
+    import io = colibri.core.io;
+
+    export function getSceneDisplayName(file: io.FilePath) {
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        const settings = finder.getSceneSettings(file);
+
+        if (settings && settings.displayName && settings.displayName.trim() !== "") {
+
+            return settings.displayName;
+        }
+
+        return file.getNameWithoutExtension();
+    }
+
+    export function findObjectDisplayFormat(obj: ISceneGameObject): string | undefined {
+
+        const objES = obj.getEditorSupport();
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        if (objES.isPrefabInstance() && !objES.isNestedPrefabDefined()) {
+
+            const hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
+
+            for (const prefabFile of hierarchy) {
+
+                const { prefabObjDisplayFmt: displayFormat } = finder.getSceneSettings(prefabFile);
+
+                if (displayFormat !== undefined && displayFormat.trim().length > 0) {
+
+                    return displayFormat;
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    export function formatObjectDisplayText(obj: ISceneGameObject): string {
+
+        const displayFormat = findObjectDisplayFormat(obj);
+
+        if (displayFormat) {
+
+            return applyFormat(obj, displayFormat);
+        }
+
+        const objES = obj.getEditorSupport();
+
+        return objES.getLabel();
+    }
+
+    function applyFormat(obj: ISceneGameObject, displayFormat: string) {
+
+        const objES = obj.getEditorSupport();
+
+        const data: any = {
+            label: objES.getLabel()
+        };
+
+        // from user components
+        {
+            const comp = objES.getUserComponentsComponent();
+
+            const props = comp.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.codeName] = prop.getValue(obj);
+            }
+        }
+
+        // from prefabs
+        {
+            const comp = objES.getComponent(PrefabUserPropertyComponent) as PrefabUserPropertyComponent;
+
+            const props = comp.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.name] = prop.getValue(obj);
+            }
+        }
+
+        let output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
+
+            const variableValue = data[p1.trim()];
+
+            return variableValue !== undefined ? variableValue : match;
+        });
+
+        output = output.replace(/\#{(.*?)}/g, (match, p1) => {
+
+            const k = p1.trim();
+
+            const variableValue = data[k];
+
+            return Boolean(variableValue) ? "#" + k : "";
+        });
+
+        output = output.replace(/ +/g, " ").trim();
+
+        return output;
+    }
+
     export function sortGameObjects(objects: ISceneGameObject[]) {
 
         const sorted = new Set();
@@ -30,7 +137,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const start = countPrefabChildren;
         const len = children.length;
 
-        for (let i = start; i < len - 1 ; i++) {
+        for (let i = start; i < len - 1; i++) {
 
             for (let j = i + 1; j < len; j++) {
 

@@ -41,7 +41,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             return new controls.viewers.LabelProvider(obj => {
 
-                return obj instanceof UserComponent ? obj.getName() : obj as string;
+                return obj instanceof UserComponent ? obj.getDisplayNameOrName() : obj as string;
             });
         }
 

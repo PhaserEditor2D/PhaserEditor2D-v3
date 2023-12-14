@@ -13,6 +13,8 @@ namespace phasereditor2d.scene.core.json {
             public snapWidth = 16,
             public snapHeight = 16,
             public onlyGenerateMethods = false,
+            public prefabObjDisplayFmt: string = undefined,
+            public displayName: string = undefined,
             public superClassName = "",
             public preloadMethodName = "preload",
             public preloadPackFiles: string[] = [],
@@ -47,6 +49,8 @@ namespace phasereditor2d.scene.core.json {
             write(data, "exportClass", this.exportClass, false);
             write(data, "autoImport", this.autoImport, false);
             write(data, "generateAwakeHandler", this.generateAwakeHandler, false);
+            write(data, "prefabObjDisplayFmt", this.prefabObjDisplayFmt, undefined);
+            write(data, "displayName", this.displayName, undefined);
             write(data, "superClassName", this.superClassName, "");
             write(data, "preloadMethodName", this.preloadMethodName, "preload");
             write(data, "preloadPackFiles", this.preloadPackFiles, []);
@@ -75,6 +79,8 @@ namespace phasereditor2d.scene.core.json {
             this.exportClass = read(data, "exportClass", false);
             this.autoImport = read(data, "autoImport", false);
             this.generateAwakeHandler = read(data, "generateAwakeHandler", false);
+            this.prefabObjDisplayFmt = read(data, "prefabObjDisplayFmt", undefined);
+            this.displayName = read(data, "displayName", undefined);
             this.superClassName = read(data, "superClassName", "");
             this.preloadMethodName = read(data, "preloadMethodName", "preload");
             this.preloadPackFiles = read(data, "preloadPackFiles", []);

@@ -8,46 +8,24 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         private static createViewer() {
 
             const viewer = new controls.viewers.TreeViewer("AddScriptsDialog");
-            viewer.setLabelProvider(new controls.viewers.LabelProvider((obj: colibri.core.io.FilePath | ScriptNodeExtension) => {
-
-                if (obj instanceof ScriptNodeExtension) {
-
-                    return obj.getTypeName();
-                }
-
-                return obj.getNameWithoutExtension();
-            }));
-            viewer.setStyledLabelProvider(new (class s {
-                getStyledTexts(obj: any, dark: boolean) {
-
-                    let text: string;
-                    let color: string;
-
-                    if (obj instanceof ScriptNodeExtension) {
-
-                        text = obj.getTypeName();
-                        color = controls.Controls.getTheme().viewerForeground;
-
-                    } else {
-
-                        text = obj.getNameWithoutExtension();
-                        color = ScenePlugin.getInstance().getPrefabColor();
-                    }
-
-                    return [{ text, color }];
-                }
-            }));
-            viewer.setContentProvider(new controls.viewers.ArrayTreeContentProvider());
+            viewer.setStyledLabelProvider(new ScriptStyledLabelProvider());
+            viewer.setLabelProvider(new controls.viewers.LabelProviderFromStyledLabelProvider(viewer.getStyledLabelProvider()));
+            viewer.setContentProvider(new ScriptsContentProvider);
             viewer.setCellRendererProvider(
                 new controls.viewers.EmptyCellRendererProvider(
-                    e => new controls.viewers.IconImageCellRenderer(
-                        resources.getIcon(resources.ICON_BUILD))));
+                    e => {
 
-            const finder = ScenePlugin.getInstance().getSceneFinder();
+                        let icon = resources.getIcon(resources.ICON_BUILD);
 
-            const input = [ScriptNodeExtension.getInstance(), ...finder.getScriptPrefabFiles()];
+                        if (e instanceof io.FilePath && e.isFolder()) {
 
-            viewer.setInput(input);
+                            icon = colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FOLDER);
+                        }
+
+                        return new controls.viewers.IconImageCellRenderer(icon)
+                    }));
+
+            viewer.setInput([]);
 
             return viewer;
         }
@@ -70,7 +48,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 this.addOpenButton("Add Script", sel => {
 
                     this.addScript(sel[0]);
-                }));
+                }), (obj: io.FilePath | ScriptNodeExtension) => {
+
+                    return obj instanceof ScriptNodeExtension || obj.isFile();
+                });
 
             this.addCancelButton();
         }

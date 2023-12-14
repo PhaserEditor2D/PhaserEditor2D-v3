@@ -25,6 +25,7 @@ namespace phasereditor2d.scene.ui.blocks {
         private _getPacks: () => pack.core.AssetPack[];
         private _blocksProvider: SceneEditorBlocksProvider;
         protected _editor: editor.SceneEditor;
+        private _scriptsContentProvider: sceneobjects.ScriptsContentProvider;
 
         constructor(editor: editor.SceneEditor, getPacks: () => pack.core.AssetPack[]) {
             super();
@@ -32,6 +33,8 @@ namespace phasereditor2d.scene.ui.blocks {
             this._blocksProvider = editor.getBlocksProvider();
             this._getPacks = getPacks;
             this._editor = this._blocksProvider.getEditor();
+            this._scriptsContentProvider = new sceneobjects.ScriptsContentProvider();
+
         }
 
         getPackItems() {
@@ -43,14 +46,16 @@ namespace phasereditor2d.scene.ui.blocks {
                 .filter(item => SCENE_EDITOR_BLOCKS_PACK_ITEM_TYPES.has(item.getType()));
         }
 
+        private isScriptNodePrefabScene() {
+
+            return this._editor.getScene().isScriptNodePrefabScene();
+        }
+
         getRoots(input: any) {
 
-            if (this._editor.getScene().isScriptNodePrefabScene()) {
+            if (this.isScriptNodePrefabScene()) {
 
-                return [
-                    sceneobjects.ScriptNodeExtension.getInstance(),
-                    ...this.getPrefabFiles("scripts")
-                ];
+                return this._scriptsContentProvider.getRoots(input);
             }
 
             const groupingType = grouping.getGroupingPreference();
@@ -145,6 +150,11 @@ namespace phasereditor2d.scene.ui.blocks {
         }
 
         getChildren(parent: any): any[] {
+
+            if (this.isScriptNodePrefabScene()) {
+
+                return this._scriptsContentProvider.getChildren(parent);
+            }
 
             if (parent instanceof viewers.PhaserTypeSymbol) {
 

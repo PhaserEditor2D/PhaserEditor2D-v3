@@ -292,7 +292,7 @@ namespace phasereditor2d.scene.ui {
             this._id = id;
         }
 
-        getSceneType() {
+        getSceneType(): core.json.SceneType {
 
             return this._sceneType;
         }

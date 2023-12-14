@@ -104,7 +104,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return this.hasLocalUserComponent(compName);
         }
-        
+
         private isComponentAvailabeInPrefab(compName: string, prefabId: string) {
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
@@ -396,7 +396,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                                 : `const ${compVarName} = new ${compName}(${args.objectVarName});`
                         ));
 
-                    const filePath = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
+                    const { importPath, asDefault } = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
                         isFile: true,
                         modTime: 0,
                         name: compName,
@@ -404,7 +404,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         children: []
                     }));
 
-                    args.unit.addImport(compName, filePath);
+                    args.unit.addImport(compName, importPath, asDefault);
                 }
             }
 
@@ -430,7 +430,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         const compInfo = finder.getUserComponentByName(compName);
 
-                        const filePath = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
+                        const importData = code.getImportPath(args.sceneFile, new io.FilePath(compInfo.file.getParent(), {
                             isFile: true,
                             modTime: 0,
                             name: compName,
@@ -438,7 +438,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                             children: []
                         }));
 
-                        args.unit.addImport(compName, filePath);
+                        args.unit.addImport(compName, importData.importPath, importData.asDefault);
                     }
                 }
             }

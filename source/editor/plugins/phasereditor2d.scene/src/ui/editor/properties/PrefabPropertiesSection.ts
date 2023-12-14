@@ -48,6 +48,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     });
 
                     linksComp.appendChild(link);
+
+                    controls.Tooltip.tooltip(link, prop.getName() + ": " + prop.getType().getName());
                 }
             });
 
