@@ -1,6 +1,6 @@
 # Change Log
 
-## dev
+## v3.65.0 - Dec 13, 2024
 
 * Allows using prefabs and user components from node modules.
 * Allows tagging folders as "copied" libraries, with the `library.txt` file.
