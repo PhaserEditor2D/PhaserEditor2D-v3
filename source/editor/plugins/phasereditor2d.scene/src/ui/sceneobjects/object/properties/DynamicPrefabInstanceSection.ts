@@ -63,11 +63,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                         if (GameObjectEditorSupport.hasEditorSupport(obj2)) {
 
-                            const editorSupport = GameObjectEditorSupport.getEditorSupport(obj2);
+                            const objES = GameObjectEditorSupport.getEditorSupport(obj2);
 
-                            if (editorSupport.isPrefabInstance()) {
+                            if (objES.isPrefabInstance()) {
 
-                                const prefabFiles = finder.getPrefabHierarchy(editorSupport.getPrefabId());
+                                const prefabFiles = finder.getPrefabHierarchy(objES.getPrefabId());
 
                                 if (prefabFiles.indexOf(this._prefabFile) >= 0) {
 

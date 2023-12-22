@@ -22,17 +22,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const finder = ScenePlugin.getInstance().getSceneFinder();
 
-        if (objES.isPrefabInstance() && !objES.isNestedPrefabDefined()) {
+        if (objES.isPrefabInstance()) {
 
-            const hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
+            let hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
 
             for (const prefabFile of hierarchy) {
 
-                const { prefabObjDisplayFmt: displayFormat } = finder.getSceneSettings(prefabFile);
+                const { prefabObjDisplayFmt } = finder.getSceneSettings(prefabFile);
 
-                if (displayFormat !== undefined && displayFormat.trim().length > 0) {
+                if (prefabObjDisplayFmt !== undefined && prefabObjDisplayFmt.trim().length > 0) {
 
-                    return displayFormat;
+                    return prefabObjDisplayFmt;
                 }
             }
         }

@@ -480,7 +480,10 @@ namespace phasereditor2d.scene.core.json {
 
             if (file) {
 
-                result.push(file);
+                if (!this.isNestedPrefab(prefabId)) {
+
+                    result.push(file);
+                }
 
                 const objData = this.getPrefabData(prefabId);
 
