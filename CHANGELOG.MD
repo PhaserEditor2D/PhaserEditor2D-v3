@@ -1,5 +1,9 @@
 # Change Log
 
+## dev
+
+* Allows to set a display name to game objects.
+
 ## v3.65.0 - Dec 13, 2024
 
 * Allows using prefabs and user components from node modules.
