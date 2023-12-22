@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         private _object: T;
         private _label: string;
+        private _displayName: string;
         private _useGameObjectName: boolean;
         private _scope: ObjectScope;
         private _scene: Scene;
@@ -36,7 +37,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return null;
         }
 
-        abstract destroy();
+        abstract destroy(): void;
 
         abstract buildDependencyHash(args: IBuildDependencyHashArgs): Promise<void>;
 
@@ -96,6 +97,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         setLabel(label: string) {
 
             this._label = label;
+        }
+
+        getDisplayName() {
+
+            return this._displayName;
+        }
+
+        setDisplayName(displayName: string) {
+            
+            this._displayName = displayName;
         }
 
         isUseGameObjectName() {

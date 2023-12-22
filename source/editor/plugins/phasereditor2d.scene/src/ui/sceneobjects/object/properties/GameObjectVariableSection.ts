@@ -43,6 +43,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             {
+                // Display Name
+
+                this.createLabel(comp, "Display Name", "The name to display in the UI.");
+
+                this.createStringField(comp, VariableComponent.displayName, false, true);
+            }
+
+            {
                 // GameObject name
 
                 this.createBooleanField(comp, VariableComponent.useGameObjectName, false);

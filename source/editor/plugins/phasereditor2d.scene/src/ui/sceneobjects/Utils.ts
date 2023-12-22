@@ -40,7 +40,46 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         return undefined;
     }
 
+    function getNestedPrefabDisplayName(prefabId: string) {
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        const data = finder.getPrefabData(prefabId);
+
+        if (data) {
+
+            if (data.displayName) {
+
+                return data.displayName;
+            }
+
+            if (finder.isNestedPrefab(data.prefabId)) {
+
+                return getNestedPrefabDisplayName(data.prefabId);
+            }
+        }
+
+        return undefined;
+    }
+
     export function formatObjectDisplayText(obj: ISceneGameObject): string {
+
+        const objES = obj.getEditorSupport();
+
+        if (objES.getDisplayName()) {
+
+            return objES.getDisplayName();
+        }
+
+        if (objES.isNestedPrefabInstance()) {
+
+            const displayName = getNestedPrefabDisplayName(objES.getPrefabId());
+
+            if (displayName) {
+                
+                return displayName;
+            }
+        }
 
         const displayFormat = findObjectDisplayFormat(obj);
 
@@ -48,8 +87,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             return applyFormat(obj, displayFormat);
         }
-
-        const objES = obj.getEditorSupport();
 
         return objES.getLabel();
     }
