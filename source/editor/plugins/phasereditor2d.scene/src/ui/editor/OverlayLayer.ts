@@ -71,18 +71,15 @@ namespace phasereditor2d.scene.ui.editor {
 
             const selection = this._editor.getSelection();
 
-            const gameObjectsSet = new Set(selection.filter(obj => sceneobjects.isGameObject(obj)));
-
             for (const obj of selection) {
 
                 ctx.save();
 
                 const isGameObject = sceneobjects.isGameObject(obj);
 
-                const isUserCompNode = obj instanceof sceneobjects.UserComponentNode
-                    && !gameObjectsSet.has(obj.getObject());
+                const isUserCompNode = obj instanceof sceneobjects.UserComponentNode;
 
-                const isScriptNode = obj instanceof sceneobjects.ScriptNode && !gameObjectsSet.has(obj.getParentDisplayObject());
+                const isScriptNode = obj instanceof sceneobjects.ScriptNode;
 
                 const isNonDisplayObject = isUserCompNode || isScriptNode;
 
