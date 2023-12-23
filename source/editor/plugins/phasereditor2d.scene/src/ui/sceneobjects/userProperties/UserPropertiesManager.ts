@@ -11,6 +11,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._properties = [];
         }
 
+        findPropertyByName(name: string) {
+
+            return this._properties.find(p => p.getName() === name);
+        }
+
         getProperties() {
 
             return this._properties;

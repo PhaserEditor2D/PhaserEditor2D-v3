@@ -93,18 +93,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (targetActionComp) {
 
-                const prop = targetActionComp.getUserComponent()
-                    .getUserProperties()
-                    .getProperties().find(p => p.getName() === "target");
+                const props = targetActionComp.getUserComponent()
+                    .getUserProperties();
 
-                if (prop) {
+                const targetProp = props.findPropertyByName("target");
+                const targetNameProp = props.findPropertyByName("targetName");
 
-                    const value = prop.getComponentProperty().getValue(obj);
+                let value = "";
 
-                    if (value) {
+                if (targetProp) {
 
-                        prefix = value + " → ";
+                    const target = targetProp.getComponentProperty().getValue(obj);
+
+                    if (target) {
+
+                        value = target;
                     }
+                }
+
+                if (targetNameProp) {
+
+                    const name = targetNameProp.getComponentProperty().getValue(obj);
+
+                    if (name) {
+                        
+                        value += " " + name;
+                    }
+                }
+
+                if (value) {
+
+                    prefix = value + " → ";
                 }
             }
 
