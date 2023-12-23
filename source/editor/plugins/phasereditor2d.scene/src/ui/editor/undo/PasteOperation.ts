@@ -119,8 +119,6 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
         private async pasteGameObjects(clipboardItems: IClipboardItem[], sel: any[]) {
 
-            console.log("pasteGamesObjects", clipboardItems.map(i => i.data));
-            
             const scene = this._editor.getScene();
 
             const maker = this._editor.getSceneMaker();

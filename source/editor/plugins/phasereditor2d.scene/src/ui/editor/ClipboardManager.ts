@@ -91,9 +91,38 @@ namespace phasereditor2d.scene.ui.editor {
 
             const p = new Phaser.Math.Vector2();
 
-            const gameObjects = this._editor.getSelectedGameObjects();
+            const selection = new Set(this._editor.getSelectedGameObjects());
 
-            for (const obj of gameObjects) {
+            const copyObjects: sceneobjects.ISceneGameObject[] = [];
+
+            // filter off the children of selected parents
+
+            for(const obj of selection) {
+
+                let include = true;
+
+                const objES = obj.getEditorSupport();
+
+                const parents = objES.getAllParents();
+
+                for(const parent of parents) {
+
+                    if (selection.has(parent)) {
+
+                        include = false;
+                        break;
+                    }
+                }
+
+                if (include) {
+
+                    copyObjects.push(obj);
+                }
+            }
+
+            // record game objects positions
+
+            for (const obj of copyObjects) {
 
                 const sprite = obj as unknown as Phaser.GameObjects.Sprite;
 
@@ -111,7 +140,9 @@ namespace phasereditor2d.scene.ui.editor {
                 minY = Math.min(minY, p.y);
             }
 
-            for (const obj of gameObjects) {
+            // serialize objects
+
+            for (const obj of copyObjects) {
 
                 const objData = {} as any;
 

@@ -80,15 +80,15 @@ namespace phasereditor2d.scene.ui {
             const selection = alternativeSelection
                 || this._editorScene.getEditor().getSelectedGameObjects();
 
-            const areDropingScriptNodes = dropObjects.filter(obj => obj instanceof sceneobjects.ScriptNode).length === dropObjects.length;
+            const areDroppingScriptNodes = dropObjects.filter(obj => obj instanceof sceneobjects.ScriptNode).length === dropObjects.length;
 
             for (const sprite of selection) {
 
-                const dropTarget = areDropingScriptNodes ? this.findDropScriptTargetParent(sprite) : this.findDropTargetParent(sprite);
+                const dropTarget = areDroppingScriptNodes ? this.findDropScriptTargetParent(sprite) : this.findDropTargetParent(sprite);
 
                 if (dropTarget) {
 
-                    if (areDropingScriptNodes) {
+                    if (areDroppingScriptNodes) {
 
                         dropInObj = dropTarget;
 
