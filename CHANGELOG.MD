@@ -5,6 +5,7 @@
 * Allows to set a display name to game objects.
 * The display name formatting expression #{x} expands to "x".
 * The display name formatting shows prepends the `TargetActionComp.target` value, if present.
+* Fixes name collision when duplicate a tree of game objects.
 
 ## v3.65.0 - Dec 13, 2024
 
