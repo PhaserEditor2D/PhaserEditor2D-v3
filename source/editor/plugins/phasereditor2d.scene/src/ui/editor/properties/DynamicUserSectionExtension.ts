@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             const result: GetPropertySection[] = [];
 
-            const visitedPrefabs = new Set<io.FilePath>();
+            const visitedPrefabs = new Set<string>();
             const visitedComps = new Set<string>();
 
             const finder = ScenePlugin.getInstance().getSceneFinder();
@@ -37,6 +37,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             // add properties from prefab
 
+            console.log("here");
+
             for (const obj of editor.getSelectedGameObjects()) {
 
                 const objES = obj.getEditorSupport();
@@ -46,14 +48,14 @@ namespace phasereditor2d.scene.ui.editor.properties {
                     continue;
                 }
 
-                const prefabFile = objES.getPrefabFile();
+                const prefabId = objES.getPrefabId();
 
-                if (visitedPrefabs.has(prefabFile)) {
+                if (visitedPrefabs.has(prefabId)) {
 
                     continue;
                 }
 
-                visitedPrefabs.add(prefabFile);
+                visitedPrefabs.add(prefabId);
 
                 const prefabUserProps = objES.getComponent(sceneobjects.PrefabUserPropertyComponent) as sceneobjects.PrefabUserPropertyComponent;
                 const prefabInfoList = prefabUserProps.getPropertiesByPrefab();
