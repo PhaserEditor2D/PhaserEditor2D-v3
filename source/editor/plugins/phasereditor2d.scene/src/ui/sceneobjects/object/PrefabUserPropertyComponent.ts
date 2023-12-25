@@ -43,6 +43,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (objES.isPrefabInstance()) {
 
+                // get all from the nested prefabs chain
+
+                if (objES.isNestedPrefabInstance()) {
+
+                    this.getNestedPrefabProperties(propertiesInObject, objES.getPrefabId());
+                }
+
+                // get all from non-nested prefab hierarchy
+
                 const nextPrefabId = finder.getFirstNonNestedPrefabId(objES.getPrefabId());
 
                 if (nextPrefabId) {
@@ -57,6 +66,28 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return propertiesInObject;
+        }
+
+        private getNestedPrefabProperties(propertiesInObject: IUserPropertiesInObject[],
+            nestedPrefabId: string) {
+
+            const finder = ScenePlugin.getInstance().getSceneFinder();
+
+            const prefabFile = finder.getPrefabFile(nestedPrefabId);
+
+            propertiesInObject.push({
+                prefabFile,
+                properties: []
+            });
+
+            const data = finder.getPrefabData(nestedPrefabId);
+
+            nestedPrefabId = data.prefabId;
+
+            if (nestedPrefabId && finder.isNestedPrefab(nestedPrefabId)) {
+
+                this.getNestedPrefabProperties(propertiesInObject, data.prefabId);
+            }
         }
 
         private getPrefabProperties(propertiesInObject: IUserPropertiesInObject[], prefabFile: io.FilePath) {

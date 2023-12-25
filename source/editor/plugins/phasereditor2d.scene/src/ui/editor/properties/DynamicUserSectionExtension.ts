@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 }
             }
 
-            // add user components from prefabs
+            // add properties from prefab
 
             for (const obj of editor.getSelectedGameObjects()) {
 
@@ -57,8 +57,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                 const prefabUserProps = objES.getComponent(sceneobjects.PrefabUserPropertyComponent) as sceneobjects.PrefabUserPropertyComponent;
                 const prefabInfoList = prefabUserProps.getPropertiesByPrefab();
-
-                console.log("properties by prefab", prefabInfoList);
 
                 // add all properties from prefabs
 
