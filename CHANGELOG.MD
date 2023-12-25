@@ -7,6 +7,7 @@
 * The display name formatting shows prepends the `TargetActionComp.target` value, if present.
 * Fixes name collision when copying a game objects tree.
 * Fixes duplicating children objects on a tree copy/paste.
+* Fixes getting user components of nested prefabs.
 
 ## v3.65.0 - Dec 13, 2024
 
