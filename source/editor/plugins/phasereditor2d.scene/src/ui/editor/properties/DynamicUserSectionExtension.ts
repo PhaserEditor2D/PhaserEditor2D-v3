@@ -37,8 +37,6 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
             // add properties from prefab
 
-            console.log("here");
-
             for (const obj of editor.getSelectedGameObjects()) {
 
                 const objES = obj.getEditorSupport();
