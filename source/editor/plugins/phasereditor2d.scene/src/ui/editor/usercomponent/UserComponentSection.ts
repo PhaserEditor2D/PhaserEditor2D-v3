@@ -119,7 +119,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this.addUpdater(() => {
 
                 text.value = this.flatValues_StringOneOrNothing(
-                    this.getSelection().map(c => c["get" + prop]()));
+                    this.getSelection().map(c => c["get" + prop]() || ""));
             });
 
             if (options) {
