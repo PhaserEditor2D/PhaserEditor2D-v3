@@ -16,6 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._object = obj;
             this._scene = scene;
             this._label = label;
+            this._displayName = "";
             this._useGameObjectName = false;
             this._scope = ObjectScope.LOCAL;
 
