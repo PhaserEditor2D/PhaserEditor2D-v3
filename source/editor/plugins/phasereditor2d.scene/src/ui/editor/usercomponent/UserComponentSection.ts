@@ -41,6 +41,8 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this.stringProp(comp, "BaseClass", "Super Class", "Name of the super class of the component. It is optional.", () => this.createSuperClassOptions());
 
             this.stringProp(comp, "DisplayName", "Display Name", "The display name of the component.");
+            
+            this.stringProp(comp, "ObjectDisplayFormat", "Object Display Format", "The display name format to show in prefab instances.");
 
             const op = (
                 action: editor.properties.TUserPropertiesAction) => {

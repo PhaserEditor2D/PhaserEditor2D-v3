@@ -85,52 +85,58 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         if (displayFormat) {
 
-            let prefix = "";
-
-            const targetActionComp = objES.getUserComponentsComponent()
-                .getUserComponentNodes()
-                .find(n => n.getComponentName() === "ActionTargetComp");
-
-            if (targetActionComp) {
-
-                const props = targetActionComp.getUserComponent()
-                    .getUserProperties();
-
-                const targetProp = props.findPropertyByName("target");
-                const targetNameProp = props.findPropertyByName("targetName");
-
-                let value = "";
-
-                if (targetProp) {
-
-                    const target = targetProp.getComponentProperty().getValue(obj);
-
-                    if (target) {
-
-                        value = target;
-                    }
-                }
-
-                if (targetNameProp) {
-
-                    const name = targetNameProp.getComponentProperty().getValue(obj);
-
-                    if (name) {
-                        
-                        value += " " + name;
-                    }
-                }
-
-                if (value) {
-
-                    prefix = value + " → ";
-                }
-            }
+            let prefix = getTargetActionDisplayNamePrefix(objES, obj);
 
             return prefix + applyFormat(obj, displayFormat);
         }
 
         return objES.getLabel();
+    }
+
+    function getTargetActionDisplayNamePrefix(objES: GameObjectEditorSupport<ISceneGameObject>, obj: ISceneGameObject) {
+        
+        let prefix = "";
+
+        const targetActionComp = objES.getUserComponentsComponent()
+            .getUserComponentNodes()
+            .find(n => n.getComponentName() === "ActionTargetComp");
+
+        if (targetActionComp) {
+
+            const props = targetActionComp.getUserComponent()
+                .getUserProperties();
+
+            const targetProp = props.findPropertyByName("target");
+            const targetNameProp = props.findPropertyByName("targetName");
+
+            let value = "";
+
+            if (targetProp) {
+
+                const target = targetProp.getComponentProperty().getValue(obj);
+
+                if (target) {
+
+                    value = target;
+                }
+            }
+
+            if (targetNameProp) {
+
+                const name = targetNameProp.getComponentProperty().getValue(obj);
+
+                if (name) {
+
+                    value += " " + name;
+                }
+            }
+
+            if (value) {
+
+                prefix = value + " → ";
+            }
+        }
+        return prefix;
     }
 
     function applyFormat(obj: ISceneGameObject, displayFormat: string) {
@@ -140,18 +146,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const data: any = {
             label: objES.getLabel()
         };
-
-        // from user components
-        {
-            const comp = objES.getUserComponentsComponent();
-
-            const props = comp.getProperties();
-
-            for (const prop of props) {
-
-                data[prop.codeName] = prop.getValue(obj);
-            }
-        }
 
         // from prefabs
         {
@@ -165,6 +159,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        // from user components
+        let componentsSuffix = "";
+        {
+            const components = objES.getUserComponentsComponent();
+
+            const props = components.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.codeName] = prop.getValue(obj);
+            }
+
+            for(const node of components.getUserComponentNodes()) {
+
+                const comp = node.getUserComponent();
+
+                const format = comp.getObjectDisplayFormat();
+
+                if (format) {
+
+                    const compData = {};
+
+                    for(const userProp of comp.getUserProperties().getProperties()) {
+
+                        const prop = userProp.getComponentProperty();
+                        
+                        const value = prop.getValue(obj);
+
+                        compData[prop.codeName] = value;
+                    }
+
+                    componentsSuffix += " " + formatString(format, compData);
+                }
+            }
+        }
+
+        let output = formatString(displayFormat, data) + componentsSuffix;
+
+        return output;
+    }
+
+    function formatString(displayFormat: string, data: any) {
         let output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
 
             const variableValue = data[p1.trim()];
@@ -182,7 +218,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         });
 
         output = output.replace(/ +/g, " ").trim();
-
         return output;
     }
 
