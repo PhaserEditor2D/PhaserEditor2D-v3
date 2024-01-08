@@ -190,12 +190,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         compData[prop.codeName] = value;
                     }
 
-                    componentsSuffix += " " + formatString(format, compData);
+                    componentsSuffix += ", " + formatString(format, compData);
                 }
             }
         }
 
-        let output = formatString(displayFormat, data) + componentsSuffix;
+        const output = formatString(displayFormat, data) + componentsSuffix;
 
         return output;
     }

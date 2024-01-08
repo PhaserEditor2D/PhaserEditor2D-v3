@@ -6,6 +6,7 @@ namespace colibri.ui.ide {
 
         private _input: IEditorInput;
         private _dirty: boolean;
+        private _readOnly: boolean;
         private _embeddedMode: boolean;
         private _editorFactory: EditorFactory;
 
@@ -19,6 +20,24 @@ namespace colibri.ui.ide {
             this._embeddedMode = false;
 
             this._editorFactory = factory;
+        }
+
+        setReadOnly(readOnly: boolean) {
+
+            this._readOnly = readOnly;
+
+            if (this.isInEditorArea()) {
+
+                const folder = this.getPartFolder();
+                const label = folder.getLabelFromContent(this);
+
+                folder.setTabReadOnly(label, this._readOnly);
+            }
+        }
+
+        isReadOnly() {
+
+            return this._readOnly;
         }
 
         getEditorFactory() {
@@ -65,6 +84,13 @@ namespace colibri.ui.ide {
         }
 
         async save() {
+
+            if (this.isReadOnly()) {
+
+                alert("Cannot save, the editor is in read-only mode.'");
+
+                return;
+            }
 
             await this.doSave();
         }

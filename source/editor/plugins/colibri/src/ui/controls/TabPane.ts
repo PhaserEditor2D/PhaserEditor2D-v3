@@ -509,6 +509,18 @@ namespace colibri.ui.controls {
             }
         }
 
+        setTabReadOnly(labelElement: HTMLElement, readOnly: boolean) {
+
+            if (readOnly) {
+
+                labelElement.classList.add("ReadOnly");
+
+            } else {
+
+                labelElement.classList.remove("ReadOnly");
+            }
+        }
+
         closeTab(content: controls.Control) {
 
             const label = this.getLabelFromContent(content);
