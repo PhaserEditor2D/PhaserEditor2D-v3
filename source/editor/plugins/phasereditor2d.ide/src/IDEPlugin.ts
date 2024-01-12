@@ -77,6 +77,16 @@ namespace phasereditor2d.ide {
             reg.addExtension(new ui.viewers.LibraryFileStyledLabelProviderExtension());
 
             phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
+
+            colibri.Platform.getWorkbench().eventEditorActivated.addListener(editor => {
+
+                const file = editor.getInput();
+
+                if (file instanceof colibri.core.io.FilePath) {
+
+                    editor.setReadOnly(ide.core.code.isNodeLibraryFile(file));
+                }
+            });
         }
 
         async compileProject() {

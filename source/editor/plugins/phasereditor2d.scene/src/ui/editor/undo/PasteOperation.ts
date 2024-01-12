@@ -35,7 +35,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             await this.pastePlainObjects(items, sel);
 
-            this.pastePrefaProperties(items, sel);
+            this.pastePrefabProperties(items, sel);
 
             this._editor.setSelection(sel);
         }
@@ -56,7 +56,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
                 this.setNewObjectId(data);
 
-                const obj =scene.readPlainObject(data);
+                const obj = scene.readPlainObject(data);
 
                 if (obj) {
 
@@ -76,7 +76,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             }
         }
 
-        private pastePrefaProperties(clipboardItems: IClipboardItem[], sel: any[]) {
+        private pastePrefabProperties(clipboardItems: IClipboardItem[], sel: any[]) {
 
             const scene = this._editor.getScene();
 
@@ -169,14 +169,26 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for (const newObj of sprites) {
 
-                const oldLabel = newObj.getEditorSupport().getLabel();
-
-                const newLabel = nameMaker.makeName(oldLabel);
-
-                newObj.getEditorSupport().setLabel(newLabel);
+                this.updateGameObjectName(newObj, nameMaker);
             }
 
             maker.afterDropObjects(prefabObj, sprites);
+        }
+
+        private updateGameObjectName(obj: sceneobjects.ISceneGameObject, nameMaker: colibri.ui.ide.utils.NameMaker) {
+
+            const objES = obj.getEditorSupport();
+
+            const oldLabel = objES.getLabel();
+
+            const newLabel = nameMaker.makeName(oldLabel);
+
+            objES.setLabel(newLabel);
+
+            for(const child of objES.getAppendedChildren()) {
+
+                this.updateGameObjectName(child, nameMaker);
+            }
         }
 
         private setNewObjectId(data: json.IObjectData) {

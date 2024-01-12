@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
         private _name: string;
         private _displayName: string;
+        private _objectDisplayFormat: string;
         private _baseClass: string;
         private _gameObjectType: string;
         private _properties: sceneobjects.UserPropertiesManager;
@@ -15,6 +16,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             this._name = name;
             this._baseClass = "";
             this._displayName = "";
+            this._objectDisplayFormat = "";
             this._gameObjectType = "Phaser.GameObjects.Image";
             this._properties = new UserComponentProperties(this);
         }
@@ -27,6 +29,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
             const data = {
                 name: this._name,
                 displayName: this._displayName,
+                objectDisplayFormat: this._objectDisplayFormat,
                 baseClass: this._baseClass,
                 gameObjectType: this._gameObjectType,
                 properties: propsData
@@ -39,6 +42,7 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
 
             this._name = data.name;
             this._displayName = read(data, "displayName", "");
+            this._objectDisplayFormat = read(data, "objectDisplayFormat", "");
             this._baseClass = read(data, "baseClass", "");
             this._gameObjectType = read(data, "gameObjectType", "Phaser.GameObjects.Image");
             this._properties.readJSON(data.properties);
@@ -52,6 +56,16 @@ namespace phasereditor2d.scene.ui.editor.usercomponent {
         setName(name: string) {
 
             this._name = name;
+        }
+
+        getObjectDisplayFormat() {
+
+            return this._objectDisplayFormat;
+        }
+
+        setObjectDisplayFormat(objectDisplayFormat: string) {
+
+            this._objectDisplayFormat = objectDisplayFormat;
         }
 
         getDisplayName() {

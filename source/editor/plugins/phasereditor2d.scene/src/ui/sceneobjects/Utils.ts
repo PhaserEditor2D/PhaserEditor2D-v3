@@ -22,18 +22,40 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         const finder = ScenePlugin.getInstance().getSceneFinder();
 
-        if (objES.isPrefabInstance() && !objES.isNestedPrefabDefined()) {
+        if (objES.isPrefabInstance()) {
 
-            const hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
+            let hierarchy = finder.getPrefabHierarchy(objES.getPrefabId());
 
             for (const prefabFile of hierarchy) {
 
-                const { prefabObjDisplayFmt: displayFormat } = finder.getSceneSettings(prefabFile);
+                const { prefabObjDisplayFmt } = finder.getSceneSettings(prefabFile);
 
-                if (displayFormat !== undefined && displayFormat.trim().length > 0) {
+                if (prefabObjDisplayFmt !== undefined && prefabObjDisplayFmt.trim().length > 0) {
 
-                    return displayFormat;
+                    return prefabObjDisplayFmt;
                 }
+            }
+        }
+
+        return undefined;
+    }
+
+    function getNestedPrefabDisplayName(prefabId: string) {
+
+        const finder = ScenePlugin.getInstance().getSceneFinder();
+
+        const data = finder.getPrefabData(prefabId);
+
+        if (data) {
+
+            if (data.displayName) {
+
+                return data.displayName;
+            }
+
+            if (finder.isNestedPrefab(data.prefabId)) {
+
+                return getNestedPrefabDisplayName(data.prefabId);
             }
         }
 
@@ -42,16 +64,79 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function formatObjectDisplayText(obj: ISceneGameObject): string {
 
+        const objES = obj.getEditorSupport();
+
+        if (objES.getDisplayName()) {
+
+            return objES.getDisplayName();
+        }
+
+        if (objES.isNestedPrefabInstance()) {
+
+            const displayName = getNestedPrefabDisplayName(objES.getPrefabId());
+
+            if (displayName) {
+
+                return displayName;
+            }
+        }
+
         const displayFormat = findObjectDisplayFormat(obj);
 
         if (displayFormat) {
 
-            return applyFormat(obj, displayFormat);
+            let prefix = getTargetActionDisplayNamePrefix(objES, obj);
+
+            return prefix + applyFormat(obj, displayFormat);
         }
 
-        const objES = obj.getEditorSupport();
-
         return objES.getLabel();
+    }
+
+    function getTargetActionDisplayNamePrefix(objES: GameObjectEditorSupport<ISceneGameObject>, obj: ISceneGameObject) {
+        
+        let prefix = "";
+
+        const targetActionComp = objES.getUserComponentsComponent()
+            .getUserComponentNodes()
+            .find(n => n.getComponentName() === "ActionTargetComp");
+
+        if (targetActionComp) {
+
+            const props = targetActionComp.getUserComponent()
+                .getUserProperties();
+
+            const targetProp = props.findPropertyByName("target");
+            const targetNameProp = props.findPropertyByName("targetName");
+
+            let value = "";
+
+            if (targetProp) {
+
+                const target = targetProp.getComponentProperty().getValue(obj);
+
+                if (target) {
+
+                    value = target;
+                }
+            }
+
+            if (targetNameProp) {
+
+                const name = targetNameProp.getComponentProperty().getValue(obj);
+
+                if (name) {
+
+                    value += " " + name;
+                }
+            }
+
+            if (value) {
+
+                prefix = value + " → ";
+            }
+        }
+        return prefix;
     }
 
     function applyFormat(obj: ISceneGameObject, displayFormat: string) {
@@ -61,18 +146,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         const data: any = {
             label: objES.getLabel()
         };
-
-        // from user components
-        {
-            const comp = objES.getUserComponentsComponent();
-
-            const props = comp.getProperties();
-
-            for (const prop of props) {
-
-                data[prop.codeName] = prop.getValue(obj);
-            }
-        }
 
         // from prefabs
         {
@@ -86,6 +159,48 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
         }
 
+        // from user components
+        let componentsSuffix = "";
+        {
+            const components = objES.getUserComponentsComponent();
+
+            const props = components.getProperties();
+
+            for (const prop of props) {
+
+                data[prop.codeName] = prop.getValue(obj);
+            }
+
+            for(const node of components.getUserComponentNodes()) {
+
+                const comp = node.getUserComponent();
+
+                const format = comp.getObjectDisplayFormat();
+
+                if (format) {
+
+                    const compData = {};
+
+                    for(const userProp of comp.getUserProperties().getProperties()) {
+
+                        const prop = userProp.getComponentProperty();
+                        
+                        const value = prop.getValue(obj);
+
+                        compData[prop.codeName] = value;
+                    }
+
+                    componentsSuffix += ", " + formatString(format, compData);
+                }
+            }
+        }
+
+        const output = formatString(displayFormat, data) + componentsSuffix;
+
+        return output;
+    }
+
+    function formatString(displayFormat: string, data: any) {
         let output = displayFormat.replace(/\${(.*?)}/g, (match, p1) => {
 
             const variableValue = data[p1.trim()];
@@ -99,11 +214,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const variableValue = data[k];
 
-            return Boolean(variableValue) ? "#" + k : "";
+            return Boolean(variableValue) ? `"${k}"` : "";
         });
 
         output = output.replace(/ +/g, " ").trim();
-
         return output;
     }
 

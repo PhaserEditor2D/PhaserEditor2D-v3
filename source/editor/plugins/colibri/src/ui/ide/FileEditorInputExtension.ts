@@ -18,10 +18,12 @@ namespace colibri.ui.ide {
         }
 
         createEditorInput(state: any): IEditorInput {
+
             return colibri.ui.ide.FileUtils.getFileFromPath(state.filePath);
         }
 
         getEditorInputId(input: core.io.FilePath): string {
+
             return input.getFullName();
         }
     }

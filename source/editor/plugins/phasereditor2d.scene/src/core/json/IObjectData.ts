@@ -6,6 +6,7 @@ namespace phasereditor2d.scene.core.json {
         prefabId?: string;
         components?: string[],
         label: string;
+        displayName?: string;
         unlock?: string[];
         scope?: ui.sceneobjects.ObjectScope;
         private_np?: boolean;

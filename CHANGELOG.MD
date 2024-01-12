@@ -1,5 +1,17 @@
 # Change Log
 
+## v3.66.0 - Jan 11, 2024
+
+* Allows to set a display name to game objects.
+* The display name formatting expression #{x} expands to "x".
+* The display name formatting shows prepends the `TargetActionComp.target` value, if present.
+* Fixes name collision when copying a game objects tree.
+* Fixes duplicating children objects on a tree copy/paste.
+* Fixes getting user components of nested prefabs.
+* Allows user component object formatting.
+* Allow read-only editors.
+* Set read-only to editors of node_module files.
+
 ## v3.65.0 - Dec 13, 2024
 
 * Allows using prefabs and user components from node modules.

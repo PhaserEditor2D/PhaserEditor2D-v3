@@ -137,6 +137,9 @@
         padding-bottom: 5px;
     }
 
+    .TabPaneLabel.ReadOnly span {
+        opacity: 0.5;
+    }
 
     .TabPaneLabel span {
         margin: 3px 0px 0px 3px;

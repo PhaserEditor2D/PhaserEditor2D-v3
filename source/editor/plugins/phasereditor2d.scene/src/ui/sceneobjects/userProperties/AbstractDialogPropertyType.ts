@@ -226,8 +226,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 formBuilder.createButton(comp, resources.getIcon(resources.ICON_PLAY), () => {
 
-                    console.log("here");
-                    
                     previewAction();
                 });
             }

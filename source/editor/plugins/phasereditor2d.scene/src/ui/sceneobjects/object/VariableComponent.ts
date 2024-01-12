@@ -14,6 +14,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             setValue: (obj, value) => obj.getEditorSupport().setLabel(value)
         };
 
+        static displayName: IProperty<ISceneGameObject> = {
+            name: "displayName",
+            tooltip: "The name to show in the UI.",
+            defValue: "",
+            local: true,
+            getValue: obj => obj.getEditorSupport().getDisplayName(),
+            setValue: (obj, value) => obj.getEditorSupport().setDisplayName(value)
+        };
+
         static useGameObjectName: IProperty<ISceneGameObject> = {
             name: "useGameObjectName",
             label: "GO Name",
@@ -38,6 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         constructor(obj: ISceneGameObject) {
             super(obj, [
                 VariableComponent.label,
+                VariableComponent.displayName,
                 VariableComponent.useGameObjectName,
                 VariableComponent.scope
             ]);
