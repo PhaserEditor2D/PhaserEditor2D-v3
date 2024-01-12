@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.66.0 - Jan 10, 2024
+## v3.66.0 - Jan 11, 2024
 
 * Allows to set a display name to game objects.
 * The display name formatting expression #{x} expands to "x".
