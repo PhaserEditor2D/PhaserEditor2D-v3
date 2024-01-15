@@ -1,1 +1,3 @@
-declare class OffscreenCanvas { }
+// not needed anymore!
+
+// declare class OffscreenCanvas { }
