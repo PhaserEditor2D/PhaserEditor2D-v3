@@ -104,21 +104,35 @@ namespace colibri.ui.ide {
 
             if (!this._fileStorage) {
 
-                this._fileStorage = new core.io.FileStorage_HTTPServer();
+                const extensions = colibri.Platform.getExtensions(core.io.FileStorageExtension.POINT_ID);
+
+                const ext = extensions[0] as core.io.FileStorageExtension;
+
+                if (!ext) {
+
+                    throw new Extension("No file storage extension registered");
+                }
+
+                console.log("Workbench: setting up file storage: " + ext.getStorageId());
+
+                this._fileStorage = ext.createStorage();
             }
 
             return this._fileStorage;
         }
 
         getEditorSessionStateRegistry() {
+
             return this._editorSessionStateRegistry;
         }
 
         getGlobalPreferences() {
+
             return this._globalPreferences;
         }
 
         getProjectPreferences() {
+
             return this._projectPreferences;
         }
 

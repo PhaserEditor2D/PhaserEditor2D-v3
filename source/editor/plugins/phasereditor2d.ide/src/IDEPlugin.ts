@@ -15,6 +15,7 @@ namespace phasereditor2d.ide {
         private _externalEditorName: string;
 
         static getInstance() {
+            
             return this._instance;
         }
 

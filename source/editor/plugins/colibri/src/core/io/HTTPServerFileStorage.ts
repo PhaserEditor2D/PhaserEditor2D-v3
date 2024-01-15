@@ -1,7 +1,5 @@
 namespace colibri.core.io {
 
-    import controls = colibri.ui.controls;
-
     interface IGetProjectFilesData {
 
         hash: string;
@@ -49,7 +47,7 @@ namespace colibri.core.io {
         }
     }
 
-    export class FileStorage_HTTPServer implements IFileStorage {
+    export class HTTPServerFileStorage implements IFileStorage {
 
         private _root: FilePath;
         private _changeListeners: ChangeListenerFunc[];
