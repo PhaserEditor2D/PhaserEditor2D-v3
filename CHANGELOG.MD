@@ -1,5 +1,11 @@
 # Change Log
 
+## v3.67.0-dev
+
+* Updates to latest typescript 5.3.3.
+* Updates to latest Codemirror 5.66.16.
+
+
 ## v3.66.0 - Jan 11, 2024
 
 * Allows to set a display name to game objects.
