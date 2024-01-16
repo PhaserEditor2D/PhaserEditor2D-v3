@@ -3,7 +3,7 @@ namespace colibri.core.io {
     export class HTTPServerFileStorageExtension extends FileStorageExtension {
 
         constructor() {
-            super("http-server");
+            super("HttpServerFileStorage");
         }
 
         createStorage(): IFileStorage {

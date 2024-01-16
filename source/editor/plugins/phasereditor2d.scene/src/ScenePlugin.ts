@@ -117,6 +117,11 @@ namespace phasereditor2d.scene {
             return this._docs;
         }
 
+        async started(): Promise<void> {
+            
+            this._sceneFinder.registerStorageListener();
+        }
+
         registerExtensions(reg: colibri.ExtensionRegistry) {
 
             this._sceneFinder = new core.json.SceneFinder();

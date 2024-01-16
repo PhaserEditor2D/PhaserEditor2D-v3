@@ -28,8 +28,6 @@ namespace colibri.core.io {
 
         openProject(): Promise<FilePath>;
 
-        createProject(templatePath: string, projectName: string): Promise<boolean>;
-
         getRoot(): FilePath;
 
         getFileString(file: FilePath): Promise<string>;
