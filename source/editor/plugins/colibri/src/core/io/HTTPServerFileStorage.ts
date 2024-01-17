@@ -652,7 +652,7 @@ namespace colibri.core.io {
             }
         }
 
-        async uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<FilePath> {
+        protected async server_uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<IFileData> {
 
             const formData = new FormData();
 
@@ -673,7 +673,12 @@ namespace colibri.core.io {
                 throw new Error(data.error);
             }
 
-            const fileData = data.file as IFileData;
+            return data.file as IFileData;
+        }
+
+        async uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<FilePath> {
+
+            const fileData = await this.server_uploadFile(uploadFolder, htmlFile);
 
             let file = uploadFolder.getFile(htmlFile.name);
 
