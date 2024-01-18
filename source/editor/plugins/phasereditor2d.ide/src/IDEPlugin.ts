@@ -80,6 +80,11 @@ namespace phasereditor2d.ide {
             phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
 
             colibri.Platform.getWorkbench().eventEditorActivated.addListener(editor => {
+                
+                if (!editor) {
+
+                    return;
+                }
 
                 const file = editor.getInput();
 
