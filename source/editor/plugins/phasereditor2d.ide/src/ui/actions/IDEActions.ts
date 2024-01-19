@@ -78,6 +78,8 @@ namespace phasereditor2d.ide.ui.actions {
 
                     executeFunc: async (args) => {
 
+                        await colibri.Platform.getWorkbench().saveAllEditors();
+
                         IDEPlugin.getInstance().playProject();
                     }
                 },
@@ -101,6 +103,8 @@ namespace phasereditor2d.ide.ui.actions {
                     testFunc: isNotWelcomeWindowScope,
 
                     executeFunc: async (args) => {
+
+                        await colibri.Platform.getWorkbench().saveAllEditors();
 
                         const config = await IDEPlugin.getInstance().requestProjectConfig();
                         let url: string;

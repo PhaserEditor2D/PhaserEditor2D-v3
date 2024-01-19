@@ -66,7 +66,7 @@ namespace colibri.ui.ide {
         }
 
         getFileStringCache() {
-            
+
             if (!CAPABILITY_FILE_STORAGE) {
 
                 return undefined;
@@ -181,7 +181,7 @@ namespace colibri.ui.ide {
 
                     // register default extensions
                     registry.addExtension(new IconAtlasLoaderExtension(plugin));
-                    
+
                     registry.addExtension(new PluginResourceLoaderExtension(
                         () => plugin.preloadResources()));
 
@@ -506,14 +506,14 @@ namespace colibri.ui.ide {
 
                 this.eventWindowFocused.fire();
 
-                for(const window of this._windows) {
+                for (const window of this._windows) {
 
-                    for(const editor of this.getEditors()) {
+                    for (const editor of this.getEditors()) {
 
                         editor.onWindowFocus();
                     }
 
-                    for(const part of window.getViews()) {
+                    for (const part of window.getViews()) {
 
                         part.onWindowFocus();
                     }
@@ -749,12 +749,24 @@ namespace colibri.ui.ide {
         }
 
         getEditors(): EditorPart[] {
+
             return this.getActiveWindow().getEditorArea().getEditors();
         }
 
         getOpenEditorsWithInput(input: ui.ide.IEditorInput) {
 
             return this.getEditors().filter(editor => editor.getInput() === input);
+        }
+
+        async saveAllEditors() {
+
+            for (const editor of this.getEditors()) {
+
+                if (!editor.isReadOnly() && editor.isDirty()) {
+
+                    await editor.save();
+                }
+            }
         }
 
         makeEditor(input: IEditorInput, editorFactory?: EditorFactory): EditorPart {
