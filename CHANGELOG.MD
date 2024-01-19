@@ -4,6 +4,7 @@
 
 * Updates to latest typescript 5.3.3.
 * Updates to latest Codemirror 5.66.16.
+* Save all editors when the user executes the Play commands.
 
 
 ## v3.66.0 - Jan 11, 2024
