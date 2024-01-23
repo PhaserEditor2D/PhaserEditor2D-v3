@@ -33,6 +33,11 @@ namespace colibri.ui.ide {
                 }
             });
 
+            viewer.eventOpenItem.addListener(() => {
+
+                this._currentViewerProvider.onViewerDoubleClick(this._viewer.getSelection());
+            });
+
             return viewer;
         }
 
