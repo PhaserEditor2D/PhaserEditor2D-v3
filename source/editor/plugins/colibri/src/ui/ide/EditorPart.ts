@@ -159,6 +159,19 @@ namespace colibri.ui.ide {
 
         getEditorViewerProvider(key: string): EditorViewerProvider {
 
+            const extensions = colibri.Platform.getExtensionRegistry()
+                .getExtensions(EditorViewerProviderExtension.POINT_ID) as EditorViewerProviderExtension[];
+
+            for (const ext of extensions) {
+
+                const provider = ext.getEditorViewerProvider(this, key);
+
+                if (provider) {
+
+                    return provider;
+                }
+            }
+
             return null;
         }
 
