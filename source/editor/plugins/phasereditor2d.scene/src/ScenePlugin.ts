@@ -11,6 +11,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
     export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
+    export const SCENE_OBJECT_FX_CATEGORY = "FX";
     export const SCENE_OBJECT_SPINE_CATEGORY = "Spine";
 
     export const SCENE_OBJECT_CATEGORIES = [
@@ -251,7 +252,8 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ColliderExtension.getInstance(),
                 ui.sceneobjects.KeyboardKeyExtension.getInstance(),
                 ui.sceneobjects.ScriptNodeExtension.getInstance(),
-                ui.sceneobjects.SpineExtension.getInstance()
+                ui.sceneobjects.SpineExtension.getInstance(),
+                ui.sceneobjects.FXGlowExtension.getInstance(),
             );
 
             // scene plain object extensions
@@ -326,10 +328,11 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
+                page => new ui.sceneobjects.FXGlowSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
                 page => new ui.sceneobjects.SpineBoundsProviderSection(page),
                 page => new ui.sceneobjects.SpineAnimationSection(page),
-                page => new ui.codesnippets.CreateFromAsepriteCodeSnippetSection(page)
+                page => new ui.codesnippets.CreateFromAsepriteCodeSnippetSection(page),
             ));
 
             // scene tools

@@ -39,6 +39,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createArcadePhysicsMenu());
 
+            menu.addMenu(this.createFXMenu());
+
             menu.addMenu(this.createParentMenu());
 
             menu.addSeparator();
@@ -52,6 +54,41 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        private createFXMenu(): controls.Menu {
+
+            const menu = new controls.Menu("FX");
+            const preMenu = new controls.Menu("Pre FX");
+            const postMenu = new controls.Menu("Post FX");
+            menu.addMenu(preMenu);
+            menu.addMenu(postMenu);
+
+            const exts = colibri.Platform
+                .getExtensions<sceneobjects.FXObjectExtension>(sceneobjects.SceneGameObjectExtension.POINT_ID)
+                .filter(e => e instanceof sceneobjects.FXObjectExtension) as sceneobjects.FXObjectExtension[];
+
+            const parents = this._editor.getSelectedGameObjects()
+                .filter(obj => obj.getEditorSupport().isDisplayObject());
+
+            for (const ext of exts) {
+
+                for (const pipelineMenu of [preMenu, postMenu]) {
+
+                    const isPreFX = pipelineMenu === preMenu;
+
+                    pipelineMenu.addAction({
+                        text: "Add " + ext.getTypeName(),
+                        enabled: parents.length > 0,
+                        callback: () => {
+
+                            this._editor.getDropManager().addFXObjects(ext, isPreFX);
+                        }
+                    });
+                }
+            }
+
+            return menu;
         }
 
         private createAddCodeSnippetMenu(): controls.Menu {

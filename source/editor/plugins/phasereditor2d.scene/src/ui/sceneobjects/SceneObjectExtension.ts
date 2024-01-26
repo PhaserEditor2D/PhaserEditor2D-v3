@@ -14,6 +14,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         x: number;
         y: number;
         scene: Scene;
+        parent?: ISceneGameObject;
         extraData?: any;
     }
 

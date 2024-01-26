@@ -58,6 +58,11 @@ utils.makeHelpFile([
     "Phaser.Types.Textures.SpriteSheetConfig.margin",
     "Phaser.Types.Textures.SpriteSheetConfig.spacing",
 
+    "Phaser.FX.Glow.color",
+    "Phaser.FX.Glow.outerStrength",
+    "Phaser.FX.Glow.innerStrength",
+    "Phaser.FX.Glow.knockout",
+
     "Phaser.Loader.LoaderPlugin.spritesheet(url)",
 
     "Phaser.Loader.LoaderPlugin.svg(url)",
