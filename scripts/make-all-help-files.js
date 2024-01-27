@@ -62,6 +62,13 @@ utils.makeHelpFile([
     "Phaser.FX.Glow.outerStrength",
     "Phaser.FX.Glow.innerStrength",
     "Phaser.FX.Glow.knockout",
+    "Phaser.FX.Shadow.x",
+    "Phaser.FX.Shadow.y",
+    "Phaser.FX.Shadow.decay",
+    "Phaser.FX.Shadow.power",
+    "Phaser.FX.Shadow.color",
+    "Phaser.FX.Shadow.samples",
+    "Phaser.FX.Shadow.intensity",
 
     "Phaser.Loader.LoaderPlugin.spritesheet(url)",
 
