@@ -4,6 +4,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class FXObjectEditorSupport<T extends FXObject> extends GameObjectEditorSupport<T> {
 
+        private _cellRenderer: controls.viewers.ICellRenderer;
+
         constructor(extension: FXObjectExtension, obj: T, scene: Scene) {
             super(extension, obj, scene);
         }
@@ -58,7 +60,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
 
-            return new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_BUILD));
+            if (!this._cellRenderer) {
+
+                this._cellRenderer = new controls.viewers.IconImageCellRenderer(resources.getIcon(resources.ICON_FX));
+            }
+
+            return this._cellRenderer;
         }
 
         getObjectParent(): ISceneGameObject {

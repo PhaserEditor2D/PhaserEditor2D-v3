@@ -289,7 +289,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const fxES = fx.getEditorSupport();
 
-                    fxES.setLabel(nameMaker.makeName("fx_" + fxES.getLabel()));
+                    fxES.setLabel(nameMaker.makeName(fxES.getLabel() + "Fx"));
 
                     fxList.push(fx);
                 }

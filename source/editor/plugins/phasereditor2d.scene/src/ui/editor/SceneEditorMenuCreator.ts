@@ -82,6 +82,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     pipelineMenu.addAction({
                         text: "Add " + ext.getTypeName(),
+                        icon: ext.getIcon(),
                         enabled: parents.length > 0,
                         callback: () => {
 

@@ -16,7 +16,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 typeName: "Glow",
                 phaserTypeName: "Phaser.FX.Glow",
                 category: SCENE_OBJECT_FX_CATEGORY,
-                icon: resources.getIconDescriptor(resources.ICON_BUILD)
+                icon: resources.getIconDescriptor(resources.ICON_FX)
             });
         }
 
