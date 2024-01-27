@@ -272,29 +272,32 @@ namespace phasereditor2d.scene.ui.editor {
             const allParents = this._editor.getSelectedGameObjects()
                 .filter(obj => obj.getEditorSupport().isDisplayObject() || obj instanceof sceneobjects.FXObject)
                 .map(obj => obj instanceof sceneobjects.FXObject ? obj.getParent() : obj);
-                
+
             const parents = new Set(allParents);
 
             const scene = this._editor.getScene();
 
-            const fxList: sceneobjects.FXObject[] = [];
+            const op = new ui.editor.undo.SceneSnapshotOperation(this._editor, async () => {
 
-            for (const parent of parents) {
+                const fxList: sceneobjects.FXObject[] = [];
 
-                const fx = ext.createFXObject(scene, parent, isPreFX);
+                for (const parent of parents) {
 
-                parent.getEditorSupport().addObjectChild(fx);
+                    const fx = ext.createFXObject(scene, parent, isPreFX);
 
-                const fxES = fx.getEditorSupport();
+                    parent.getEditorSupport().addObjectChild(fx);
 
-                fxES.setLabel(nameMaker.makeName("fx_" + fxES.getLabel()));
+                    const fxES = fx.getEditorSupport();
 
-                fxList.push(fx);
-            }
+                    fxES.setLabel(nameMaker.makeName("fx_" + fxES.getLabel()));
 
-            this._editor.repaint();
-            this._editor.refreshOutline();
-            this._editor.setSelection(fxList);
+                    fxList.push(fx);
+                }
+
+                this._editor.setSelection(fxList);
+            });
+
+            this._editor.getUndoManager().add(op);
         }
 
         private onDragOver(e: DragEvent) {
