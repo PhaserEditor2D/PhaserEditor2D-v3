@@ -188,5 +188,16 @@
   "Phaser.Types.Animations.PlayAnimationConfig.hideOnComplete": "Should sprite.visible = false when the animation finishes?",
   "Phaser.Types.Animations.PlayAnimationConfig.showBeforeDelay": "If this animation has a delay, should it show the first frame immediately (true), or only after the delay (false)",
   "Phaser.Types.Animations.PlayAnimationConfig.startFrame": "The frame of the animation to start playback from.",
-  "Phaser.Types.Animations.PlayAnimationConfig.timeScale": "The time scale to be applied to playback of this animation."
+  "Phaser.Types.Animations.PlayAnimationConfig.timeScale": "The time scale to be applied to playback of this animation.",
+  "Phaser.FX.Glow.color": "The color of the glow as a number value.",
+  "Phaser.FX.Glow.outerStrength": "The strength of the glow outward from the edge of the Sprite.",
+  "Phaser.FX.Glow.innerStrength": "The strength of the glow inward from the edge of the Sprite.",
+  "Phaser.FX.Glow.knockout": "If `true` only the glow is drawn, not the texture itself.",
+  "Phaser.FX.Shadow.x": "The horizontal offset of the shadow effect.",
+  "Phaser.FX.Shadow.y": "The vertical offset of the shadow effect.",
+  "Phaser.FX.Shadow.decay": "The amount of decay for the shadow effect.",
+  "Phaser.FX.Shadow.power": "The power of the shadow effect.",
+  "Phaser.FX.Shadow.color": "The color of the shadow.",
+  "Phaser.FX.Shadow.samples": "The number of samples that the shadow effect will run for.\n\nThis should be an integer with a minimum value of 1 and a maximum of 12.",
+  "Phaser.FX.Shadow.intensity": "The intensity of the shadow effect."
 }

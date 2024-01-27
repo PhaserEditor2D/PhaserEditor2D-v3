@@ -58,18 +58,6 @@ utils.makeHelpFile([
     "Phaser.Types.Textures.SpriteSheetConfig.margin",
     "Phaser.Types.Textures.SpriteSheetConfig.spacing",
 
-    "Phaser.FX.Glow.color",
-    "Phaser.FX.Glow.outerStrength",
-    "Phaser.FX.Glow.innerStrength",
-    "Phaser.FX.Glow.knockout",
-    "Phaser.FX.Shadow.x",
-    "Phaser.FX.Shadow.y",
-    "Phaser.FX.Shadow.decay",
-    "Phaser.FX.Shadow.power",
-    "Phaser.FX.Shadow.color",
-    "Phaser.FX.Shadow.samples",
-    "Phaser.FX.Shadow.intensity",
-
     "Phaser.Loader.LoaderPlugin.spritesheet(url)",
 
     "Phaser.Loader.LoaderPlugin.svg(url)",
@@ -314,6 +302,17 @@ utils.makeHelpFile([
     "Phaser.Types.Animations.PlayAnimationConfig.startFrame",
     "Phaser.Types.Animations.PlayAnimationConfig.timeScale",
 
+    "Phaser.FX.Glow.color",
+    "Phaser.FX.Glow.outerStrength",
+    "Phaser.FX.Glow.innerStrength",
+    "Phaser.FX.Glow.knockout",
+    "Phaser.FX.Shadow.x",
+    "Phaser.FX.Shadow.y",
+    "Phaser.FX.Shadow.decay",
+    "Phaser.FX.Shadow.power",
+    "Phaser.FX.Shadow.color",
+    "Phaser.FX.Shadow.samples",
+    "Phaser.FX.Shadow.intensity",
 
 ], "../source/editor/plugins/phasereditor2d.resources/_res/phasereditor2d.scene/docs/phaser.json");
 
