@@ -1,10 +1,10 @@
-/// <reference path="./FXObjectExtension.ts" />
+/// <reference path="../FXObjectExtension.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class FXGlowExtension extends FXObjectExtension {
+    export class FXShadowExtension extends FXObjectExtension {
 
-        private static _instance = new FXGlowExtension();
+        private static _instance = new FXShadowExtension();
 
         static getInstance() {
 
@@ -13,8 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor() {
             super({
-                typeName: "Glow",
-                phaserTypeName: "Phaser.FX.Glow",
+                typeName: "Shadow",
+                phaserTypeName: "Phaser.FX.Shadow",
                 category: SCENE_OBJECT_FX_CATEGORY,
                 icon: resources.getIconDescriptor(resources.ICON_BUILD)
             });
@@ -22,12 +22,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         override getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
-            return new FXGlowCodeDOMBuilder();
+            return new FXShadowCodeDOMBuilder();
         }
 
         override createFXObject(scene: Scene, parent: ISceneGameObject, preFX: boolean) {
                 
-            const obj = new FXGlow(scene, parent, preFX);
+            const obj = new FXShadow(scene, parent, preFX);
 
             scene.removeGameObject(obj);
 
@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const data = args.data as IFXObjectData;
 
-            const obj = new FXGlow(args.scene, args.parent, data.preFX);
+            const obj = new FXShadow(args.scene, args.parent, data.preFX);
 
             args.scene.removeGameObject(obj);
 

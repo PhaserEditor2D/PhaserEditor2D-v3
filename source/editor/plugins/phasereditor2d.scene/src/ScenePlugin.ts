@@ -254,6 +254,7 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ScriptNodeExtension.getInstance(),
                 ui.sceneobjects.SpineExtension.getInstance(),
                 ui.sceneobjects.FXGlowExtension.getInstance(),
+                ui.sceneobjects.FXShadowExtension.getInstance(),
             );
 
             // scene plain object extensions
@@ -329,6 +330,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
                 page => new ui.sceneobjects.FXGlowSection(page),
+                page => new ui.sceneobjects.FXShadowSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
                 page => new ui.sceneobjects.SpineBoundsProviderSection(page),
                 page => new ui.sceneobjects.SpineAnimationSection(page),

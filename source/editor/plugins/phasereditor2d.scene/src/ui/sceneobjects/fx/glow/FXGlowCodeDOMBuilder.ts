@@ -1,4 +1,4 @@
-/// <reference path="./FXObjectCodeDOMBuilder.ts" />
+/// <reference path="../FXObjectCodeDOMBuilder.ts" />
 
 namespace phasereditor2d.scene.ui.sceneobjects {
 

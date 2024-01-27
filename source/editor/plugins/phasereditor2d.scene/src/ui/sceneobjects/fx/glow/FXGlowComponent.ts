@@ -1,4 +1,4 @@
-/// <reference path="./FXProperty.ts" />
+/// <reference path="../FXProperty.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class FXGlowComponent extends Component<FXGlow> {
@@ -24,8 +24,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const objES = obj.getEditorSupport();
 
             if (objES.isNestedPrefabInstance()) {
-
-                console.log("color1", FXGlowComponent.color.getValue(obj));
 
                 NumberColorPropertyCodeDomAdapter
                 this.buildSetObjectPropertyCodeDOM_FloatProperty(args,

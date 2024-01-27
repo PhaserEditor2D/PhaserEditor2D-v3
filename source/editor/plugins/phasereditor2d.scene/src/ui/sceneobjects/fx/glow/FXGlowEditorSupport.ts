@@ -1,4 +1,4 @@
-/// <reference path="./FXObjectEditorSupport.ts" />
+/// <reference path="../FXObjectEditorSupport.ts" />
 namespace phasereditor2d.scene.ui.sceneobjects {
 
         export class FXGlowEditorSupport extends FXObjectEditorSupport<FXGlow> {
