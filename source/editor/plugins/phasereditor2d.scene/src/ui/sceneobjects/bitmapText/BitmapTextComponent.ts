@@ -97,7 +97,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 BitmapTextComponent.dropShadowX,
                 BitmapTextComponent.dropShadowY,
                 BitmapTextComponent.dropShadowAlpha,
-                NumberColorPropertyCodeDomAdapter(BitmapTextComponent.dropShadowColor)
+                NumberColorPropertyCodeDomAdapter2(BitmapTextComponent.dropShadowColor)
             );
         }
     }

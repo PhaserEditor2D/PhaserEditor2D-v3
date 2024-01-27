@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         destroy(): boolean | void {
-            
+
             this.getObject().removeFromParent();
 
             super.destroy();
@@ -30,10 +30,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getObjectParent(): ISceneGameObject {
-            
+
             const parent = this.getObject().getParent();
 
             return parent;
+        }
+
+        writeJSON(data: IFXObjectData): void {
+
+            super.writeJSON(data);
+
+            data.preFX = this.getObject().isPreFX() || undefined;
         }
     }
 }

@@ -1297,7 +1297,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const initObjData = ext.createInitObjectDataFromChild(childData);
 
                 // creates an empty object
-                const sprite = maker.createObject(initObjData);
+                const sprite = maker.createObject(initObjData, undefined, parent);
 
                 if (sprite) {
 

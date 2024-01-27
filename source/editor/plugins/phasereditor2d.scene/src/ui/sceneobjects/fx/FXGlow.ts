@@ -12,9 +12,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this._phaserFX = pipeline.addGlow();
 
-            parent.getEditorSupport().addObjectChild(this);
-
             this._editorSupport = new FXGlowEditorSupport(this, scene);
+        }
+
+        getPhaserFX(): Phaser.FX.Glow {
+            
+            return super.getPhaserFX() as Phaser.FX.Glow;
         }
 
         getEditorSupport() {

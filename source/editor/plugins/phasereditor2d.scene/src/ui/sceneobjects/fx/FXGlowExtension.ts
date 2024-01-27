@@ -20,14 +20,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             });
         }
 
-        override createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
-
-            throw new Error("Method not supported.");
-        }
-
         override getCodeDOMBuilder(): GameObjectCodeDOMBuilder {
 
-            throw new Error("Method not implemented.");
+            return new FXGlowCodeDOMBuilder();
         }
 
         override createFXObject(scene: Scene, parent: ISceneGameObject, preFX: boolean) {
@@ -35,6 +30,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const obj = new FXGlow(scene, parent, preFX);
 
             scene.removeGameObject(obj);
+
+            return obj;
+        }
+
+        override createGameObjectWithData(args: ICreateWithDataArgs): ISceneGameObject {
+
+            const data = args.data as IFXObjectData;
+
+            const obj = new FXGlow(args.scene, args.parent, data.preFX);
+
+            args.scene.removeGameObject(obj);
+
+            obj.getEditorSupport().readJSON(args.data);
 
             return obj;
         }

@@ -25,11 +25,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, ShapeComponent.isFilled);
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, NumberColorPropertyCodeDomAdapter(ShapeComponent.fillColor));
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, NumberColorPropertyCodeDomAdapter2(ShapeComponent.fillColor));
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args, ShapeComponent.fillAlpha);
 
             this.buildSetObjectPropertyCodeDOM_BooleanProperty(args, ShapeComponent.isStroked);
-            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, NumberColorPropertyCodeDomAdapter(ShapeComponent.strokeColor));
+            this.buildSetObjectPropertyCodeDOM_FloatProperty(args, NumberColorPropertyCodeDomAdapter2(ShapeComponent.strokeColor));
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args, ShapeComponent.strokeAlpha);
             this.buildSetObjectPropertyCodeDOM_FloatProperty(args, ShapeComponent.lineWidth);
         }

@@ -68,8 +68,11 @@ namespace phasereditor2d.scene.ui.editor {
                 .getExtensions<sceneobjects.FXObjectExtension>(sceneobjects.SceneGameObjectExtension.POINT_ID)
                 .filter(e => e instanceof sceneobjects.FXObjectExtension) as sceneobjects.FXObjectExtension[];
 
-            const parents = this._editor.getSelectedGameObjects()
-                .filter(obj => obj.getEditorSupport().isDisplayObject());
+            const selection = this._editor.getSelectedGameObjects();
+
+            const parents = selection
+                .filter(obj => obj.getEditorSupport().isDisplayObject()
+                    || obj instanceof sceneobjects.FXObject);
 
             for (const ext of exts) {
 

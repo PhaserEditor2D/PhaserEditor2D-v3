@@ -10,12 +10,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         constructor(obj: FXGlow) {
             super(obj, [
-                FXGlowComponent.color
+                FXGlowComponent.color,
+                FXGlowComponent.outerStrength,
+                FXGlowComponent.innerStrength,
+                FXGlowComponent.knockout
             ]);
         }
 
         buildSetObjectPropertiesCodeDOM(args: ISetObjectPropertiesCodeDOMArgs): void {
-            throw new Error("Method not implemented.");
+
+            const obj = this.getObject();
+
+            const objES = obj.getEditorSupport();
+
+            if (objES.isNestedPrefabInstance()) {
+
+                console.log("color1", FXGlowComponent.color.getValue(obj));
+
+                NumberColorPropertyCodeDomAdapter
+                this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
+                    NumberColorPropertyCodeDomAdapter2(FXGlowComponent.color),
+                    FXGlowComponent.outerStrength,
+                    FXGlowComponent.innerStrength,
+                );
+
+                this.buildSetObjectPropertyCodeDOM_BooleanProperty(args,
+                    FXGlowComponent.knockout
+                );
+            }
         }
     }
 }

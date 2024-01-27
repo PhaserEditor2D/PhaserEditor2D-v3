@@ -15,6 +15,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export interface ICreateWithDataArgs {
 
         scene: Scene;
+        parent: ISceneGameObject;
         data: json.IObjectData;
     }
 

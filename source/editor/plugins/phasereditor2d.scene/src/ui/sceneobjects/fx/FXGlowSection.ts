@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 3);
 
-            this.createPropertyColorRow(comp, FXGlowComponent.color, true);
+            this.createPropertyColorRow(comp, FXGlowComponent.color, false);
 
             this.createNumberProperty(comp, FXGlowComponent.outerStrength);
 

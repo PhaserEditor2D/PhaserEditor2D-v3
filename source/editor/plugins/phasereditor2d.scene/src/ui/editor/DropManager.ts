@@ -244,7 +244,7 @@ namespace phasereditor2d.scene.ui.editor {
         }
 
         private buildNameMaker() {
-            
+
             const scene = this._editor.getScene();
 
             const nameMaker = new ide.utils.NameMaker(obj => {
@@ -269,8 +269,11 @@ namespace phasereditor2d.scene.ui.editor {
 
             const nameMaker = this.buildNameMaker();
 
-            const parents = this._editor.getSelectedGameObjects()
-                .filter(obj => obj.getEditorSupport().isDisplayObject());
+            const allParents = this._editor.getSelectedGameObjects()
+                .filter(obj => obj.getEditorSupport().isDisplayObject() || obj instanceof sceneobjects.FXObject)
+                .map(obj => obj instanceof sceneobjects.FXObject ? obj.getParent() : obj);
+                
+            const parents = new Set(allParents);
 
             const scene = this._editor.getScene();
 
@@ -279,6 +282,8 @@ namespace phasereditor2d.scene.ui.editor {
             for (const parent of parents) {
 
                 const fx = ext.createFXObject(scene, parent, isPreFX);
+
+                parent.getEditorSupport().addObjectChild(fx);
 
                 const fxES = fx.getEditorSupport();
 
