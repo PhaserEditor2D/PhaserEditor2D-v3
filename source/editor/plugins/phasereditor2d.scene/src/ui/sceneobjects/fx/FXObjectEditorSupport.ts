@@ -8,6 +8,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(extension, obj, scene);
         }
 
+        static syncEffectsOrder(obj: ISceneGameObject) {
+
+            const sprite = obj as unknown as Phaser.GameObjects.Image;
+
+            const objES = obj.getEditorSupport();
+
+            const preFXs = objES.getObjectChildren()
+                .filter(obj => obj instanceof FXObject && obj.isPreFX())
+                .map((obj: FXObject) => obj.getPhaserFX());
+
+            const postFXs = objES.getObjectChildren()
+                .filter(obj => obj instanceof FXObject && !obj.isPreFX())
+                .map((obj: FXObject) => obj.getPhaserFX());
+
+            sprite.preFX.clear();
+            sprite.postFX.clear();
+
+            for (const fx of preFXs) {
+
+                sprite.preFX.add(fx);
+            }
+
+            for (const fx of postFXs) {
+
+                sprite.postFX.add(fx);
+            }
+        }
+
         destroy(): boolean | void {
 
             const obj = this.getObject();

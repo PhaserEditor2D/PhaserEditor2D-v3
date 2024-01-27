@@ -158,6 +158,21 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             sceneobjects.sortGameObjects(sel);
 
+            const objectsToSyncFxSet: Set<sceneobjects.ISceneGameObject> = new Set();
+
+            for (const obj of sel) {
+
+                if (obj instanceof sceneobjects.FXObject) {
+
+                    objectsToSyncFxSet.add(obj.getParent());
+                }
+            }
+
+            for(const obj of objectsToSyncFxSet) {
+
+                sceneobjects.FXObjectEditorSupport.syncEffectsOrder(obj);
+            }
+
             this.getEditor().repaint();
         }
     }
