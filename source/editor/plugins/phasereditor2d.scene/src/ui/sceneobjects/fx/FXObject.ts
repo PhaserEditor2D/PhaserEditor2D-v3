@@ -15,6 +15,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract getEditorSupport(): GameObjectEditorSupport<ISceneGameObject>;
 
+        removeFX() {
+
+            const pipeline = this.getPipeline();
+
+            pipeline.remove(this._phaserFX);
+
+            this._phaserFX = undefined;
+        }
+
         getPhaserFX() {
             
             return this._phaserFX;

@@ -10,7 +10,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         destroy(): boolean | void {
 
-            this.getObject().removeFromParent();
+            const obj = this.getObject();
+
+            obj.removeFX();
+
+            obj.removeFromParent();
 
             super.destroy();
         }
