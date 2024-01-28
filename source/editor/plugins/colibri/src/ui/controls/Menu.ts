@@ -93,6 +93,7 @@ namespace colibri.ui.controls {
         create(x: number, y: number, modal?: boolean, openLeft?: boolean) {
 
             if (this._items.length === 0) {
+
                 return;
             }
 
@@ -305,6 +306,11 @@ namespace colibri.ui.controls {
         createWithEvent(e: MouseEvent, openLeft = false, alignToElement = false) {
 
             e.preventDefault();
+            
+            if (Menu._activeMenu) {
+                
+                Menu._activeMenu.closeAll();
+            }
 
             let x = e.clientX;
             let y = e.clientY;
