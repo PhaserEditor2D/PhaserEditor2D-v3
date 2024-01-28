@@ -31,7 +31,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (objES.isNestedPrefabInstance()) {
 
-                NumberColorPropertyCodeDomAdapter
                 this.buildSetObjectPropertyCodeDOM_FloatProperty(args,
                     FXShadowComponent.x,
                     FXShadowComponent.y,
