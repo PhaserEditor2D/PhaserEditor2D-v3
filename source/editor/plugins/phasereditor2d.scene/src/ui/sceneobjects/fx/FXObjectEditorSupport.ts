@@ -24,13 +24,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 .filter(obj => obj instanceof FXObject && !obj.isPreFX())
                 .map((obj: FXObject) => obj.getPhaserFX());
 
-            sprite.preFX.clear();
-            sprite.postFX.clear();
+            if (sprite.preFX) {
 
-            for (const fx of preFXs) {
+                sprite.preFX.clear();
 
-                sprite.preFX.add(fx);
+                for (const fx of preFXs) {
+
+                    sprite.preFX.add(fx);
+                }
             }
+
+            sprite.postFX.clear();
 
             for (const fx of postFXs) {
 

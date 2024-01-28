@@ -70,9 +70,25 @@ namespace phasereditor2d.scene.ui.editor {
 
             const selection = this._editor.getSelectedGameObjects();
 
-            const parents = selection
-                .filter(obj => obj.getEditorSupport().isDisplayObject()
-                    || obj instanceof sceneobjects.FXObject);
+
+            const parents = selection.map(obj => {
+
+                if (obj.getEditorSupport().isDisplayObject()) {
+
+                    return obj;
+                }
+
+                if (obj instanceof sceneobjects.FXObject) {
+
+                    return obj.getParent();
+                }
+            });
+
+            const withPreFX = parents.filter(obj => (obj as unknown as Phaser.GameObjects.Image).preFX);
+            const withPostFX = parents.filter(obj => (obj as unknown as Phaser.GameObjects.Image).postFX);
+
+            const allHasPreFX = parents.length === withPreFX.length;
+            const allHasPostFX = parents.length === withPostFX.length;
 
             for (const ext of exts) {
 
@@ -80,10 +96,12 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const isPreFX = pipelineMenu === preMenu;
 
+                    let enabled = isPreFX && allHasPreFX || !isPreFX && allHasPostFX;
+
                     pipelineMenu.addAction({
                         text: "Add " + ext.getTypeName(),
                         icon: ext.getIcon(),
-                        enabled: parents.length > 0,
+                        enabled,
                         callback: () => {
 
                             this._editor.getDropManager().addFXObjects(ext, isPreFX);
