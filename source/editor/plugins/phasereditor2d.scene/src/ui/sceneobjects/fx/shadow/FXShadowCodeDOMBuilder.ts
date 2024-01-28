@@ -18,10 +18,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const fx = obj.getPhaserFX();
 
-            // call.argFloat(fx.color);
-            // call.argFloat(fx.outerStrength);
-            // call.argFloat(fx.innerStrength);
-            // call.argBool(fx.knockout as any);
+            call.argFloat(fx.x);
+            call.argFloat(fx.y);
+            call.argFloat(fx.decay);
+            call.argFloat(fx.power);
+            call.argFloat(fx.color);
+            call.argFloat(fx.samples);
+            call.argFloat(fx.intensity);
 
             return call;
         }
