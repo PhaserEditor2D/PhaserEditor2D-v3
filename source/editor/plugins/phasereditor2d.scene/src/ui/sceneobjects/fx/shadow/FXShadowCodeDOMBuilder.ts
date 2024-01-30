@@ -1,5 +1,3 @@
-/// <reference path="../FXObjectCodeDOMBuilder.ts" />
-
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
