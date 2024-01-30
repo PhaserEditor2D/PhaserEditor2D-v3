@@ -329,6 +329,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
+                page => new ui.sceneobjects.FXSection(page),
                 page => new ui.sceneobjects.FXGlowSection(page),
                 page => new ui.sceneobjects.FXShadowSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
