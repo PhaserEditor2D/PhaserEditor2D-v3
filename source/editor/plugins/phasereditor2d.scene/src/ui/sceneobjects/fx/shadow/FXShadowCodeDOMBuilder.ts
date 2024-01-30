@@ -4,19 +4,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
-    export class FXShadowCodeDOMBuilder extends FXObjectCodeDOMBuilder {
+    export class FXShadowCodeDOMBuilder extends FXObjectCodeDOMBuilder<Phaser.FX.Shadow> {
 
-        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
+        constructor() {
+            super("Shadow");
+        }
 
-            const obj = args.obj as FXShadow;
-
-            const pipeline = obj.isPreFX()? "preFX" : "postFX";
-
-            const varname = `${args.parentVarName}.${pipeline}`;
-
-            const call = new code.MethodCallCodeDOM("addShadow", varname);
-
-            const fx = obj.getPhaserFX();
+        buildAddFXMethodArgs(call: code.MethodCallCodeDOM, fx: Phaser.FX.Shadow): void {
 
             call.argFloat(fx.x);
             call.argFloat(fx.y);
@@ -25,8 +19,6 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             call.argFloat(fx.color);
             call.argFloat(fx.samples);
             call.argFloat(fx.intensity);
-
-            return call;
         }
     }
 }

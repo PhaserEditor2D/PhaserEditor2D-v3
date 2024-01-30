@@ -1,8 +1,35 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export abstract class FXObjectCodeDOMBuilder extends GameObjectCodeDOMBuilder {
-        
-        abstract buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM;
+    import code = core.code;
+
+    export abstract class FXObjectCodeDOMBuilder<T extends Phaser.FX.Controller> extends GameObjectCodeDOMBuilder {
+
+        private _fxName: string;
+
+        constructor(fxName: string) {
+            super();
+
+            this._fxName = fxName;
+        }
+
+        abstract buildAddFXMethodArgs(call: code.MethodCallCodeDOM, fx: T): void;
+
+        buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
+
+            const obj = args.obj as FXObject;
+
+            const pipeline = obj.isPreFX()? "preFX" : "postFX";
+
+            const varname = `${args.parentVarName}.${pipeline}`;
+
+            const call = new code.MethodCallCodeDOM("add" + this._fxName, varname);
+
+            const fx = obj.getPhaserFX() as T;
+
+            this.buildAddFXMethodArgs(call, fx);
+
+            return call;
+        }
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void {
             
