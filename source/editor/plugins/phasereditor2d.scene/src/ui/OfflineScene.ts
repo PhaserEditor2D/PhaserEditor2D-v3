@@ -10,12 +10,20 @@ namespace phasereditor2d.scene.ui {
 
                 const scene = new OfflineScene(data);
 
+                const canvasManager = ScenePlugin.getInstance().getCanvasManager();
+
+                const canvas = canvasManager.takeCanvas();
+
                 scene.setCallback(() => {
+                    
                     resolve(scene);
+
+                    canvasManager.releaseCanvas(canvas);
                 });
 
                 const game = new Phaser.Game({
-                    type: Phaser.CANVAS,
+                    type: Phaser.WEBGL,
+                    canvas,
                     width: 1,
                     height: 1,
                     audio: {
@@ -46,6 +54,7 @@ namespace phasereditor2d.scene.ui {
         }
 
         setCallback(callback: () => void) {
+
             this._callback = callback;
         }
 
