@@ -12,11 +12,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this._fxName = fxName;
         }
 
-        abstract buildAddFXMethodArgs(call: code.MethodCallCodeDOM, fx: T): void;
+        abstract buildAddFXMethodArgs(call: code.MethodCallCodeDOM, fx: T, args: IBuildObjectFactoryCodeDOMArgs): void;
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
-
-            const scene = args.obj.scene as Scene;
 
             const obj = args.obj as FXObject;
 
@@ -29,7 +27,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const fx = obj.getPhaserFX() as T;
 
-            this.buildAddFXMethodArgs(call, fx);
+            this.buildAddFXMethodArgs(call, fx, args);
 
             return call;
         }

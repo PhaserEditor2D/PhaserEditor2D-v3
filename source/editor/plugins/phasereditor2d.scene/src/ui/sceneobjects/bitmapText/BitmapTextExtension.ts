@@ -128,16 +128,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 
+            let result = [];
+
             const font = args.serializer.read(BitmapTextComponent.font.name) as string;
 
             const asset = args.finder.findAssetPackItem(font);
 
             if (asset instanceof pack.core.BitmapFontAssetPackItem) {
 
-                return [asset];
+                result = [asset];
             }
 
-            return [];
+            // Maybe it contains FX objects depending on textures
+            const childrenAssets = await ContainerExtension.getAssetsFromNestedData(args);
+
+            return [...result, ...childrenAssets];
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {

@@ -43,7 +43,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 
-            return [];
+           // Maybe it contains FX objects depending on textures
+           const childrenAssets = await ContainerExtension.getAssetsFromNestedData(args);
+
+           return childrenAssets;
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {

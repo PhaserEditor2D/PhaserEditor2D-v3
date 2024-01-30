@@ -81,7 +81,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return layer;
         }
 
-        getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 
             return ContainerExtension.getAssetsFromNestedData(args);
         }

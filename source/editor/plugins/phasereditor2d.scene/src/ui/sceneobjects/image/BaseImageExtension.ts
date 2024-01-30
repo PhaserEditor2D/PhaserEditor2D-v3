@@ -4,7 +4,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         abstract getCodeDOMBuilder(): GameObjectCodeDOMBuilder;
 
-        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
+        static async getAssetsFromObjectWithTextureData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
 
             const { key } = args.serializer.read(TextureComponent.texture.name, {}) as ITextureKeys;
 
@@ -18,6 +18,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             return [];
+        }
+
+        async getAssetsFromObjectData(args: IGetAssetsFromObjectArgs): Promise<any[]> {
+
+            const assets1 = await BaseImageExtension.getAssetsFromObjectWithTextureData(args);
+
+            // Maybe it contains FX objects depending on textures
+            const assets2 = await ContainerExtension.getAssetsFromNestedData(args);
+
+            return [...assets1, ...assets2];
         }
 
         static isImageOrImageFrameAsset(data: any) {
