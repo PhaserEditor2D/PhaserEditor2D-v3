@@ -16,13 +16,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         buildCreateObjectWithFactoryCodeDOM(args: IBuildObjectFactoryCodeDOMArgs): core.code.MethodCallCodeDOM {
 
+            const scene = args.obj.scene as Scene;
+
             const obj = args.obj as FXObject;
 
-            const pipeline = obj.isPreFX()? "preFX" : "postFX";
+            const pipeline = obj.isPreFX() ? "preFX" : "postFX";
 
             const varname = `${args.parentVarName}.${pipeline}`;
 
             const call = new code.MethodCallCodeDOM("add" + this._fxName, varname);
+            call.setOptionalContext(true);
 
             const fx = obj.getPhaserFX() as T;
 
@@ -32,15 +35,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildCreatePrefabInstanceCodeDOM(args: IBuildPrefabConstructorCodeDOMArgs): void {
-            
+
             throw new Error("FX prefab not supported.");
         }
-        
+
         buildPrefabConstructorDeclarationCodeDOM(args: IBuildPrefabConstructorDeclarationCodeDOM): void {
 
             throw new Error("FX prefab not supported.");
         }
-        
+
         buildPrefabConstructorDeclarationSupperCallCodeDOM(args: IBuildPrefabConstructorDeclarationSupperCallCodeDOMArgs): void {
 
             throw new Error("FX prefab not supported.");
