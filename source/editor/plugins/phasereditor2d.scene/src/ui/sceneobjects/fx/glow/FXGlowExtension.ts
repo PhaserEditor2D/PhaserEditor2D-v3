@@ -38,7 +38,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const data = args.data as IFXObjectData;
 
-            const obj = new FXGlow(args.scene, args.parent, data.preFX);
+            const obj = new FXGlow(args.scene, args.parent, data.preFX ?? false);
 
             args.scene.removeGameObject(obj);
 

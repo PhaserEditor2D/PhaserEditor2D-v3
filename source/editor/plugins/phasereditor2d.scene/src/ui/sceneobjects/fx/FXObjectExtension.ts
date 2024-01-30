@@ -17,6 +17,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return [];
         }
 
+        createInitObjectDataFromChild(childData: core.json.IObjectData): core.json.IObjectData {
+            
+            const data = super.createInitObjectDataFromChild(childData) as any;
+
+            data.preFX = (childData as any).preFX;
+
+            return data;
+        }
+
         abstract createFXObject(scene: Scene, parent: ISceneGameObject, preFX: boolean): FXObject;
     }
 }
