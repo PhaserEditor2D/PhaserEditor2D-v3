@@ -233,6 +233,7 @@ namespace colibri.ui.controls {
             displayName: "Light",
             classList: ["light"],
             dark: false,
+            sceneBackground: "#8e8e8e",
             viewerSelectionBackground: "#4242ff",
             viewerSelectionForeground: "#f0f0f0",
             viewerForeground: "#2f2f2f",
@@ -243,6 +244,7 @@ namespace colibri.ui.controls {
             displayName: "Dark",
             classList: ["dark"],
             dark: true,
+            sceneBackground: "#3f3f3f",
             viewerSelectionBackground: "#f0a050", // "#101ea2",//"#8f8f8f",
             viewerSelectionForeground: "#0e0e0e",
             viewerForeground: "#f0f0f0",
@@ -251,15 +253,6 @@ namespace colibri.ui.controls {
         static DEFAULT_THEME = Controls.DARK_THEME;
 
         static _theme: ITheme = Controls.DEFAULT_THEME;
-
-        static switchTheme(): ITheme {
-
-            const newTheme = this._theme === this.LIGHT_THEME ? this.DARK_THEME : this.LIGHT_THEME;
-
-            this.setTheme(newTheme);
-
-            return newTheme;
-        }
 
         static setTheme(theme: ITheme) {
 

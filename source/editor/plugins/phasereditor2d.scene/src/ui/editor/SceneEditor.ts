@@ -316,6 +316,18 @@ namespace phasereditor2d.scene.ui.editor {
             return this._canvasContainer;
         }
 
+        private registerThemeListener() {
+
+            colibri.Platform.getWorkbench().eventThemeChanged.addListener((theme: controls.ITheme) => {   
+
+                const color = Phaser.Display.Color.HexStringToColor(theme.sceneBackground);
+
+                this._scene.renderer.config["backgroundColor"] = color;
+
+                this.repaint();
+            });
+        }
+
         private createGame() {
 
             this._scene = new Scene(this);
@@ -323,14 +335,14 @@ namespace phasereditor2d.scene.ui.editor {
             this._game = new Phaser.Game({
                 type: ScenePlugin.DEFAULT_EDITOR_CANVAS_CONTEXT,
                 canvas: this._gameCanvas,
-                // backgroundColor: "#8e8e8e",
                 scale: {
                     mode: Phaser.Scale.NONE
                 },
                 // resolution: window.devicePixelRatio,
+                backgroundColor: controls.Controls.getTheme().sceneBackground,
                 render: {
                     pixelArt: ScenePlugin.DEFAULT_EDITOR_PIXEL_ART,
-                    transparent: true
+                    transparent: false
                 },
                 audio: {
                     noAudio: true
@@ -346,6 +358,7 @@ namespace phasereditor2d.scene.ui.editor {
                 scene: this._scene,
             });
 
+
             this._sceneRead = false;
 
             this._gameBooted = false;
@@ -354,6 +367,8 @@ namespace phasereditor2d.scene.ui.editor {
                 // the scene is created just at this moment!
                 this.onGameBoot();
             };
+
+            this.registerThemeListener();
         }
 
         private async updateTitleIcon(force = false) {
