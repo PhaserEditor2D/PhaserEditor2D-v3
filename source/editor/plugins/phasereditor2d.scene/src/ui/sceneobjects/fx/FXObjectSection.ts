@@ -1,9 +1,9 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
-    export class FXSection extends SceneGameObjectSection<FXObject> {
+    export class FXObjectSection extends SceneGameObjectSection<FXObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.FXSection", "FX", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.FXObjectSection", "FX", false, true);
         }
 
         createForm(parent: HTMLDivElement): void {
@@ -23,15 +23,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     value: "postFX"
                 }
             ], item => {
-                    
-                const op = new editor.undo.SceneSnapshotOperation(this.getEditor(), async () => {  
-                    
+
+                const op = new editor.undo.SceneSnapshotOperation(this.getEditor(), async () => {
+
                     const isPreFX = item.value === "preFX";
 
                     const syncObjects = new Set<ISceneGameObject>();
-    
-                    for(const obj of this.getSelection()) {
-    
+
+                    for (const obj of this.getSelection()) {
+
                         if (obj.isPreFX() !== isPreFX) {
 
                             obj.setPreFX(isPreFX);
@@ -40,7 +40,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                         }
                     }
 
-                    for(const obj  of syncObjects) {
+                    for (const obj of syncObjects) {
 
                         FXObjectEditorSupport.syncEffects(obj);
                     }

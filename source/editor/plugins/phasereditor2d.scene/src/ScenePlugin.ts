@@ -29,7 +29,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
 
     export class ScenePlugin extends colibri.Plugin {
-
+        
         private static _instance = new ScenePlugin();
 
         static DEFAULT_CANVAS_CONTEXT = Phaser.WEBGL;
@@ -298,6 +298,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TintSection(page),
                 page => new ui.sceneobjects.TintSingleSection(page),
                 page => new ui.sceneobjects.SizeSection(page),
+                page => new ui.sceneobjects.EffectsSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
@@ -329,7 +330,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
-                page => new ui.sceneobjects.FXSection(page),
+                page => new ui.sceneobjects.FXObjectSection(page),
                 page => new ui.sceneobjects.FXGlowSection(page),
                 page => new ui.sceneobjects.FXShadowSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
@@ -543,6 +544,15 @@ namespace phasereditor2d.scene {
                     ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
         }
 
+        getFXExtensions() {
+
+            const exts = colibri.Platform
+                .getExtensions<ui.sceneobjects.FXObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID)
+                .filter(e => e instanceof ui.sceneobjects.FXObjectExtension) as ui.sceneobjects.FXObjectExtension[];
+
+            return exts;
+        }
+        
         getLayoutExtensions() {
 
             return colibri.Platform

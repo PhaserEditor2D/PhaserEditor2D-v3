@@ -36,13 +36,30 @@ namespace colibri.ui.controls.properties {
             label.innerText = text;
 
             if (tooltip) {
-                
+
                 Tooltip.tooltip(label, tooltip);
             }
 
             parent.appendChild(label);
 
             return label;
+        }
+
+        createLink(parent: HTMLElement, textOrIcon: string, callback: (e?: MouseEvent) => void) {
+
+            const btn = document.createElement("a");
+            btn.href = "#";
+
+            btn.innerText = textOrIcon;
+
+            btn.addEventListener("click", e => callback(e));
+
+            if (parent) {
+
+                parent.appendChild(btn);
+            }
+
+            return btn;
         }
 
         createButton(parent: HTMLElement, textOrIcon: string | IImage, callback: (e?: MouseEvent) => void) {

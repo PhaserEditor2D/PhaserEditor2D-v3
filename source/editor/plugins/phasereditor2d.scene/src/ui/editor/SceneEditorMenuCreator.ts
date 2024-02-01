@@ -64,12 +64,9 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(preMenu);
             menu.addMenu(postMenu);
 
-            const exts = colibri.Platform
-                .getExtensions<sceneobjects.FXObjectExtension>(sceneobjects.SceneGameObjectExtension.POINT_ID)
-                .filter(e => e instanceof sceneobjects.FXObjectExtension) as sceneobjects.FXObjectExtension[];
+            const exts = ScenePlugin.getInstance().getFXExtensions();
 
             const selection = this._editor.getSelectedGameObjects();
-
 
             const parents = selection.map(obj => {
 
