@@ -59,10 +59,6 @@ namespace phasereditor2d.scene.ui.editor {
         private createFXMenu(): controls.Menu {
 
             const menu = new controls.Menu("FX");
-            const preMenu = new controls.Menu("Pre FX");
-            const postMenu = new controls.Menu("Post FX");
-            menu.addMenu(preMenu);
-            menu.addMenu(postMenu);
 
             const exts = ScenePlugin.getInstance().getFXExtensions();
 

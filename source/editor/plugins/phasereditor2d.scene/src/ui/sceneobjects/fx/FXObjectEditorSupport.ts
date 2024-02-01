@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             super(extension, obj, scene);
         }
 
-        static syncEffects(obj: ISceneGameObject) {
+        static syncEffectsOrder(obj: ISceneGameObject) {
 
             const sprite = obj as unknown as Phaser.GameObjects.Image;
 

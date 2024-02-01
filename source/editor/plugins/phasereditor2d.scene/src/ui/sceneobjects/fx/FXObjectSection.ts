@@ -10,8 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const comp = this.createGridElement(parent, 2);
 
-            this.createLabel(comp, "Pipeline", "The pipeline.");
-
+            this.createLabel(comp, "Change Pipeline", "Change the FX to a different pipeline.");
 
             const btn = this.createMenuButton(comp, "", () => [
                 {
@@ -22,28 +21,30 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     name: "Post FX",
                     value: "postFX"
                 }
-            ], item => {
+            ], value => {
 
                 const op = new editor.undo.SceneSnapshotOperation(this.getEditor(), async () => {
 
-                    const isPreFX = item.value === "preFX";
+                    const ids = this.getSelection()
+                        .map(obj => obj.getEditorSupport().getId());
+
+                    const isPreFX = value === "preFX";
 
                     const syncObjects = new Set<ISceneGameObject>();
 
                     for (const obj of this.getSelection()) {
 
-                        if (obj.isPreFX() !== isPreFX) {
+                        obj.setPreFX(isPreFX);
 
-                            obj.setPreFX(isPreFX);
-
-                            syncObjects.add(obj.getParent());
-                        }
+                        syncObjects.add(obj.getParent());
                     }
 
                     for (const obj of syncObjects) {
 
-                        FXObjectEditorSupport.syncEffects(obj);
+                        this.recreateEffects(obj);
                     }
+
+                    this.getEditor().getSelectionManager().setSelectionByIds(ids);
                 });
 
                 this.getEditor().getUndoManager().add(op);
@@ -55,6 +56,29 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 btn.textContent = preFX ? "Pre FX" : "Post FX";
             });
+        }
+
+        private recreateEffects(obj: ISceneGameObject) {
+
+            const objES = obj.getEditorSupport();
+
+            const data: any = {};
+
+            objES.writeJSON(data);
+
+            const img = obj as any as Phaser.GameObjects.Image;
+
+            if (img.preFX) {
+
+                img.preFX.clear();
+            }
+
+            if (img.postFX) {
+
+                img.postFX.clear();
+            }
+
+            objES.readJSON(data);
         }
 
         canEdit(obj: any, n: number): boolean {

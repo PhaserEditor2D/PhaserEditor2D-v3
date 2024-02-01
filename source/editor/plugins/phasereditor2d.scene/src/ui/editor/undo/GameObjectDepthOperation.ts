@@ -170,7 +170,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             for(const obj of objectsToSyncFxSet) {
 
-                sceneobjects.FXObjectEditorSupport.syncEffects(obj);
+                sceneobjects.FXObjectEditorSupport.syncEffectsOrder(obj);
             }
 
             this.getEditor().repaint();

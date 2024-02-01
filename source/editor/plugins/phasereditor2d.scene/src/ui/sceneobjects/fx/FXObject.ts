@@ -25,7 +25,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getPhaserFX() {
-            
+
             return this._phaserFX;
         }
 
