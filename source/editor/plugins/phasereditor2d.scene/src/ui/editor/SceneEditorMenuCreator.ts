@@ -84,30 +84,19 @@ namespace phasereditor2d.scene.ui.editor {
                 }
             });
 
-            const withPreFX = parents.filter(obj => (obj as unknown as Phaser.GameObjects.Image).preFX);
-            const withPostFX = parents.filter(obj => (obj as unknown as Phaser.GameObjects.Image).postFX);
+            const enabled = parents.length > 0;
 
-            const allHasPreFX = parents.length === withPreFX.length;
-            const allHasPostFX = parents.length === withPostFX.length;
+            for(const ext of exts) {
 
-            for (const ext of exts) {
+                menu.addAction({
+                    text: "Add " + ext.getTypeName(),
+                    icon: ext.getIcon(),
+                    enabled,
+                    callback: () => {
 
-                for (const pipelineMenu of [preMenu, postMenu]) {
-
-                    const isPreFX = pipelineMenu === preMenu;
-
-                    let enabled = isPreFX && allHasPreFX || !isPreFX && allHasPostFX;
-
-                    pipelineMenu.addAction({
-                        text: "Add " + ext.getTypeName(),
-                        icon: ext.getIcon(),
-                        enabled,
-                        callback: () => {
-
-                            this._editor.getDropManager().addFXObjects(ext, isPreFX);
-                        }
-                    });
-                }
+                        this._editor.getDropManager().addFXObjects(ext);
+                    }
+                });
             }
 
             return menu;
