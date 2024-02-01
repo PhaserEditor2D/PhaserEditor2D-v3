@@ -12,8 +12,42 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLabel(comp, "Pipeline", "The pipeline.");
 
-            const btn = this.createButton(comp, "", () => { });
 
+            const btn = this.createMenuButton(comp, "", () => [
+                {
+                    name: "Pre FX",
+                    value: "preFX"
+                },
+                {
+                    name: "Post FX",
+                    value: "postFX"
+                }
+            ], item => {
+                    
+                const op = new editor.undo.SceneSnapshotOperation(this.getEditor(), async () => {  
+                    
+                    const isPreFX = item.value === "preFX";
+
+                    const syncObjects = new Set<ISceneGameObject>();
+    
+                    for(const obj of this.getSelection()) {
+    
+                        if (obj.isPreFX() !== isPreFX) {
+
+                            obj.setPreFX(isPreFX);
+
+                            syncObjects.add(obj.getParent());
+                        }
+                    }
+
+                    for(const obj  of syncObjects) {
+
+                        FXObjectEditorSupport.syncEffects(obj);
+                    }
+                });
+
+                this.getEditor().getUndoManager().add(op);
+            });
 
             this.addUpdater(() => {
 

@@ -41,6 +41,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return this._preFX;
         }
 
+        setPreFX(preFX: boolean) {
+
+            this._preFX = preFX;
+        }
+
         getParent() {
 
             return this._parent;
