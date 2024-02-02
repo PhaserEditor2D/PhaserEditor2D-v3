@@ -8,7 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         label?: string,
         tooltip?: string,
         local: boolean = false,
-        afterSetValue?: (obj: any) => void): IEnumProperty<any, any> {
+        afterSetValue?: (obj: any) => void,
+        valueToCodeConverter?: IValueToCodeConverter): IEnumProperty<any, any> {
 
         let codeName: string;
         let name: string;
@@ -30,6 +31,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label,
             tooltip: tooltip,
             local,
+            valueToCodeConverter,
             getValue: obj => obj[name],
             setValue: (obj, value) => {
 
@@ -44,7 +46,19 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             getEnumValues: (object: any) => enumValues,
 
-            getValueLabel: (value: any) => enumLabels[enumValues.indexOf(value)]
+            getValueLabel: (value: any) => {
+
+                if (Array.isArray(value)) {
+
+                    const enumValues2 = enumValues.map(val => JSON.stringify(val));
+
+                    const value2 = JSON.stringify(value);
+                    
+                    return enumLabels[enumValues2.indexOf(value2)];
+                }
+
+                return enumLabels[enumValues.indexOf(value)];
+            }
         };
     }
 }

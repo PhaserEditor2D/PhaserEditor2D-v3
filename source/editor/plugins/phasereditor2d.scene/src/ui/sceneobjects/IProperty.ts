@@ -22,4 +22,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     export declare type IValueToCodeConverter = (value: any) => any;
+
+    export function ArrayValueToCodeConverter(value: any[]) {
+
+        return `[${value.map(val => JSON.stringify(val)).join(", ")}]`;
+    }
 }
