@@ -36,6 +36,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return data;
         }
 
+        getFXObjectFactories(): IFXObjectFactory[] {
+
+            return [];
+        }
+
         abstract createFXObject(scene: Scene, parent: ISceneGameObject, preFX: boolean): FXObject;
     }
 }

@@ -265,7 +265,7 @@ namespace phasereditor2d.scene.ui.editor {
             return nameMaker;
         }
 
-        addFXObjects(ext: sceneobjects.FXObjectExtension) {
+        addFXObjects(factory: sceneobjects.FXObjectExtension|sceneobjects.IFXObjectFactory, ) {
 
             const nameMaker = this.buildNameMaker();
 
@@ -285,7 +285,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                     const isPreFX = sceneobjects.FXObjectExtension.isDefaultPipelinePreFX(parent);
 
-                    const fx = ext.createFXObject(scene, parent, isPreFX);
+                    const fx = factory.createFXObject(scene, parent, isPreFX);
 
                     parent.getEditorSupport().addObjectChild(fx);
 

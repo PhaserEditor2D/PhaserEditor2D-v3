@@ -79,17 +79,41 @@ namespace phasereditor2d.scene.ui.editor {
 
             const enabled = parents.length > 0;
 
-            for(const ext of exts) {
+            for (const ext of exts) {
 
-                menu.addAction({
-                    text: "Add " + ext.getTypeName(),
-                    icon: ext.getIcon(),
-                    enabled,
-                    callback: () => {
+                const factories = ext.getFXObjectFactories();
 
-                        this._editor.getDropManager().addFXObjects(ext);
+                if (factories.length > 0) {
+
+                    const menu2 = new controls.Menu(ext.getTypeName());
+
+                    menu.addMenu(menu2);
+
+                    for (const factory of factories) {
+
+                        menu2.addAction({
+                            text: "Add " + factory.factoryName,
+                            icon: ext.getIcon(),
+                            enabled,
+                            callback: () => {
+
+                                this._editor.getDropManager().addFXObjects(factory);
+                            }
+                        });
                     }
-                });
+
+                } else {
+
+                    menu.addAction({
+                        text: "Add " + ext.getTypeName(),
+                        icon: ext.getIcon(),
+                        enabled,
+                        callback: () => {
+
+                            this._editor.getDropManager().addFXObjects(ext);
+                        }
+                    });
+                }
             }
 
             return menu;
