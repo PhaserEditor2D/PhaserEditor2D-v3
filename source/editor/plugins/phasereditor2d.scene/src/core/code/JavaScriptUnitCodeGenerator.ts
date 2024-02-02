@@ -352,6 +352,12 @@ namespace phasereditor2d.scene.core.code {
             if (assign.getContextExpr()) {
 
                 this.append(assign.getContextExpr());
+
+                if (this.isTypeScript() && assign.isOptionalContext()) {
+
+                    this.append("!");
+                }
+                
                 this.append(".");
             }
 

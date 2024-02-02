@@ -3,10 +3,35 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class EffectsSection extends SceneGameObjectSection<ISceneGameObject> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.EffectsSection", "Shader Effects", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.EffectsSection", "Shader FX", false, true);
         }
 
         createForm(parent: HTMLDivElement): void {
+            
+            const comp = this.createGridElement(parent, 3);
+
+            this.createNumberProperty(comp, EffectsComponent.padding);
+
+            const items = () => {
+
+                return ScenePlugin.getInstance().getFXExtensions().map(e => ({
+                    name: e.getTypeName(),
+                    value: e,
+                    icon: e.getIcon()
+                }));
+            }
+
+            const btn = this.createMenuButton(comp, "Add", items, (value: FXObjectExtension) => {
+
+                this.getEditor()
+                    .getDropManager()
+                    .addFXObjects(value);
+            });
+
+            btn.style.gridColumn = "1 / span 3";
+        }
+
+        createForm__old(parent: HTMLDivElement): void {
 
             const comp = this.createGridElement(parent, 1);
 
