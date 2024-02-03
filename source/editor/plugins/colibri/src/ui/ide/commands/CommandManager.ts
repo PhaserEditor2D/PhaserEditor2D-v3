@@ -356,7 +356,7 @@ namespace colibri.ui.ide.commands {
             args: {
                 command?: ICommandConfig,
                 handler?: IHandlerConfig,
-                keys?: IKeyMatcherConfig
+                keys?: IKeyMatcherConfig | IKeyMatcherConfig[],
             },
             commandId?: string) {
 
@@ -375,7 +375,17 @@ namespace colibri.ui.ide.commands {
 
             if (args.keys) {
 
-                this.addKeyBinding(id, new KeyMatcher(args.keys));
+                if (Array.isArray(args.keys)) {
+
+                    for(const key of args.keys) {
+
+                        this.addKeyBinding(id, new KeyMatcher(key));
+                    }
+
+                } else {
+
+                    this.addKeyBinding(id, new KeyMatcher(args.keys));
+                }
             }
         }
     }
