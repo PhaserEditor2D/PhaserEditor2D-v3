@@ -1889,6 +1889,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                         return false;
                                     }
 
+                                    if (obj instanceof sceneobjects.FXObject) {
+
+                                        return false;
+                                    }
+
                                 } else {
 
                                     return false;
