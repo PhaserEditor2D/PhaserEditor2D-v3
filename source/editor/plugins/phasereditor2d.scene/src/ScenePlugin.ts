@@ -29,7 +29,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_CATEGORY_SET = new Set(SCENE_OBJECT_CATEGORIES);
 
     export class ScenePlugin extends colibri.Plugin {
-        
+
         private static _instance = new ScenePlugin();
 
         static DEFAULT_CANVAS_CONTEXT = Phaser.WEBGL;
@@ -119,7 +119,7 @@ namespace phasereditor2d.scene {
         }
 
         async started(): Promise<void> {
-            
+
             this._sceneFinder.registerStorageListener();
         }
 
@@ -544,15 +544,33 @@ namespace phasereditor2d.scene {
                     ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
         }
 
+        private _fxExtensions: ui.sceneobjects.FXObjectExtension[];
+
+        private _fxTypes: Set<string>;
+
+        isFXType(type: string) {
+
+            this.getFXExtensions();
+
+            return this._fxTypes.has(type);
+        }
+
         getFXExtensions() {
 
-            const exts = colibri.Platform
+            if (this._fxExtensions) {
+
+                return this._fxExtensions;
+            }
+
+            this._fxExtensions = colibri.Platform
                 .getExtensions<ui.sceneobjects.FXObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID)
                 .filter(e => e instanceof ui.sceneobjects.FXObjectExtension) as ui.sceneobjects.FXObjectExtension[];
 
-            return exts;
+            this._fxTypes = new Set(this._fxExtensions.map(e => e.getTypeName()));
+
+            return this._fxExtensions;
         }
-        
+
         getLayoutExtensions() {
 
             return colibri.Platform
