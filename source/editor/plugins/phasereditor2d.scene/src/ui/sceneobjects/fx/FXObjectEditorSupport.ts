@@ -16,30 +16,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const objES = obj.getEditorSupport();
 
-            const preFXs = objES.getObjectChildren()
-                .filter(obj => obj instanceof FXObject && obj.isPreFX())
-                .map((obj: FXObject) => obj.getPhaserFX());
+            const data: any = {};
+            objES.writeJSON(data);
+            objES.readJSON(data);
 
-            const postFXs = objES.getObjectChildren()
-                .filter(obj => obj instanceof FXObject && !obj.isPreFX())
-                .map((obj: FXObject) => obj.getPhaserFX());
+            // const preFXs = objES.getObjectChildren()
+            //     .filter(obj => obj instanceof FXObject && obj.isPreFX())
+            //     .map((obj: FXObject) => obj.getPhaserFX());
 
-            if (sprite.preFX) {
+            // const postFXs = objES.getObjectChildren()
+            //     .filter(obj => obj instanceof FXObject && !obj.isPreFX())
+            //     .map((obj: FXObject) => obj.getPhaserFX());
 
-                sprite.preFX.clear();
+            // if (sprite.preFX) {
 
-                for (const fx of preFXs) {
+            //     sprite.preFX.clear();
 
-                    sprite.preFX.add(fx);
-                }
-            }
+            //     for (const fx of preFXs) {
 
-            sprite.postFX.clear();
+            //         sprite.preFX.add(fx);
+            //     }
+            // }
 
-            for (const fx of postFXs) {
+            // sprite.postFX.clear();
 
-                sprite.postFX.add(fx);
-            }
+            // for (const fx of postFXs) {
+
+            //     sprite.postFX.add(fx);
+            // }
         }
 
         destroy(): boolean | void {

@@ -168,9 +168,29 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 }
             }
 
-            for(const obj of objectsToSyncFxSet) {
+            if (objectsToSyncFxSet.size > 0) {
 
-                sceneobjects.FXObjectEditorSupport.syncEffectsOrder(obj);
+                const selManager = this.getEditor().getSelectionManager();
+
+                const selIds = selManager.getSelectionIds();
+
+                for(const obj of objectsToSyncFxSet) {
+
+                    const objES = obj.getEditorSupport();
+    
+                    const data: any = {};
+    
+                    objES.writeJSON(data);
+
+                    const sprite = obj as unknown as Phaser.GameObjects.Image;
+                    
+                    sprite.preFX?.clear();
+                    sprite.postFX?.clear();
+    
+                    objES.readJSON(data);
+                }
+
+                selManager.setSelectionByIds(selIds);
             }
 
             this.getEditor().repaint();
