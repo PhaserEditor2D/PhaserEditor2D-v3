@@ -3,7 +3,7 @@ namespace colibri.ui.controls {
     export class Menu {
 
         private _text: string;
-        private _items: (Action|Menu)[];
+        private _items: (Action | Menu)[];
         private _element: HTMLDivElement;
         private _bgElement: HTMLDivElement;
         private _menuCloseCallback: () => void;
@@ -90,6 +90,14 @@ namespace colibri.ui.controls {
         getElement() {
 
             return this._element;
+        }
+
+        static closeAll() {
+
+            if (this._activeMenu) {
+
+                this._activeMenu.closeAll();
+            }
         }
 
         static getActiveMenu() {

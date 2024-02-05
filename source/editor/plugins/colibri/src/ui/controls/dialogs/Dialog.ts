@@ -38,9 +38,10 @@ namespace colibri.ui.controls.dialogs {
 
                             if (dlg.isCloseWithEscapeKey()) {
 
-                                if (Menu.getActiveMenu()) {
+                                if (Menu.getActiveMenu() || ColorPickerManager.isActivePicker()) {
 
-                                    Menu.getActiveMenu().closeAll();
+                                    Menu.closeAll();
+                                    ColorPickerManager.closeActive();
 
                                 } else {
 
