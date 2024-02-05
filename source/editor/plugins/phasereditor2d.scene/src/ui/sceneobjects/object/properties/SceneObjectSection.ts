@@ -165,6 +165,22 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const text = colorElement.text;
             const btn = colorElement.btn;
 
+            const currentColor = text.value;
+
+            text.addEventListener("preview", e => {
+
+                const value = text.value;
+
+                console.log("preview color", value);
+
+                for(const obj of this.getSelection()) {
+
+                    property.setValue(obj, value);
+                }
+
+                this.getEditor().repaint();
+            });
+
             text.addEventListener("change", e => {
 
                 const value = text.value;

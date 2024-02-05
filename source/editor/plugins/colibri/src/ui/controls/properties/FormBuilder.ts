@@ -269,11 +269,17 @@ namespace colibri.ui.controls.properties {
 
                 btn["__picker"] = picker;
 
+                const initialColor = text.value;
+
                 picker.setOptions({
                     popup: "left",
                     editor: false,
                     alpha: allowAlpha,
                     onClose: () => {
+
+                        text.value = initialColor;
+                        btn.style.background = initialColor;
+                        text.dispatchEvent(new CustomEvent("preview"));
 
                         ColorPickerManager.closeActive();
                     },
@@ -282,6 +288,12 @@ namespace colibri.ui.controls.properties {
                         text.value = allowAlpha ? color.hex : color.hex.substring(0, 7);
                         btn.style.background = text.value;
                         text.dispatchEvent(new CustomEvent("change"));
+                    },
+                    onChange: (color) => {
+
+                        text.value = allowAlpha ? color.hex : color.hex.substring(0, 7);
+                        btn.style.background = text.value;
+                        text.dispatchEvent(new CustomEvent("preview"));
                     }
                 });
 

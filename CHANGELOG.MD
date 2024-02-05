@@ -7,6 +7,7 @@
 * Save all editors when the user executes the Play commands.
 * A new onViewerDoubleClicked event in the editor viewer provider.
 * Depth order commands now works with Mac keyboard with a numpad.
+* Fixes bug with opening multiple context menus.
 
 ## v3.66.0 - Jan 11, 2024
 
