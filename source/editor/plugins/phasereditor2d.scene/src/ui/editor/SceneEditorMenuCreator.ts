@@ -85,7 +85,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                 if (factories.length > 0) {
 
-                    const menu2 = new controls.Menu(ext.getTypeName());
+                    const menu2 = new controls.Menu(ext.getTypeName(), ext.getIcon());
 
                     menu.addMenu(menu2);
 

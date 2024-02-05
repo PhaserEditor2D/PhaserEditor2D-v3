@@ -3,7 +3,7 @@ namespace colibri.ui.controls {
     export class Menu {
 
         private _text: string;
-        private _items: unknown[];
+        private _items: (Action|Menu)[];
         private _element: HTMLDivElement;
         private _bgElement: HTMLDivElement;
         private _menuCloseCallback: () => void;
@@ -11,11 +11,23 @@ namespace colibri.ui.controls {
         private _subMenu: Menu;
         private _parentMenu: Menu;
         private _lastItemElementSelected: HTMLDivElement;
+        private _icon: IImage;
 
-        constructor(text?: string) {
+        constructor(text?: string, icon?: IImage) {
 
             this._items = [];
             this._text = text;
+            this._icon = icon;
+        }
+
+        getIcon() {
+
+            return this._icon;
+        }
+
+        setIcon(icon: IImage) {
+
+            this._icon = icon;
         }
 
         setMenuClosedCallback(callback: () => void) {
@@ -99,12 +111,12 @@ namespace colibri.ui.controls {
 
             Menu._activeMenu = this;
 
-            let hasIcon = false;
-
             this._element = document.createElement("div");
             this._element.classList.add("Menu");
 
             let lastIsSeparator = true;
+
+            let hasIcon = false;
 
             for (const item of this._items) {
 
@@ -127,6 +139,8 @@ namespace colibri.ui.controls {
                 const itemElement = document.createElement("div");
                 itemElement.classList.add("MenuItem");
 
+                const icon = item.getIcon();
+
                 if (item instanceof Action) {
 
                     if (item.isSelected()) {
@@ -137,26 +151,9 @@ namespace colibri.ui.controls {
                         itemElement.appendChild(checkElement)
                     }
 
-                    if (item.getIcon()) {
+                    if (icon) {
 
-                        {
-                            const iconControl = new controls.IconControl(item.getIcon());
-                            iconControl.getCanvas().classList.add("MenuItemIcon", "ThemeMenuItemIcon");
-                            itemElement.appendChild(iconControl.getCanvas());
-                        }
-
-                        {
-                            let icon = item.getIcon();
-
-                            if (icon instanceof IconImage) {
-
-                                icon = icon.getNegativeThemeImage()
-                            }
-
-                            const iconControl = new controls.IconControl(icon);
-                            iconControl.getCanvas().classList.add("MenuItemIcon", "NegativeMenuItemIcon");
-                            itemElement.appendChild(iconControl.getCanvas());
-                        }
+                        this.createIconPart(icon, itemElement);
 
                         hasIcon = true;
                     }
@@ -198,6 +195,13 @@ namespace colibri.ui.controls {
                 } else {
 
                     const subMenu = item as Menu;
+
+                    if (icon) {
+
+                        this.createIconPart(subMenu.getIcon(), itemElement);
+
+                        hasIcon = true;
+                    }
 
                     const labelElement = document.createElement("label");
                     labelElement.classList.add("MenuItemText");
@@ -289,6 +293,25 @@ namespace colibri.ui.controls {
             this._element.style.top = y + "px";
         }
 
+        private createIconPart(icon: IImage, itemElement: HTMLDivElement) {
+            {
+                const iconControl = new controls.IconControl(icon);
+                iconControl.getCanvas().classList.add("MenuItemIcon", "ThemeMenuItemIcon");
+                itemElement.appendChild(iconControl.getCanvas());
+            }
+
+            {
+                if (icon instanceof IconImage) {
+
+                    icon = icon.getNegativeThemeImage();
+                }
+
+                const iconControl = new controls.IconControl(icon);
+                iconControl.getCanvas().classList.add("MenuItemIcon", "NegativeMenuItemIcon");
+                itemElement.appendChild(iconControl.getCanvas());
+            }
+        }
+
         private closeSubMenu() {
 
             if (this._lastItemElementSelected) {
@@ -306,9 +329,9 @@ namespace colibri.ui.controls {
         createWithEvent(e: MouseEvent, openLeft = false, alignToElement = false) {
 
             e.preventDefault();
-            
+
             if (Menu._activeMenu) {
-                
+
                 Menu._activeMenu.closeAll();
             }
 
