@@ -2,8 +2,8 @@
 
 ## v3.67.0-dev
 
-* Updates to latest typescript 5.3.3.
-* Updates to latest Codemirror 5.66.16.
+* Updates to latest TypeScript 5.3.3.
+* Updates to latest CodeMirror 5.66.16.
 * Save all editors when the user executes the Play commands.
 * A new onViewerDoubleClicked event in the editor viewer provider.
 * Depth order commands now works with Mac keyboard with a numpad.
