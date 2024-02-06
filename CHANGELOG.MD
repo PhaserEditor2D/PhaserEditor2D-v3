@@ -8,7 +8,7 @@
 * Depth order commands now works with Mac keyboard with a numeric pad, in its default config.
 * Fixes bug with opening multiple context menus.
 * Color Picker shows realtime preview of the color.
-* Allows changing numeric values with the mouse wheel, while pressing Shift.
+* Allows changing numeric values with the mouse wheel.
 * Allows changing numeric values with the Up/Down keys. If Shift is pressed, it increments it by 10.
 
 ## v3.66.0 - Jan 11, 2024

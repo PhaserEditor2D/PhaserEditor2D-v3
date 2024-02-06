@@ -119,16 +119,32 @@ namespace colibri.ui.controls.properties {
 
             if (increment !== undefined) {
 
-                text.addEventListener("wheel", e => {
+                text.addEventListener("focusout", e => {
 
-                    if (!text.hasAttribute("__editorWheel")) {
+                    text.removeAttribute("__editorWheel");
 
-                        text.setAttribute("__editorInitText", text.value);
+                    const initText = text.getAttribute("__editorInitText");
+
+                    if (text.value !== initText) {
+
+                        text.dispatchEvent(new CustomEvent("change", {
+                            detail: {
+                                initText
+                            }
+                        }));
                     }
+                });
+
+                text.addEventListener("focusin", () => {
+
+                    text.setAttribute("__editorInitText", text.value);
+                });
+
+                text.addEventListener("wheel", e => {
 
                     text.setAttribute("__editorWheel", "1");
 
-                    if (e.shiftKey && document.activeElement === text) {
+                    if (document.activeElement === text) {
 
                         e.preventDefault();
 
@@ -136,7 +152,7 @@ namespace colibri.ui.controls.properties {
 
                         text.value = (parseFloat(text.value) + delta).toString();
 
-                        text.dispatchEvent(new CustomEvent("preview"));
+                        text.dispatchEvent(new Event("preview"));
                     }
                 });
 
@@ -164,27 +180,9 @@ namespace colibri.ui.controls.properties {
 
                         text.value = (parseFloat(text.value) + delta).toString();
 
-                        text.dispatchEvent(new Event("change"));
+                        text.dispatchEvent(new Event("preview"));
 
                         e.preventDefault();
-                    }
-                });
-
-                text.addEventListener("keyup", e => {
-
-                    if (text.getAttribute("__editorWheel") === "1") {
-
-                        e.preventDefault();
-
-                        text.removeAttribute("__editorWheel");
-
-                        text.value = parseFloat(text.value).toString();
-
-                        text.dispatchEvent(new CustomEvent("change", {
-                            detail: {
-                                initText: text.getAttribute("__editorInitText")
-                            }
-                        }));
                     }
                 });
             }
