@@ -113,11 +113,11 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
-        createNumberText(parent: HTMLElement, readOnly = false, incrementAmount?: number) {
+        createNumberText(parent: HTMLElement, readOnly = false, increment?: number) {
 
             const text = this.createText(parent, readOnly);
 
-            if (incrementAmount !== undefined) {
+            if (increment !== undefined) {
 
                 text.addEventListener("wheel", e => {
 
@@ -132,7 +132,7 @@ namespace colibri.ui.controls.properties {
 
                         e.preventDefault();
 
-                        const delta = incrementAmount * Math.sign(e.deltaY);
+                        const delta = increment * Math.sign(e.deltaY);
 
                         text.value = (parseFloat(text.value) + delta).toString();
 
@@ -140,11 +140,41 @@ namespace colibri.ui.controls.properties {
                     }
                 });
 
+                text.addEventListener("keydown", e => {
+
+                    let delta: number = undefined;
+
+                    switch (e.code) {
+
+                        case "ArrowUp":
+                            delta = increment;
+                            break;
+
+                        case "ArrowDown":
+                            delta = -increment;
+                            break;
+                    }
+
+                    if (delta !== undefined) {
+
+                        if (e.shiftKey) {
+
+                            delta *= 10;
+                        }
+
+                        text.value = (parseFloat(text.value) + delta).toString();
+
+                        text.dispatchEvent(new Event("change"));
+
+                        e.preventDefault();
+                    }
+                });
+
                 text.addEventListener("keyup", e => {
 
-                    e.preventDefault();
-
                     if (text.getAttribute("__editorWheel") === "1") {
+
+                        e.preventDefault();
 
                         text.removeAttribute("__editorWheel");
 
