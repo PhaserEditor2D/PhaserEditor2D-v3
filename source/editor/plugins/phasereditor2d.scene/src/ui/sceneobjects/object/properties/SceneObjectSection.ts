@@ -45,33 +45,74 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         createFloatField(parent: HTMLElement, property: IProperty<T>) {
 
-            const text = this.createText(parent, false);
+            const text = this.createNumberText(parent, false, property.increment);
 
-            text.addEventListener("change", e => {
+            const makeListener = (isPreview: boolean) => {
 
-                const textValue = text.value;
+                return (e: Event | CustomEvent) => {
 
-                let value: number;
+                    const textValue = text.value;
 
-                if (textValue.trim() === "") {
+                    let value: number;
 
-                    value = property.defValue;
+                    if (textValue.trim() === "") {
 
-                } else {
+                        value = property.defValue;
 
-                    value = this.parseNumberExpression(text);
+                    } else {
+
+                        value = this.parseNumberExpression(text);
+                    }
+
+                    if (isNaN(value)) {
+
+                        this.updateWithSelection();
+
+                    } else {
+
+                        if (isPreview) {
+
+                            for (const obj of this.getSelection()) {
+
+                                property.setValue(obj, value);
+                            }
+
+                            this.getEditor().repaint();
+
+                        } else {
+
+                            if (e instanceof CustomEvent) {
+
+                                // this is a custom event then it is setting the value
+                                // from alternative methods like mouse wheel or dragging the label
+                                // so let's restore the initial value of the objects
+
+                                if (e.detail) {
+
+                                    const initText = e.detail.initText as string;
+
+                                    const value = this.parseNumberExpressionString(initText);
+
+                                    if (typeof value === "number") {
+
+                                        for(const obj of this.getSelection()) {
+
+                                            property.setValue(obj, value);
+                                        }
+                                    }
+                                }
+                            }
+
+                            this.getEditor().getUndoManager().add(
+                                new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                        }
+                    }
                 }
+            }
 
-                if (isNaN(value)) {
+            text.addEventListener("preview", makeListener(true));
 
-                    this.updateWithSelection();
-
-                } else {
-
-                    this.getEditor().getUndoManager().add(
-                        new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
-                }
-            });
+            text.addEventListener("change", makeListener(false));
 
             this.addUpdater(() => {
 
@@ -173,7 +214,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 console.log("preview color", value);
 
-                for(const obj of this.getSelection()) {
+                for (const obj of this.getSelection()) {
 
                     property.setValue(obj, value);
                 }

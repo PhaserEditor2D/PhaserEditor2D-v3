@@ -113,6 +113,55 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
+        createNumberText(parent: HTMLElement, readOnly = false, incrementAmount?: number) {
+
+            const text = this.createText(parent, readOnly);
+
+            if (incrementAmount !== undefined) {
+
+                text.addEventListener("wheel", e => {
+
+                    if (!text.hasAttribute("__editorWheel")) {
+
+                        text.setAttribute("__editorInitText", text.value);
+                    }
+
+                    text.setAttribute("__editorWheel", "1");
+
+                    if (e.shiftKey && document.activeElement === text) {
+
+                        e.preventDefault();
+
+                        const delta = incrementAmount * Math.sign(e.deltaY);
+
+                        text.value = (parseFloat(text.value) + delta).toString();
+
+                        text.dispatchEvent(new CustomEvent("preview"));
+                    }
+                });
+
+                text.addEventListener("keyup", e => {
+
+                    e.preventDefault();
+
+                    if (text.getAttribute("__editorWheel") === "1") {
+
+                        text.removeAttribute("__editorWheel");
+
+                        text.value = parseFloat(text.value).toString();
+
+                        text.dispatchEvent(new CustomEvent("change", {
+                            detail: {
+                                initText: text.getAttribute("__editorInitText")
+                            }
+                        }));
+                    }
+                });
+            }
+
+            return text;
+        }
+
         createText(parent: HTMLElement, readOnly = false) {
 
             const text = document.createElement("input");

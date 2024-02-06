@@ -13,8 +13,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TransformComponent extends Component<ITransformLikeObject> {
 
-        static x = SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x");
-        static y = SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y");
+        static x = SimpleProperty("x", 0, "X", "phaser:Phaser.GameObjects.Components.Transform.x", false, null, 1);
+        static y = SimpleProperty("y", 0, "Y", "phaser:Phaser.GameObjects.Components.Transform.y", false, null, 1);
 
         static position: IPropertyXY = {
             label: "Position",
@@ -23,8 +23,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             y: TransformComponent.y
         };
 
-        static scaleX = SimpleProperty("scaleX", 1, "X", "phaser:Phaser.GameObjects.Components.Transform.scaleX");
-        static scaleY = SimpleProperty("scaleY", 1, "Y", "phaser:Phaser.GameObjects.Components.Transform.scaleY");
+        static scaleX = SimpleProperty("scaleX", 1, "X", "phaser:Phaser.GameObjects.Components.Transform.scaleX", false, null, 0.05);
+        static scaleY = SimpleProperty("scaleY", 1, "Y", "phaser:Phaser.GameObjects.Components.Transform.scaleY", false, null, 0.05);
 
         static scale: IPropertyXY = {
             label: "Scale",
@@ -32,7 +32,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             y: TransformComponent.scaleY
         };
 
-        static angle = SimpleProperty("angle", 0, "Angle", "phaser:Phaser.GameObjects.Components.Transform.angle");
+        static angle = SimpleProperty("angle", 0, "Angle", "phaser:Phaser.GameObjects.Components.Transform.angle", false, null, 1);
 
         constructor(obj: ITransformLikeObject) {
             super(obj, [

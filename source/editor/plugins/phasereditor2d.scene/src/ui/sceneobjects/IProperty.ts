@@ -12,6 +12,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         defValue: any;
 
+        increment?: number;
+
         local?: boolean;
 
         label?: string;
