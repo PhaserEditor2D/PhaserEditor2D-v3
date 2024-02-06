@@ -2,7 +2,5 @@
     "workbench.colorTheme": "Nord",
     "cSpell.words": [
         "openfile"
-    ],
-    "editor.stickyScroll.enabled": false,
-    "editor.stickyScroll.scrollWithEditor": true
+    ]
 }
