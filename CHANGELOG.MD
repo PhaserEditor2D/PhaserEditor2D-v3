@@ -5,10 +5,10 @@
 * Updates to latest TypeScript 5.3.3.
 * Updates to latest CodeMirror 5.66.16.
 * Save all editors when the user executes the Play commands.
-* A new onViewerDoubleClicked event in the editor viewer provider.
-* Depth order commands now works with Mac keyboard with a numpad.
+* Depth order commands now works with Mac keyboard with a numeric pad, in its default config.
 * Fixes bug with opening multiple context menus.
 * Color Picker shows realtime preview of the color.
+* Allows changing numeric values with the mouse wheel.
 
 ## v3.66.0 - Jan 11, 2024
 
