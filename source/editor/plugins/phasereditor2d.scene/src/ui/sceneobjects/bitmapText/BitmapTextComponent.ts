@@ -37,6 +37,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Font Size",
             tooltip: "phaser:Phaser.GameObjects.BitmapText.setFontSize",
             defValue: 0,
+            increment: 1,
+            incrementMin: 1,
             getValue: obj => obj.fontSize,
             setValue: (obj, value) => obj.setFontSize(value)
         };
@@ -46,6 +48,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Letter Spacing",
             tooltip: "phaser:Phaser.GameObjects.BitmapText.setLetterSpacing",
             defValue: 0,
+            increment: 1,
+            incrementMin: 1,
             getValue: obj => obj.letterSpacing,
             setValue: (obj, value) => obj.setLetterSpacing(value)
         };
@@ -55,13 +59,15 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Max Width",
             tooltip: "phaser:Phaser.GameObjects.BitmapText.maxWidth",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.maxWidth,
             setValue: (obj, value) => obj.setMaxWidth(value)
         };
 
-        static dropShadowX = SimpleProperty("dropShadowX", 0, "Drop Shadow X", "phaser:Phaser.GameObjects.BitmapText.dropShadowX");
-        static dropShadowY = SimpleProperty("dropShadowY", 0, "Drop Shadow Y", "phaser:Phaser.GameObjects.BitmapText.dropShadowY");
-        static dropShadowAlpha = SimpleProperty("dropShadowAlpha", 0.5, "Drop Shadow Alpha", "phaser:Phaser.GameObjects.BitmapText.dropShadowAlpha");
+        static dropShadowX = SimpleProperty("dropShadowX", 0, "Drop Shadow X", "phaser:Phaser.GameObjects.BitmapText.dropShadowX", false, null, 1, 0);
+        static dropShadowY = SimpleProperty("dropShadowY", 0, "Drop Shadow Y", "phaser:Phaser.GameObjects.BitmapText.dropShadowY", false, null, 1, 0);
+        static dropShadowAlpha = SimpleProperty("dropShadowAlpha", 0.5, "Drop Shadow Alpha", "phaser:Phaser.GameObjects.BitmapText.dropShadowAlpha", false, null, 0.05, 0);
         static dropShadowColor = NumberColorProperty("dropShadowColor", "#000000", "Drop Shadow Color", "phaser:Phaser.GameObjects.BitmapText.dropShadowColor");
 
         constructor(obj: BitmapText) {
