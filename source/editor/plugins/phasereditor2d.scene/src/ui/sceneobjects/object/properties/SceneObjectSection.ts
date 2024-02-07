@@ -42,10 +42,84 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return btn;
         }
 
+        createIncrementableStringField(parent: HTMLElement, property: IProperty<T>) {
+
+            const text = this.createIncrementableText(
+                parent, false, property.increment, property.incrementMin, property.incrementMax, property.incrementValueComputer);
+
+            const makeListener = (isPreview: boolean) => {
+
+                return (e: Event | CustomEvent) => {
+
+                    const textValue = text.value;
+
+                    let value: string;
+
+                    if (textValue.trim() === "") {
+
+                        value = property.defValue;
+
+                    } else {
+
+                        value = textValue
+                    }
+
+                    if (isPreview) {
+
+                        for (const obj of this.getSelection()) {
+
+                            property.setValue(obj, value);
+                        }
+
+                        this.getEditor().repaint();
+
+                    } else {
+
+                        if (e instanceof CustomEvent) {
+
+                            // this is a custom event then it is setting the value
+                            // from alternative methods like mouse wheel or dragging the label
+                            // so let's restore the initial value of the objects
+
+                            if (e.detail) {
+
+                                const initValue = e.detail.initText as string;
+
+                                for (const obj of this.getSelection()) {
+
+                                    property.setValue(obj, initValue);
+                                }
+                            }
+                        }
+
+                        this.getEditor().getUndoManager().add(
+                            new SimpleOperation(this.getEditor(), this.getSelection(), property, value));
+                    }
+                }
+            }
+
+            text.addEventListener("preview", makeListener(true));
+
+            text.addEventListener("change", makeListener(false));
+
+            this.addUpdater(() => {
+
+                text.disabled = !this.isUnlocked(property);
+
+                const values = this.getSelection()
+
+                    .map(obj => property.getValue(obj));
+
+                text.value = this.flatValues_StringOneOrNothing(values);
+            });
+
+            return text;
+        }
+
         // tslint:disable-next-line:ban-types
         createFloatField(parent: HTMLElement, property: IProperty<T>) {
 
-            const text = this.createNumberText(
+            const text = this.createIncrementableText(
                 parent, false, property.increment, property.incrementMin, property.incrementMax);
 
             const makeListener = (isPreview: boolean) => {

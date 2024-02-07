@@ -10,6 +10,57 @@ namespace colibri.ui.controls.properties {
         dialogTittle: string
     }
 
+    export function clamp(value: number, min?: number, max?: number) {
+
+        if (min !== undefined && value < min) {
+
+            return min;
+        }
+
+        if (max !== undefined && value > max) {
+
+            return max;
+        }
+
+        return value;
+    }
+
+    export type IValueComputer = (value: string, increment?: number, min?:number, max?:number) => string;
+
+    export function defaultNumberValueComputer(value: string, increment?: number, min?: number, max?: number) {
+
+        if (!increment) {
+
+            return value;
+        }
+
+        const num = parseFloat(value);
+
+        if (isNaN(num)) {
+
+            return value;
+        }
+
+        return clamp(num + increment, min, max).toFixed(2);
+    }
+
+    export function fontSizeValueComputer(value: string, increment?: number, min?: number, max?: number) {
+
+        if (!increment) {
+
+            return value;
+        }
+
+        const num = parseFloat(value);
+
+        if (isNaN(num)) {
+
+            return value;
+        }
+
+        return clamp(num + increment, min, max).toFixed(2);
+    }
+
     export class FormBuilder {
 
         createSeparator(parent: HTMLElement, text: string, gridColumn?: string) {
@@ -113,22 +164,12 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
-        private clamp(value: number, min?: number, max?: number) {
+        createLabelToTextNumericLink(label: HTMLElement, text: HTMLInputElement, increment: number, min?: number, max?: number, valueComputer?: IValueComputer) {
 
-            if (min !== undefined && value < min) {
+            if (!valueComputer) {
 
-                return min;
+                valueComputer = defaultNumberValueComputer;
             }
-
-            if (max !== undefined && value > max) {
-
-                return max;
-            }
-
-            return value;
-        }
-
-        createLabelToTextNumericLink(label: HTMLElement, text: HTMLInputElement, increment: number, min?: number, max?: number) {
 
             label.style.cursor = "ew-resize";
             label.draggable = true;
@@ -137,7 +178,7 @@ namespace colibri.ui.controls.properties {
 
                 const delta = e.movementX * increment;
 
-                text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
+                text.value = valueComputer(text.value, delta, min, max);
 
                 text.dispatchEvent(new Event("preview"));
             }
@@ -161,7 +202,15 @@ namespace colibri.ui.controls.properties {
             });
         }
 
-        createNumberText(parent: HTMLElement, readOnly = false, increment?: number, min?: number, max?: number) {
+        createIncrementableText(
+            parent: HTMLElement,
+            readOnly = false,
+            increment?: number,
+            min?: number,
+            max?: number,
+            valueComputer?: (value: string, increment: number, min?: number, max?: number) => string) {
+
+            valueComputer = valueComputer || defaultNumberValueComputer;
 
             const text = this.createText(parent, readOnly);
 
@@ -196,9 +245,11 @@ namespace colibri.ui.controls.properties {
 
                         e.preventDefault();
 
+                        console.log("wheel");
+
                         const delta = increment * Math.sign(e.deltaY);
 
-                        text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
+                        text.value = valueComputer(text.value, delta, min, max);
 
                         text.dispatchEvent(new Event("preview"));
                     }
@@ -226,7 +277,7 @@ namespace colibri.ui.controls.properties {
                             delta *= 10;
                         }
 
-                        text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
+                        text.value = valueComputer(text.value, delta, min, max);
 
                         text.dispatchEvent(new Event("preview"));
 

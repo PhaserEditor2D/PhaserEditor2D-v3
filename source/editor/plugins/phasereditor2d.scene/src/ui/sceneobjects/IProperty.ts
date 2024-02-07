@@ -18,6 +18,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         incrementMax?: number;
 
+        incrementValueComputer?: colibri.ui.controls.properties.IValueComputer;
+
         local?: boolean;
 
         label?: string;

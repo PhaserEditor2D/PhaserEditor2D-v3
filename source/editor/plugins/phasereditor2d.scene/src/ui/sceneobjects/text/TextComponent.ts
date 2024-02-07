@@ -2,6 +2,32 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import code = core.code;
 
+    function fontValueComputer(fontSize: string, increment?: number, min?: number, max?: number): string {
+
+        if (!increment) {
+
+            return fontSize;
+        }
+
+        const match = fontSize.match(/^([\d.]+)([a-z]+)$/);
+
+        if (match) {
+
+            const originalSize = parseFloat(match[1]);
+
+            const unit = match[2];
+
+            const newSize = colibri.ui.controls.properties.clamp(
+                originalSize + increment, min, max);
+
+            return `${newSize}${unit}`;
+
+        } else {
+
+            return fontSize;
+        }
+    }
+
     export class TextComponent extends Component<Text> {
 
         static fixedWidth: IProperty<Text> = {
@@ -99,6 +125,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Font Size",
             tooltip: "phaser:Phaser.GameObjects.Text.setFontSize",
             defValue: "16px",
+            increment: 1,
+            incrementMin: 0,
+            incrementValueComputer: fontValueComputer,
             getValue: obj => obj.style.fontSize,
             setValue: (obj, value) => obj.setFontSize(value)
         };

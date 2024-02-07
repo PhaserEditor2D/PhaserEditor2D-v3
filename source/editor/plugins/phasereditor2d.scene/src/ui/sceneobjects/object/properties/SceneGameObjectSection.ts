@@ -105,13 +105,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             text.style.gridColumn = fullWidth ? "4 / span 3" : "4";
 
             this.createPropertyLabelToTextNumericLink(prop, label, text);
+
+            return {
+                labelElement: label,
+                textElement: text
+            };
         }
 
         createPropertyLabelToTextNumericLink(prop: IProperty<any>, label: HTMLElement, text: HTMLInputElement) {
 
             if (prop.increment) {
 
-                this.createLabelToTextNumericLink(label, text, prop.increment, prop.incrementMin, prop.incrementMax);
+                this.createLabelToTextNumericLink(label, text, prop.increment, prop.incrementMin, prop.incrementMax, prop.incrementValueComputer);
             }
         }
 
@@ -173,7 +178,12 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             return text;
         }
 
-        createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true, readOnly = false) {
+        createPropertyStringRow(
+            parent: HTMLElement,
+            prop: IProperty<any>,
+            lockIcon: boolean = true,
+            readOnly = false,
+            incrementable = false) {
 
             if (lockIcon) {
 
@@ -183,7 +193,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const text = this.createStringField(parent, prop, true, false, false, readOnly);
+            let text: HTMLInputElement | HTMLTextAreaElement;
+
+            if (incrementable) {
+
+                text = this.createIncrementableStringField(parent, prop);
+
+                this.createPropertyLabelToTextNumericLink(prop, label, text);
+
+            } else {
+
+                text = this.createStringField(parent, prop, true, false, false, readOnly);
+            }
 
             return { label, text };
         }
