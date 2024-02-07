@@ -98,11 +98,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip))
-                .style.gridColumn = "2 / span 2";
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            label.style.gridColumn = "2 / span 2";
 
-            this.createFloatField(parent, prop)
-                .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+            const text = this.createFloatField(parent, prop);
+            text.style.gridColumn = fullWidth ? "4 / span 3" : "4";
+
+            if (prop.increment) {
+
+                this.createLabelToTextNumericLink(label, text, prop.increment);
+            }
         }
 
         createNumberProperty(parent: HTMLElement, prop: IProperty<any>) {

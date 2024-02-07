@@ -18,6 +18,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "X",
             tooltip: "phaser:Phaser.GameObjects.Components.Origin.originX",
             defValue: 0.5,
+            increment: 0.025,
             getValue: obj => obj.originX,
             setValue: (obj, value) => obj.setOrigin(value, obj.originY)
         };
@@ -25,6 +26,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static originY: IProperty<IOriginLikeObject> = {
             name: "originY",
             label: "Y",
+            increment: 0.025,
             tooltip: "phaser:Phaser.GameObjects.Components.Origin.originY",
             defValue: 0.5,
             getValue: obj => obj.originY,
