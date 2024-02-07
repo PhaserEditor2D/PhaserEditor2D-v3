@@ -8,7 +8,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     function SimpleBodyProperty(
-        name: string, defValue: any, label: string, editorField?: string, tooptip?: string): IProperty<any> {
+        name: string, defValue: any, label: string, editorField?: string, tooptip?: string,
+        increment?: number, min?: number, max?: number): IProperty<any> {
 
         editorField = editorField ?? name;
 
@@ -17,6 +18,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             codeName: `body.${name}`,
             defValue,
             label,
+            increment,
+            incrementMin: min,
+            incrementMax: max,
             tooltip: tooptip ?? `phaser:Phaser.Physics.Arcade.Body.${name}`,
             getValue: obj => obj.body[editorField] ?? defValue,
             setValue: (obj, value) => {
@@ -43,7 +47,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
     }
 
-    function simpleBodyVectorProperty(vectorName: string, axis: "x" | "y", defValue: number): IProperty<ISceneGameObject> {
+    function simpleBodyVectorProperty(vectorName: string, axis: "x" | "y", defValue: number, increment?: number, min?: number, max?: number): IProperty<ISceneGameObject> {
 
         return {
             name: `body.${vectorName}.${axis}`,
@@ -52,18 +56,21 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             defValue: defValue,
             getValue: obj => obj.body[vectorName][axis],
             setValue: (obj, value) => obj.body[vectorName][axis] = value,
-            tooltip: `phaser:Phaser.Physics.Arcade.Body.${vectorName}`
-        }
+            tooltip: `phaser:Phaser.Physics.Arcade.Body.${vectorName}`,
+            increment,
+            incrementMin: min,
+            incrementMax: max
+        } as IProperty<any>;
     }
 
-    function SimpleBodyVectorProperty(vectorName: string, label: string, defValueX: number, defValueY?: number, setterName?: string): IPropertyXY {
+    function SimpleBodyVectorProperty(vectorName: string, label: string, defValueX: number, defValueY?: number, setterName?: string, increment?: number, min?: number, max?: number): IPropertyXY {
 
         return {
             label,
             setterName: setterName ? `body.${setterName}` : undefined,
             tooltip: "phaser:Phaser.Physics.Arcade.Body." + vectorName,
-            x: simpleBodyVectorProperty(vectorName, "x", defValueX),
-            y: simpleBodyVectorProperty(vectorName, "y", defValueY ?? defValueX)
+            x: simpleBodyVectorProperty(vectorName, "x", defValueX, increment, min, max),
+            y: simpleBodyVectorProperty(vectorName, "y", defValueY ?? defValueX, increment, min, max),
         };
     }
 
@@ -154,6 +161,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             name: `body.${axis}`,
             label: axis === "width" ? "W" : "H",
             tooltip: "The size of the body, if it is rectangular.",
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.body[axis],
             setValue: (obj, value) => {
 
@@ -179,17 +188,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static enable = SimpleBodyProperty("enable", true, "Enable", "__enable");
         static bodyType = bodyTypeProperty();
         static moves = SimpleBodyProperty("moves", true, "Moves");
-        static velocity = SimpleBodyVectorProperty("velocity", "Velocity", 0);
-        static maxVelocity = SimpleBodyVectorProperty("maxVelocity", "Max Velocity", 10000);
-        static maxSpeed = SimpleBodyProperty("maxSpeed", -1, "Max Speed");
-        static friction = SimpleBodyVectorProperty("friction", "Friction", 1, 0);
+        static velocity = SimpleBodyVectorProperty("velocity", "Velocity", 0, 0, undefined, 1);
+        static maxVelocity = SimpleBodyVectorProperty("maxVelocity", "Max Velocity", 10000, 10000, undefined, 1);
+        static maxSpeed = SimpleBodyProperty("maxSpeed", -1, "Max Speed", undefined, undefined, 1);
+        static friction = SimpleBodyVectorProperty("friction", "Friction", 1, 0, undefined, 0.05);
         static allowGravity = SimpleBodyProperty("allowGravity", true, "Allow Gravity");
-        static gravity = SimpleBodyVectorProperty("gravity", "Gravity", 0);
-        static acceleration = SimpleBodyVectorProperty("acceleration", "Acceleration", 0);
+        static gravity = SimpleBodyVectorProperty("gravity", "Gravity", 0, undefined, undefined, 1);
+        static acceleration = SimpleBodyVectorProperty("acceleration", "Acceleration", 0, undefined, undefined, 1);
         static useDamping = SimpleBodyProperty("useDamping", false, "Use Damping");
         static allowDrag = SimpleBodyProperty("allowDrag", true, "Allow Drag");
-        static drag = SimpleBodyVectorProperty("drag", "Drag", 0);
-        static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0);
+        static drag = SimpleBodyVectorProperty("drag", "Drag", 0, undefined, undefined, 0.05, 0, 1);
+        static bounce = SimpleBodyVectorProperty("bounce", "Bounce", 0, undefined, undefined, 0.05, 0);
         static collideWorldBounds = SimpleBodyProperty("collideWorldBounds", false, "Collide World Bounds");
         static onWorldBounds = SimpleBodyProperty("onWorldBounds", false, "On World Bounds");
         static checkCollisionNone = CheckCollisionProperty("none", false);
@@ -198,23 +207,23 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static checkCollisionLeft = CheckCollisionProperty("left", true);
         static checkCollisionRight = CheckCollisionProperty("right", true);
         static allowRotation = SimpleBodyProperty("allowRotation", true, "Allow Rotation");
-        static angularVelocity = SimpleBodyProperty("angularVelocity", 0, "Angular Velocity");
-        static angularAcceleration = SimpleBodyProperty("angularAcceleration", 0, "Angular Acceleration");
-        static angularDrag = SimpleBodyProperty("angularDrag", 0, "Angular Drag");
-        static maxAngular = SimpleBodyProperty("maxAngular", 1000, "Max Angular");
+        static angularVelocity = SimpleBodyProperty("angularVelocity", 0, "Angular Velocity", undefined, undefined, 1);
+        static angularAcceleration = SimpleBodyProperty("angularAcceleration", 0, "Angular Acceleration", undefined, undefined, 1);
+        static angularDrag = SimpleBodyProperty("angularDrag", 0, "Angular Drag", undefined, undefined, 1);
+        static maxAngular = SimpleBodyProperty("maxAngular", 1000, "Max Angular", undefined, undefined, 1);
         static pushable = SimpleBodyProperty("pushable", true, "Pushable");
         static immovable = SimpleBodyProperty("immovable", false, "Immovable");
         static overlap: IPropertyXY = {
             label: "Overlap",
             tooltip: "The amount of horizontal/vertical overlap (before separation), if this Body is colliding with another.",
-            x: SimpleBodyProperty("overlapX", 0, "X"),
-            y: SimpleBodyProperty("overlapY", 0, "Y"),
+            x: SimpleBodyProperty("overlapX", 0, "X", undefined, undefined, 1, 0),
+            y: SimpleBodyProperty("overlapY", 0, "Y", undefined, undefined, 1, 0),
         };
-        static overlapR = SimpleBodyProperty("overlapR", 0, "Overlap R");
-        static mass = SimpleBodyProperty("mass", 1, "Mass");
+        static overlapR = SimpleBodyProperty("overlapR", 0, "Overlap R", undefined, undefined, 1, 0);
+        static mass = SimpleBodyProperty("mass", 1, "Mass", undefined, undefined, 1, 0);
         static geometry = geometryProperty();
-        static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius");
-        static offset = SimpleBodyVectorProperty("offset", "Offset", 0, 0, "setOffset");
+        static radius = SimpleBodyProperty("radius", 64, "Radius", "__radius", undefined, 1, 0);
+        static offset = SimpleBodyVectorProperty("offset", "Offset", 0, 0, "setOffset", 1, 0);
         static size: IPropertyXY = {
             label: "Size",
             tooltip: "Size",
@@ -243,7 +252,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             // I have to scale to 1 and later restore the original scale
             // see issue https://github.com/PhaserEditor2D/PhaserEditor2D-v3/issues/250
-            const {scaleX, scaleY} = sprite;
+            const { scaleX, scaleY } = sprite;
 
             sprite.setScale(1, 1);
 
@@ -260,7 +269,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         static disableBody(obj: ISceneGameObject) {
 
             const body = ArcadeComponent.getBody(obj);
-            
+
             body.world.remove(body);
 
             obj.getEditorSupport().setComponentActive(ArcadeComponent, false);
@@ -329,7 +338,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         buildPrefabTypeScriptDefinitionsCodeDOM(args: IBuildPrefabExtraTypeScriptDefinitionsCodeDOMArgs): void {
-         
+
             const obj = args.prefabObj;
 
             if (obj.getEditorSupport().isPrefabInstance()) {
@@ -341,7 +350,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             }
 
             const isStatic = ArcadeComponent.isStaticBody(obj as any);
-            const type = isStatic? "Phaser.Physics.Arcade.StaticBody" : "Phaser.Physics.Arcade.Body";
+            const type = isStatic ? "Phaser.Physics.Arcade.StaticBody" : "Phaser.Physics.Arcade.Body";
 
             const fieldDecl = new code.FieldDeclCodeDOM("body", type);
             fieldDecl.setInterfaceMember(true);
