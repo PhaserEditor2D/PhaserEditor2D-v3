@@ -175,6 +175,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = this.createFloatField(parent, prop);
 
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
+
             return text;
         }
 

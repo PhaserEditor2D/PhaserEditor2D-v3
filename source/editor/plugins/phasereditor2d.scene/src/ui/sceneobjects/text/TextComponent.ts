@@ -35,6 +35,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Width",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedWidth",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.fixedWidth,
             setValue: (obj, value) => obj.setFixedSize(value, obj.style.fixedHeight)
         };
@@ -44,6 +46,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Height",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextStyle.fixedHeight",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.fixedHeight,
             setValue: (obj, value) => obj.setFixedSize(obj.style.fixedWidth, value)
         };
@@ -60,6 +64,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Padding Left",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.left",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.padding["left"],
             setValue: (obj, value) => { obj.padding["left"] = value; obj.updateText(); }
         };
@@ -69,6 +75,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Padding Top",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.top",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.padding["top"],
             setValue: (obj, value) => { obj.padding["top"] = value; obj.updateText(); }
         };
@@ -78,6 +86,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Padding Right",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.right",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.padding["right"],
             setValue: (obj, value) => { obj.padding["right"] = value; obj.updateText(); }
         };
@@ -87,6 +97,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Padding Bottom",
             tooltip: "phaser:Phaser.Types.GameObjects.Text.TextPadding.bottom",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.padding["bottom"],
             setValue: (obj, value) => { obj.padding["bottom"] = value; obj.updateText(); }
         };
@@ -96,6 +108,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Line Spacing",
             tooltip: "phaser:Phaser.GameObjects.Text.lineSpacing",
             defValue: 0,
+            increment: 0.5,
+            incrementMin: 0,
             getValue: obj => obj.lineSpacing,
             setValue: (obj, value) => obj.setLineSpacing(value)
         };
@@ -166,6 +180,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Stroke Thickness",
             tooltip: "phaser:Phaser.GameObjects.Text.setStroke(thickness)",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.strokeThickness,
             setValue: (obj, value) => obj.setStroke(obj.style.stroke, value)
         };
@@ -184,6 +200,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "X",
             tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(x)",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.shadowOffsetX,
             setValue: (obj, value) => obj.setShadowOffset(value, obj.style.shadowOffsetY)
         };
@@ -193,6 +211,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Y",
             tooltip: "phaser:Phaser.GameObjects.Text.setShadowOffset(y)",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.shadowOffsetY,
             setValue: (obj, value) => obj.setShadowOffset(obj.style.shadowOffsetX, value)
         };
@@ -243,6 +263,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Shadow Blur",
             tooltip: "phaser:Phaser.GameObjects.Text.setShadowBlur",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.shadowBlur,
             setValue: (obj, value) => obj.setShadowBlur(value)
         };
@@ -252,6 +274,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "X",
             tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineX",
             defValue: 1.2,
+            increment: 0.05,
+            incrementMin: 0,
             getValue: obj => obj.style.baselineX,
             setValue: (obj, value) => obj.style.baselineX = value
         };
@@ -261,6 +285,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Y",
             tooltip: "phaser:Phaser.GameObjects.TextStyle.baselineY",
             defValue: 1.4,
+            increment: 0.05,
+            incrementMin: 0,
             getValue: obj => obj.style.baselineY,
             setValue: (obj, value) => obj.style.baselineY = value
         };
@@ -277,6 +303,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Max Lines",
             tooltip: "phaser:Phaser.GameObjects.Text.setMaxLines",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.maxLines,
             setValue: (obj, value) => obj.setMaxLines(value)
         };
@@ -286,6 +314,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Word Wrap Width",
             tooltip: "phaser:Phaser.GameObjects.Text.setWordWrapWidth(width)",
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: obj => obj.style.wordWrapWidth || 0,
             setValue: (obj, value) => {
 
