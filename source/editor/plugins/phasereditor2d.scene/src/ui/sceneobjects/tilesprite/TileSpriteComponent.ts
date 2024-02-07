@@ -2,10 +2,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export class TileSpriteComponent extends Component<TileSprite> {
 
-        static tilePositionX = SimpleProperty("tilePositionX", 0, "X", "phaser:Phaser.GameObjects.TileSprite.tilePositionX");
-        static tilePositionY = SimpleProperty("tilePositionY", 0, "Y", "phaser:Phaser.GameObjects.TileSprite.tilePositionY");
-        static tileScaleX = SimpleProperty("tileScaleX", 1, "X", "Phaser.GameObjects.TileSprite.tileScaleX");
-        static tileScaleY = SimpleProperty("tileScaleY", 1, "Y", "Phaser.GameObjects.TileSprite.tileScaleY");
+        static tilePositionX = SimpleProperty("tilePositionX", 0, "X", "phaser:Phaser.GameObjects.TileSprite.tilePositionX", false, null, 1);
+        static tilePositionY = SimpleProperty("tilePositionY", 0, "Y", "phaser:Phaser.GameObjects.TileSprite.tilePositionY", false, null, 1);
+        static tileScaleX = SimpleProperty("tileScaleX", 1, "X", "Phaser.GameObjects.TileSprite.tileScaleX", false, null, 0.05, 0.01);
+        static tileScaleY = SimpleProperty("tileScaleY", 1, "Y", "Phaser.GameObjects.TileSprite.tileScaleY", false, null, 0.05, 0.01);
 
         static tilePosition: IPropertyXY = {
             label: "Tile Position",

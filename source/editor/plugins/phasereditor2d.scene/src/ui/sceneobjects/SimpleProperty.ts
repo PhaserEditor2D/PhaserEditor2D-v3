@@ -1,7 +1,15 @@
 namespace phasereditor2d.scene.ui.sceneobjects {
 
     export function SimpleProperty(
-        nameConfig: string | { name: string, codeName: string }, defValue: any, label?: string, tooltip?: string, local: boolean = false, afterSetValue?: (obj: any) => void, increment?: number): IProperty<any> {
+        nameConfig: string | { name: string, codeName: string },
+        defValue: any,
+        label?: string,
+        tooltip?: string,
+        local: boolean = false,
+        afterSetValue?: (obj: any) => void,
+        increment?: number,
+        incrementMin?: number,
+        incrementMax?: number): IProperty<any> {
 
         let codeName: string;
         let name: string;
@@ -24,6 +32,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             tooltip: tooltip,
             local,
             increment,
+            incrementMin,
+            incrementMax,
             getValue: obj => obj[name],
             setValue: (obj, value) => {
 
