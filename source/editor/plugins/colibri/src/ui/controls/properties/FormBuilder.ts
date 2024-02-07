@@ -113,6 +113,39 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
+        createLabelToTextNumericLink(label: HTMLElement, text: HTMLInputElement, increment: number) {
+
+            label.style.cursor = "ew-resize";
+            label.draggable = true;
+
+            const updatePosition = (e: MouseEvent) => {
+
+                const delta = e.movementX * increment;
+
+                text.value = (parseFloat(text.value) + delta).toString();
+
+                text.dispatchEvent(new Event("preview"));
+            }
+
+            label.addEventListener("mousedown", e => {
+
+                (label as any).requestPointerLock({
+                    unadjustedMovement: true
+                });
+
+                document.addEventListener("mousemove", updatePosition);
+                document.addEventListener("mouseup", () => {
+                    
+                    document.exitPointerLock();
+                    document.removeEventListener("mousemove", updatePosition);
+
+                    text.dispatchEvent(new Event("focusout"));
+                });
+
+                text.dispatchEvent(new Event("focusin"));
+            });
+        }
+
         createNumberText(parent: HTMLElement, readOnly = false, increment?: number) {
 
             const text = this.createText(parent, readOnly);

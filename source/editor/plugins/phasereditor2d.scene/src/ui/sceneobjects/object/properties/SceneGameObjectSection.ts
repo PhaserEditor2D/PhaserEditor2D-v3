@@ -263,6 +263,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                     label.classList.add("label-axis-" + axis);
                     input.classList.add("input-axis-" + axis);
                 }
+
+                if (propXY.x.increment) {
+
+                    this.createLabelToTextNumericLink(label, input, propXY.x.increment);
+                }
             }
 
             return inputElements;
