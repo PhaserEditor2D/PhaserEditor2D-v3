@@ -113,7 +113,22 @@ namespace colibri.ui.controls.properties {
             return btn;
         }
 
-        createLabelToTextNumericLink(label: HTMLElement, text: HTMLInputElement, increment: number) {
+        private clamp(value: number, min?: number, max?: number) {
+
+            if (min !== undefined && value < min) {
+
+                return min;
+            }
+
+            if (max !== undefined && value > max) {
+
+                return max;
+            }
+
+            return value;
+        }
+
+        createLabelToTextNumericLink(label: HTMLElement, text: HTMLInputElement, increment: number, min?: number, max?: number) {
 
             label.style.cursor = "ew-resize";
             label.draggable = true;
@@ -122,7 +137,7 @@ namespace colibri.ui.controls.properties {
 
                 const delta = e.movementX * increment;
 
-                text.value = (parseFloat(text.value) + delta).toFixed(2);
+                text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
 
                 text.dispatchEvent(new Event("preview"));
             }
@@ -135,7 +150,7 @@ namespace colibri.ui.controls.properties {
 
                 document.addEventListener("mousemove", updatePosition);
                 document.addEventListener("mouseup", () => {
-                    
+
                     document.exitPointerLock();
                     document.removeEventListener("mousemove", updatePosition);
 
@@ -146,7 +161,7 @@ namespace colibri.ui.controls.properties {
             });
         }
 
-        createNumberText(parent: HTMLElement, readOnly = false, increment?: number) {
+        createNumberText(parent: HTMLElement, readOnly = false, increment?: number, min?: number, max?: number) {
 
             const text = this.createText(parent, readOnly);
 
@@ -183,7 +198,7 @@ namespace colibri.ui.controls.properties {
 
                         const delta = increment * Math.sign(e.deltaY);
 
-                        text.value = (parseFloat(text.value) + delta).toFixed(2);
+                        text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
 
                         text.dispatchEvent(new Event("preview"));
                     }
@@ -211,7 +226,7 @@ namespace colibri.ui.controls.properties {
                             delta *= 10;
                         }
 
-                        text.value = (parseFloat(text.value) + delta).toFixed(2);
+                        text.value = this.clamp(parseFloat(text.value) + delta, min, max).toFixed(2);
 
                         text.dispatchEvent(new Event("preview"));
 

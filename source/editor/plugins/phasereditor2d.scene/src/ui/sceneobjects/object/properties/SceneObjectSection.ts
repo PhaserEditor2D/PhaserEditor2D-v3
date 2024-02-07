@@ -45,7 +45,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         // tslint:disable-next-line:ban-types
         createFloatField(parent: HTMLElement, property: IProperty<T>) {
 
-            const text = this.createNumberText(parent, false, property.increment);
+            const text = this.createNumberText(
+                parent, false, property.increment, property.incrementMin, property.incrementMax);
 
             const makeListener = (isPreview: boolean) => {
 
@@ -95,7 +96,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                                     if (typeof value === "number") {
 
-                                        for(const obj of this.getSelection()) {
+                                        for (const obj of this.getSelection()) {
 
                                             property.setValue(obj, value);
                                         }

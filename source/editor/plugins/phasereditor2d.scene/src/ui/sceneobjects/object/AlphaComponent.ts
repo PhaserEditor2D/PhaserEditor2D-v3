@@ -16,8 +16,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Alpha",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alpha",
             defValue: 1,
+            increment: 0.01,
+            incrementMin: 0,
+            incrementMax: 1,
             getValue: obj => obj.alpha,
-            setValue: (obj, value) => obj.alpha = value
+            setValue: (obj, value) => obj.alpha = Phaser.Math.Clamp(value, 0, 1)
         };
 
         static alphaTopLeft: IProperty<IAlphaLikeObject> = {
@@ -25,8 +28,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Left",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopLeft",
             defValue: 1,
+            increment: 0.05,
             getValue: obj => obj.alphaTopLeft,
-            setValue: (obj, value) => obj.alphaTopLeft = value
+            setValue: (obj, value) => obj.alphaTopLeft = Phaser.Math.Clamp(value, 0, 1)
         };
 
         static alphaTopRight: IProperty<IAlphaLikeObject> = {
@@ -34,8 +38,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Right",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopRight",
             defValue: 1,
+            increment: 0.05,
             getValue: obj => obj.alphaTopRight,
-            setValue: (obj, value) => obj.alphaTopRight = value
+            setValue: (obj, value) => obj.alphaTopRight = Phaser.Math.Clamp(value, 0, 1)
         };
 
         static alphaBottomLeft: IProperty<IAlphaLikeObject> = {
@@ -43,8 +48,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Left",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
             defValue: 1,
+            increment: 0.05,
             getValue: obj => obj.alphaBottomLeft,
-            setValue: (obj, value) => obj.alphaBottomLeft = value
+            setValue: (obj, value) => obj.alphaBottomLeft = Phaser.Math.Clamp(value, 0, 1)
         };
 
         static alphaBottomRight: IProperty<IAlphaLikeObject> = {
@@ -52,8 +58,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Right",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomRight",
             defValue: 1,
+            increment: 0.05,
             getValue: obj => obj.alphaBottomRight,
-            setValue: (obj, value) => obj.alphaBottomRight = value
+            setValue: (obj, value) => obj.alphaBottomRight = Phaser.Math.Clamp(value, 0, 1)
         };
 
         static alphaTop: IPropertyXY = {

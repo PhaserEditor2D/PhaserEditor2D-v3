@@ -106,7 +106,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (prop.increment) {
 
-                this.createLabelToTextNumericLink(label, text, prop.increment);
+                this.createLabelToTextNumericLink(
+                    label, text, prop.increment, prop.incrementMin, prop.incrementMax);
             }
         }
 
@@ -271,7 +272,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 if (propXY.x.increment) {
 
-                    this.createLabelToTextNumericLink(label, input, propXY.x.increment);
+                    this.createLabelToTextNumericLink(
+                        label, input, propXY.x.increment, propXY.x.incrementMin, propXY.x.incrementMax);
                 }
             }
 

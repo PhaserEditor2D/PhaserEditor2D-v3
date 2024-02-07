@@ -14,6 +14,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         increment?: number;
 
+        incrementMin?: number;
+
+        incrementMax?: number;
+
         local?: boolean;
 
         label?: string;
