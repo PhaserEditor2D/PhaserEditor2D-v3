@@ -28,7 +28,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Left",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopLeft",
             defValue: 1,
-            increment: 0.05,
+            increment: 0.01,
+            incrementMin: 0,
+            incrementMax: 1,
             getValue: obj => obj.alphaTopLeft,
             setValue: (obj, value) => obj.alphaTopLeft = Phaser.Math.Clamp(value, 0, 1)
         };
@@ -38,7 +40,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Right",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaTopRight",
             defValue: 1,
-            increment: 0.05,
+            increment: 0.01,
+            incrementMin: 0,
+            incrementMax: 1,
             getValue: obj => obj.alphaTopRight,
             setValue: (obj, value) => obj.alphaTopRight = Phaser.Math.Clamp(value, 0, 1)
         };
@@ -48,7 +52,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Left",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomLeft",
             defValue: 1,
-            increment: 0.05,
+            increment: 0.01,
+            incrementMin: 0,
+            incrementMax: 1,
             getValue: obj => obj.alphaBottomLeft,
             setValue: (obj, value) => obj.alphaBottomLeft = Phaser.Math.Clamp(value, 0, 1)
         };
@@ -58,7 +64,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Right",
             tooltip: "phaser:Phaser.GameObjects.Components.Alpha.alphaBottomRight",
             defValue: 1,
-            increment: 0.05,
+            increment: 0.01,
+            incrementMin: 0,
+            incrementMax: 1,
             getValue: obj => obj.alphaBottomRight,
             setValue: (obj, value) => obj.alphaBottomRight = Phaser.Math.Clamp(value, 0, 1)
         };
