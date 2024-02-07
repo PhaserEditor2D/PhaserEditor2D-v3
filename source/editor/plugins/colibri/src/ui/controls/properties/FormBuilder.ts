@@ -122,7 +122,7 @@ namespace colibri.ui.controls.properties {
 
                 const delta = e.movementX * increment;
 
-                text.value = (parseFloat(text.value) + delta).toString();
+                text.value = (parseFloat(text.value) + delta).toFixed(2);
 
                 text.dispatchEvent(new Event("preview"));
             }
@@ -183,7 +183,7 @@ namespace colibri.ui.controls.properties {
 
                         const delta = increment * Math.sign(e.deltaY);
 
-                        text.value = (parseFloat(text.value) + delta).toString();
+                        text.value = (parseFloat(text.value) + delta).toFixed(2);
 
                         text.dispatchEvent(new Event("preview"));
                     }
@@ -211,7 +211,7 @@ namespace colibri.ui.controls.properties {
                             delta *= 10;
                         }
 
-                        text.value = (parseFloat(text.value) + delta).toString();
+                        text.value = (parseFloat(text.value) + delta).toFixed(2);
 
                         text.dispatchEvent(new Event("preview"));
 
