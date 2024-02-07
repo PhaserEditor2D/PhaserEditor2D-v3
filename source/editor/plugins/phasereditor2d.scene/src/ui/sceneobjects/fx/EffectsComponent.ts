@@ -9,6 +9,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             label: "Padding",
             tooltip: PhaserHelp("Phaser.GameObjects.Components.FX.padding"),
             defValue: 0,
+            increment: 1,
+            incrementMin: 0,
             getValue: (obj: Image) => {
 
                 if (obj.preFX) {

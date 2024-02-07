@@ -104,10 +104,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const text = this.createFloatField(parent, prop);
             text.style.gridColumn = fullWidth ? "4 / span 3" : "4";
 
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
+        }
+
+        createPropertyLabelToTextNumericLink(prop: IProperty<any>, label: HTMLElement, text: HTMLInputElement) {
+
             if (prop.increment) {
 
-                this.createLabelToTextNumericLink(
-                    label, text, prop.increment, prop.incrementMin, prop.incrementMax);
+                this.createLabelToTextNumericLink(label, text, prop.increment, prop.incrementMin, prop.incrementMax);
             }
         }
 
@@ -115,9 +119,11 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
 
-            this.createFloatField(parent, prop);
+            const text = this.createFloatField(parent, prop);
+
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
         }
 
         createPropertyBoolean(parent: HTMLElement, prop: IProperty<any>, lockIcon = true) {
@@ -261,20 +267,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
 
-                const input = this.createFloatField(parent, prop);
-                inputElements.push(input);
+                const text = this.createFloatField(parent, prop);
+                inputElements.push(text);
 
                 if (colorAxis) {
 
                     label.classList.add("label-axis-" + axis);
-                    input.classList.add("input-axis-" + axis);
+                    text.classList.add("input-axis-" + axis);
                 }
 
-                if (propXY.x.increment) {
-
-                    this.createLabelToTextNumericLink(
-                        label, input, propXY.x.increment, propXY.x.incrementMin, propXY.x.incrementMax);
-                }
+                this.createPropertyLabelToTextNumericLink(propXY.x, label, text);
             }
 
             return inputElements;
