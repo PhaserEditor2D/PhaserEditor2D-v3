@@ -10,7 +10,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             for (const key in list) {
 
-                if (key === "__DEFAULT" || key === "__MISSING") {
+                if (key === "__DEFAULT" || key === "__MISSING" || key === "__WHITE") {
 
                     continue;
                 }
