@@ -2,6 +2,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     export abstract class FXObjectExtension extends SceneGameObjectExtension {
 
+        static allowGameObject(obj: ISceneGameObject) {
+
+            if (!obj.getEditorSupport().isDisplayObject()
+                || obj instanceof SpineObject) {
+
+                return false;
+            }
+
+            return true;
+        }
+
         static isDefaultPipelinePreFX(parent: ISceneGameObject) {
 
             return parent instanceof Phaser.GameObjects.Sprite

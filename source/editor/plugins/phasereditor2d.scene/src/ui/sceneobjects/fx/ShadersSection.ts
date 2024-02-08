@@ -79,7 +79,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         canEdit(obj: ISceneGameObject, n: number): boolean {
 
-            return isGameObject(obj) && obj.getEditorSupport().isDisplayObject();
+            return isGameObject(obj) && FXObjectExtension.allowGameObject(obj);
         }
 
         canEditNumber(n: number): boolean {

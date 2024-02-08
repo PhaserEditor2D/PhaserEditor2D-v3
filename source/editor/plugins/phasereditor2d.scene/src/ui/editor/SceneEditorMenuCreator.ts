@@ -75,7 +75,10 @@ namespace phasereditor2d.scene.ui.editor {
 
                     return obj.getParent();
                 }
-            });
+
+                return undefined;
+
+            }).filter(obj => obj && sceneobjects.FXObjectExtension.allowGameObject(obj));
 
             const enabled = parents.length > 0;
 
