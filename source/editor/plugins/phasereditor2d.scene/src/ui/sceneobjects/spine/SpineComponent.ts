@@ -59,10 +59,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         static defaultMix = SimpleProperty({
             name: "defaultMix", codeName: "animationStateData.defaultMix",
-        }, 0, "Default Mix", "phaser:spine.AnimationStateData.defaultMix");
+        }, 0, "Default Mix", "phaser:spine.AnimationStateData.defaultMix", false, undefined, 1, 0);
 
         static timeScale = SimpleProperty({ name: "timeScale", codeName: "animationState.timeScale" },
-            1, "Time Scale", "phaser:spine.AnimationState.timeScale");
+            1, "Time Scale", "phaser:spine.AnimationState.timeScale", false, undefined, 0.01, 0);
 
         // bounds provider
 
@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             false, (obj: SpineObject) => {
 
                 obj.updateBoundsProvider();
-            })
+            }, 0.01, 0)
 
         constructor(obj: SpineObject) {
             super(obj, [
