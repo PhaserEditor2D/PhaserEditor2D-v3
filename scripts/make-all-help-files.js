@@ -280,6 +280,79 @@ utils.makeHelpFile([
     "Phaser.Physics.Arcade.Collider(processCallback)",
     "Phaser.Physics.Arcade.Collider(callbackContext)",
 
+    "Phaser.FX.Glow.color",
+    "Phaser.FX.Glow.outerStrength",
+    "Phaser.FX.Glow.innerStrength",
+    "Phaser.FX.Glow.knockout",
+
+    "Phaser.FX.Shadow.x",
+    "Phaser.FX.Shadow.y",
+    "Phaser.FX.Shadow.decay",
+    "Phaser.FX.Shadow.power",
+    "Phaser.FX.Shadow.color",
+    "Phaser.FX.Shadow.samples",
+    "Phaser.FX.Shadow.intensity",
+
+    "Phaser.FX.Barrel.amount",
+
+    "Phaser.FX.Bloom.color",
+    "Phaser.FX.Bloom.offsetX",
+    "Phaser.FX.Bloom.offsetY",
+    "Phaser.FX.Bloom.blurStrength",
+    "Phaser.FX.Bloom.strength",
+    "Phaser.FX.Bloom.steps",
+
+    "Phaser.FX.Bokeh.radius",
+    "Phaser.FX.Bokeh.amount",
+    "Phaser.FX.Bokeh.contrast",
+    "Phaser.FX.Bokeh.isTiltShift",
+    "Phaser.FX.Bokeh.blurX",
+    "Phaser.FX.Bokeh.blurY",
+    "Phaser.FX.Bokeh.strength",
+
+    "Phaser.FX.Circle.thickness",
+    "Phaser.FX.Circle.color",
+    "Phaser.FX.Circle.backgroundColor",
+    "Phaser.FX.Circle.scale",
+    "Phaser.FX.Circle.feather",
+
+    "Phaser.FX.ColorMatrix.alpha",
+    "Phaser.FX.ColorMatrix.brightness(value)",
+    "Phaser.FX.ColorMatrix.hue(rotation)",
+    "Phaser.FX.ColorMatrix.grayscale(value)",
+    "Phaser.FX.ColorMatrix.contrast(value)",
+    "Phaser.FX.ColorMatrix.night(intensity)",
+
+    "Phaser.FX.Displacement.x",
+    "Phaser.FX.Displacement.y",
+
+    "Phaser.FX.Gradient.color1",
+    "Phaser.FX.Gradient.color2",
+    "Phaser.FX.Gradient.alpha",
+    "Phaser.FX.Gradient.fromX",
+    "Phaser.FX.Gradient.fromY",
+    "Phaser.FX.Gradient.toX",
+    "Phaser.FX.Gradient.toY",
+    "Phaser.FX.Gradient.size",
+
+    "Phaser.FX.Pixelate.amount",
+
+    "Phaser.FX.Shine.speed",
+    "Phaser.FX.Shine.lineWidth",
+    "Phaser.FX.Shine.gradient",
+    "Phaser.FX.Shine.reveal",
+
+    "Phaser.FX.Vignette.x",
+    "Phaser.FX.Vignette.y",
+    "Phaser.FX.Vignette.radius",
+    "Phaser.FX.Vignette.strength",
+
+    "Phaser.FX.Wipe.wipeWidth",
+    "Phaser.FX.Wipe.direction",
+    "Phaser.FX.Wipe.axis",
+    "Phaser.FX.Wipe.progress",
+    "Phaser.FX.Wipe.reveal",
+
     "Phaser.Input.Keyboard.Key",
 
     "spine.SpineGameObject",
