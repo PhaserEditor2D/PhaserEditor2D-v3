@@ -245,8 +245,6 @@ namespace colibri.ui.controls.properties {
 
                         e.preventDefault();
 
-                        console.log("wheel");
-
                         const delta = increment * Math.sign(e.deltaY);
 
                         text.value = valueComputer(text.value, delta, min, max);
