@@ -8,21 +8,13 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const list = scene.textures.list;
 
-            for (const key in list) {
+            for (const key of scene.textures.getTextureKeys()) {
 
-                if (key === "__DEFAULT" || key === "__MISSING" || key === "__WHITE") {
+                const texture = list[key];
 
-                    continue;
-                }
+                texture.destroy();
 
-                if (list.hasOwnProperty(key)) {
-
-                    const texture = list[key];
-
-                    texture.destroy();
-
-                    delete list[key];
-                }
+                delete list[key];
             }
         }
 
@@ -38,7 +30,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (asset instanceof pack.core.AnimationConfigInPackItem) {
 
-                for(const animFrame of asset.getFrames()) {
+                for (const animFrame of asset.getFrames()) {
 
                     const textureFrame = animFrame.getTextureFrame();
 
@@ -51,7 +43,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             let framesContainer: pack.core.ImageFrameContainerAssetPackItem | pack.core.AsepriteAssetPackItem = null;
 
-            if (asset instanceof pack.core.ImageFrameContainerAssetPackItem 
+            if (asset instanceof pack.core.ImageFrameContainerAssetPackItem
                 || asset instanceof pack.core.AsepriteAssetPackItem) {
 
                 framesContainer = asset;
