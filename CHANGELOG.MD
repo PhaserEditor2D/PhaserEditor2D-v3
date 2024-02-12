@@ -11,6 +11,7 @@
 * Allows changing numeric values with the mouse wheel.
 * Allows changing numeric values with the Up/Down keys. If Shift is pressed, it increments it by 10.
 * Allows changing numeric values by dragging the label.
+* Adds support to Shader Effects objects, Glow and Shadow.
 
 ## v3.66.0 - Jan 11, 2024
 
