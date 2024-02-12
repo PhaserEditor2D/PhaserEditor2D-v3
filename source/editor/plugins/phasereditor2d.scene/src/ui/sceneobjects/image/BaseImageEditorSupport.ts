@@ -57,7 +57,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         setInteractive() {
 
-            this.getObject().setInteractive(interactive_getAlpha_SharedTexture);
+            this.getObject().setInteractive(undefined, interactive_getAlpha_SharedTexture)
         }
     }
 }
