@@ -1,5 +1,7 @@
 *.tsbuildinfo
 node_modules/
-plugins/*/_out/**
+#plugins/*/_out/**
+plugins/*/_out/**/*.d.ts
+plugins/*/_out/**/*.d.ts.map
 .vscode
 .DS_Store
