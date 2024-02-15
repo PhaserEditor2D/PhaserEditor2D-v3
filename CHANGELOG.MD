@@ -1,9 +1,10 @@
 # Change Log
 
-## v3.67.0-dev
+## v3.67.0, Feb 16
 
 * Updates to latest TypeScript 5.3.3.
 * Updates to latest CodeMirror 5.66.16.
+* Adds support to Phaser 3.80.
 * Save all editors when the user executes the Play commands.
 * Depth order commands now works with Mac keyboard with a numeric pad, in its default config.
 * Fixes bug with opening multiple context menus.
