@@ -3,7 +3,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     export class FXShadowSection extends SceneGameObjectSection<FXShadow> {
 
         constructor(page: colibri.ui.controls.properties.PropertyPage) {
-            super(page, "phasereditor2d.scene.ui.sceneobjects.FXShadowSection", "Shadow", false, true);
+            super(page, "phasereditor2d.scene.ui.sceneobjects.FXShadowSection", "Shadow", false, false);
         }
 
         createForm(parent: HTMLDivElement): void {

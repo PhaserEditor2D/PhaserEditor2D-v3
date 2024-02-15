@@ -21094,7 +21094,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class FXGlowSection extends sceneobjects.SceneGameObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.FXGlowSection", "Glow", false, true);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.FXGlowSection", "Glow", false, false);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 3);
@@ -21287,7 +21287,7 @@ var phasereditor2d;
             (function (sceneobjects) {
                 class FXShadowSection extends sceneobjects.SceneGameObjectSection {
                     constructor(page) {
-                        super(page, "phasereditor2d.scene.ui.sceneobjects.FXShadowSection", "Shadow", false, true);
+                        super(page, "phasereditor2d.scene.ui.sceneobjects.FXShadowSection", "Shadow", false, false);
                     }
                     createForm(parent) {
                         const comp = this.createGridElement(parent, 3);
