@@ -9,7 +9,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             texture: string, frame: string | number, width: number,
             leftWidth: number, rightWidth: number
         ) {
-            super(scene, x, y, texture, frame, width, 0,
+            super(scene, x, y, texture || "__MISSING", frame, width, 0,
                 leftWidth, rightWidth, 0, 0);
 
             this._editorSupport = new ThreeSliceEditorSupport(this, scene);

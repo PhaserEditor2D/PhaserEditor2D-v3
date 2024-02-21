@@ -24931,7 +24931,7 @@ var phasereditor2d;
                 class NineSlice extends Phaser.GameObjects.NineSlice {
                     _editorSupport;
                     constructor(scene, x, y, texture, frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight) {
-                        super(scene, x, y, texture, frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight);
+                        super(scene, x, y, texture || "__MISSING", frame, width, height, leftWidth, rightWidth, topHeight, bottomHeight);
                         this._editorSupport = new sceneobjects.NineSliceEditorSupport(this, scene);
                     }
                     getEditorSupport() {
@@ -25279,7 +25279,7 @@ var phasereditor2d;
                 class ThreeSlice extends Phaser.GameObjects.NineSlice {
                     _editorSupport;
                     constructor(scene, x, y, texture, frame, width, leftWidth, rightWidth) {
-                        super(scene, x, y, texture, frame, width, 0, leftWidth, rightWidth, 0, 0);
+                        super(scene, x, y, texture || "__MISSING", frame, width, 0, leftWidth, rightWidth, 0, 0);
                         this._editorSupport = new sceneobjects.ThreeSliceEditorSupport(this, scene);
                     }
                     getEditorSupport() {
