@@ -14,6 +14,7 @@
 * Allows changing numeric values by dragging the label.
 * Adds support to Shader Effects objects, Glow and Shadow.
 * Uses the Text's internal canvas to render the Text object in the Outline view.
+* Use the __MISSING texture by default in NineSlice and ThreeSlice.
 
 ## v3.66.0 - Jan 11, 2024
 
