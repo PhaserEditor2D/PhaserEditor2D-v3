@@ -79,9 +79,10 @@ namespace phasereditor2d.scene.ui.editor {
 
                 const isUserCompNode = obj instanceof sceneobjects.UserComponentNode;
 
-                const isScriptNode = obj instanceof sceneobjects.ScriptNode;
+                const isScriptNodeOrFXObj = obj instanceof sceneobjects.ScriptNode
+                    || obj instanceof sceneobjects.FXObject;
 
-                const isNonDisplayObject = isUserCompNode || isScriptNode;
+                const isNonDisplayObject = isUserCompNode || isScriptNodeOrFXObj;
 
                 if (isGameObject || isNonDisplayObject) {
 
@@ -91,7 +92,7 @@ namespace phasereditor2d.scene.ui.editor {
 
                         sprite = obj.getObject();
 
-                    } else if (isScriptNode) {
+                    } else if (isScriptNodeOrFXObj) {
 
                         sprite = obj.getParentDisplayObject();
 

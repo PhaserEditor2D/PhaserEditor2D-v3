@@ -563,6 +563,7 @@ namespace phasereditor2d.scene.ui {
 
                     const sprite = ext.createGameObjectWithData({
                         data: data,
+                        parent,
                         scene: this._editorScene
                     });
 

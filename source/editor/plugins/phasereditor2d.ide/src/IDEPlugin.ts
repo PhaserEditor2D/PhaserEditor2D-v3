@@ -15,6 +15,7 @@ namespace phasereditor2d.ide {
         private _externalEditorName: string;
 
         static getInstance() {
+
             return this._instance;
         }
 
@@ -50,6 +51,7 @@ namespace phasereditor2d.ide {
                 id: "lightBlue",
                 classList: ["lightBlue"],
                 displayName: "Light Blue",
+                sceneBackground: controls.Controls.LIGHT_THEME.sceneBackground,
                 viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
                 viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
                 viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
@@ -60,6 +62,7 @@ namespace phasereditor2d.ide {
                 id: "lightGray",
                 classList: ["light", "lightGray"],
                 displayName: "Light Gray",
+                sceneBackground: controls.Controls.LIGHT_THEME.sceneBackground,
                 viewerForeground: controls.Controls.LIGHT_THEME.viewerForeground,
                 viewerSelectionForeground: controls.Controls.LIGHT_THEME.viewerSelectionForeground,
                 viewerSelectionBackground: controls.Controls.LIGHT_THEME.viewerSelectionBackground,
@@ -79,6 +82,11 @@ namespace phasereditor2d.ide {
             phasereditor2d.files.FilesPlugin.getInstance().setOpenFileAction(file => this.openFileFromFilesView(file));
 
             colibri.Platform.getWorkbench().eventEditorActivated.addListener(editor => {
+
+                if (!editor) {
+
+                    return;
+                }
 
                 const file = editor.getInput();
 

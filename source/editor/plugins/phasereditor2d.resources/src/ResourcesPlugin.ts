@@ -63,6 +63,7 @@ namespace phasereditor2d.resources {
     export const ICON_KEYBOARD_KEY = "keyboard-key";
     export const ICON_9_SLICE = "9slice";
     export const ICON_3_SLICE = "3slice";
+    export const ICON_FX = "fx";
     // phasereditor2d.webContentTypes
     export const ICON_FILE_FONT = "file-font";
     export const ICON_FILE_IMAGE = "file-image";

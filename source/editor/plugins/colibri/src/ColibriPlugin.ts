@@ -60,6 +60,9 @@ namespace colibri {
                 )
             );
 
+            // file storage
+            reg.addExtension(new colibri.core.io.HTTPServerFileStorageExtension());
+
             // editor inputs
 
             reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());

@@ -87,7 +87,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             section.addUpdater(() => {
 
-                const finder = ScenePlugin.getInstance().getSceneFinder();
+                btn.disabled = !ui.editor.ConvertTypeDialog
+                    .canConvert(section.getEditor());
 
                 btn.textContent = section.flatValues_StringJoinDifferent(
 

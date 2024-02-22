@@ -2,13 +2,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
     import controls = colibri.ui.controls;
 
-    function parseColor(color: string) {
+    function parseColor(color: string, alpha = false) {
 
         const rgba = controls.Colors.parseColor(color);
 
-        const result = Phaser.Display.Color.GetColor(rgba.r, rgba.g, rgba.b);
+        if (alpha) {
 
-        return result;
+            return Phaser.Display.Color.GetColor32(rgba.r, rgba.g, rgba.b, rgba.a);
+        }
+
+        return Phaser.Display.Color.GetColor(rgba.r, rgba.g, rgba.b);
     }
 
     export function NumberColorProperty(
@@ -55,6 +58,34 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         };
     }
 
+    export function NumberColorPropertyCodeDomAdapter2(p: IProperty<any>): IProperty<any> {
+
+        const name = p.name;
+
+        const defValue = parseColor(p.defValue);
+
+        return {
+            name: name,
+            defValue,
+            label: p.label,
+            tooltip: p.tooltip,
+            local: p.local,
+            getValue: obj => {
+
+                const val = p.getValue(obj) as string;
+
+                const color = parseColor(val);
+
+                return color;
+            },
+
+            setValue: (obj, value) => {
+
+                throw new Error("Unreachable code!");
+            }
+        }
+    }
+
     export function NumberColorPropertyCodeDomAdapter(p: IProperty<any>): IProperty<any> {
 
         const name = p.name;
@@ -77,6 +108,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 }
 
                 const color = parseColor(val);
+
+                console.log("parseColor", val, color);
 
                 return color;
             },

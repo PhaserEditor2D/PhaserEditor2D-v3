@@ -12,7 +12,7 @@ namespace phasereditor2d.scene.ui.editor.outline {
 
                 return plainObject.getEditorSupport().getLabel();
 
-            } if (sceneobjects.isGameObject(obj)) {
+            } else if (sceneobjects.isGameObject(obj)) {
 
                 const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
 
@@ -128,6 +128,11 @@ namespace phasereditor2d.scene.ui.editor.outline {
             if (sceneobjects.isGameObject(obj)) {
 
                 const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+
+                if (obj instanceof sceneobjects.FXObject) {
+
+                    hintText += " #" + (obj.isPreFX ? "preFX" : "postFX");
+                }
 
                 if (obj instanceof sceneobjects.ScriptNode) {
 

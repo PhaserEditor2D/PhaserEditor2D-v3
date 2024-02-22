@@ -11,6 +11,7 @@ namespace phasereditor2d.scene {
     export const SCENE_OBJECT_ARCADE_CATEGORY = "Arcade";
     export const SCENE_OBJECT_INPUT_CATEGORY = "Input";
     export const SCENE_OBJECT_SCRIPT_CATEGORY = "Script";
+    export const SCENE_OBJECT_FX_CATEGORY = "FX";
     export const SCENE_OBJECT_SPINE_CATEGORY = "Spine";
 
     export const SCENE_OBJECT_CATEGORIES = [
@@ -115,6 +116,11 @@ namespace phasereditor2d.scene {
             }
 
             return this._docs;
+        }
+
+        async started(): Promise<void> {
+
+            this._sceneFinder.registerStorageListener();
         }
 
         registerExtensions(reg: colibri.ExtensionRegistry) {
@@ -246,7 +252,9 @@ namespace phasereditor2d.scene {
                 ui.sceneobjects.ColliderExtension.getInstance(),
                 ui.sceneobjects.KeyboardKeyExtension.getInstance(),
                 ui.sceneobjects.ScriptNodeExtension.getInstance(),
-                ui.sceneobjects.SpineExtension.getInstance()
+                ui.sceneobjects.SpineExtension.getInstance(),
+                ui.sceneobjects.FXGlowExtension.getInstance(),
+                ui.sceneobjects.FXShadowExtension.getInstance(),
             );
 
             // scene plain object extensions
@@ -290,6 +298,7 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.TintSection(page),
                 page => new ui.sceneobjects.TintSingleSection(page),
                 page => new ui.sceneobjects.SizeSection(page),
+                page => new ui.sceneobjects.ShadersSection(page),
                 page => new ui.sceneobjects.TileSpriteSection(page),
                 page => new ui.sceneobjects.NineSliceSection(page),
                 page => new ui.sceneobjects.ThreeSliceSection(page),
@@ -321,10 +330,13 @@ namespace phasereditor2d.scene {
                 page => new ui.sceneobjects.ColliderSection(page),
                 page => new ui.sceneobjects.KeyboardKeySection(page),
                 page => new ui.sceneobjects.TextureSection(page),
+                page => new ui.sceneobjects.FXObjectSection(page),
+                page => new ui.sceneobjects.FXGlowSection(page),
+                page => new ui.sceneobjects.FXShadowSection(page),
                 page => new ui.sceneobjects.SpineSection(page),
                 page => new ui.sceneobjects.SpineBoundsProviderSection(page),
                 page => new ui.sceneobjects.SpineAnimationSection(page),
-                page => new ui.codesnippets.CreateFromAsepriteCodeSnippetSection(page)
+                page => new ui.codesnippets.CreateFromAsepriteCodeSnippetSection(page),
             ));
 
             // scene tools
@@ -530,6 +542,33 @@ namespace phasereditor2d.scene {
             return colibri.Platform
                 .getExtensions<ui.editor.outline.SceneEditorOutlineExtension>(
                     ui.editor.outline.SceneEditorOutlineExtension.POINT_ID);
+        }
+
+        private _fxExtensions: ui.sceneobjects.FXObjectExtension[];
+
+        private _fxTypes: Set<string>;
+
+        isFXType(type: string) {
+
+            this.getFXExtensions();
+
+            return this._fxTypes.has(type);
+        }
+
+        getFXExtensions() {
+
+            if (this._fxExtensions) {
+
+                return this._fxExtensions;
+            }
+
+            this._fxExtensions = colibri.Platform
+                .getExtensions<ui.sceneobjects.FXObjectExtension>(ui.sceneobjects.SceneGameObjectExtension.POINT_ID)
+                .filter(e => e instanceof ui.sceneobjects.FXObjectExtension) as ui.sceneobjects.FXObjectExtension[];
+
+            this._fxTypes = new Set(this._fxExtensions.map(e => e.getTypeName()));
+
+            return this._fxExtensions;
         }
 
         getLayoutExtensions() {

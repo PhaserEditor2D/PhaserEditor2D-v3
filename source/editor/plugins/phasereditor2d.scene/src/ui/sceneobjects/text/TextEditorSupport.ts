@@ -30,8 +30,8 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getCellRenderer(): colibri.ui.controls.viewers.ICellRenderer {
-
-            return new ObjectCellRenderer();
+            
+            return new TextCellRenderer();
         }
 
         setInteractive(): void {

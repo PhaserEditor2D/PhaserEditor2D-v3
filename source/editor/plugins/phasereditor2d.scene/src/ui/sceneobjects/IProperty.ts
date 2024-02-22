@@ -12,6 +12,14 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
         defValue: any;
 
+        increment?: number;
+
+        incrementMin?: number;
+
+        incrementMax?: number;
+
+        incrementValueComputer?: colibri.ui.controls.properties.IValueComputer;
+
         local?: boolean;
 
         label?: string;
@@ -22,4 +30,9 @@ namespace phasereditor2d.scene.ui.sceneobjects {
     }
 
     export declare type IValueToCodeConverter = (value: any) => any;
+
+    export function ArrayValueToCodeConverter(value: any[]) {
+
+        return `[${value.map(val => JSON.stringify(val)).join(", ")}]`;
+    }
 }

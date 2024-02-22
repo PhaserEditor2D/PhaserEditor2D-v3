@@ -312,6 +312,11 @@ namespace phasereditor2d.scene.ui {
             return this._settings.autoImport || this._settings.exportClass;
         }
 
+        isTypeScriptOutput() {
+
+            return this._settings.compilerOutputLanguage === ide.core.code.SourceLang.TYPE_SCRIPT;
+        }
+
         getMaker() {
 
             return super.getMaker() as SceneMaker;

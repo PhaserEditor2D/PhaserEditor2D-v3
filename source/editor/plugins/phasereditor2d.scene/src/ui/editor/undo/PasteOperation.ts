@@ -117,7 +117,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
             }
         }
 
-        private async pasteGameObjects(clipboardItems: IClipboardItem[], sel: any[]) {
+        private async pasteGameObjects(clipboardItems: IClipboardItem[], newSelection: any[]) {
 
             const scene = this._editor.getScene();
 
@@ -156,13 +156,49 @@ namespace phasereditor2d.scene.ui.editor.undo {
                         await loader.updateLoaderWithObjData(this.getScene(), data);
                     }
 
-                    const obj = maker.createObject(data);
+                    const ser = maker.getSerializer(data);
 
-                    if (obj) {
+                    const type = ser.getType();
 
-                        sprites.push(obj);
+                    if (ScenePlugin.getInstance().isFXType(type)) {
 
-                        sel.push(obj);
+                        // ok, with the FX objects it is different, I can't create them without a parent
+                        // so I have to find the parent right now!
+
+                        const editorSelection = this.getEditor().getSelection();
+
+                        for (const parent of editorSelection) {
+
+                            if (sceneobjects.isGameObject(parent)) {
+
+                                const parentES = (parent as sceneobjects.ISceneGameObject).getEditorSupport();
+
+                                if (parentES.isDisplayObject()) {
+
+                                    const obj = maker.createObject(data, undefined, parent);
+
+                                    parentES.addObjectChild(obj);
+
+                                    sprites.push(obj);
+
+                                    newSelection.push(obj);
+                                }
+                            }
+                        }
+
+                    } else {
+
+                        // it isn't an FX object,
+                        // so I can create it without a parent
+
+                        const obj = maker.createObject(data);
+
+                        if (obj) {
+
+                            sprites.push(obj);
+
+                            newSelection.push(obj);
+                        }
                     }
                 }
             }
@@ -172,7 +208,9 @@ namespace phasereditor2d.scene.ui.editor.undo {
                 this.updateGameObjectName(newObj, nameMaker);
             }
 
-            maker.afterDropObjects(prefabObj, sprites);
+            const nonFXObjects = sprites.filter(s => !(s instanceof sceneobjects.FXObject));
+
+            maker.afterDropObjects(prefabObj, nonFXObjects);
         }
 
         private updateGameObjectName(obj: sceneobjects.ISceneGameObject, nameMaker: colibri.ui.ide.utils.NameMaker) {
@@ -185,7 +223,7 @@ namespace phasereditor2d.scene.ui.editor.undo {
 
             objES.setLabel(newLabel);
 
-            for(const child of objES.getAppendedChildren()) {
+            for (const child of objES.getAppendedChildren()) {
 
                 this.updateGameObjectName(child, nameMaker);
             }

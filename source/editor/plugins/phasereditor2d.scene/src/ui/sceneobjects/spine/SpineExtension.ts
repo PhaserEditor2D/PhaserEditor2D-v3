@@ -213,7 +213,10 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const dataAsset = args.finder.findAssetPackItem(dataKey);
             const atlasAsset = args.finder.findAssetPackItem(atlasKey);
 
-            return [dataAsset, atlasAsset];
+            // Maybe it contains FX objects depending on textures
+            const childrenAssets = await ContainerExtension.getAssetsFromNestedData(args);
+
+            return [dataAsset, atlasAsset, ...childrenAssets];
         }
 
         getCodeDOMBuilder(): GameObjectCodeDOMBuilder {

@@ -6,7 +6,7 @@
         "styles/Spine.css"
     ],
     "scripts": [
-        "libs/localforage.js",
+        "libs/localforage/localforage.js",
         "_out/phasereditor2d.scene.js"
     ]
 }

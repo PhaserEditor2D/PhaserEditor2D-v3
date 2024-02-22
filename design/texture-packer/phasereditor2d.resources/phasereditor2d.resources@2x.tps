@@ -2,9 +2,9 @@
 <data version="1.0">
     <struct type="Settings">
         <key>fileFormatVersion</key>
-        <int>5</int>
+        <int>6</int>
         <key>texturePackerVersion</key>
-        <string>6.0.2</string>
+        <string>7.1.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -127,8 +127,8 @@
                 <filename>../../../source/editor/plugins/phasereditor2d.resources/icons/atlas@2x.json</filename>
             </struct>
         </map>
-        <key>multiPack</key>
-        <false/>
+        <key>multiPackMode</key>
+        <enum type="SettingsBase::MultiPackMode">MultiPackOff</enum>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -204,6 +204,7 @@
             <key type="filename">x2/dark/file-script@2x.png</key>
             <key type="filename">x2/dark/file-sound@2x.png</key>
             <key type="filename">x2/dark/file-text@2x.png</key>
+            <key type="filename">x2/dark/fx@2x.png</key>
             <key type="filename">x2/dark/grid@2x.png</key>
             <key type="filename">x2/dark/group@2x.png</key>
             <key type="filename">x2/dark/image-type@2x.png</key>
@@ -269,6 +270,7 @@
             <key type="filename">x2/light/file-script@2x.png</key>
             <key type="filename">x2/light/file-sound@2x.png</key>
             <key type="filename">x2/light/file-text@2x.png</key>
+            <key type="filename">x2/light/fx@2x.png</key>
             <key type="filename">x2/light/grid@2x.png</key>
             <key type="filename">x2/light/group@2x.png</key>
             <key type="filename">x2/light/image-type@2x.png</key>
@@ -317,11 +319,17 @@
                 <false/>
             </struct>
         </map>
-        <key>fileList</key>
-        <array>
-            <filename>x2/dark</filename>
-            <filename>x2/light</filename>
-        </array>
+        <key>fileLists</key>
+        <map type="SpriteSheetMap">
+            <key>default</key>
+            <struct type="SpriteSheet">
+                <key>files</key>
+                <array>
+                    <filename>x2/dark</filename>
+                    <filename>x2/light</filename>
+                </array>
+            </struct>
+        </map>
         <key>ignoreFileList</key>
         <array/>
         <key>replaceList</key>

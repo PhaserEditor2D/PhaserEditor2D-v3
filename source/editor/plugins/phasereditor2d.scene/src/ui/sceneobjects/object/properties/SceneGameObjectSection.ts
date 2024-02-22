@@ -98,20 +98,37 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip))
-                .style.gridColumn = "2 / span 2";
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            label.style.gridColumn = "2 / span 2";
 
-            this.createFloatField(parent, prop)
-                .style.gridColumn = fullWidth ? "4 / span 3" : "4";
+            const text = this.createFloatField(parent, prop);
+            text.style.gridColumn = fullWidth ? "4 / span 3" : "4";
+
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
+
+            return {
+                labelElement: label,
+                textElement: text
+            };
+        }
+
+        createPropertyLabelToTextNumericLink(prop: IProperty<any>, label: HTMLElement, text: HTMLInputElement) {
+
+            if (prop.increment) {
+
+                this.createLabelToTextNumericLink(label, text, prop.increment, prop.incrementMin, prop.incrementMax, prop.incrementValueComputer);
+            }
         }
 
         createNumberProperty(parent: HTMLElement, prop: IProperty<any>) {
 
             this.createLock(parent, prop);
 
-            this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
+            const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
 
-            this.createFloatField(parent, prop);
+            const text = this.createFloatField(parent, prop);
+
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
         }
 
         createPropertyBoolean(parent: HTMLElement, prop: IProperty<any>, lockIcon = true) {
@@ -158,10 +175,17 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             const text = this.createFloatField(parent, prop);
 
+            this.createPropertyLabelToTextNumericLink(prop, label, text);
+
             return text;
         }
 
-        createPropertyStringRow(parent: HTMLElement, prop: IProperty<any>, lockIcon: boolean = true, readOnly = false) {
+        createPropertyStringRow(
+            parent: HTMLElement,
+            prop: IProperty<any>,
+            lockIcon: boolean = true,
+            readOnly = false,
+            incrementable = false) {
 
             if (lockIcon) {
 
@@ -171,7 +195,18 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
             label.style.gridColumn = "2";
 
-            const text = this.createStringField(parent, prop, true, false, false, readOnly);
+            let text: HTMLInputElement | HTMLTextAreaElement;
+
+            if (incrementable) {
+
+                text = this.createIncrementableStringField(parent, prop);
+
+                this.createPropertyLabelToTextNumericLink(prop, label, text);
+
+            } else {
+
+                text = this.createStringField(parent, prop, true, false, false, readOnly);
+            }
 
             return { label, text };
         }
@@ -255,14 +290,16 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
                 const label = this.createLabel(parent, prop.label, PhaserHelp(prop.tooltip));
 
-                const input = this.createFloatField(parent, prop);
-                inputElements.push(input);
+                const text = this.createFloatField(parent, prop);
+                inputElements.push(text);
 
                 if (colorAxis) {
 
                     label.classList.add("label-axis-" + axis);
-                    input.classList.add("input-axis-" + axis);
+                    text.classList.add("input-axis-" + axis);
                 }
+
+                this.createPropertyLabelToTextNumericLink(propXY.x, label, text);
             }
 
             return inputElements;

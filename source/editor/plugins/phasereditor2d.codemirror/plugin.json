@@ -1,24 +1,27 @@
 {
     "id": "phasereditor2d.codemirror",
     "styles": [
-        "codemirror-5.62.3/lib/codemirror.css",
-        "codemirror-5.62.3/theme/darcula.css",
-        "codemirror-5.62.3/addon/dialog/dialog.css",
+        "codemirror-5.65.16/lib/codemirror.css",
+        "codemirror-5.65.16/theme/darcula.css",
+        "codemirror-5.65.16/addon/dialog/dialog.css",
+        "codemirror-5.65.16/addon/search/matchesonscrollbar.css",
         "styles/styles.css"
     ],
     "scripts": [
-        "codemirror-5.62.3/lib/codemirror.js",
-        "codemirror-5.62.3/mode/meta.js",
-        "codemirror-5.62.3/mode/css/css.js",
-        "codemirror-5.62.3/mode/htmlmixed/htmlmixed.js",
-        "codemirror-5.62.3/mode/javascript/javascript.js",
-        "codemirror-5.62.3/mode/markdown/markdown.js",
-        "codemirror-5.62.3/mode/xml/xml.js",
-        "codemirror-5.62.3/addon/dialog/dialog.js",
-        "codemirror-5.62.3/addon/search/search.js",
-        "codemirror-5.62.3/addon/search/searchcursor.js",
-        "codemirror-5.62.3/addon/search/jump-to-line.js",
-        "codemirror-5.62.3/addon/selection/active-line.js",
+        "codemirror-5.65.16/lib/codemirror.js",
+        "codemirror-5.65.16/mode/meta.js",
+        "codemirror-5.65.16/mode/css/css.js",
+        "codemirror-5.65.16/mode/htmlmixed/htmlmixed.js",
+        "codemirror-5.65.16/mode/javascript/javascript.js",
+        "codemirror-5.65.16/mode/markdown/markdown.js",
+        "codemirror-5.65.16/mode/xml/xml.js",
+        "codemirror-5.65.16/addon/dialog/dialog.js",
+        "codemirror-5.65.16/addon/search/search.js",
+        "codemirror-5.65.16/addon/search/match-highlighter.js",
+        "codemirror-5.65.16/addon/search/matchesonscrollbar.js",
+        "codemirror-5.65.16/addon/search/searchcursor.js",
+        "codemirror-5.65.16/addon/search/jump-to-line.js",
+        "codemirror-5.65.16/addon/selection/active-line.js",
         "_out/phasereditor2d.codemirror.js"
     ]
 }

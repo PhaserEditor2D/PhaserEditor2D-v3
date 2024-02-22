@@ -38,6 +38,7 @@ namespace colibri {
             const list = this._map.get(point);
 
             if (!list) {
+                
                 return [];
             }
 

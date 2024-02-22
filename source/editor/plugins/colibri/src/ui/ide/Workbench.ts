@@ -66,7 +66,7 @@ namespace colibri.ui.ide {
         }
 
         getFileStringCache() {
-            
+
             if (!CAPABILITY_FILE_STORAGE) {
 
                 return undefined;
@@ -104,21 +104,35 @@ namespace colibri.ui.ide {
 
             if (!this._fileStorage) {
 
-                this._fileStorage = new core.io.FileStorage_HTTPServer();
+                const extensions = colibri.Platform.getExtensions(core.io.FileStorageExtension.POINT_ID);
+
+                const ext = extensions[0] as core.io.FileStorageExtension;
+
+                if (!ext) {
+
+                    throw new Extension("No file storage extension registered");
+                }
+
+                console.log("Workbench: setting up file storage: " + ext.getStorageId());
+
+                this._fileStorage = ext.createStorage();
             }
 
             return this._fileStorage;
         }
 
         getEditorSessionStateRegistry() {
+
             return this._editorSessionStateRegistry;
         }
 
         getGlobalPreferences() {
+
             return this._globalPreferences;
         }
 
         getProjectPreferences() {
+
             return this._projectPreferences;
         }
 
@@ -167,7 +181,7 @@ namespace colibri.ui.ide {
 
                     // register default extensions
                     registry.addExtension(new IconAtlasLoaderExtension(plugin));
-                    
+
                     registry.addExtension(new PluginResourceLoaderExtension(
                         () => plugin.preloadResources()));
 
@@ -492,14 +506,14 @@ namespace colibri.ui.ide {
 
                 this.eventWindowFocused.fire();
 
-                for(const window of this._windows) {
+                for (const window of this._windows) {
 
-                    for(const editor of this.getEditors()) {
+                    for (const editor of this.getEditors()) {
 
                         editor.onWindowFocus();
                     }
 
-                    for(const part of window.getViews()) {
+                    for (const part of window.getViews()) {
 
                         part.onWindowFocus();
                     }
@@ -735,12 +749,24 @@ namespace colibri.ui.ide {
         }
 
         getEditors(): EditorPart[] {
+
             return this.getActiveWindow().getEditorArea().getEditors();
         }
 
         getOpenEditorsWithInput(input: ui.ide.IEditorInput) {
 
             return this.getEditors().filter(editor => editor.getInput() === input);
+        }
+
+        async saveAllEditors() {
+
+            for (const editor of this.getEditors()) {
+
+                if (!editor.isReadOnly() && editor.isDirty()) {
+
+                    await editor.save();
+                }
+            }
         }
 
         makeEditor(input: IEditorInput, editorFactory?: EditorFactory): EditorPart {

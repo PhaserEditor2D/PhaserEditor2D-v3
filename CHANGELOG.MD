@@ -1,5 +1,21 @@
 # Change Log
 
+## v3.67.0, Feb 22
+
+* Updates to latest TypeScript 5.3.3.
+* Updates to latest CodeMirror 5.66.16.
+* Adds support to Phaser 3.80.
+* Save all editors when the user executes the Play commands.
+* Depth order commands now works with Mac keyboard with a numeric pad, in its default config.
+* Fixes bug with opening multiple context menus.
+* Color Picker shows realtime preview of the color.
+* Allows changing numeric values with the mouse wheel.
+* Allows changing numeric values with the Up/Down keys. If Shift is pressed, it increments it by 10.
+* Allows changing numeric values by dragging the label.
+* Adds support to Shader Effects objects, Glow and Shadow.
+* Uses the Text's internal canvas to render the Text object in the Outline view.
+* Use the __MISSING texture by default in NineSlice and ThreeSlice.
+
 ## v3.66.0 - Jan 11, 2024
 
 * Allows to set a display name to game objects.

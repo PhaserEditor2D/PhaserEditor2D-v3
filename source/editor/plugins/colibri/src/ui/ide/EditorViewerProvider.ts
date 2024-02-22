@@ -43,10 +43,15 @@ namespace colibri.ui.ide {
         }
 
         getSelection() {
+
             return this._viewer.getSelection();
         }
 
         onViewerSelectionChanged(selection: any[]) {
+            // nothing
+        }
+
+        onViewerDoubleClick(selection: any[]) {
             // nothing
         }
 
@@ -94,7 +99,7 @@ namespace colibri.ui.ide {
 
         abstract preload(complete?: boolean): Promise<void>;
 
-        abstract getUndoManager();
+        abstract getUndoManager(): colibri.ui.ide.undo.UndoManager;
 
         getTabSections() {
 

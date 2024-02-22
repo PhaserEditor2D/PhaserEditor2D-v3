@@ -81,7 +81,7 @@ namespace colibri.ui.controls.properties {
         }
 
         isFillSpace() {
-            
+
             return this._fillSpace;
         }
 
@@ -179,9 +179,7 @@ namespace colibri.ui.controls.properties {
             return true;
         }
 
-        parseNumberExpression(textElement: HTMLInputElement, isInteger = false) {
-
-            const expr = textElement.value;
+        parseNumberExpressionString(expr: string, isInteger = false) {
 
             let value: number;
 
@@ -192,9 +190,6 @@ namespace colibri.ui.controls.properties {
                 value = parser.evaluate(expr);
 
                 if (typeof value === "number") {
-
-                    textElement.value = value.toString();
-
 
                     if (isInteger) {
 
@@ -215,6 +210,20 @@ namespace colibri.ui.controls.properties {
             }
 
             return Number.parseFloat(expr);
+        }
+
+        parseNumberExpression(textElement: HTMLInputElement, isInteger = false) {
+
+            const expr = textElement.value;
+
+            const value = this.parseNumberExpressionString(expr, isInteger);
+
+            if (typeof value === "number") {
+
+                textElement.value = value.toString();
+            }
+
+            return value;
         }
 
         createGridElement(parent: HTMLElement, cols = 0, simpleProps = true) {

@@ -7,6 +7,7 @@ namespace colibri.ui.ide.actions {
     export const CAT_GENERAL = "colibri.ui.ide.actions.GeneralCategory";
     export const CAT_EDIT = "colibri.ui.ide.actions.EditCategory";
     export const CMD_SAVE = "colibri.ui.ide.actions.Save";
+    export const CMD_SAVE_ALL = "colibri.ui.ide.actions.SaveAll";
     export const CMD_EDITOR_TABS_SIZE_UP = "colibri.ui.ide.actions.EditorTabsSizeUp";
     export const CMD_EDITOR_TABS_SIZE_DOWN = "colibri.ui.ide.actions.EditorTabsSizeDown";
     export const CMD_EDITOR_CLOSE = "colibri.ui.ide.actions.EditorClose";
@@ -481,6 +482,29 @@ namespace colibri.ui.ide.actions {
                     control: true,
                     key: "KeyS",
                     filterInputElements: false
+                }
+            });
+
+            // save all
+
+            manager.add({
+                command: {
+                    id: CMD_SAVE_ALL,
+                    name: "Save All",
+                    tooltip: "Save all editors",
+                    category: CAT_EDIT
+                },
+                handler: {
+                    testFunc: args => {
+
+                        const editors = Platform.getWorkbench().getActiveWindow().getEditorArea().getEditors();
+
+                        return editors.some(e => e.isDirty() && !e.isReadOnly());
+                    },
+                    executeFunc: args => {
+
+                        Platform.getWorkbench().saveAllEditors();
+                    }
                 }
             });
 

@@ -39,6 +39,8 @@ namespace phasereditor2d.scene.ui.editor {
 
             menu.addMenu(this.createArcadePhysicsMenu());
 
+            menu.addMenu(this.createFXMenu());
+
             menu.addMenu(this.createParentMenu());
 
             menu.addSeparator();
@@ -52,6 +54,72 @@ namespace phasereditor2d.scene.ui.editor {
             menu.addMenu(this.createSceneMenu());
 
             menu.addMenu(this.createCompilerMenu());
+        }
+
+        private createFXMenu(): controls.Menu {
+
+            const menu = new controls.Menu("FX");
+
+            const exts = ScenePlugin.getInstance().getFXExtensions();
+
+            const selection = this._editor.getSelectedGameObjects();
+
+            const parents = selection.map(obj => {
+
+                if (obj.getEditorSupport().isDisplayObject()) {
+
+                    return obj;
+                }
+
+                if (obj instanceof sceneobjects.FXObject) {
+
+                    return obj.getParent();
+                }
+
+                return undefined;
+
+            }).filter(obj => obj && sceneobjects.FXObjectExtension.allowGameObject(obj));
+
+            const enabled = parents.length > 0;
+
+            for (const ext of exts) {
+
+                const factories = ext.getFXObjectFactories();
+
+                if (factories.length > 0) {
+
+                    const menu2 = new controls.Menu(ext.getTypeName(), ext.getIcon());
+
+                    menu.addMenu(menu2);
+
+                    for (const factory of factories) {
+
+                        menu2.addAction({
+                            text: "Add " + factory.factoryName,
+                            icon: ext.getIcon(),
+                            enabled,
+                            callback: () => {
+
+                                this._editor.getDropManager().addFXObjects(factory);
+                            }
+                        });
+                    }
+
+                } else {
+
+                    menu.addAction({
+                        text: "Add " + ext.getTypeName(),
+                        icon: ext.getIcon(),
+                        enabled,
+                        callback: () => {
+
+                            this._editor.getDropManager().addFXObjects(ext);
+                        }
+                    });
+                }
+            }
+
+            return menu;
         }
 
         private createAddCodeSnippetMenu(): controls.Menu {

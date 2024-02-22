@@ -15,5 +15,7 @@ namespace colibri.ui.controls {
         viewerForeground: string;
 
         dark: boolean;
+
+        sceneBackground: string;
     }
 }

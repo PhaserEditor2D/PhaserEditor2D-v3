@@ -1,7 +1,5 @@
 namespace colibri.core.io {
 
-    import controls = colibri.ui.controls;
-
     interface IGetProjectFilesData {
 
         hash: string;
@@ -49,7 +47,7 @@ namespace colibri.core.io {
         }
     }
 
-    export class FileStorage_HTTPServer implements IFileStorage {
+    export class HTTPServerFileStorage implements IFileStorage {
 
         private _root: FilePath;
         private _changeListeners: ChangeListenerFunc[];
@@ -74,7 +72,7 @@ namespace colibri.core.io {
             });
         }
 
-        private async detectServerChangesOnWindowsFocus() {
+        protected async detectServerChangesOnWindowsFocus() {
 
             const hashData = await apiRequest("GetProjectFilesHash", {});
 
@@ -270,6 +268,7 @@ namespace colibri.core.io {
         }
 
         getRoot(): FilePath {
+
             return this._root;
         }
 
@@ -290,23 +289,6 @@ namespace colibri.core.io {
             this.fireChange(change);
 
             return root;
-        }
-
-        async createProject(templatePath: string, projectName: string): Promise<boolean> {
-
-            const data = await apiRequest("CreateProject", {
-                templatePath,
-                projectName
-            });
-
-            if (data.error) {
-
-                alert("Cannot create the project.");
-
-                return false;
-            }
-
-            return true;
         }
 
         async reload(): Promise<void> {
@@ -367,7 +349,7 @@ namespace colibri.core.io {
                 modTime: 0
             });
 
-            await this.setFileString_priv(file, content);
+            await this.server_setFileString(file, content);
 
             folder._add(file);
 
@@ -419,6 +401,13 @@ namespace colibri.core.io {
 
         async getFileBinary(file: FilePath): Promise<ArrayBuffer> {
 
+            const content = await this.server_getFileBinary(file);
+
+            return content;
+        }
+
+        protected async server_getFileBinary(file: FilePath): Promise<ArrayBuffer> {
+
             const resp = await fetch(file.getUrl(), {
                 method: "GET",
                 cache: "force-cache"
@@ -436,7 +425,7 @@ namespace colibri.core.io {
             return content;
         }
 
-        async getFileString(file: FilePath): Promise<string> {
+        protected async server_getFileString(file: FilePath): Promise<string> {
 
             const resp = await fetch(file.getUrl(), {
                 method: "GET",
@@ -455,9 +444,16 @@ namespace colibri.core.io {
             return content;
         }
 
+        async getFileString(file: FilePath): Promise<string> {
+
+            const content = await this.server_getFileString(file);
+
+            return content;
+        }
+
         async setFileString(file: FilePath, content: string): Promise<void> {
 
-            await this.setFileString_priv(file, content);
+            await this.server_setFileString(file, content);
 
             this._hash = "";
 
@@ -468,7 +464,7 @@ namespace colibri.core.io {
             this.fireChange(change);
         }
 
-        private async setFileString_priv(file: FilePath, content: string): Promise<void> {
+        protected async server_setFileString(file: FilePath, content: string): Promise<void> {
 
             const data = await apiRequest("SetFileString", {
                 path: file.getFullName(),
@@ -486,16 +482,23 @@ namespace colibri.core.io {
             file._setSize(fileData.size);
         }
 
-        async deleteFiles(files: FilePath[]) {
+        protected async server_deleteFiles(files: FilePath[]) {
 
             const data = await apiRequest("DeleteFiles", {
                 paths: files.map(file => file.getFullName())
             });
 
             if (data.error) {
+
                 alert(`Cannot delete the files.`);
+                
                 throw new Error(data.error);
             }
+        }
+
+        async deleteFiles(files: FilePath[]) {
+
+            await this.server_deleteFiles(files);
 
             const deletedSet = new Set<FilePath>();
 
@@ -522,7 +525,7 @@ namespace colibri.core.io {
             this.fireChange(change);
         }
 
-        async renameFile(file: FilePath, newName: string) {
+        protected async server_renameFile(file: FilePath, newName: string) {
 
             const data = await apiRequest("RenameFile", {
                 oldPath: file.getFullName(),
@@ -533,6 +536,11 @@ namespace colibri.core.io {
                 alert(`Cannot rename the file.`);
                 throw new Error(data.error);
             }
+        }
+
+        async renameFile(file: FilePath, newName: string) {
+
+            await this.server_renameFile(file, newName);
 
             const fromPath = file.getFullName();
 
@@ -555,6 +563,7 @@ namespace colibri.core.io {
             let ext = fromFile.getExtension();
 
             if (ext) {
+
                 ext = "." + ext;
             }
 
@@ -566,17 +575,7 @@ namespace colibri.core.io {
 
             const newName = base + suffix + ext;
 
-            const data = await apiRequest("CopyFile", {
-                fromPath: fromFile.getFullName(),
-                toPath: FilePath.join(toFolder.getFullName(), newName)
-            });
-
-            if (data.error) {
-                alert(`Cannot copy the file ${fromFile.getFullName()}`);
-                throw new Error(data.error);
-            }
-
-            const fileData = data.file as IFileData;
+            const fileData = await this.server_copyFile(fromFile, toFolder, newName);
 
             const newFile = new FilePath(null, fileData);
 
@@ -592,13 +591,27 @@ namespace colibri.core.io {
 
             return newFile;
         }
+        
+        protected async server_copyFile(fromFile: FilePath, toFolder: FilePath, newName: string) {
+
+            const data = await apiRequest("CopyFile", {
+                fromPath: fromFile.getFullName(),
+                toPath: FilePath.join(toFolder.getFullName(), newName)
+            });
+
+            if (data.error) {
+                alert(`Cannot copy the file ${fromFile.getFullName()}`);
+                throw new Error(data.error);
+            }
+
+            const fileData = data.file as IFileData;
+
+            return fileData;
+        }
 
         async moveFiles(movingFiles: FilePath[], moveTo: FilePath): Promise<void> {
 
-            const data = await apiRequest("MoveFiles", {
-                movingPaths: movingFiles.map(file => file.getFullName()),
-                movingToPath: moveTo.getFullName()
-            });
+            await this.server_moveFiles(movingFiles, moveTo);
 
             const records = movingFiles.map(file => {
                 return {
@@ -606,11 +619,6 @@ namespace colibri.core.io {
                     to: FilePath.join(moveTo.getFullName(), file.getName())
                 };
             });
-
-            if (data.error) {
-                alert(`Cannot move the files.`);
-                throw new Error(data.error);
-            }
 
             for (const srcFile of movingFiles) {
 
@@ -631,7 +639,20 @@ namespace colibri.core.io {
             this.fireChange(change);
         }
 
-        async uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<FilePath> {
+        protected async server_moveFiles(movingFiles: FilePath[], moveTo: FilePath) {
+            
+            const data = await apiRequest("MoveFiles", {
+                movingPaths: movingFiles.map(file => file.getFullName()),
+                movingToPath: moveTo.getFullName()
+            });
+
+            if (data.error) {
+                alert(`Cannot move the files.`);
+                throw new Error(data.error);
+            }
+        }
+
+        protected async server_uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<IFileData> {
 
             const formData = new FormData();
 
@@ -652,7 +673,12 @@ namespace colibri.core.io {
                 throw new Error(data.error);
             }
 
-            const fileData = data.file as IFileData;
+            return data.file as IFileData;
+        }
+
+        async uploadFile(uploadFolder: FilePath, htmlFile: File): Promise<FilePath> {
+
+            const fileData = await this.server_uploadFile(uploadFolder, htmlFile);
 
             let file = uploadFolder.getFile(htmlFile.name);
 

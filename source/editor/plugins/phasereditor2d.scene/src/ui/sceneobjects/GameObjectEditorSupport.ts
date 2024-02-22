@@ -59,6 +59,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
             this.addComponent(new VariableComponent(obj));
             this.addComponent(new PrefabUserPropertyComponent(obj));
             this.addComponent(new UserComponentsEditorComponent(obj));
+            this.addComponent(new EffectsComponent(obj));
 
             if (this.isDisplayObject()) {
 
@@ -1297,7 +1298,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
                 const initObjData = ext.createInitObjectDataFromChild(childData);
 
                 // creates an empty object
-                const sprite = maker.createObject(initObjData);
+                const sprite = maker.createObject(initObjData, undefined, parent);
 
                 if (sprite) {
 

@@ -8,12 +8,24 @@ namespace phasereditor2d.scene.core.code {
         private _propertyValueExpr: string;
         private _contextExpr: string;
         private _propertyType: string;
+        private _optionalContext: boolean;
 
         constructor(propertyName: string, context?: string) {
             super();
 
             this._propertyName = propertyName;
             this._contextExpr = context;
+            this._optionalContext = false;
+        }
+
+        setOptionalContext(optionalContext: boolean) {
+
+            this._optionalContext = optionalContext;
+        }
+
+        isOptionalContext() {
+
+            return this._optionalContext;
         }
 
         value(expr: string) {

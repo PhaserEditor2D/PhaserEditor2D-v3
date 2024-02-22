@@ -2,9 +2,9 @@
 <data version="1.0">
     <struct type="Settings">
         <key>fileFormatVersion</key>
-        <int>5</int>
+        <int>6</int>
         <key>texturePackerVersion</key>
-        <string>6.0.2</string>
+        <string>7.1.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -127,8 +127,8 @@
                 <filename>../../../source/editor/plugins/phasereditor2d.resources/icons/atlas@1x.json</filename>
             </struct>
         </map>
-        <key>multiPack</key>
-        <false/>
+        <key>multiPackMode</key>
+        <enum type="SettingsBase::MultiPackMode">MultiPackOff</enum>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -204,6 +204,7 @@
             <key type="filename">x1/dark/file-script.png</key>
             <key type="filename">x1/dark/file-sound.png</key>
             <key type="filename">x1/dark/file-text.png</key>
+            <key type="filename">x1/dark/fx.png</key>
             <key type="filename">x1/dark/grid.png</key>
             <key type="filename">x1/dark/group.png</key>
             <key type="filename">x1/dark/image-type.png</key>
@@ -269,6 +270,7 @@
             <key type="filename">x1/light/file-script.png</key>
             <key type="filename">x1/light/file-sound.png</key>
             <key type="filename">x1/light/file-text.png</key>
+            <key type="filename">x1/light/fx.png</key>
             <key type="filename">x1/light/grid.png</key>
             <key type="filename">x1/light/group.png</key>
             <key type="filename">x1/light/image-type.png</key>
@@ -317,11 +319,17 @@
                 <false/>
             </struct>
         </map>
-        <key>fileList</key>
-        <array>
-            <filename>x1/dark</filename>
-            <filename>x1/light</filename>
-        </array>
+        <key>fileLists</key>
+        <map type="SpriteSheetMap">
+            <key>default</key>
+            <struct type="SpriteSheet">
+                <key>files</key>
+                <array>
+                    <filename>x1/dark</filename>
+                    <filename>x1/light</filename>
+                </array>
+            </struct>
+        </map>
         <key>ignoreFileList</key>
         <array/>
         <key>replaceList</key>

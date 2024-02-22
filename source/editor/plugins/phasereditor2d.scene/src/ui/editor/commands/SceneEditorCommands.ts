@@ -1451,9 +1451,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Move up object in the list.",
                     category: CAT_SCENE_EDITOR
                 },
-                keys: {
-                    key: "PageUp"
-                }
+                keys: [{ key: "PageUp" }, { key: "Numpad9" }]
             });
 
             manager.add({
@@ -1463,9 +1461,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Move down object in the list.",
                     category: CAT_SCENE_EDITOR
                 },
-                keys: {
-                    key: "PageDown"
-                }
+                keys: [{ key: "PageDown" }, { key: "Numpad3" }]
             });
 
             manager.add({
@@ -1475,9 +1471,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Move top object in the list.",
                     category: CAT_SCENE_EDITOR
                 },
-                keys: {
-                    key: "Home"
-                }
+                keys: [{ key: "Home" }, { key: "Numpad7" }]
             });
 
             manager.add({
@@ -1487,9 +1481,7 @@ namespace phasereditor2d.scene.ui.editor.commands {
                     tooltip: "Move bottom object in the list.",
                     category: CAT_SCENE_EDITOR
                 },
-                keys: {
-                    key: "End"
-                }
+                keys: [{ key: "End" }, { key: "Numpad1" }]
             });
         }
 
@@ -1893,6 +1885,11 @@ namespace phasereditor2d.scene.ui.editor.commands {
                                     }
 
                                     if (obj instanceof sceneobjects.Layer) {
+
+                                        return false;
+                                    }
+
+                                    if (obj instanceof sceneobjects.FXObject) {
 
                                         return false;
                                     }

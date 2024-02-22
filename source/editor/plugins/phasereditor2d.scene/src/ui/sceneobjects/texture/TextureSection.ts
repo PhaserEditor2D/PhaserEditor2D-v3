@@ -170,6 +170,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         getTextureComponent(obj: ITextureLikeObject) {
+            
             return obj.getEditorSupport().getComponent(TextureComponent) as TextureComponent;
         }
 
@@ -179,6 +180,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
         }
 
         canEditNumber(n: number): boolean {
+
             return n > 0;
         }
     }

@@ -2,20 +2,16 @@ namespace colibri.ui.controls {
 
     export class ColorPickerManager {
 
-        private static _currentPicker;
+        private static _currentPicker: Picker;
         private static _set = false;
 
         static createPicker() {
 
             this.setupPicker();
 
-            const pickerClass = window["Picker"];
+            this._currentPicker = new Picker(document.body);
 
-            const picker = new pickerClass(document.body);
-
-            this._currentPicker = picker;
-
-            return picker;
+            return this._currentPicker;
         }
 
         static isActivePicker() {
@@ -38,9 +34,11 @@ namespace colibri.ui.controls {
 
             if (picker) {
 
-                picker.destroy();
-
                 this._currentPicker = null;
+
+                picker.onClose(null);
+
+                picker.destroy();
             }
         }
 

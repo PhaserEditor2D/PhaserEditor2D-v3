@@ -57,6 +57,7 @@ namespace phasereditor2d.scene.core.json {
         private _compModelsInfo: IUserComponentsModelInfo[];
         private _enabled: boolean;
         private _nestedPrefabIds: Set<string>;
+        private _storageChangeListener: (e: io.FileStorageChange) => Promise<void>;
 
         constructor() {
 
@@ -73,11 +74,16 @@ namespace phasereditor2d.scene.core.json {
             this._compModelsInfo = [];
 
             this._enabled = true;
+        }
 
-            colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(async (e) => {
+        registerStorageListener() {
+
+            this._storageChangeListener = async (e: io.FileStorageChange) => {
 
                 await this.handleStorageChange(e);
-            });
+            };
+
+            colibri.ui.ide.FileUtils.getFileStorage().addChangeListener(this._storageChangeListener);
         }
 
         private async handleStorageChange(change: io.FileStorageChange) {
