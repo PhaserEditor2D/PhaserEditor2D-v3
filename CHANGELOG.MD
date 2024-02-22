@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.67.0, Feb 16
+## v3.67.0, Feb 22
 
 * Updates to latest TypeScript 5.3.3.
 * Updates to latest CodeMirror 5.66.16.
