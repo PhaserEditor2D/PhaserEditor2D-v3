@@ -140,6 +140,10 @@ namespace phasereditor2d.scene.ui.editor {
                 minY = Math.min(minY, p.y);
             }
 
+            // sort the objects by depth
+
+            this._editor.getScene().sortObjectsByDepth(copyObjects);
+
             // serialize objects
 
             for (const obj of copyObjects) {

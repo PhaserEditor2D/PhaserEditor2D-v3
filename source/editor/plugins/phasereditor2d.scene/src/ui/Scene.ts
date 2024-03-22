@@ -45,6 +45,39 @@ namespace phasereditor2d.scene.ui {
             this._version = version;
         }
 
+        sortObjectsByDepth(objects: sceneobjects.ISceneGameObject[]) {
+
+            const map = new Map<sceneobjects.ISceneGameObject, number>();
+
+            this.buildDepthMap(map, this.getGameObjects(), 0);
+
+            objects.sort((a, b) => {
+
+                const aa = map.get(a);
+                const bb = map.get(b);
+
+                return aa - bb;
+            });
+        }
+
+        private buildDepthMap(map: Map<sceneobjects.ISceneGameObject, number>, list: sceneobjects.ISceneGameObject[], index: number) {
+
+            for (const obj of list) {
+
+                index++;
+
+                map.set(obj, index);
+
+                const objES = (obj as sceneobjects.ISceneGameObject).getEditorSupport();
+
+                const children = objES.getObjectChildren();
+
+                index = this.buildDepthMap(map, children, index);
+            }
+
+            return index;
+        }
+
         sortObjectsByIndex(objects: Phaser.GameObjects.GameObject[]) {
 
             const map: Map<any, number> = new Map();

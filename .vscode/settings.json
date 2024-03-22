@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
         "openfile"
-    ]
+    ],
+    "editor.stickyScroll.scrollWithEditor": false,
+    "editor.stickyScroll.enabled": false
 }

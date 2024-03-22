@@ -3715,6 +3715,25 @@ var phasereditor2d;
                 setVersion(version) {
                     this._version = version;
                 }
+                sortObjectsByDepth(objects) {
+                    const map = new Map();
+                    this.buildDepthMap(map, this.getGameObjects(), 0);
+                    objects.sort((a, b) => {
+                        const aa = map.get(a);
+                        const bb = map.get(b);
+                        return aa - bb;
+                    });
+                }
+                buildDepthMap(map, list, index) {
+                    for (const obj of list) {
+                        index++;
+                        map.set(obj, index);
+                        const objES = obj.getEditorSupport();
+                        const children = objES.getObjectChildren();
+                        index = this.buildDepthMap(map, children, index);
+                    }
+                    return index;
+                }
                 sortObjectsByIndex(objects) {
                     const map = new Map();
                     this.buildSortingMap(map, this.getGameObjects(), 0);
@@ -6731,6 +6750,8 @@ var phasereditor2d;
                             minX = Math.min(minX, p.x);
                             minY = Math.min(minY, p.y);
                         }
+                        // sort the objects by depth
+                        this._editor.getScene().sortObjectsByDepth(copyObjects);
                         // serialize objects
                         for (const obj of copyObjects) {
                             const objData = {};
