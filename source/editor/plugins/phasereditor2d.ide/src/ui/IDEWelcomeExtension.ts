@@ -51,6 +51,10 @@ namespace phasereditor2d.ide.ui {
                 </ul>
 
                 <p>To send us your feedback email <a href="mailto:support@phaser.io">support@phaser.io</a> or join us on <a target="_blank" href="https://phaser.io/community/discord">Discord</a></p>
+
+                <p>
+                    <button onclick='colibri.Platform.getWorkbench().getCommandManager().executeCommand("phasereditor2d.scene.ui.editor.commands.OpenSceneFile")'>Open a Scene</button>
+                </p>
         </div>
     </div>`;
 
