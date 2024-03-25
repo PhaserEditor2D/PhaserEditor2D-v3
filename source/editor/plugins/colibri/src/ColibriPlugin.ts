@@ -66,10 +66,29 @@ namespace colibri {
             // editor inputs
 
             reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
+            reg.addExtension(new colibri.ui.ide.welcome.WelcomePageInputExtension());
+
+            // editors
+
+            reg.addExtension(new colibri.ui.ide.EditorExtension([
+                colibri.ui.ide.welcome.WelcomePage.getFactory()
+            ]));
 
             // content types
 
             reg.addExtension(new colibri.core.ContentTypeExtension([new core.PublicRootContentTypeResolver()]));
+        }
+
+        getWelcomePageExtension() {
+
+            const exts = Platform.getExtensions(colibri.ui.ide.welcome.WelcomePageExtension.POINT_ID);
+
+            if (exts.length > 0) {
+
+                return exts[0] as colibri.ui.ide.welcome.WelcomePageExtension;
+            }
+
+            return null;
         }
     }
 

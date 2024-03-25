@@ -95,6 +95,10 @@ namespace phasereditor2d.ide {
                     editor.setReadOnly(ide.core.code.isNodeLibraryFile(file));
                 }
             });
+
+            // welcome page
+
+            reg.addExtension(new ui.IDEWelcomeExtension());
         }
 
         async compileProject() {

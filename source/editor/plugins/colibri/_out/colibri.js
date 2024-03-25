@@ -1220,8 +1220,20 @@ var colibri;
             reg.addExtension(new colibri.core.io.HTTPServerFileStorageExtension());
             // editor inputs
             reg.addExtension(new colibri.ui.ide.FileEditorInputExtension());
+            reg.addExtension(new colibri.ui.ide.welcome.WelcomePageInputExtension());
+            // editors
+            reg.addExtension(new colibri.ui.ide.EditorExtension([
+                colibri.ui.ide.welcome.WelcomePage.getFactory()
+            ]));
             // content types
             reg.addExtension(new colibri.core.ContentTypeExtension([new colibri.core.PublicRootContentTypeResolver()]));
+        }
+        getWelcomePageExtension() {
+            const exts = colibri.Platform.getExtensions(colibri.ui.ide.welcome.WelcomePageExtension.POINT_ID);
+            if (exts.length > 0) {
+                return exts[0];
+            }
+            return null;
         }
     }
     colibri.ColibriPlugin = ColibriPlugin;
@@ -10951,6 +10963,18 @@ var colibri;
                     if (editorArea.getEditors().length === 0) {
                         this.openFromUrlSearchParameter();
                     }
+                    this.showWelcomePage();
+                }
+                showWelcomePage() {
+                    const welcomeExtension = colibri.ColibriPlugin.getInstance().getWelcomePageExtension();
+                    if (!welcomeExtension) {
+                        return;
+                    }
+                    console.log("Workbench: showing welcome page.");
+                    const welcomeEditor = this.getEditorArea().getEditors();
+                    if (welcomeEditor.find(e => e instanceof ide.welcome.WelcomePage) === undefined) {
+                        colibri.Platform.getWorkbench().openEditor(ide.welcome.WELCOME_PAGE_INPUT, new ide.welcome.WelcomePageFactory());
+                    }
                 }
                 openFromUrlSearchParameter() {
                     const params = new URLSearchParams(window.location.search);
@@ -12263,6 +12287,138 @@ var colibri;
                 }
                 utils.NameMaker = NameMaker;
             })(utils = ide.utils || (ide.utils = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var welcome;
+            (function (welcome) {
+                class WelcomePage extends colibri.ui.ide.EditorPart {
+                    static _factory;
+                    _contentElement;
+                    static getFactory() {
+                        return this._factory || (this._factory = new welcome.WelcomePageFactory());
+                    }
+                    constructor() {
+                        super("colibri.ui.ide.welcome.WelcomePage", WelcomePage.getFactory());
+                        this.setIcon(colibri.ColibriPlugin.getInstance().getIcon(colibri.ICON_FILE));
+                    }
+                    setInput(input) {
+                        super.setInput(input);
+                        this.setTitle("Welcome");
+                    }
+                    createPart() {
+                        this._contentElement = document.createElement("div");
+                        this._contentElement.classList.add("WelcomePageArea");
+                        this.getElement().appendChild(this._contentElement);
+                        const ext = colibri.ColibriPlugin.getInstance().getWelcomePageExtension();
+                        if (ext) {
+                            ext.buildPage(this._contentElement);
+                        }
+                    }
+                }
+                welcome.WelcomePage = WelcomePage;
+            })(welcome = ide.welcome || (ide.welcome = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var welcome;
+            (function (welcome) {
+                class WelcomePageExtension extends colibri.Extension {
+                    static POINT_ID = "colibri.ui.ide.welcome.WelcomePageExtension";
+                    constructor() {
+                        super(WelcomePageExtension.POINT_ID);
+                    }
+                }
+                welcome.WelcomePageExtension = WelcomePageExtension;
+            })(welcome = ide.welcome || (ide.welcome = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var welcome;
+            (function (welcome) {
+                class WelcomePageFactory {
+                    acceptInput(input) {
+                        return input === welcome.WELCOME_PAGE_INPUT;
+                    }
+                    createEditor() {
+                        return new welcome.WelcomePage();
+                    }
+                    getName() {
+                        return "Welcome Page";
+                    }
+                }
+                welcome.WelcomePageFactory = WelcomePageFactory;
+            })(welcome = ide.welcome || (ide.welcome = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var welcome;
+            (function (welcome) {
+                class WelcomePageInput {
+                    constructor() {
+                    }
+                    getEditorInputExtension() {
+                        return welcome.WelcomePageInputExtension.ID;
+                    }
+                    ;
+                }
+                welcome.WelcomePageInput = WelcomePageInput;
+                welcome.WELCOME_PAGE_INPUT = new WelcomePageInput();
+            })(welcome = ide.welcome || (ide.welcome = {}));
+        })(ide = ui.ide || (ui.ide = {}));
+    })(ui = colibri.ui || (colibri.ui = {}));
+})(colibri || (colibri = {}));
+var colibri;
+(function (colibri) {
+    var ui;
+    (function (ui) {
+        var ide;
+        (function (ide) {
+            var welcome;
+            (function (welcome) {
+                class WelcomePageInputExtension extends colibri.ui.ide.EditorInputExtension {
+                    static ID = "colibri.ui.ide.welcome.WelcomePageInputExtension";
+                    constructor() {
+                        super(WelcomePageInputExtension.ID);
+                    }
+                    createEditorInput(state) {
+                        return welcome.WELCOME_PAGE_INPUT;
+                    }
+                    getEditorInputState(input) {
+                        return {
+                            fullName: "WelcomePageInput"
+                        };
+                    }
+                    getEditorInputId(input) {
+                        return "WelcomePageInput";
+                    }
+                }
+                welcome.WelcomePageInputExtension = WelcomePageInputExtension;
+            })(welcome = ide.welcome || (ide.welcome = {}));
         })(ide = ui.ide || (ui.ide = {}));
     })(ui = colibri.ui || (colibri.ui = {}));
 })(colibri || (colibri = {}));

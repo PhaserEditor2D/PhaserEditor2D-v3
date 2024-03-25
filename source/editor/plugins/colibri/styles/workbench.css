@@ -33,6 +33,13 @@ Important:
     height: 100%;
 }
 
+/* editors */
+
+.WelcomePageArea {
+    overflow: auto;
+    height: 100%;
+}
+
 /* toolbar */
 
 .MainToolbar {

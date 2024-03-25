@@ -155,6 +155,27 @@ namespace colibri.ui.ide {
 
                 this.openFromUrlSearchParameter();
             }
+
+            this.showWelcomePage();
+        }
+
+        protected showWelcomePage() {
+
+            const welcomeExtension = ColibriPlugin.getInstance().getWelcomePageExtension();
+
+            if (!welcomeExtension) {
+
+                return;
+            }
+
+            console.log("Workbench: showing welcome page.");
+
+            const welcomeEditor = this.getEditorArea().getEditors();
+
+            if (welcomeEditor.find(e => e instanceof welcome.WelcomePage) === undefined) {
+
+                colibri.Platform.getWorkbench().openEditor(welcome.WELCOME_PAGE_INPUT, new welcome.WelcomePageFactory());
+            }
         }
 
         private openFromUrlSearchParameter() {
