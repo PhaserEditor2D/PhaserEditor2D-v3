@@ -1,6 +1,6 @@
 # Change Log
 
-## v3.78.0-beta
+## v3.68.0-beta
 
 * Shows welcome page.
 * #314: (Fix) Pasting multiple script nodes changes their ordering
