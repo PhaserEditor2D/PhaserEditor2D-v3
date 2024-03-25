@@ -1,5 +1,10 @@
 # Change Log
 
+## v3.78.0-beta
+
+* Shows welcome page.
+* #314: (Fix) Pasting multiple script nodes changes their ordering
+
 ## v3.67.0, Feb 22
 
 * Updates to latest TypeScript 5.3.3.
