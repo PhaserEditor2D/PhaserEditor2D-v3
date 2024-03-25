@@ -34,7 +34,7 @@ namespace colibri.ui.ide.welcome {
 
             if (ext) {
 
-                ext.buildPage(this._contentElement);
+                ext.buildPage(this, this._contentElement);
             }
         }
     }

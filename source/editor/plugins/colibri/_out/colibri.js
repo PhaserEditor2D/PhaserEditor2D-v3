@@ -12318,7 +12318,7 @@ var colibri;
                         this.getElement().appendChild(this._contentElement);
                         const ext = colibri.ColibriPlugin.getInstance().getWelcomePageExtension();
                         if (ext) {
-                            ext.buildPage(this._contentElement);
+                            ext.buildPage(this, this._contentElement);
                         }
                     }
                 }

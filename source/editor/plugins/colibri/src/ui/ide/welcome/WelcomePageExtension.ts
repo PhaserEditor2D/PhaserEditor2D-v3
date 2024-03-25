@@ -8,6 +8,6 @@ namespace colibri.ui.ide.welcome {
             super(WelcomePageExtension.POINT_ID);
         }
 
-        abstract buildPage(contentElement: HTMLDivElement): void;
+        abstract buildPage(editor: WelcomePage, contentElement: HTMLDivElement): void;
     }
 }

@@ -729,8 +729,9 @@ var phasereditor2d;
     (function (ide) {
         var ui;
         (function (ui) {
+            var controls = colibri.ui.controls;
             class IDEWelcomeExtension extends colibri.ui.ide.welcome.WelcomePageExtension {
-                buildPage(contentElement) {
+                buildPage(editor, contentElement) {
                     contentElement.innerHTML = `<div>
 
             <style>
@@ -778,6 +779,8 @@ var phasereditor2d;
                 <p>To send us your feedback email <a href="mailto:support@phaser.io">support@phaser.io</a> or join us on <a target="_blank" href="https://phaser.io/community/discord">Discord</a></p>
         </div>
     </div>`;
+                    const img = document.createElement("img");
+                    editor.setIcon(new controls.DefaultImage(img, "static/favicon.png"));
                 }
             }
             ui.IDEWelcomeExtension = IDEWelcomeExtension;

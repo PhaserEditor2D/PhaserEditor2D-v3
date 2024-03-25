@@ -1,8 +1,10 @@
 namespace phasereditor2d.ide.ui {
 
+    import controls = colibri.ui.controls;
+
     export class IDEWelcomeExtension extends colibri.ui.ide.welcome.WelcomePageExtension {
 
-        buildPage(contentElement: HTMLDivElement) {
+        buildPage(editor: colibri.ui.ide.welcome.WelcomePage, contentElement: HTMLDivElement): void {
 
             contentElement.innerHTML = `<div>
 
@@ -51,6 +53,9 @@ namespace phasereditor2d.ide.ui {
                 <p>To send us your feedback email <a href="mailto:support@phaser.io">support@phaser.io</a> or join us on <a target="_blank" href="https://phaser.io/community/discord">Discord</a></p>
         </div>
     </div>`;
+
+            const img = document.createElement("img");
+            editor.setIcon(new controls.DefaultImage(img, "static/favicon.png"));
         }
     }
 }
