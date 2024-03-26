@@ -31,16 +31,20 @@ namespace colibri.ui.controls {
         preload(): Promise<PreloadResult> {
 
             if (this._ready || this._error) {
+
                 return Controls.resolveNothingLoaded();
             }
 
             if (this._requestPromise) {
+
                 return this._requestPromise;
             }
 
             this._requestPromise = new Promise((resolve, reject) => {
 
-                this._imageElement.src = this._url;
+                const storage = colibri.Platform.getWorkbench().getFileStorage();
+
+                storage.loadImage(this._imageElement, this._url);
 
                 this._imageElement.addEventListener("load", e => {
 

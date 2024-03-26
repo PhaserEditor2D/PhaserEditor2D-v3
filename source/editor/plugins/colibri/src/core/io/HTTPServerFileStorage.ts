@@ -64,6 +64,14 @@ namespace colibri.core.io {
             this.registerDocumentVisibilityListener();
         }
 
+        async loadImage(imageElement: HTMLImageElement, url: string): Promise<void> {
+
+            // we do the regular load of an image, other storage implementation may override this method,
+            // by getting the image data from other sources, like a local file.
+
+            imageElement.src = url;
+        }
+
         private registerDocumentVisibilityListener() {
 
             Platform.getWorkbench().eventWindowFocused.addListener(async () => {
@@ -270,6 +278,11 @@ namespace colibri.core.io {
         getRoot(): FilePath {
 
             return this._root;
+        }
+
+        protected setRoot(root: FilePath) {
+
+            this._root = root;
         }
 
         async openProject(): Promise<FilePath> {
@@ -491,7 +504,7 @@ namespace colibri.core.io {
             if (data.error) {
 
                 alert(`Cannot delete the files.`);
-                
+
                 throw new Error(data.error);
             }
         }
@@ -591,7 +604,7 @@ namespace colibri.core.io {
 
             return newFile;
         }
-        
+
         protected async server_copyFile(fromFile: FilePath, toFolder: FilePath, newName: string) {
 
             const data = await apiRequest("CopyFile", {
@@ -640,7 +653,7 @@ namespace colibri.core.io {
         }
 
         protected async server_moveFiles(movingFiles: FilePath[], moveTo: FilePath) {
-            
+
             const data = await apiRequest("MoveFiles", {
                 movingPaths: movingFiles.map(file => file.getFullName()),
                 movingToPath: moveTo.getFullName()

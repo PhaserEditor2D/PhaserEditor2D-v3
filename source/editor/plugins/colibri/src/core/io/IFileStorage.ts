@@ -23,6 +23,8 @@ namespace colibri.core.io {
     }
 
     export interface IFileStorage {
+        
+        loadImage(imageElement: HTMLImageElement, url: string): Promise<void>;
 
         reload(): Promise<void>;
 
@@ -49,6 +51,7 @@ namespace colibri.core.io {
         copyFile(fromFile: FilePath, toFile: FilePath): Promise<FilePath>;
 
         uploadFile(uploadFolder: FilePath, file: File): Promise<FilePath>;
+        
 
         getImageSize(file: FilePath): Promise<ImageSize>;
 

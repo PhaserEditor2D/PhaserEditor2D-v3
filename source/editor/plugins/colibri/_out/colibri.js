@@ -1999,6 +1999,11 @@ var colibri;
                     this._changeListeners = [];
                     this.registerDocumentVisibilityListener();
                 }
+                async loadImage(imageElement, url) {
+                    // we do the regular load of an image, other storage implementation may override this method,
+                    // by getting the image data from other sources, like a local file.
+                    imageElement.src = url;
+                }
                 registerDocumentVisibilityListener() {
                     colibri.Platform.getWorkbench().eventWindowFocused.addListener(async () => {
                         await this.detectServerChangesOnWindowsFocus();
@@ -2127,6 +2132,9 @@ var colibri;
                 }
                 getRoot() {
                     return this._root;
+                }
+                setRoot(root) {
+                    this._root = root;
                 }
                 async openProject() {
                     this._root = null;
@@ -2924,7 +2932,8 @@ var colibri;
                         return this._requestPromise;
                     }
                     this._requestPromise = new Promise((resolve, reject) => {
-                        this._imageElement.src = this._url;
+                        const storage = colibri.Platform.getWorkbench().getFileStorage();
+                        storage.loadImage(this._imageElement, this._url);
                         this._imageElement.addEventListener("load", e => {
                             this._requestPromise = null;
                             this._ready = true;
