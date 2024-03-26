@@ -129,11 +129,10 @@ namespace phasereditor2d.scene.core.json {
                 return;
             }
 
-            const total = (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE)).length
+            const sceneFiles = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_SCENE);
+            const userCompFiles = await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS);
 
-                + (await FileUtils.getFilesWithContentType(core.CONTENT_TYPE_USER_COMPONENTS)).length
-
-                + 1;
+            const total = sceneFiles.length + userCompFiles.length + 1;
 
             monitor.addTotal(total);
 

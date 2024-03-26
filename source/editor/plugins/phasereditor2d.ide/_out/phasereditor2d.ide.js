@@ -147,8 +147,6 @@ var phasereditor2d;
                 controls.dialogs.Dialog.closeAllDialogs();
                 const dlg = new ide.ui.dialogs.OpeningProjectDialog();
                 dlg.create();
-                dlg.setTitle("Opening project");
-                dlg.setProgress(0);
                 const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
                 try {
                     const wb = colibri.Platform.getWorkbench();
@@ -1129,6 +1127,8 @@ var phasereditor2d;
                 class OpeningProjectDialog extends controls.dialogs.ProgressDialog {
                     create() {
                         super.create();
+                        this.setTitle("Opening project");
+                        this.setProgress(0);
                         this.getDialogBackgroundElement().classList.add("DarkDialogContainer");
                     }
                 }

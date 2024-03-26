@@ -237,8 +237,6 @@ namespace phasereditor2d.ide {
 
             const dlg = new ui.dialogs.OpeningProjectDialog();
             dlg.create();
-            dlg.setTitle("Opening project");
-            dlg.setProgress(0);
 
             const monitor = new controls.dialogs.ProgressDialogMonitor(dlg);
 

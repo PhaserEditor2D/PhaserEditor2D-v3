@@ -793,7 +793,7 @@ var colibri;
                 async openProject(monitor) {
                     this.eventBeforeOpenProject.fire("");
                     this.resetCache();
-                    console.log(`Workbench: opening project.`);
+                    console.log(`Workbench: opening project`);
                     const fileStorage = this.getFileStorage();
                     await fileStorage.openProject();
                     const projectName = fileStorage.getRoot().getName();

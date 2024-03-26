@@ -660,7 +660,9 @@ namespace colibri.core.io {
             });
 
             if (data.error) {
+
                 alert(`Cannot move the files.`);
+                
                 throw new Error(data.error);
             }
         }

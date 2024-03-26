@@ -260,7 +260,7 @@ namespace colibri.ui.ide {
 
             this.resetCache();
 
-            console.log(`Workbench: opening project.`);
+            console.log(`Workbench: opening project`);
 
             const fileStorage = this.getFileStorage();
 
