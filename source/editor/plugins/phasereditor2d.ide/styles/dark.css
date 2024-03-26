@@ -1,0 +1,4 @@
+/* Welcome */
+.dark .WelcomePageArea #welcome-logo {
+    filter: drop-shadow(0 0 1px white)
+}

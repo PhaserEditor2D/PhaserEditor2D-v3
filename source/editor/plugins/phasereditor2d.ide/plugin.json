@@ -3,7 +3,8 @@
     "styles": [
         "styles/controls.css",
         "styles/lightBlue.css",
-        "styles/lightGray.css"
+        "styles/lightGray.css",
+        "styles/dark.css"
     ],
     "scripts": [
         "scripts/showdown.min.js",        
