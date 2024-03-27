@@ -13,7 +13,12 @@ namespace colibri.ui.ide.welcome {
         constructor() {
             super("colibri.ui.ide.welcome.WelcomePage", WelcomePage.getFactory());
 
-            this.setIcon(ColibriPlugin.getInstance().getIcon(ICON_FILE));
+            const ext = ColibriPlugin.getInstance().getWelcomePageExtension();
+
+            if (ext) {
+
+                this.setIcon(ext.getIcon());
+            }
         }
 
         setInput(input: colibri.ui.ide.IEditorInput): void {

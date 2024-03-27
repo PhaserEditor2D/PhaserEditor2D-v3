@@ -59,8 +59,15 @@ namespace phasereditor2d.ide.ui {
         </div>
     </div>`;
 
-            const img = document.createElement("img");
-            editor.setIcon(new controls.DefaultImage(img, "static/favicon.png"));
+        }
+
+        getIcon(): controls.IImage {
+
+            const imgElement = document.createElement("img");
+
+            const img = new controls.DefaultImage(imgElement, "static/favicon.png");
+
+            return new controls.IconImage(img, img);
         }
     }
 }
