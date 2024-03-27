@@ -386,16 +386,7 @@ namespace colibri.core.io {
                 modTime: 0
             });
 
-            const path = FilePath.join(container.getFullName(), folderName);
-
-            const data = await apiRequest("CreateFolder", {
-                path
-            });
-
-            if (data.error) {
-                alert(`Cannot create folder at '${path}'`);
-                throw new Error(data.error);
-            }
+            const data = await this.server_createFolder(container, folderName);
 
             newFolder["_modTime"] = data["modTime"];
             container["_files"].push(newFolder);
@@ -410,6 +401,26 @@ namespace colibri.core.io {
             this.fireChange(change);
 
             return newFolder;
+        }
+
+        protected async server_createFolder(container: FilePath, folderName: string): Promise<{
+            modTime: number;
+        }> {
+
+            const path = FilePath.join(container.getFullName(), folderName);
+
+            const data = await apiRequest("CreateFolder", {
+                path
+            });
+
+            if (data.error) {
+
+                alert(`Cannot create folder at '${path}'`);
+
+                throw new Error(data.error);
+            }
+
+            return data;
         }
 
         async getFileBinary(file: FilePath): Promise<ArrayBuffer> {
