@@ -297,6 +297,8 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     for (const prop of props) {
 
+                        console.log("Creating property editor for", prop.getName(), "at least one prefab", atLeastOnePrefab);
+
                         prop.getType().createInspectorPropertyEditor(this, comp, prop, atLeastOnePrefab);
                     }
                 }

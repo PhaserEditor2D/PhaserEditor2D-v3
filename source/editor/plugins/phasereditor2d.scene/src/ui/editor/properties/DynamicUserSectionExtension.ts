@@ -1,8 +1,6 @@
 /// <reference path="./SceneEditorPropertySectionExtension.ts" />
 namespace phasereditor2d.scene.ui.editor.properties {
 
-    import io = colibri.core.io;
-
     export class DynamicUserSectionExtension extends SceneEditorPropertySectionExtension {
 
         getSectionProviders(editor: SceneEditor): GetPropertySection[] {
@@ -89,7 +87,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         if (findResult) {
 
                             result.push(page => new DynamicUserComponentSection(
-                                page, compName, compDisplayName, `${findResult.file.getModTime()}`));
+                                page, compName, compDisplayName, `${findResult.file.getModTime()}+prefab`));
                         }
                     }
                 }
