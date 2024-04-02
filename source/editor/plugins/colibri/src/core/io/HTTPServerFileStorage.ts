@@ -1,12 +1,12 @@
 namespace colibri.core.io {
 
-    interface IGetProjectFilesData {
+    export interface IGetProjectFilesData {
 
         hash: string;
         maxNumberOfFiles: number;
         projectNumberOfFiles: number;
         rootFile: IFileData;
-        error: string;
+        error?: string;
     }
 
     export async function apiRequest(method: string, body?: any) {
@@ -80,7 +80,7 @@ namespace colibri.core.io {
             });
         }
 
-        protected async detectServerChangesOnWindowsFocus() {
+        protected async server_computeProjectFilesHash(): Promise<string> {
 
             const hashData = await apiRequest("GetProjectFilesHash", {});
 
@@ -88,20 +88,34 @@ namespace colibri.core.io {
 
                 alert(hashData.error);
 
-                return;
+                return null;
             }
 
             const hash = hashData.hash as string;
 
+            return hash;
+        }
+
+        protected async detectServerChangesOnWindowsFocus() {
+
+            const hash = await this.server_computeProjectFilesHash();
+
+            if (hash === null) {
+
+                return;
+            }
+
             if (hash === this._hash) {
+
                 // nothing to do!
-                console.log("Server files not changed (hash=" + hash + ")");
+                console.log("Storage: server files not changed.");
+                
                 return;
             }
 
             this._hash = hash;
 
-            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
+            const data = await this.server_getProjectFilesData();
 
             if (data.error) {
 
@@ -306,7 +320,7 @@ namespace colibri.core.io {
 
         async reload(): Promise<void> {
 
-            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
+            const data = await this.server_getProjectFilesData();
 
             let newRoot: FilePath;
 
@@ -330,6 +344,13 @@ namespace colibri.core.io {
             this._hash = data.hash;
 
             this._root = newRoot;
+        }
+
+        protected async server_getProjectFilesData(): Promise<IGetProjectFilesData> {
+
+            const data = await apiRequest("GetProjectFiles", {}) as IGetProjectFilesData;
+
+            return data;
         }
 
         private async fireChange(change: FileStorageChange) {
@@ -673,7 +694,7 @@ namespace colibri.core.io {
             if (data.error) {
 
                 alert(`Cannot move the files.`);
-                
+
                 throw new Error(data.error);
             }
         }

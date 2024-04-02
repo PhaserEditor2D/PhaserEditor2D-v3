@@ -191,6 +191,7 @@ namespace colibri.core.io {
         }
 
         getFile(name: string) {
+            
             return this.getFiles().find(file => file.getName() === name);
         }
 
