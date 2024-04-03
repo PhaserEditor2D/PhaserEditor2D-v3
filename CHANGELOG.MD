@@ -2,7 +2,6 @@
 
 ## v3.68.0-beta
 
-* Shows welcome page.
 * #314: (Fix) Pasting multiple script nodes changes their ordering.
 * Fixes hidden components in prefab instances.
 
