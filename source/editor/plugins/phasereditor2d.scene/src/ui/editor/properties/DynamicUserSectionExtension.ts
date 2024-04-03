@@ -87,7 +87,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                         if (findResult) {
 
                             result.push(page => new DynamicUserComponentSection(
-                                page, compName, compDisplayName, `${findResult.file.getModTime()}+prefab`));
+                                page, compName, compDisplayName, `DynamicUserComponentSection_${compName}_${findResult.file.getModTime()}+prefab`));
                         }
                     }
                 }
