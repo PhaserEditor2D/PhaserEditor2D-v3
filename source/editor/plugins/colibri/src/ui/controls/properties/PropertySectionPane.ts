@@ -23,7 +23,7 @@ namespace colibri.ui.controls.properties {
 
             if (hashType) {
 
-                this.getElement().setAttribute("type-hash", section.getTypeHash());
+                this.getElement().setAttribute("type-hash", hashType);
             }
         }
 
