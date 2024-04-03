@@ -115,7 +115,7 @@ namespace phasereditor2d.scene.ui.sceneobjects {
 
             if (key in data) {
 
-                return data[key];
+                return Boolean(data[key]);
             }
 
             if (data.prefabId) {
