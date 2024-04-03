@@ -14,7 +14,7 @@ namespace phasereditor2d.scene.ui.editor.properties {
                 DynamicUserComponentSection.computeId(componentName, hash),
                 componentName, false, true,
                 resources.getIcon(resources.ICON_USER_COMPONENT),
-                `DynamicUserComponentSection_${componentName}}`);
+                `DynamicUserComponentSection_${componentName}`);
 
             this._componentName = componentName;
             this._componentDisplayName = componentDisplayName;
@@ -346,9 +346,13 @@ namespace phasereditor2d.scene.ui.editor.properties {
 
                     const exported = userComp.isComponentPublished(this._componentName);
 
+                    console.log("Can edit", this._componentName, "exported", exported);
+
                     return exported;
                 }
             }
+
+            console.log("Cannot edit", this._componentName);
 
             return false;
         }
